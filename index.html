@@ -9,7 +9,7 @@
 body{
 margin:0;
 font-family:sans-serif;
-background:#f5f5f5;
+background:#f2f2f2;
 }
 
 header{
@@ -40,15 +40,15 @@ cursor:pointer;
 .products{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:10px;
-padding:10px;
+gap:12px;
+padding:12px;
 }
 
 .card{
 background:white;
-border-radius:10px;
+border-radius:12px;
 padding:10px;
-box-shadow:0 0 5px rgba(0,0,0,0.1);
+box-shadow:0 0 6px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -62,14 +62,27 @@ font-weight:bold;
 margin-top:5px;
 }
 
-button.buy{
+.qty{
+display:flex;
+justify-content:space-between;
+margin-top:5px;
+}
+
+.qty button{
+border:none;
+background:#eee;
+padding:5px 10px;
+border-radius:5px;
+}
+
+.buy{
 background:#6a5acd;
 color:white;
 border:none;
 padding:8px;
 width:100%;
 border-radius:8px;
-margin-top:5px;
+margin-top:6px;
 }
 
 .cart{
@@ -105,16 +118,12 @@ cursor:pointer;
 <script>
 
 let products = [
-{ name:"Termos 1L", price:"120 000 so'm", cat:"termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-{ name:"Termos 2L", price:"150 000 so'm", cat:"termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-
-{ name:"Elektr choynak", price:"180 000 so'm", cat:"choynak", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-
-{ name:"Blender 3x1", price:"220 000 so'm", cat:"blender", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-
-{ name:"Idishlar to'plami", price:"300 000 so'm", cat:"idish", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-
-{ name:"Qozon 5L", price:"170 000 so'm", cat:"qozon", img:"https://i.imgur.com/3ZQ3Z5b.png" }
+{ name:"Termos 1L", price:120000, cat:"termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ name:"Termos 2L", price:150000, cat:"termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ name:"Elektr choynak", price:180000, cat:"choynak", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ name:"Blender 3x1", price:220000, cat:"blender", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ name:"Idishlar to'plami", price:300000, cat:"idish", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ name:"Qozon 5L", price:170000, cat:"qozon", img:"https://i.imgur.com/3ZQ3Z5b.png" }
 ];
 
 let cart = [];
@@ -122,14 +131,22 @@ let cart = [];
 function showCategory(cat){
 let html = "";
 
-products.forEach(p=>{
+products.forEach((p,i)=>{
 if(cat=="all" || p.cat==cat){
+
 html += 
 <div class="card">
 <img src="${p.img}">
 <h4>${p.name}</h4>
-<div class="price">${p.price}</div>
-<button class="buy" onclick="addToCart('${p.name}','${p.price}')">Savatga qo'shish</button>
+<div class="price">${p.price.toLocaleString()} so'm</div>
+
+<div class="qty">
+<button onclick="minus(${i})">-</button>
+<span id="q${i}">1</span>
+<button onclick="plus(${i})">+</button>
+</div>
+
+<button class="buy" onclick="addToCart(${i})">Savatga qo'shish</button>
 </div>
 ;
 }
@@ -140,8 +157,20 @@ document.getElementById("products").innerHTML = html;
 
 showCategory("all");
 
-function addToCart(name,price){
-cart.push(name + " - " + price);
+function plus(i){
+let el = document.getElementById("q"+i);
+el.innerText = parseInt(el.innerText)+1;
+}
+
+function minus(i){
+let el = document.getElementById("q"+i);
+if(el.innerText>1) el.innerText = parseInt(el.innerText)-1;
+}
+
+function addToCart(i){
+let qty = document.getElementById("q"+i).innerText;
+let p = products[i];
+cart.push(p.name + " x" + qty + " = " + (p.price*qty).toLocaleString()+" so'm");
 alert("Savatga qo'shildi");
 }
 
