@@ -1,79 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>Mini Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitchen Shop</title>
 
 <style>
-body {
-  font-family: Arial;
-  background: #f5f5f5;
-  margin: 0;
+body{
+margin:0;
+font-family:sans-serif;
+background:#f5f5f5;
 }
 
-header {
-  background: #6C2BD9;
-  color: white;
-  padding: 15px;
-  font-size: 20px;
+header{
+background:#6a5acd;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
 }
 
-.products {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 10px;
+.categories{
+display:flex;
+overflow-x:auto;
+background:white;
+padding:10px;
 }
 
-.card {
-  background: white;
-  width: 45%;
-  margin: 2.5%;
-  padding: 10px;
-  border-radius: 10px;
+.categories button{
+margin-right:10px;
+border:none;
+background:#eee;
+padding:8px 15px;
+border-radius:20px;
+cursor:pointer;
 }
 
-.card img {
-  width: 100%;
-  border-radius: 10px;
+.products{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+padding:10px;
 }
 
-.price {
-  color: green;
-  font-weight: bold;
+.card{
+background:white;
+border-radius:10px;
+padding:10px;
+box-shadow:0 0 5px rgba(0,0,0,0.1);
 }
 
-button {
-  width: 100%;
-  padding: 10px;
-  background: #6C2BD9;
-  color: white;
-  border: none;
-  border-radius: 8px;
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+.price{
+color:#6a5acd;
+font-weight:bold;
+margin-top:5px;
+}
+
+button.buy{
+background:#6a5acd;
+color:white;
+border:none;
+padding:8px;
+width:100%;
+border-radius:8px;
+margin-top:5px;
+}
+
+.cart{
+position:fixed;
+bottom:15px;
+right:15px;
+background:#6a5acd;
+color:white;
+padding:12px 18px;
+border-radius:30px;
+cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<header>My Mini Shop</header>
+<header>Kitchen Shop</header>
 
-<div class="products">
+<div class="categories">
+<button onclick="showCategory('all')">Hammasi</button>
+<button onclick="showCategory('termos')">Termoslar</button>
+<button onclick="showCategory('choynak')">Choynaklar</button>
+<button onclick="showCategory('blender')">Blenderlar</button>
+<button onclick="showCategory('idish')">Idishlar</button>
+<button onclick="showCategory('qozon')">Qozonlar</button>
+</div>
 
+<div class="products" id="products"></div>
+
+<div class="cart" onclick="sendOrder()">Buyurtma berish</div>
+
+<script>
+
+let products = [
+{ name:"Termos 1L", price:"120 000 so'm", cat:"termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ name:"Termos 2L", price:"150 000 so'm", cat:"termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+
+{ name:"Elektr choynak", price:"180 000 so'm", cat:"choynak", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+
+{ name:"Blender 3x1", price:"220 000 so'm", cat:"blender", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+
+{ name:"Idishlar to'plami", price:"300 000 so'm", cat:"idish", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+
+{ name:"Qozon 5L", price:"170 000 so'm", cat:"qozon", img:"https://i.imgur.com/3ZQ3Z5b.png" }
+];
+
+let cart = [];
+
+function showCategory(cat){
+let html = "";
+
+products.forEach(p=>{
+if(cat=="all" || p.cat==cat){
+html += 
 <div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>AirPods Pro</h3>
-<p class="price">299 000 so'm</p>
-<button>Sotib olish</button>
+<img src="${p.img}">
+<h4>${p.name}</h4>
+<div class="price">${p.price}</div>
+<button class="buy" onclick="addToCart('${p.name}','${p.price}')">Savatga qo'shish</button>
 </div>
+;
+}
+});
 
-<div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Smart Watch</h3>
-<p class="price">399 000 so'm</p>
-<button>Sotib olish</button>
-</div>
+document.getElementById("products").innerHTML = html;
+}
 
-</div>
+showCategory("all");
+
+function addToCart(name,price){
+cart.push(name + " - " + price);
+alert("Savatga qo'shildi");
+}
+
+function sendOrder(){
+let text = "Yangi buyurtma:%0A";
+
+cart.forEach(item=>{
+text += item + "%0A";
+});
+
+window.open("https://t.me/YOUR_BOT_USERNAME?start=" + text);
+}
+
+</script>
 
 </body>
 </html>
