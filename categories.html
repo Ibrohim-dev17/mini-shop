@@ -13,14 +13,26 @@ font-family:system-ui;
 background:#f5f5f5;
 }
 
+/* HEADER */
+
 .header{
 background:white;
 padding:14px;
-font-size:18px;
 display:flex;
 align-items:center;
 gap:10px;
 }
+
+.back-btn{
+text-decoration:none;
+background:#6a5acd;
+color:white;
+padding:6px 12px;
+border-radius:20px;
+font-size:13px;
+}
+
+/* CATEGORIES GRID */
 
 .categories{
 display:grid;
@@ -47,23 +59,6 @@ border-radius:12px;
 margin-top:8px;
 font-size:14px;
 }
-.cat-card p{
-margin-top:8px;
-font-size:14px;
-}
-
-/* SHU YERGA QO‘SHASAN */
-
-.back-btn{
-text-decoration:none;
-background:#6a5acd;
-color:white;
-padding:6px 12px;
-border-radius:20px;
-font-size:13px;
-}
-
-</style>  
 
 </style>
 </head>
@@ -71,7 +66,7 @@ font-size:13px;
 <body>
 
 <div class="header">
-<a href="index.html">⬅</a>
+<a href="index.html" class="back-btn">⬅ Back</a>
 <b>All Categories</b>
 </div>
 
@@ -99,12 +94,12 @@ font-size:13px;
 
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Idishlar</p>
+<p>Mikser</p>
 </div>
 
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mikser</p>
+<p>Idishlar</p>
 </div>
 
 </div>
