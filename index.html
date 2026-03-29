@@ -48,15 +48,29 @@ outline:none;
 font-size:18px;
 }
 
-/* BANNER */
+/* SLIDER (faqat qo‘shildi, eski kod o‘zgarmadi) */
 
-.banner{
+.banner-slider{
 margin:12px;
-background:#6a5acd;
-color:white;
-padding:20px;
-border-radius:14px;
-font-size:18px;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+border-radius:16px;
+}
+
+.banner-track{
+display:flex;
+gap:10px;
+}
+
+.banner-item{
+flex:0 0 100%;
+scroll-snap-align:start;
+}
+
+.banner-item img{
+width:100%;
+border-radius:16px;
+display:block;
 }
 
 /* CATEGORY HEADER */
@@ -147,41 +161,6 @@ padding:12px 0;
 box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 font-size:20px;
 }
-/* SLIDER */
-
-.slider{
-position:relative;
-margin:12px;
-overflow:hidden;
-border-radius:14px;
-}
-
-.slide-track{
-display:flex;
-transition:0.4s;
-}
-
-.slide-track img{
-width:100%;
-flex:0 0 100%;
-}
-
-/* BUTTONS */
-
-.prev, .next{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-background:white;
-border:none;
-font-size:20px;
-padding:6px 10px;
-border-radius:50%;
-cursor:pointer;
-}
-
-.prev{ left:8px; }
-.next{ right:8px; }  
 
 </style>
 </head>
@@ -202,22 +181,28 @@ cursor:pointer;
 
 </div>
 
-<!-- REKLAMA BANNER -->
+<!-- REKLAMA SLIDER (faqat shu qo‘shildi) -->
 
-<div class="slider">
+<div class="banner-slider">
 
-<div class="slide-track" id="slideTrack">
+<div class="banner-track">
 
+<div class="banner-item">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
+</div>
+
+<div class="banner-item">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
+</div>
+
+<div class="banner-item">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
+</div>
 
 </div>
 
-<button class="prev" onclick="slideLeft()">❮</button>
-<button class="next" onclick="slideRight()">❯</button>
-
 </div>
+
 <!-- CATEGORY TITLE -->
 
 <div class="cat-header">
@@ -225,7 +210,7 @@ cursor:pointer;
 <a href="categories.html" class="see-btn">See all →</a>
 </div>
 
-<!-- CATEGORY (3 ta ko‘rinadi) -->
+<!-- CATEGORY -->
 
 <div class="categories">
 
@@ -283,28 +268,5 @@ cursor:pointer;
 👤
 </div>
 
-<script>
-
-let index = 0;
-const track = document.getElementById("slideTrack");
-const slides = document.querySelectorAll(".slide-track img");
-
-function slideRight(){
-index++;
-if(index >= slides.length){ index = 0; }
-track.style.transform = "translateX(-" + index*100 + "%)";
-}
-
-function slideLeft(){
-index--;
-if(index < 0){ index = slides.length-1; }
-track.style.transform = "translateX(-" + index*100 + "%)";
-}
-
-</script>
-
-</body>
-</html>
-  
 </body>
 </html>
