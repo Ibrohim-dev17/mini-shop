@@ -15,80 +15,37 @@ background:#f5f5f5;
 
 /* HEADER */
 
-<div class="top-header">
-
-<div class="row">
-<div class="menu">☰</div>
-<div class="cart">🛍️</div>
-</div>
-
-<div class="search">
-<input type="text" placeholder="What are you looking for?">
-<div class="filter">⚙️</div>
-</div>
-
-</div>
-
-/* SEARCH */
-
-.search-box{
-margin-top:10px;
+.top-header{
+background:white;
+padding:14px;
 }
 
-.search-box input{
-width:100%;
-padding:12px;
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:22px;
+}
+
+.search{
+margin-top:10px;
+background:#f3f3f3;
+border-radius:20px;
+padding:10px;
+display:flex;
+align-items:center;
+}
+
+.search input{
+flex:1;
 border:none;
-border-radius:12px;
-background:#f0f0f0;
+background:transparent;
 font-size:14px;
 outline:none;
 }
 
-/* BANNER */
-
-.banner{
-margin:12px;
-background:linear-gradient(45deg,#6a5acd,#7b61ff);
-border-radius:16px;
-padding:18px;
-color:white;
-}
-
-.banner h2{
-margin:0;
+.filter{
 font-size:18px;
-}
-
-.banner p{
-font-size:13px;
-margin:6px 0 10px;
-}
-
-.banner button{
-border:none;
-background:white;
-color:#6a5acd;
-padding:8px 16px;
-border-radius:20px;
-font-weight:bold;
-}
-
-/* CATEGORIES */
-
-.categories{
-display:flex;
-overflow-x:auto;
-padding:10px;
-background:white;
-}
-
-.cat{
-background:#f0f0f0;
-padding:8px 14px;
-border-radius:20px;
-margin-right:8px;
-font-size:13px;
 }
 
 /* PRODUCTS */
@@ -144,28 +101,23 @@ font-size:20px;
 
 <body>
 
-<div class="header">
-<div class="title">Kitchen Market</div>
+<!-- HEADER (rasmdagidek) -->
 
-<div class="search-box">
-<input type="text" id="searchInput" placeholder="Mahsulot qidirish...">
-</div>
-</div>
+<div class="top-header">
 
-<div class="banner">
-<h2>Kitchen Chegirma</h2>
-<p>Uy ro'zg'or buyumlari uchun maxsus narxlar</p>
-<button>Shop now</button>
+<div class="row">
+<div>☰</div>
+<div>🛍️</div>
 </div>
 
-<div class="categories">
-<div class="cat">Termos</div>
-<div class="cat">Choynak</div>
-<div class="cat">Blender</div>
-<div class="cat">Idishlar</div>
-<div class="cat">Qozonlar</div>
-<div class="cat">Mikser</div>
+<div class="search">
+<input type="text" placeholder="What are you looking for?">
+<div class="filter">⚙️</div>
 </div>
+
+</div>
+
+<!-- PRODUCTS -->
 
 <div class="products">
 
@@ -197,35 +149,10 @@ font-size:20px;
 
 <div class="bottom">
 🏠
-📦
+🛒
 ❤️
 👤
 </div>
-
-<script>
-
-const searchInput = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".card");
-
-searchInput.addEventListener("keyup", function(){
-
-let value = this.value.toLowerCase();
-
-cards.forEach(function(card){
-
-let text = card.innerText.toLowerCase();
-
-if(text.includes(value)){
-card.style.display = "block";
-}else{
-card.style.display = "none";
-}
-
-});
-
-});
-
-</script>
 
 </body>
 </html>
