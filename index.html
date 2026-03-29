@@ -3,48 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kitchen Shop</title>
+<title>Kitchen Market</title>
 
 <style>
 
 body{
 margin:0;
 font-family:system-ui;
-background:#f6f6f6;
+background:#f5f5f5;
 }
 
 /* HEADER */
 
 .header{
-padding:14px;
-display:flex;
-justify-content:space-between;
-align-items:center;
 background:white;
+padding:14px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.header h2{
-margin:0;
+.title{
 font-size:18px;
+font-weight:bold;
 }
 
-.icons{
-font-size:20px;
+/* SEARCH */
+
+.search-box{
+margin-top:10px;
+}
+
+.search-box input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#f0f0f0;
+font-size:14px;
+outline:none;
 }
 
 /* BANNER */
 
 .banner{
 margin:12px;
-background:linear-gradient(45deg,#7b61ff,#5a46ff);
+background:linear-gradient(45deg,#6a5acd,#7b61ff);
 border-radius:16px;
 padding:18px;
 color:white;
 }
 
-.banner h3{
+.banner h2{
 margin:0;
-font-size:17px;
+font-size:18px;
 }
 
 .banner p{
@@ -55,13 +65,13 @@ margin:6px 0 10px;
 .banner button{
 border:none;
 background:white;
-color:#5a46ff;
+color:#6a5acd;
 padding:8px 16px;
 border-radius:20px;
 font-weight:bold;
 }
 
-/* CATEGORY */
+/* CATEGORIES */
 
 .categories{
 display:flex;
@@ -100,7 +110,7 @@ border-radius:12px;
 }
 
 .price{
-color:#5a46ff;
+color:#6a5acd;
 font-weight:bold;
 font-size:15px;
 margin-top:6px;
@@ -132,12 +142,15 @@ font-size:20px;
 <body>
 
 <div class="header">
-<h2>Kitchen Market</h2>
-<div class="icons">🔍 🔔</div>
+<div class="title">Kitchen Market</div>
+
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Mahsulot qidirish...">
+</div>
 </div>
 
 <div class="banner">
-<h3>Kitchen Chegirma</h3>
+<h2>Kitchen Chegirma</h2>
 <p>Uy ro'zg'or buyumlari uchun maxsus narxlar</p>
 <button>Shop now</button>
 </div>
@@ -185,6 +198,31 @@ font-size:20px;
 ❤️
 👤
 </div>
+
+<script>
+
+const searchInput = document.getElementById("searchInput");
+const cards = document.querySelectorAll(".card");
+
+searchInput.addEventListener("keyup", function(){
+
+let value = this.value.toLowerCase();
+
+cards.forEach(function(card){
+
+let text = card.innerText.toLowerCase();
+
+if(text.includes(value)){
+card.style.display = "block";
+}else{
+card.style.display = "none";
+}
+
+});
+
+});
+
+</script>
 
 </body>
 </html>
