@@ -87,37 +87,63 @@ border-radius:20px;
 font-weight:bold;
 }
 
-/* PRODUCTS */
+/* CATEGORY SECTION */
 
-.products{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+.category-section{
 padding:12px;
 }
 
-.card{
+.cat-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.cat-header h3{
+margin:0;
+font-size:16px;
+}
+
+.cat-header span{
+color:#6a5acd;
+font-size:14px;
+cursor:pointer;
+}
+
+.cat-list{
+display:flex;
+gap:12px;
+margin-top:12px;
+}
+
+.cat-card{
 background:white;
 border-radius:14px;
 padding:10px;
+width:100px;
+text-align:center;
 box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.card img{
-width:100%;
+.cat-card img{
+width:70px;
+height:70px;
+object-fit:cover;
 border-radius:12px;
 }
 
-.price{
-color:#6a5acd;
-font-weight:bold;
-font-size:15px;
-margin-top:6px;
+.cat-card p{
+margin:6px 0 0;
+font-size:13px;
 }
 
-.name{
-font-size:13px;
-margin-top:3px;
+/* ALL CATEGORIES (See all bosilganda chiqadi) */
+
+.all-categories{
+display:none;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:12px;
 }
 
 /* BOTTOM MENU */
@@ -156,7 +182,7 @@ font-size:20px;
 
 </div>
 
-<!-- BANNER (search tagiga qo‘shildi) -->
+<!-- BANNER -->
 
 <div class="banner-slider">
 <div class="slides">
@@ -182,35 +208,52 @@ font-size:20px;
 </div>
 </div>
 
-<!-- PRODUCTS -->
+<!-- CATEGORIES -->
 
-<div class="products">
+<div class="category-section">
 
-<div class="card">
+<div class="cat-header">
+<h3>Categories</h3>
+<span onclick="showCategories()">See all</span>
+</div>
+
+<div class="cat-list">
+
+<div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">120 000 so'm</div>
-<div class="name">Termos 1L</div>
+<p>Termos</p>
 </div>
 
-<div class="card">
+<div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">180 000 so'm</div>
-<div class="name">Elektr choynak</div>
+<p>Choynak</p>
 </div>
 
-<div class="card">
+<div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">220 000 so'm</div>
-<div class="name">Blender 3x1</div>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">170 000 so'm</div>
-<div class="name">Qozon 5L</div>
+<p>Blender</p>
 </div>
 
 </div>
+
+<!-- See all bosilganda chiqadi -->
+
+<div id="allCategories" class="all-categories">
+
+<div class="cat-card"><p>Termos</p></div>
+<div class="cat-card"><p>Choynak</p></div>
+<div class="cat-card"><p>Blender</p></div>
+<div class="cat-card"><p>Qozonlar</p></div>
+<div class="cat-card"><p>Idishlar</p></div>
+<div class="cat-card"><p>Mikser</p></div>
+<div class="cat-card"><p>Tovoqlar</p></div>
+<div class="cat-card"><p>Kastryulka</p></div>
+
+</div>
+
+</div>
+
+<!-- BOTTOM MENU -->
 
 <div class="bottom">
 🏠
@@ -218,6 +261,12 @@ font-size:20px;
 ❤️
 👤
 </div>
+
+<script>
+function showCategories(){
+document.getElementById("allCategories").style.display="grid";
+}
+</script>
 
 </body>
 </html>
