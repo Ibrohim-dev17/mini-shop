@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products</title>
+
+<style>
+
+body{
+margin:0;
+font-family:system-ui;
+background:#f5f5f5;
+}
+
+/* HEADER */
+
+.header{
+background:white;
+padding:14px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.back-btn{
+text-decoration:none;
+background:#6a5acd;
+color:white;
+padding:6px 12px;
+border-radius:20px;
+font-size:13px;
+}
+
+/* PRODUCTS */
+
+.products{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+padding:14px;
+}
+
+.product-card{
+background:white;
+border-radius:14px;
+padding:12px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+text-align:center;
+}
+
+.product-card img{
+width:90px;
+height:90px;
+border-radius:12px;
+}
+
+.product-card p{
+margin:8px 0 4px;
+font-size:14px;
+}
+
+.price{
+color:#6a5acd;
+font-weight:600;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<a href="categories.html" class="back-btn">⬅ Back</a>
+<b id="title">Products</b>
+</div>
+
+<div class="products" id="products">
+
+</div>
+
+
+<script>
+
+/* Qaysi kategoriya bosilganini olish */
+
+const params = new URLSearchParams(window.location.search);
+const category = params.get("cat");
+
+/* Title o‘zgaradi */
+
+document.getElementById("title").innerText = category;
+
+/* Qaysi kategoriya bo‘lsa o‘sha mahsulot chiqadi */
+
+const products = document.getElementById("products");
+
+if(category === "termos"){
+products.innerHTML = 
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Termos 1L</p>
+<div class="price">120 000 so'm</div>
+</div>
+
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Termos 2L</p>
+<div class="price">150 000 so'm</div>
+</div>
+
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Termos 3L</p>
+<div class="price">190 000 so'm</div>
+</div>
+;
+}
+
+if(category === "blender"){
+products.innerHTML = 
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Blender 3x1</p>
+<div class="price">220 000 so'm</div>
+</div>
+
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Blender 5x1</p>
+<div class="price">290 000 so'm</div>
+</div>
+;
+}
+
+if(category === "choynak"){
+products.innerHTML = 
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Choynak Metall</p>
+<div class="price">95 000 so'm</div>
+</div>
+
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Choynak Elektr</p>
+<div class="price">160 000 so'm</div>
+</div>
+;
+}
+
+</script>
+
+</body>
+</html>
