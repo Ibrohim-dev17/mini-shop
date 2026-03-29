@@ -13,27 +13,56 @@ font-family:Arial, sans-serif;
 background:#f5f5f5;
 }
 
+/* HEADER */
+
 header{
-background:#6a5acd;
-color:white;
 padding:14px;
-font-size:20px;
-text-align:center;
+background:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.title{
+font-size:18px;
 font-weight:bold;
 }
 
-.search{
-background:white;
-padding:10px;
+.icons{
+font-size:20px;
 }
 
-.search input{
-width:100%;
-padding:10px;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:14px;
+/* BANNER */
+
+.banner{
+margin:12px;
+background:linear-gradient(45deg,#6a5acd,#8a2be2);
+border-radius:14px;
+color:white;
+padding:18px;
 }
+
+.banner h2{
+margin:0;
+font-size:18px;
+}
+
+.banner p{
+margin:6px 0 10px;
+font-size:13px;
+}
+
+.banner button{
+border:none;
+background:white;
+color:#6a5acd;
+padding:8px 14px;
+border-radius:20px;
+font-weight:bold;
+}
+
+/* CATEGORIES */
 
 .categories{
 display:flex;
@@ -42,14 +71,15 @@ padding:10px;
 background:white;
 }
 
-.categories button{
-border:none;
+.cat{
 background:#f0f0f0;
 padding:8px 14px;
 border-radius:20px;
 margin-right:8px;
 font-size:13px;
 }
+
+/* PRODUCTS */
 
 .products{
 display:grid;
@@ -60,9 +90,9 @@ padding:10px;
 
 .card{
 background:white;
-border-radius:12px;
+border-radius:14px;
 padding:8px;
-box-shadow:0 0 6px rgba(0,0,0,0.08);
+box-shadow:0 0 8px rgba(0,0,0,0.08);
 }
 
 .card img{
@@ -70,83 +100,31 @@ width:100%;
 border-radius:10px;
 }
 
-.name{
-font-size:14px;
-margin-top:5px;
-}
-
 .price{
 color:#6a5acd;
 font-weight:bold;
 font-size:15px;
+margin-top:5px;
+}
+
+.name{
+font-size:13px;
 margin-top:3px;
 }
 
-.counter{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:6px;
-}
+/* BOTTOM MENU */
 
-.counter button{
-width:30px;
-height:30px;
-border:none;
-background:#6a5acd;
-color:white;
-font-size:18px;
-border-radius:6px;
-}
-
-.cart-btn{
+.bottom{
 position:fixed;
-bottom:15px;
-right:15px;
-background:#6a5acd;
-color:white;
-padding:12px 16px;
-border-radius:25px;
-font-weight:bold;
-font-size:14px;
-}
-
-.cart{
-position:fixed;
-bottom:70px;
-right:8px;
+bottom:0;
+left:0;
+right:0;
 background:white;
-width:92%;
-max-height:380px;
-overflow:auto;
-border-radius:12px;
-box-shadow:0 0 12px rgba(0,0,0,0.2);
-display:none;
-padding:10px;
-}
-
-.item{
-font-size:14px;
-margin-bottom:5px;
-}
-
-input{
-width:100%;
-padding:9px;
-margin-top:6px;
-border-radius:8px;
-border:1px solid #ddd;
-}
-
-.order{
-background:#6a5acd;
-color:white;
-border:none;
-width:100%;
-padding:11px;
-border-radius:8px;
-margin-top:10px;
-font-size:15px;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+font-size:20px;
 }
 
 </style>
@@ -154,141 +132,60 @@ font-size:15px;
 
 <body>
 
-<header>Kitchen Market</header>
+<header>
+<div class="title">Kitchen Market</div>
+<div class="icons">🔍 🔔</div>
+</header>
 
-<div class="search">
-<input type="text" placeholder="Mahsulot qidirish..." oninput="search(this.value)">
+<div class="banner">
+<h2>Kitchen Chegirma</h2>
+<p>Uy ro'zg'or buyumlari uchun maxsus narxlar</p>
+<button>Shop now</button>
 </div>
 
 <div class="categories">
-<button onclick="filter('all')">Hammasi</button>
-<button onclick="filter('termos')">Termoslar</button>
-<button onclick="filter('choynak')">Choynaklar</button>
-<button onclick="filter('blender')">Blenderlar</button>
-<button onclick="filter('idish')">Idishlar</button>
-<button onclick="filter('qozon')">Qozonlar</button>
+<div class="cat">Termos</div>
+<div class="cat">Choynak</div>
+<div class="cat">Blender</div>
+<div class="cat">Idishlar</div>
+<div class="cat">Qozonlar</div>
+<div class="cat">Mikser</div>
 </div>
 
-<div class="products" id="products"></div>
+<div class="products">
 
-<div class="cart" id="cartBox"></div>
-<div class="cart-btn" onclick="toggleCart()">Savat</div>
-
-<script>
-
-let products = [
-{n:"Termos 1L",p:120000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Termos 2L",p:150000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Elektr choynak",p:180000,c:"choynak",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Blender 3x1",p:220000,c:"blender",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Idishlar set",p:300000,c:"idish",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Qozon 5L",p:170000,c:"qozon",i:"https://i.imgur.com/3ZQ3Z5b.png"}
-];
-
-let cart = {};
-
-function show(list){
-let h="";
-list.forEach((p,i)=>{
-let count = cart[i] ? cart[i] : 0;
-
-h+=`
 <div class="card">
-<img src="${p.i}">
-<div class="name">${p.n}</div>
-<div class="price">${p.p.toLocaleString()} so'm</div>
-
-<div class="counter">
-<button onclick="minus(${i})">-</button>
-<span>${count}</span>
-<button onclick="plus(${i})">+</button>
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<div class="price">120 000 so'm</div>
+<div class="name">Termos 1L</div>
 </div>
 
-</div>`;
-});
-document.getElementById("products").innerHTML=h;
-}
+<div class="card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<div class="price">180 000 so'm</div>
+<div class="name">Elektr choynak</div>
+</div>
 
-show(products);
+<div class="card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<div class="price">220 000 so'm</div>
+<div class="name">Blender 3x1</div>
+</div>
 
-function plus(i){
-cart[i] = cart[i] ? cart[i]+1 : 1;
-show(products);
-showCart();
-}
+<div class="card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<div class="price">170 000 so'm</div>
+<div class="name">Qozon 5L</div>
+</div>
 
-function minus(i){
-if(cart[i]){
-cart[i]--;
-if(cart[i]==0) delete cart[i];
-}
-show(products);
-showCart();
-}
+</div>
 
-function toggleCart(){
-let box=document.getElementById("cartBox");
-box.style.display = box.style.display=="block"?"none":"block";
-showCart();
-}
-
-function showCart(){
-let box=document.getElementById("cartBox");
-let h="";
-let total=0;
-
-for(let i in cart){
-let p=products[i];
-let count=cart[i];
-let sum=p.p*count;
-
-h+=`<div class="item">${p.n} x ${count} = ${sum.toLocaleString()} so'm</div>`;
-total+=sum;
-}
-
-h+=`
-<hr><b>Jami: ${total.toLocaleString()} so'm</b>
-
-<input id="name" placeholder="Ismingiz">
-<input id="phone" placeholder="Telefon raqam">
-
-<button class="order" onclick="sendOrder()">Buyurtma berish</button>
-`;
-
-box.innerHTML=h;
-}
-
-function sendOrder(){
-
-let name=document.getElementById("name").value;
-let phone=document.getElementById("phone").value;
-
-let text="Yangi buyurtma:%0A";
-
-for(let i in cart){
-let p=products[i];
-let count=cart[i];
-text+=p.n+" x "+count+" = "+(p.p*count)+" so'm%0A";
-}
-
-text+="%0AIsm: "+name;
-text+="%0ATelefon: "+phone;
-
-window.open("https://t.me/Sardoba27bot?start="+text);
-
-}
-
-function filter(cat){
-if(cat=="all") return show(products);
-show(products.filter(p=>p.c==cat));
-}
-
-function search(txt){
-txt=txt.toLowerCase();
-show(products.filter(p=>p.n.toLowerCase().includes(txt)));
-}
-
-</script>
+<div class="bottom">
+🏠
+📦
+❤️
+👤
+</div>
 
 </body>
 </html>
