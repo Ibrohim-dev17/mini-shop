@@ -94,7 +94,7 @@ font-size:14px;
 <!-- SEARCH -->
 
 <div class="search-box">
-<input type="text" placeholder="Search category...">
+<input type="text" id="searchInput" placeholder="Search category...">
 </div>
 
 <!-- CATEGORIES -->
@@ -133,5 +133,30 @@ font-size:14px;
 
 </div>
 
+ <script>
+
+const search = document.getElementById("searchInput");
+const categories = document.querySelectorAll(".cat-card");
+
+search.addEventListener("keyup", function(){
+
+let text = search.value.toLowerCase();
+
+categories.forEach(function(card){
+
+let name = card.innerText.toLowerCase();
+
+if(name.includes(text)){
+card.style.display = "block";
+}else{
+card.style.display = "none";
+}
+
+});
+
+});
+
+</script> 
+  
 </body>
 </html>
