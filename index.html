@@ -8,7 +8,7 @@
 <style>
 body{
 margin:0;
-font-family:Arial, sans-serif;
+font-family:Arial;
 background:#f5f5f5;
 }
 
@@ -19,35 +19,6 @@ padding:15px;
 font-size:22px;
 font-weight:bold;
 text-align:center;
-}
-
-.search{
-padding:10px;
-background:white;
-}
-
-.search input{
-width:100%;
-padding:10px;
-border-radius:10px;
-border:1px solid #ddd;
-font-size:15px;
-}
-
-.categories{
-display:flex;
-overflow-x:auto;
-padding:10px;
-background:white;
-}
-
-.categories button{
-border:none;
-background:#f0f0f0;
-padding:10px 15px;
-border-radius:20px;
-margin-right:8px;
-cursor:pointer;
 }
 
 .products{
@@ -80,21 +51,14 @@ font-weight:bold;
 margin-top:5px;
 }
 
-.counter{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:5px;
-}
-
-.counter button{
-border:none;
+.buy{
 background:#6a5acd;
 color:white;
-width:30px;
-height:30px;
-border-radius:6px;
-font-size:18px;
+border:none;
+width:100%;
+padding:8px;
+border-radius:8px;
+margin-top:5px;
 }
 
 .cart-btn{
@@ -105,8 +69,8 @@ background:#6a5acd;
 color:white;
 padding:12px 18px;
 border-radius:30px;
-font-weight:bold;
 cursor:pointer;
+font-weight:bold;
 }
 
 .cart{
@@ -114,8 +78,8 @@ position:fixed;
 bottom:70px;
 right:10px;
 background:white;
-width:270px;
-max-height:350px;
+width:280px;
+max-height:400px;
 overflow:auto;
 border-radius:12px;
 box-shadow:0 0 12px rgba(0,0,0,0.2);
@@ -123,10 +87,22 @@ display:none;
 padding:10px;
 }
 
-.remove{
-color:red;
-cursor:pointer;
-font-size:14px;
+input{
+width:100%;
+padding:8px;
+margin-top:5px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+.order{
+background:#6a5acd;
+color:white;
+border:none;
+width:100%;
+padding:10px;
+border-radius:8px;
+margin-top:10px;
 }
 </style>
 </head>
@@ -134,19 +110,6 @@ font-size:14px;
 <body>
 
 <header>Kitchen Market</header>
-
-<div class="search">
-<input type="text" placeholder="Mahsulot qidirish..." oninput="search(this.value)">
-</div>
-
-<div class="categories">
-<button onclick="filter('all')">Hammasi</button>
-<button onclick="filter('termos')">Termoslar</button>
-<button onclick="filter('choynak')">Choynaklar</button>
-<button onclick="filter('blender')">Blenderlar</button>
-<button onclick="filter('idish')">Idishlar</button>
-<button onclick="filter('qozon')">Qozonlar</button>
-</div>
 
 <div class="products" id="products"></div>
 
@@ -156,45 +119,35 @@ font-size:14px;
 <script>
 
 let products = [
-{n:"Termos 1L",p:120000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Termos 2L",p:150000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Elektr choynak",p:180000,c:"choynak",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Blender 3x1",p:220000,c:"blender",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Idishlar set",p:300000,c:"idish",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Qozon 5L",p:170000,c:"qozon",i:"https://i.imgur.com/3ZQ3Z5b.png"}
+{n:"Termos 1L",p:120000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Termos 2L",p:150000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Elektr choynak",p:180000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Blender 3x1",p:220000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Idishlar set",p:300000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Qozon 5L",p:170000,i:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
 let cart = [];
 
-function show(list){
+function show(){
 let h="";
-list.forEach((p,i)=>{
+products.forEach((p,i)=>{
 h+=`
 <div class="card">
 <img src="${p.i}">
 <div class="name">${p.n}</div>
 <div class="price">${p.p.toLocaleString()} so'm</div>
-
-<div class="counter">
-<button onclick="add(${i})">+</button>
-<button onclick="remove(${i})">-</button>
-</div>
-
+<button class="buy" onclick="add(${i})">Savatga qo'shish</button>
 </div>`;
 });
 document.getElementById("products").innerHTML=h;
 }
 
-show(products);
+show();
 
 function add(i){
 cart.push(products[i]);
 alert("Savatga qo'shildi");
-showCart();
-}
-
-function remove(i){
-cart.pop();
 showCart();
 }
 
@@ -209,34 +162,41 @@ let box=document.getElementById("cartBox");
 let h="";
 let total=0;
 
-cart.forEach((p,i)=>{
-h+=p.n+" - "+p.p.toLocaleString()+" so'm <span class='remove' onclick='deleteItem("+i+")'>o'chirish</span><br>";
+cart.forEach(p=>{
+h+=p.n+" - "+p.p.toLocaleString()+" so'm<br>";
 total+=p.p;
 });
 
-h+=`<hr><b>Jami: ${total.toLocaleString()} so'm</b><br><br>
-<a href="https://t.me/Sardoba27bot" target="_blank">
-<button style="background:#6a5acd;color:white;border:none;padding:10px;width:100%;border-radius:8px;">
-Buyurtma berish
-</button>
-</a>`;
+h+=`
+<hr><b>Jami: ${total.toLocaleString()} so'm</b><br><br>
+
+Ismingiz:
+<input id="name" placeholder="Ismingizni yozing">
+
+Telefon:
+<input id="phone" placeholder="Telefon raqam">
+
+<button class="order" onclick="sendOrder()">Buyurtma berish</button>
+`;
 
 box.innerHTML=h;
 }
 
-function deleteItem(i){
-cart.splice(i,1);
-showCart();
-}
+function sendOrder(){
 
-function filter(cat){
-if(cat=="all") return show(products);
-show(products.filter(p=>p.c==cat));
-}
+let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
 
-function search(txt){
-txt=txt.toLowerCase();
-show(products.filter(p=>p.n.toLowerCase().includes(txt)));
+let text="Yangi buyurtma:%0A";
+cart.forEach(p=>{
+text+=p.n+" - "+p.p+" so'm%0A";
+});
+
+text+="%0AIsm: "+name;
+text+="%0ATelefon: "+phone;
+
+window.open("https://t.me/Sardoba27bot?start="+text);
+
 }
 
 </script>
