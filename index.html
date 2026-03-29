@@ -177,7 +177,7 @@ font-size:20px;
 </div>
 
 <div class="search">
-<input type="text" placeholder="What are you looking for?">
+<input type="text" id="searchHome" placeholder="What are you looking for?">
 <div class="filter">⚙️</div>
 </div>
 
@@ -243,5 +243,30 @@ font-size:20px;
 👤
 </div>
 
+<script>
+
+const searchHome = document.getElementById("searchHome");
+const homeCategories = document.querySelectorAll(".cat-card");
+
+searchHome.addEventListener("keyup", function(){
+
+let text = searchHome.value.toLowerCase();
+
+homeCategories.forEach(function(card){
+
+let name = card.innerText.toLowerCase();
+
+if(name.includes(text)){
+card.style.display = "block";
+}else{
+card.style.display = "none";
+}
+
+});
+
+});
+
+</script>
+  
 </body>
 </html>
