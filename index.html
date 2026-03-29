@@ -6,110 +6,48 @@
 <title>Kitchen Market</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#f5f5f5;
-}
+body{margin:0;font-family:Arial;background:#f5f5f5;}
+header{background:#6a5acd;color:white;padding:15px;font-size:22px;font-weight:bold;text-align:center;}
 
-header{
-background:#6a5acd;
-color:white;
-padding:15px;
-font-size:22px;
-font-weight:bold;
-text-align:center;
-}
+.search{padding:10px;background:white;}
+.search input{width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;}
 
-.products{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-padding:12px;
-}
+.categories{display:flex;overflow-x:auto;padding:10px;background:white;}
+.categories button{border:none;background:#f0f0f0;padding:10px 15px;border-radius:20px;margin-right:8px;}
 
-.card{
-background:white;
-border-radius:15px;
-padding:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.08);
-}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px;}
+.card{background:white;border-radius:15px;padding:10px;box-shadow:0 0 10px rgba(0,0,0,0.08);}
+.card img{width:100%;border-radius:12px;}
+.name{font-size:15px;margin-top:5px;}
+.price{color:#6a5acd;font-weight:bold;margin-top:5px;}
 
-.card img{
-width:100%;
-border-radius:12px;
-}
+.buy{background:#6a5acd;color:white;border:none;width:100%;padding:8px;border-radius:8px;margin-top:5px;}
 
-.name{
-font-size:15px;
-margin-top:5px;
-}
+.cart-btn{position:fixed;bottom:15px;right:15px;background:#6a5acd;color:white;padding:12px 18px;border-radius:30px;font-weight:bold;}
 
-.price{
-color:#6a5acd;
-font-weight:bold;
-margin-top:5px;
-}
+.cart{position:fixed;bottom:70px;right:10px;background:white;width:280px;max-height:400px;overflow:auto;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.2);display:none;padding:10px;}
 
-.buy{
-background:#6a5acd;
-color:white;
-border:none;
-width:100%;
-padding:8px;
-border-radius:8px;
-margin-top:5px;
-}
-
-.cart-btn{
-position:fixed;
-bottom:15px;
-right:15px;
-background:#6a5acd;
-color:white;
-padding:12px 18px;
-border-radius:30px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.cart{
-position:fixed;
-bottom:70px;
-right:10px;
-background:white;
-width:280px;
-max-height:400px;
-overflow:auto;
-border-radius:12px;
-box-shadow:0 0 12px rgba(0,0,0,0.2);
-display:none;
-padding:10px;
-}
-
-input{
-width:100%;
-padding:8px;
-margin-top:5px;
-border-radius:8px;
-border:1px solid #ddd;
-}
-
-.order{
-background:#6a5acd;
-color:white;
-border:none;
-width:100%;
-padding:10px;
-border-radius:8px;
-margin-top:10px;
-}
+input{width:100%;padding:8px;margin-top:5px;border-radius:8px;border:1px solid #ddd;}
+.order{background:#6a5acd;color:white;border:none;width:100%;padding:10px;border-radius:8px;margin-top:10px;}
 </style>
 </head>
 
 <body>
 
 <header>Kitchen Market</header>
+
+<div class="search">
+<input type="text" placeholder="Qidirish..." oninput="search(this.value)">
+</div>
+
+<div class="categories">
+<button onclick="filter('all')">Hammasi</button>
+<button onclick="filter('termos')">Termoslar</button>
+<button onclick="filter('choynak')">Choynaklar</button>
+<button onclick="filter('blender')">Blenderlar</button>
+<button onclick="filter('idish')">Idishlar</button>
+<button onclick="filter('qozon')">Qozonlar</button>
+</div>
 
 <div class="products" id="products"></div>
 
@@ -119,19 +57,19 @@ margin-top:10px;
 <script>
 
 let products = [
-{n:"Termos 1L",p:120000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Termos 2L",p:150000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Elektr choynak",p:180000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Blender 3x1",p:220000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Idishlar set",p:300000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Qozon 5L",p:170000,i:"https://i.imgur.com/3ZQ3Z5b.png"}
+{n:"Termos 1L",p:120000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Termos 2L",p:150000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Elektr choynak",p:180000,c:"choynak",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Blender 3x1",p:220000,c:"blender",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Idishlar set",p:300000,c:"idish",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Qozon 5L",p:170000,c:"qozon",i:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
-let cart = [];
+let cart=[];
 
-function show(){
+function show(list){
 let h="";
-products.forEach((p,i)=>{
+list.forEach((p,i)=>{
 h+=`
 <div class="card">
 <img src="${p.i}">
@@ -143,12 +81,12 @@ h+=`
 document.getElementById("products").innerHTML=h;
 }
 
-show();
+show(products);
 
 function add(i){
 cart.push(products[i]);
-alert("Savatga qo'shildi");
 showCart();
+alert("Savatga qo'shildi");
 }
 
 function toggleCart(){
@@ -162,8 +100,8 @@ let box=document.getElementById("cartBox");
 let h="";
 let total=0;
 
-cart.forEach(p=>{
-h+=p.n+" - "+p.p.toLocaleString()+" so'm<br>";
+cart.forEach((p,i)=>{
+h+=p.n+" - "+p.p.toLocaleString()+" so'm <span onclick='deleteItem("+i+")' style='color:red;cursor:pointer'>o'chirish</span><br>";
 total+=p.p;
 });
 
@@ -171,15 +109,30 @@ h+=`
 <hr><b>Jami: ${total.toLocaleString()} so'm</b><br><br>
 
 Ismingiz:
-<input id="name" placeholder="Ismingizni yozing">
+<input id="name" placeholder="Ismingiz">
 
 Telefon:
-<input id="phone" placeholder="Telefon raqam">
+<input id="phone" placeholder="Telefon">
 
 <button class="order" onclick="sendOrder()">Buyurtma berish</button>
 `;
 
 box.innerHTML=h;
+}
+
+function deleteItem(i){
+cart.splice(i,1);
+showCart();
+}
+
+function filter(cat){
+if(cat=="all") return show(products);
+show(products.filter(p=>p.c==cat));
+}
+
+function search(txt){
+txt=txt.toLowerCase();
+show(products.filter(p=>p.n.toLowerCase().includes(txt)));
 }
 
 function sendOrder(){
@@ -188,6 +141,7 @@ let name=document.getElementById("name").value;
 let phone=document.getElementById("phone").value;
 
 let text="Yangi buyurtma:%0A";
+
 cart.forEach(p=>{
 text+=p.n+" - "+p.p+" so'm%0A";
 });
@@ -196,7 +150,6 @@ text+="%0AIsm: "+name;
 text+="%0ATelefon: "+phone;
 
 window.open("https://t.me/Sardoba27bot?start="+text);
-
 }
 
 </script>
