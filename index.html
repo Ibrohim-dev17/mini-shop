@@ -6,9 +6,10 @@
 <title>Kitchen Market</title>
 
 <style>
+
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial, sans-serif;
 background:#f5f5f5;
 }
 
@@ -19,6 +20,35 @@ padding:14px;
 font-size:20px;
 text-align:center;
 font-weight:bold;
+}
+
+.search{
+background:white;
+padding:10px;
+}
+
+.search input{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+.categories{
+display:flex;
+overflow-x:auto;
+padding:10px;
+background:white;
+}
+
+.categories button{
+border:none;
+background:#f0f0f0;
+padding:8px 14px;
+border-radius:20px;
+margin-right:8px;
+font-size:13px;
 }
 
 .products{
@@ -32,7 +62,7 @@ padding:10px;
 background:white;
 border-radius:12px;
 padding:8px;
-box-shadow:0 0 6px rgba(0,0,0,0.1);
+box-shadow:0 0 6px rgba(0,0,0,0.08);
 }
 
 .card img{
@@ -42,7 +72,7 @@ border-radius:10px;
 
 .name{
 font-size:14px;
-margin-top:4px;
+margin-top:5px;
 }
 
 .price{
@@ -60,8 +90,8 @@ margin-top:6px;
 }
 
 .counter button{
-width:32px;
-height:32px;
+width:30px;
+height:30px;
 border:none;
 background:#6a5acd;
 color:white;
@@ -75,7 +105,7 @@ bottom:15px;
 right:15px;
 background:#6a5acd;
 color:white;
-padding:12px 18px;
+padding:12px 16px;
 border-radius:25px;
 font-weight:bold;
 font-size:14px;
@@ -87,12 +117,17 @@ bottom:70px;
 right:8px;
 background:white;
 width:92%;
-max-height:350px;
+max-height:380px;
 overflow:auto;
 border-radius:12px;
 box-shadow:0 0 12px rgba(0,0,0,0.2);
 display:none;
 padding:10px;
+}
+
+.item{
+font-size:14px;
+margin-bottom:5px;
 }
 
 input{
@@ -113,12 +148,26 @@ border-radius:8px;
 margin-top:10px;
 font-size:15px;
 }
+
 </style>
 </head>
 
 <body>
 
 <header>Kitchen Market</header>
+
+<div class="search">
+<input type="text" placeholder="Mahsulot qidirish..." oninput="search(this.value)">
+</div>
+
+<div class="categories">
+<button onclick="filter('all')">Hammasi</button>
+<button onclick="filter('termos')">Termoslar</button>
+<button onclick="filter('choynak')">Choynaklar</button>
+<button onclick="filter('blender')">Blenderlar</button>
+<button onclick="filter('idish')">Idishlar</button>
+<button onclick="filter('qozon')">Qozonlar</button>
+</div>
 
 <div class="products" id="products"></div>
 
@@ -128,19 +177,21 @@ font-size:15px;
 <script>
 
 let products = [
-{n:"Termos 1L",p:120000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Termos 2L",p:150000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Elektr choynak",p:180000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Blender 3x1",p:220000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Idishlar set",p:300000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Qozon 5L",p:170000,i:"https://i.imgur.com/3ZQ3Z5b.png"}
+{n:"Termos 1L",p:120000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Termos 2L",p:150000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Elektr choynak",p:180000,c:"choynak",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Blender 3x1",p:220000,c:"blender",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Idishlar set",p:300000,c:"idish",i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Qozon 5L",p:170000,c:"qozon",i:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
-let cart = [];
+let cart = {};
 
-function show(){
+function show(list){
 let h="";
-products.forEach((p,i)=>{
+list.forEach((p,i)=>{
+let count = cart[i] ? cart[i] : 0;
+
 h+=`
 <div class="card">
 <img src="${p.i}">
@@ -149,6 +200,7 @@ h+=`
 
 <div class="counter">
 <button onclick="minus(${i})">-</button>
+<span>${count}</span>
 <button onclick="plus(${i})">+</button>
 </div>
 
@@ -157,15 +209,20 @@ h+=`
 document.getElementById("products").innerHTML=h;
 }
 
-show();
+show(products);
 
 function plus(i){
-cart.push(products[i]);
+cart[i] = cart[i] ? cart[i]+1 : 1;
+show(products);
 showCart();
 }
 
 function minus(i){
-cart.pop();
+if(cart[i]){
+cart[i]--;
+if(cart[i]==0) delete cart[i];
+}
+show(products);
 showCart();
 }
 
@@ -180,19 +237,20 @@ let box=document.getElementById("cartBox");
 let h="";
 let total=0;
 
-cart.forEach(p=>{
-h+=p.n+" - "+p.p.toLocaleString()+" so'm<br>";
-total+=p.p;
-});
+for(let i in cart){
+let p=products[i];
+let count=cart[i];
+let sum=p.p*count;
+
+h+=`<div class="item">${p.n} x ${count} = ${sum.toLocaleString()} so'm</div>`;
+total+=sum;
+}
 
 h+=`
-<hr><b>Jami: ${total.toLocaleString()} so'm</b><br><br>
+<hr><b>Jami: ${total.toLocaleString()} so'm</b>
 
-Ismingiz:
 <input id="name" placeholder="Ismingiz">
-
-Telefon:
-<input id="phone" placeholder="Telefon">
+<input id="phone" placeholder="Telefon raqam">
 
 <button class="order" onclick="sendOrder()">Buyurtma berish</button>
 `;
@@ -207,15 +265,27 @@ let phone=document.getElementById("phone").value;
 
 let text="Yangi buyurtma:%0A";
 
-cart.forEach(p=>{
-text+=p.n+" - "+p.p+" so'm%0A";
-});
+for(let i in cart){
+let p=products[i];
+let count=cart[i];
+text+=p.n+" x "+count+" = "+(p.p*count)+" so'm%0A";
+}
 
 text+="%0AIsm: "+name;
 text+="%0ATelefon: "+phone;
 
 window.open("https://t.me/Sardoba27bot?start="+text);
 
+}
+
+function filter(cat){
+if(cat=="all") return show(products);
+show(products.filter(p=>p.c==cat));
+}
+
+function search(txt){
+txt=txt.toLowerCase();
+show(products.filter(p=>p.n.toLowerCase().includes(txt)));
 }
 
 </script>
