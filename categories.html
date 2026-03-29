@@ -159,6 +159,20 @@ card.style.display = "none";
 });
 
 </script> 
-  
+
+<script>
+
+if (window.history && window.history.pushState) {
+
+window.history.pushState('forward', null, '');
+
+window.onpopstate = function () {
+window.history.pushState('forward', null, '');
+};
+
+}
+
+</script>
+ 
 </body>
 </html>
