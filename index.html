@@ -6,48 +6,119 @@
 <title>Kitchen Market</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f5f5f5;}
-header{background:#6a5acd;color:white;padding:15px;font-size:22px;font-weight:bold;text-align:center;}
+body{
+margin:0;
+font-family:Arial;
+background:#f5f5f5;
+}
 
-.search{padding:10px;background:white;}
-.search input{width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;}
+header{
+background:#6a5acd;
+color:white;
+padding:14px;
+font-size:20px;
+text-align:center;
+font-weight:bold;
+}
 
-.categories{display:flex;overflow-x:auto;padding:10px;background:white;}
-.categories button{border:none;background:#f0f0f0;padding:10px 15px;border-radius:20px;margin-right:8px;}
+.products{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+padding:10px;
+}
 
-.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px;}
-.card{background:white;border-radius:15px;padding:10px;box-shadow:0 0 10px rgba(0,0,0,0.08);}
-.card img{width:100%;border-radius:12px;}
-.name{font-size:15px;margin-top:5px;}
-.price{color:#6a5acd;font-weight:bold;margin-top:5px;}
+.card{
+background:white;
+border-radius:12px;
+padding:8px;
+box-shadow:0 0 6px rgba(0,0,0,0.1);
+}
 
-.buy{background:#6a5acd;color:white;border:none;width:100%;padding:8px;border-radius:8px;margin-top:5px;}
+.card img{
+width:100%;
+border-radius:10px;
+}
 
-.cart-btn{position:fixed;bottom:15px;right:15px;background:#6a5acd;color:white;padding:12px 18px;border-radius:30px;font-weight:bold;}
+.name{
+font-size:14px;
+margin-top:4px;
+}
 
-.cart{position:fixed;bottom:70px;right:10px;background:white;width:280px;max-height:400px;overflow:auto;border-radius:12px;box-shadow:0 0 12px rgba(0,0,0,0.2);display:none;padding:10px;}
+.price{
+color:#6a5acd;
+font-weight:bold;
+font-size:15px;
+margin-top:3px;
+}
 
-input{width:100%;padding:8px;margin-top:5px;border-radius:8px;border:1px solid #ddd;}
-.order{background:#6a5acd;color:white;border:none;width:100%;padding:10px;border-radius:8px;margin-top:10px;}
+.counter{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:6px;
+}
+
+.counter button{
+width:32px;
+height:32px;
+border:none;
+background:#6a5acd;
+color:white;
+font-size:18px;
+border-radius:6px;
+}
+
+.cart-btn{
+position:fixed;
+bottom:15px;
+right:15px;
+background:#6a5acd;
+color:white;
+padding:12px 18px;
+border-radius:25px;
+font-weight:bold;
+font-size:14px;
+}
+
+.cart{
+position:fixed;
+bottom:70px;
+right:8px;
+background:white;
+width:92%;
+max-height:350px;
+overflow:auto;
+border-radius:12px;
+box-shadow:0 0 12px rgba(0,0,0,0.2);
+display:none;
+padding:10px;
+}
+
+input{
+width:100%;
+padding:9px;
+margin-top:6px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+.order{
+background:#6a5acd;
+color:white;
+border:none;
+width:100%;
+padding:11px;
+border-radius:8px;
+margin-top:10px;
+font-size:15px;
+}
 </style>
 </head>
 
 <body>
 
 <header>Kitchen Market</header>
-
-<div class="search">
-<input type="text" placeholder="Qidirish..." oninput="search(this.value)">
-</div>
-
-<div class="categories">
-<button onclick="filter('all')">Hammasi</button>
-<button onclick="filter('termos')">Termoslar</button>
-<button onclick="filter('choynak')">Choynaklar</button>
-<button onclick="filter('blender')">Blenderlar</button>
-<button onclick="filter('idish')">Idishlar</button>
-<button onclick="filter('qozon')">Qozonlar</button>
-</div>
 
 <div class="products" id="products"></div>
 
@@ -57,36 +128,45 @@ input{width:100%;padding:8px;margin-top:5px;border-radius:8px;border:1px solid #
 <script>
 
 let products = [
-{n:"Termos 1L",p:120000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Termos 2L",p:150000,c:"termos",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Elektr choynak",p:180000,c:"choynak",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Blender 3x1",p:220000,c:"blender",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Idishlar set",p:300000,c:"idish",i:"https://i.imgur.com/3ZQ3Z5b.png"},
-{n:"Qozon 5L",p:170000,c:"qozon",i:"https://i.imgur.com/3ZQ3Z5b.png"}
+{n:"Termos 1L",p:120000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Termos 2L",p:150000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Elektr choynak",p:180000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Blender 3x1",p:220000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Idishlar set",p:300000,i:"https://i.imgur.com/3ZQ3Z5b.png"},
+{n:"Qozon 5L",p:170000,i:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
-let cart=[];
+let cart = [];
 
-function show(list){
+function show(){
 let h="";
-list.forEach((p,i)=>{
+products.forEach((p,i)=>{
 h+=`
 <div class="card">
 <img src="${p.i}">
 <div class="name">${p.n}</div>
 <div class="price">${p.p.toLocaleString()} so'm</div>
-<button class="buy" onclick="add(${i})">Savatga qo'shish</button>
+
+<div class="counter">
+<button onclick="minus(${i})">-</button>
+<button onclick="plus(${i})">+</button>
+</div>
+
 </div>`;
 });
 document.getElementById("products").innerHTML=h;
 }
 
-show(products);
+show();
 
-function add(i){
+function plus(i){
 cart.push(products[i]);
 showCart();
-alert("Savatga qo'shildi");
+}
+
+function minus(i){
+cart.pop();
+showCart();
 }
 
 function toggleCart(){
@@ -100,8 +180,8 @@ let box=document.getElementById("cartBox");
 let h="";
 let total=0;
 
-cart.forEach((p,i)=>{
-h+=p.n+" - "+p.p.toLocaleString()+" so'm <span onclick='deleteItem("+i+")' style='color:red;cursor:pointer'>o'chirish</span><br>";
+cart.forEach(p=>{
+h+=p.n+" - "+p.p.toLocaleString()+" so'm<br>";
 total+=p.p;
 });
 
@@ -120,21 +200,6 @@ Telefon:
 box.innerHTML=h;
 }
 
-function deleteItem(i){
-cart.splice(i,1);
-showCart();
-}
-
-function filter(cat){
-if(cat=="all") return show(products);
-show(products.filter(p=>p.c==cat));
-}
-
-function search(txt){
-txt=txt.toLowerCase();
-show(products.filter(p=>p.n.toLowerCase().includes(txt)));
-}
-
 function sendOrder(){
 
 let name=document.getElementById("name").value;
@@ -150,6 +215,7 @@ text+="%0AIsm: "+name;
 text+="%0ATelefon: "+phone;
 
 window.open("https://t.me/Sardoba27bot?start="+text);
+
 }
 
 </script>
