@@ -3,32 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Kitchen Store</title>
+<title>Kitchen Market</title>
 
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:#fafafa;
+background:#f6f6f6;
 }
 
-.top{
-background:#ff6b6b;
+header{
+background:#6a5acd;
 color:white;
-padding:20px;
-font-size:24px;
-font-weight:bold;
+padding:15px;
+font-size:22px;
 text-align:center;
+font-weight:bold;
 }
 
 .banner{
-background:#fff;
 margin:10px;
+background:white;
 padding:15px;
 border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
 text-align:center;
-font-size:18px;
+box-shadow:0 0 8px rgba(0,0,0,0.08);
 }
 
 .categories{
@@ -38,12 +37,12 @@ padding:10px;
 }
 
 .categories button{
-background:#fff;
 border:none;
-padding:10px 15px;
+background:white;
 margin-right:10px;
+padding:10px 15px;
 border-radius:20px;
-box-shadow:0 0 5px rgba(0,0,0,0.1);
+box-shadow:0 0 6px rgba(0,0,0,0.1);
 cursor:pointer;
 }
 
@@ -72,26 +71,13 @@ margin-top:5px;
 }
 
 .price{
-color:#ff6b6b;
+color:#6a5acd;
 font-weight:bold;
 margin-top:5px;
 }
 
-.qty{
-display:flex;
-justify-content:space-between;
-margin-top:5px;
-}
-
-.qty button{
-border:none;
-background:#eee;
-padding:5px 10px;
-border-radius:6px;
-}
-
 .buy{
-background:#ff6b6b;
+background:#6a5acd;
 color:white;
 border:none;
 width:100%;
@@ -100,26 +86,40 @@ border-radius:8px;
 margin-top:5px;
 }
 
-.cart{
+.cart-btn{
 position:fixed;
 bottom:15px;
 right:15px;
-background:#ff6b6b;
+background:#6a5acd;
 color:white;
 padding:12px 18px;
 border-radius:30px;
 cursor:pointer;
 font-weight:bold;
 }
+
+.cart-box{
+position:fixed;
+bottom:70px;
+right:10px;
+background:white;
+width:250px;
+max-height:300px;
+overflow:auto;
+border-radius:12px;
+box-shadow:0 0 12px rgba(0,0,0,0.2);
+display:none;
+padding:10px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="top">HOME KITCHEN STORE</div>
+<header>Kitchen Market</header>
 
 <div class="banner">
-Bugungi chegirmalar 🔥 Kitchen mahsulotlari arzon narxda
+Bugungi chegirmalar 🔥 Uy anjomlari arzon narxda
 </div>
 
 <div class="categories">
@@ -133,7 +133,8 @@ Bugungi chegirmalar 🔥 Kitchen mahsulotlari arzon narxda
 
 <div class="products" id="products"></div>
 
-<div class="cart" onclick="order()">Buyurtma berish</div>
+<div class="cart-box" id="cartBox"></div>
+<div class="cart-btn" onclick="toggleCart()">Savat</div>
 
 <script>
 
@@ -157,13 +158,6 @@ h+=`
 <img src="${p.i}">
 <div class="name">${p.n}</div>
 <div class="price">${p.p.toLocaleString()} so'm</div>
-
-<div class="qty">
-<button onclick="m(${i})">-</button>
-<span id="q${i}">1</span>
-<button onclick="p1(${i})">+</button>
-</div>
-
 <button class="buy" onclick="add(${i})">Savatga qo'shish</button>
 </div>`;
 }
@@ -173,26 +167,30 @@ document.getElementById("products").innerHTML=h;
 
 show("all");
 
-function p1(i){
-let e=document.getElementById("q"+i);
-e.innerText=parseInt(e.innerText)+1;
-}
-
-function m(i){
-let e=document.getElementById("q"+i);
-if(e.innerText>1)e.innerText=parseInt(e.innerText)-1;
-}
-
 function add(i){
-let q=document.getElementById("q"+i).innerText;
-cart.push(products[i].n+" x"+q);
+cart.push(products[i]);
 alert("Savatga qo'shildi");
+showCart();
 }
 
-function order(){
-let t="Yangi buyurtma:%0A";
-cart.forEach(i=>t+=i+"%0A");
-window.open("https://t.me/YOUR_BOT_USERNAME?start="+t);
+function toggleCart(){
+let box=document.getElementById("cartBox");
+box.style.display = box.style.display=="block"?"none":"block";
+showCart();
+}
+
+function showCart(){
+let box=document.getElementById("cartBox");
+let h="";
+let total=0;
+
+cart.forEach(p=>{
+h+=p.n+" - "+p.p.toLocaleString()+" so'm<br>";
+total+=p.p;
+});
+
+h+="<hr><b>Jami: "+total.toLocaleString()+" so'm</b>";
+box.innerHTML=h;
 }
 
 </script>
