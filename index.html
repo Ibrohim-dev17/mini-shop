@@ -8,8 +8,8 @@
 <style>
 body{
 margin:0;
-font-family:Arial;
-background:#f6f6f6;
+font-family:Arial, sans-serif;
+background:#f5f5f5;
 }
 
 header{
@@ -17,32 +17,36 @@ background:#6a5acd;
 color:white;
 padding:15px;
 font-size:22px;
-text-align:center;
 font-weight:bold;
+text-align:center;
 }
 
-.banner{
-margin:10px;
+.search{
+padding:10px;
 background:white;
-padding:15px;
-border-radius:12px;
-text-align:center;
-box-shadow:0 0 8px rgba(0,0,0,0.08);
+}
+
+.search input{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:15px;
 }
 
 .categories{
 display:flex;
 overflow-x:auto;
 padding:10px;
+background:white;
 }
 
 .categories button{
 border:none;
-background:white;
-margin-right:10px;
+background:#f0f0f0;
 padding:10px 15px;
 border-radius:20px;
-box-shadow:0 0 6px rgba(0,0,0,0.1);
+margin-right:8px;
 cursor:pointer;
 }
 
@@ -76,14 +80,21 @@ font-weight:bold;
 margin-top:5px;
 }
 
-.buy{
+.counter{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:5px;
+}
+
+.counter button{
+border:none;
 background:#6a5acd;
 color:white;
-border:none;
-width:100%;
-padding:8px;
-border-radius:8px;
-margin-top:5px;
+width:30px;
+height:30px;
+border-radius:6px;
+font-size:18px;
 }
 
 .cart-btn{
@@ -94,22 +105,28 @@ background:#6a5acd;
 color:white;
 padding:12px 18px;
 border-radius:30px;
-cursor:pointer;
 font-weight:bold;
+cursor:pointer;
 }
 
-.cart-box{
+.cart{
 position:fixed;
 bottom:70px;
 right:10px;
 background:white;
-width:250px;
-max-height:300px;
+width:270px;
+max-height:350px;
 overflow:auto;
 border-radius:12px;
 box-shadow:0 0 12px rgba(0,0,0,0.2);
 display:none;
 padding:10px;
+}
+
+.remove{
+color:red;
+cursor:pointer;
+font-size:14px;
 }
 </style>
 </head>
@@ -118,22 +135,22 @@ padding:10px;
 
 <header>Kitchen Market</header>
 
-<div class="banner">
-Bugungi chegirmalar 🔥 Uy anjomlari arzon narxda
+<div class="search">
+<input type="text" placeholder="Mahsulot qidirish..." oninput="search(this.value)">
 </div>
 
 <div class="categories">
-<button onclick="show('all')">Hammasi</button>
-<button onclick="show('termos')">Termoslar</button>
-<button onclick="show('choynak')">Choynaklar</button>
-<button onclick="show('blender')">Blenderlar</button>
-<button onclick="show('idish')">Idishlar</button>
-<button onclick="show('qozon')">Qozonlar</button>
+<button onclick="filter('all')">Hammasi</button>
+<button onclick="filter('termos')">Termoslar</button>
+<button onclick="filter('choynak')">Choynaklar</button>
+<button onclick="filter('blender')">Blenderlar</button>
+<button onclick="filter('idish')">Idishlar</button>
+<button onclick="filter('qozon')">Qozonlar</button>
 </div>
 
 <div class="products" id="products"></div>
 
-<div class="cart-box" id="cartBox"></div>
+<div class="cart" id="cartBox"></div>
 <div class="cart-btn" onclick="toggleCart()">Savat</div>
 
 <script>
@@ -149,27 +166,35 @@ let products = [
 
 let cart = [];
 
-function show(cat){
+function show(list){
 let h="";
-products.forEach((p,i)=>{
-if(cat=="all"||p.c==cat){
+list.forEach((p,i)=>{
 h+=`
 <div class="card">
 <img src="${p.i}">
 <div class="name">${p.n}</div>
 <div class="price">${p.p.toLocaleString()} so'm</div>
-<button class="buy" onclick="add(${i})">Savatga qo'shish</button>
+
+<div class="counter">
+<button onclick="add(${i})">+</button>
+<button onclick="remove(${i})">-</button>
+</div>
+
 </div>`;
-}
 });
 document.getElementById("products").innerHTML=h;
 }
 
-show("all");
+show(products);
 
 function add(i){
 cart.push(products[i]);
 alert("Savatga qo'shildi");
+showCart();
+}
+
+function remove(i){
+cart.pop();
 showCart();
 }
 
@@ -184,13 +209,34 @@ let box=document.getElementById("cartBox");
 let h="";
 let total=0;
 
-cart.forEach(p=>{
-h+=p.n+" - "+p.p.toLocaleString()+" so'm<br>";
+cart.forEach((p,i)=>{
+h+=p.n+" - "+p.p.toLocaleString()+" so'm <span class='remove' onclick='deleteItem("+i+")'>o'chirish</span><br>";
 total+=p.p;
 });
 
-h+="<hr><b>Jami: "+total.toLocaleString()+" so'm</b>";
+h+=`<hr><b>Jami: ${total.toLocaleString()} so'm</b><br><br>
+<a href="https://t.me/Sardoba27bot" target="_blank">
+<button style="background:#6a5acd;color:white;border:none;padding:10px;width:100%;border-radius:8px;">
+Buyurtma berish
+</button>
+</a>`;
+
 box.innerHTML=h;
+}
+
+function deleteItem(i){
+cart.splice(i,1);
+showCart();
+}
+
+function filter(cat){
+if(cat=="all") return show(products);
+show(products.filter(p=>p.c==cat));
+}
+
+function search(txt){
+txt=txt.toLowerCase();
+show(products.filter(p=>p.n.toLowerCase().includes(txt)));
 }
 
 </script>
