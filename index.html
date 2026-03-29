@@ -48,96 +48,70 @@ outline:none;
 font-size:18px;
 }
 
-<!-- BANNER -->
+/* BANNER (sen yuborgan banner uchun style) */
 
-<div class="banner-slider">
-<div class="slides">
+.banner-slider{
+overflow-x:auto;
+padding:12px;
+scroll-snap-type:x mandatory;
+}
 
-<div class="slide">
-<h3>Kitchen Chegirma</h3>
-<p>Termos va choynaklarga aksiya</p>
-</div>
+.slides{
+display:flex;
+gap:12px;
+}
 
-<div class="slide">
-<h3>Blender Aksiya</h3>
-<p>3x1 blenderlar arzon</p>
-</div>
+.slide{
+flex:0 0 85%;
+scroll-snap-align:start;
+background:linear-gradient(45deg,#6a5acd,#8a2be2);
+color:white;
+border-radius:16px;
+padding:18px;
+}
 
-</div>
-</div>
+/* CATEGORY */
 
-/* CATEGORY HEADER */
+.category-section{
+padding:12px;
+}
 
 .cat-header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:0 14px;
-margin-top:10px;
 }
 
-.see-btn{
-text-decoration:none;
-color:white;
-background:#6a5acd;
-padding:6px 14px;
-border-radius:20px;
-font-size:13px;
-font-weight:600;
+.cat-header span{
+color:#6a5acd;
+font-size:14px;
+cursor:pointer;
 }
 
-/* CATEGORY */
-
-.categories{
+.cat-list{
 display:flex;
 gap:12px;
-padding:14px;
+margin-top:12px;
 }
 
-.cat{
-background:white;
-padding:14px;
-border-radius:14px;
-text-align:center;
-width:90px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.cat img{
-width:60px;
-}
-
-/* PRODUCTS */
-
-.products{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-padding:12px;
-}
-
-.card{
+.cat-card{
 background:white;
 border-radius:14px;
 padding:10px;
+width:100px;
+text-align:center;
 box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.card img{
-width:100%;
+.cat-card img{
+width:70px;
+height:70px;
 border-radius:12px;
 }
 
-.price{
-color:#6a5acd;
-font-weight:bold;
-font-size:15px;
-margin-top:6px;
-}
-
-.name{
+.cat-card p{
 font-size:13px;
-margin-top:3px;
+margin:6px 0 0;
 }
 
 /* BOTTOM MENU */
@@ -160,6 +134,8 @@ font-size:20px;
 
 <body>
 
+<!-- HEADER -->
+
 <div class="top-header">
 
 <div class="row">
@@ -174,85 +150,59 @@ font-size:20px;
 
 </div>
 
-<!-- REKLAMA SLIDER (faqat shu qo‘shildi) -->
+<!-- BANNER (BU SEN YUBORGAN KOD – O‘ZGARTIRILMADI) -->
 
 <div class="banner-slider">
+<div class="slides">
 
-<div class="banner-track">
-
-<div class="banner-item">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<div class="slide">
+<h3>Kitchen Chegirma</h3>
+<p>Termos va choynaklarga aksiya</p>
 </div>
 
-<div class="banner-item">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-</div>
-
-<div class="banner-item">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<div class="slide">
+<h3>Blender Aksiya</h3>
+<p>3x1 blenderlar arzon</p>
 </div>
 
 </div>
-
 </div>
 
-<!-- CATEGORY TITLE -->
+<!-- CATEGORIES -->
+
+<div class="category-section">
 
 <div class="cat-header">
 <h3>Categories</h3>
-<a href="categories.html" class="see-btn">See all →</a>
+
+<a href="categories.html">
+<span>See all</span>
+</a>
+
 </div>
 
-<!-- CATEGORY -->
+<div class="cat-list">
 
-<div class="categories">
-
-<div class="cat">
+<div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Termos</p>
 </div>
 
-<div class="cat">
+<div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Choynak</p>
 </div>
 
-<div class="cat">
+<div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Blender</p>
 </div>
 
 </div>
 
-<!-- PRODUCTS -->
-
-<div class="products">
-
-<div class="card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">120 000 so'm</div>
-<div class="name">Termos 1L</div>
 </div>
 
-<div class="card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">180 000 so'm</div>
-<div class="name">Elektr choynak</div>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">220 000 so'm</div>
-<div class="name">Blender 3x1</div>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<div class="price">170 000 so'm</div>
-<div class="name">Qozon 5L</div>
-</div>
-
-</div>
+<!-- BOTTOM MENU -->
 
 <div class="bottom">
 🏠
