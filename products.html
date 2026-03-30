@@ -76,10 +76,7 @@ font-size:14px;
 <b id="title">Products</b>
 </div>
 
-<div class="products" id="products">
-
-</div>
-
+<div class="products" id="products"></div>
 
 <script>
 
@@ -92,12 +89,14 @@ const category = params.get("cat");
 
 document.getElementById("title").innerText = category;
 
-/* Qaysi kategoriya bo‘lsa o‘sha mahsulot chiqadi */
+/* Mahsulotlar chiqadigan joy */
 
 const products = document.getElementById("products");
 
+/* TERMOS */
+
 if(category === "termos"){
-products.innerHTML = 
+products.innerHTML = `
 
 <div class="product-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
@@ -135,53 +134,13 @@ products.innerHTML =
 <div class="price">240 000 so'm</div>
 </div>
 
-;
+`;
 }
 
-if(category === "termos"){
-products.innerHTML = 
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Termos 1L</p>
-<div class="price">120 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Termos 2L</p>
-<div class="price">150 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Termos 3L</p>
-<div class="price">190 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Temir Termos 2L</p>
-<div class="price">170 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Sport Termos</p>
-<div class="price">110 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Katta Termos 5L</p>
-<div class="price">240 000 so'm</div>
-</div>
-
-;
-}
+/* BLENDER */
 
 if(category === "blender"){
-products.innerHTML = 
+products.innerHTML = `
 
 <div class="product-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
@@ -219,11 +178,13 @@ products.innerHTML =
 <div class="price">390 000 so'm</div>
 </div>
 
-;
-}  
+`;
+}
+
+/* QOZON */
 
 if(category === "qozon"){
-products.innerHTML = 
+products.innerHTML = `
 
 <div class="product-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
@@ -261,11 +222,13 @@ products.innerHTML =
 <div class="price">320 000 so'm</div>
 </div>
 
-;
+`;
 }
 
+/* MIKSER */
+
 if(category === "mikser"){
-products.innerHTML = 
+products.innerHTML = `
 
 <div class="product-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
@@ -303,11 +266,13 @@ products.innerHTML =
 <div class="price">210 000 so'm</div>
 </div>
 
-;
-}  
+`;
+}
+
+/* IDISHLAR */
 
 if(category === "idishlar"){
-products.innerHTML = 
+products.innerHTML = `
 
 <div class="product-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
@@ -345,9 +310,9 @@ products.innerHTML =
 <div class="price">260 000 so'm</div>
 </div>
 
-;
-}  
-  
+`;
+}
+
 </script>
 
 </body>
