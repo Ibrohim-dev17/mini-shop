@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Products</title>
+<title>Product</title>
 
 <style>
 
@@ -13,57 +13,52 @@ font-family:system-ui;
 background:#f5f5f5;
 }
 
-/* HEADER */
-
-.header{
+.product{
 background:white;
-padding:14px;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.back-btn{
-text-decoration:none;
-background:#6a5acd;
-color:white;
-padding:6px 12px;
-border-radius:20px;
-font-size:13px;
-}
-
-/* PRODUCTS */
-
-.products{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-padding:14px;
-}
-
-.product-card{
-background:white;
-border-radius:14px;
-padding:12px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
+margin:12px;
+border-radius:16px;
+padding:16px;
 text-align:center;
 }
 
-.product-card img{
-width:90px;
-height:90px;
+.product img{
+width:180px;
+border-radius:14px;
+}
+
+.desc{
+margin-top:10px;
+font-size:14px;
+color:#555;
+}
+
+.counter{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:14px;
+margin-top:14px;
+}
+
+.counter button{
+width:34px;
+height:34px;
+border:none;
+border-radius:8px;
+background:#6a5acd;
+color:white;
+font-size:18px;
+}
+
+.add-btn{
+margin-top:14px;
+background:#6a5acd;
+color:white;
+padding:12px;
 border-radius:12px;
-}
-
-.product-card p{
-margin:8px 0 4px;
-font-size:14px;
-}
-
-.price{
-color:#6a5acd;
-font-weight:600;
-font-size:14px;
+border:none;
+width:100%;
+font-size:15px;
 }
 
 </style>
@@ -71,246 +66,44 @@ font-size:14px;
 
 <body>
 
-<div class="header">
-<a href="categories.html" class="back-btn">⬅ Back</a>
-<b id="title">Products</b>
+<div class="product">
+
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+
+<h3>Termos 1L</h3>
+
+<div class="desc">
+Issiq suvni 12 soat issiq saqlaydi. Zanglamaydigan po'latdan tayyorlangan.
 </div>
 
-<div class="products" id="products"></div>
+<div class="counter">
+<button onclick="minus()">-</button>
+<span id="count">1</span>
+<button onclick="plus()">+</button>
+</div>
+
+<button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
+
+</div>
 
 <script>
 
-/* Qaysi kategoriya bosilganini olish */
+let count = 1;
 
-const params = new URLSearchParams(window.location.search);
-const category = params.get("cat");
-
-/* Title o‘zgaradi */
-
-document.getElementById("title").innerText = category;
-
-/* Mahsulotlar chiqadigan joy */
-
-const products = document.getElementById("products");
-
-/* TERMOS */
-
-if(category === "termos"){
-products.innerHTML = `
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Termos 1L</p>
-<div class="price">120 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Termos 2L</p>
-<div class="price">150 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Termos 3L</p>
-<div class="price">190 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Temir Termos 2L</p>
-<div class="price">170 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Sport Termos</p>
-<div class="price">110 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Katta Termos 5L</p>
-<div class="price">240 000 so'm</div>
-</div>
-
-`;
+function plus(){
+count++;
+document.getElementById("count").innerText = count;
 }
 
-/* BLENDER */
-
-if(category === "blender"){
-products.innerHTML = `
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Blender 3x1</p>
-<div class="price">220 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Blender 5x1</p>
-<div class="price">290 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Katta Blender</p>
-<div class="price">340 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mini Blender</p>
-<div class="price">160 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Blender Metall</p>
-<div class="price">310 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Professional Blender</p>
-<div class="price">390 000 so'm</div>
-</div>
-
-`;
+function minus(){
+if(count > 1){
+count--;
+document.getElementById("count").innerText = count;
+}
 }
 
-/* QOZON */
-
-if(category === "qozon"){
-products.innerHTML = `
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Qozon 5L</p>
-<div class="price">180 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Qozon 7L</p>
-<div class="price">210 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Qozon 10L</p>
-<div class="price">260 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Qozon Temir</p>
-<div class="price">240 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Qozon Qopqoqli</p>
-<div class="price">230 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Katta Qozon 15L</p>
-<div class="price">320 000 so'm</div>
-</div>
-
-`;
-}
-
-/* MIKSER */
-
-if(category === "mikser"){
-products.innerHTML = `
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mikser Oddiy</p>
-<div class="price">120 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mikser 5 Speed</p>
-<div class="price">150 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mikser Metall</p>
-<div class="price">180 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mikser Professional</p>
-<div class="price">240 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mini Mikser</p>
-<div class="price">95 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Mikser 7 Speed</p>
-<div class="price">210 000 so'm</div>
-</div>
-
-`;
-}
-
-/* IDISHLAR */
-
-if(category === "idishlar"){
-products.innerHTML = `
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Idishlar To‘plami</p>
-<div class="price">150 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Chinni Idishlar</p>
-<div class="price">230 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Oshxona Idishlari</p>
-<div class="price">180 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Kosalar To‘plami</p>
-<div class="price">95 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Likopchalar</p>
-<div class="price">110 000 so'm</div>
-</div>
-
-<div class="product-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Premium Idishlar</p>
-<div class="price">260 000 so'm</div>
-</div>
-
-`;
+function addToCart(){
+alert("Mahsulot savatga qo‘shildi");
 }
 
 </script>
