@@ -173,6 +173,44 @@ margin-top:6px;
 font-size:14px;
 opacity:0.9;
 }
+
+/* RANDOM PRODUCTS */
+
+.random-section{
+padding:12px;
+}
+
+.random-products{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:10px;
+}
+
+.product-card{
+background:white;
+border-radius:14px;
+padding:10px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.product-card img{
+width:80px;
+height:80px;
+border-radius:10px;
+}
+
+.product-card p{
+font-size:14px;
+margin:6px 0;
+}
+
+.price{
+font-size:13px;
+color:#6a5acd;
+font-weight:600;
+}
   
 </style>
 </head>
@@ -258,6 +296,16 @@ opacity:0.9;
 
 <!-- BOTTOM MENU -->
 
+<!-- RANDOM PRODUCTS -->
+
+<div class="random-section">
+
+<h3>Popular Products</h3>
+
+<div class="random-products" id="randomProducts"></div>
+
+</div>
+  
 <div class="bottom">
 🏠
 🛒
@@ -315,6 +363,47 @@ bannerIndex++;
 if(bannerIndex >= bannerCount){ bannerIndex = 0; }
 bannerTrack.style.transform = "translateX(-" + bannerIndex*92 + "%)";
 }, 3000);
+
+</script>
+
+<script>
+
+const products = [
+{name:"Termos 1L", price:"120 000 so'm"},
+{name:"Termos 2L", price:"150 000 so'm"},
+{name:"Blender 3x1", price:"220 000 so'm"},
+{name:"Blender 5x1", price:"290 000 so'm"},
+{name:"Choynak Metall", price:"130 000 so'm"},
+{name:"Choynak Elektr", price:"190 000 so'm"},
+{name:"Qozon 5L", price:"180 000 so'm"},
+{name:"Qozon 10L", price:"260 000 so'm"},
+{name:"Mikser Oddiy", price:"120 000 so'm"},
+{name:"Mikser Professional", price:"240 000 so'm"},
+{name:"Idishlar To‘plami", price:"150 000 so'm"},
+{name:"Kosalar To‘plami", price:"95 000 so'm"}
+];
+
+const randomBox = document.getElementById("randomProducts");
+
+function showRandomProducts(){
+
+randomBox.innerHTML = "";
+
+for(let i=0;i<6;i++){
+
+let random = products[Math.floor(Math.random()*products.length)];
+
+randomBox.innerHTML += 
+<div class="product-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>${random.name}</p>
+<div class="price">${random.price}</div>
+</div>
+;
+}
+}
+
+showRandomProducts();
 
 </script>
   
