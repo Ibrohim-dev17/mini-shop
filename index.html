@@ -48,18 +48,6 @@ outline:none;
 font-size:18px;
 }
 
-/* BANNER (sen yuborgan banner uchun style) */
-
-.banner-slider{
-overflow-x:auto;
-padding:12px;
-scroll-snap-type:x mandatory;
-}
-
-.slides{
-display:flex;
-gap:12px;
-}
 
 .slide{
 flex:0 0 85%;
@@ -76,13 +64,7 @@ padding:18px;
 padding:12px;
 }
 
-.cat-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.cat-header span{
+.cat-headern{
 color:#6a5acd;
 font-size:14px;
 cursor:pointer;
@@ -160,7 +142,37 @@ font-size:20px;
   background:#5846c5;
 }
 
+/* BANNER */
 
+.banner{
+overflow:hidden;
+padding:12px;
+}
+
+.banner-track{
+display:flex;
+transition:0.5s;
+}
+
+.banner-card{
+min-width:90%;
+background:linear-gradient(45deg,#6a5acd,#8a2be2);
+color:white;
+border-radius:18px;
+padding:20px;
+margin-right:12px;
+}
+
+.banner-card h3{
+margin:0;
+font-size:18px;
+}
+
+.banner-card p{
+margin-top:6px;
+font-size:14px;
+opacity:0.9;
+}
   
 </style>
 </head>
@@ -185,20 +197,30 @@ font-size:20px;
 
 <!-- BANNER (BU SEN YUBORGAN KOD – O‘ZGARTIRILMADI) -->
 
-<div class="banner-slider">
-<div class="slides">
+<!-- BANNER -->
 
-<div class="slide">
+<div class="banner">
+<div class="banner-track" id="bannerTrack">
+
+<div class="banner-card">
 <h3>Kitchen Chegirma</h3>
 <p>Termos va choynaklarga aksiya</p>
 </div>
 
-<div class="slide">
+<div class="banner-card">
 <h3>Blender Aksiya</h3>
-<p>3x1 blenderlar arzon</p>
+<p>3x1 blenderlar arzon narxda</p>
+</div>
+
+<div class="banner-card">
+<h3>Yangi Mahsulotlar</h3>
+<p>Oshxona jihozlari yangi keldi</p>
 </div>
 
 </div>
+</div>
+
+  
 </div>
 
 <!-- CATEGORIES -->
@@ -279,6 +301,20 @@ window.history.pushState('forward', null, '');
 };
 
 }
+
+</script>
+
+<script>
+
+let bannerIndex = 0;
+const bannerTrack = document.getElementById("bannerTrack");
+const bannerCount = document.querySelectorAll(".banner-card").length;
+
+setInterval(() => {
+bannerIndex++;
+if(bannerIndex >= bannerCount){ bannerIndex = 0; }
+bannerTrack.style.transform = "translateX(-" + bannerIndex*92 + "%)";
+}, 3000);
 
 </script>
   
