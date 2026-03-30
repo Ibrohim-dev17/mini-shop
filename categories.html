@@ -80,40 +80,6 @@ margin-top:8px;
 font-size:14px;
 }
 
-/* PRODUCTS */
-
-.products{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-padding:14px;
-}
-
-.product-card{
-background:white;
-border-radius:14px;
-padding:12px;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
-text-align:center;
-}
-
-.product-card img{
-width:90px;
-height:90px;
-border-radius:12px;
-}
-
-.product-card p{
-margin:8px 0 4px;
-font-size:14px;
-}
-
-.price{
-color:#6a5acd;
-font-weight:600;
-font-size:14px;
-}
-
 </style>
 </head>
 
@@ -180,12 +146,6 @@ font-size:14px;
 
 </div>
 
-<!-- POPULAR PRODUCTS -->
-
-<h3 style="padding:14px;">Popular products</h3>
-
-<div class="products" id="popularProducts"></div>
-
 <script>
 
 /* SEARCH */
@@ -211,37 +171,7 @@ card.style.display = "none";
 
 });
 
-/* RANDOM PRODUCTS */
-
-const allProducts = [
-
-{name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Katta Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-
-];
-
-const randomProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0,6);
-
-const container = document.getElementById("popularProducts");
-
-randomProducts.forEach(p => {
-container.innerHTML += `
-<div class="product-card">
-<img src="${p.img}">
-<p>${p.name}</p>
-<div class="price">${p.price} so'm</div>
-</div>
-`;
-});
-
-</script>
+</script> 
 
 <script>
 
