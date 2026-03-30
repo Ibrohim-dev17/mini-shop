@@ -106,29 +106,31 @@ overflow:hidden;
 padding:12px;
 }
 
+.banner{
+overflow-x:auto;
+padding:12px;
+scroll-snap-type:x mandatory;
+-webkit-overflow-scrolling:touch;
+}
+
+.banner::-webkit-scrollbar{
+display:none;
+}
+
 .banner-track{
 display:flex;
-transition:0.5s;
+gap:12px;
 }
 
 .banner-card{
-min-width:90%;
+min-width:85%;
+flex:0 0 auto;
+scroll-snap-align:start;
 background:linear-gradient(45deg,#6a5acd,#8a2be2);
 color:white;
 border-radius:18px;
 padding:20px;
-margin-right:12px;
-}
-
-.banner-card h3{
-margin:0;
-font-size:18px;
-}
-
-.banner-card p{
-margin-top:6px;
-font-size:14px;
-opacity:0.9;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
 }
 
 /* RANDOM PRODUCTS */
@@ -208,11 +210,11 @@ font-size:20px;
 <!-- BANNER -->
 
 <div class="banner">
-<div class="banner-track" id="bannerTrack">
+<div class="banner-track">
 
 <div class="banner-card">
 <h3>Kitchen Chegirma</h3>
-<p>Termos va choynaklarga aksiya</p>
+<p>Termos va choynaklarga katta aksiya</p>
 </div>
 
 <div class="banner-card">
@@ -222,7 +224,7 @@ font-size:20px;
 
 <div class="banner-card">
 <h3>Yangi Mahsulotlar</h3>
-<p>Oshxona jihozlari yangi keldi</p>
+<p>Yangi oshxona jihozlari keldi</p>
 </div>
 
 </div>
