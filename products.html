@@ -7,17 +7,16 @@
 
 <style>
 body{margin:0;font-family:system-ui;background:#f5f5f5;}
-.product{background:white;margin:12px;border-radius:16px;padding:16px;text-align:center;}
-.product img{width:180px;border-radius:14px;}
-.desc{margin-top:10px;font-size:14px;color:#555;}
+.box{background:white;margin:12px;padding:16px;border-radius:16px;text-align:center;}
+img{width:180px;border-radius:14px;}
 .counter{display:flex;justify-content:center;gap:14px;margin-top:14px;}
-.counter button{width:34px;height:34px;border:none;border-radius:8px;background:#6a5acd;color:white;font-size:18px;}
-.add-btn{margin-top:14px;background:#6a5acd;color:white;padding:12px;border-radius:12px;border:none;width:100%;font-size:15px;}
+button{width:34px;height:34px;border:none;border-radius:8px;background:#6a5acd;color:white;font-size:18px;}
+.add{margin-top:14px;background:#6a5acd;color:white;padding:12px;border:none;border-radius:12px;width:100%;}
 </style>
 </head>
 <body>
 
-<div class="product" id="productBox"></div>
+<div class="box" id="box"></div>
 
 <script>
 
@@ -25,22 +24,21 @@ const url = new URLSearchParams(window.location.search);
 const id = url.get("id");
 
 const products = [
-{id:1,name:"Termos 1L",price:"120 000",img:"https://i.imgur.com/3ZQ3Z5b.png",desc:"Issiqni 12 soat saqlaydi"},
+{id:1,name:"Termos 1L",price:"120 000",img:"https://i.imgur.com/3ZQ3Z5b.png",desc:"12 soat issiq saqlaydi"},
 {id:2,name:"Termos 2L",price:"150 000",img:"https://i.imgur.com/3ZQ3Z5b.png",desc:"Katta hajmli termos"},
 {id:3,name:"Blender 3x1",price:"220 000",img:"https://i.imgur.com/3ZQ3Z5b.png",desc:"3 funksiyali blender"},
 {id:4,name:"Mini Blender",price:"160 000",img:"https://i.imgur.com/3ZQ3Z5b.png",desc:"Kichik blender"}
 ];
 
 const p = products.find(x=>x.id==id);
-
 let count = 1;
 
-const box = document.getElementById("productBox");
+const box = document.getElementById("box");
 
 box.innerHTML = `
 <img src="${p.img}">
 <h3>${p.name}</h3>
-<div class="desc">${p.desc}</div>
+<p>${p.desc}</p>
 
 <div class="counter">
 <button onclick="minus()">-</button>
@@ -48,12 +46,12 @@ box.innerHTML = `
 <button onclick="plus()">+</button>
 </div>
 
-<button class="add-btn" onclick="addToCart()">Savatga qo'shish</button>
+<button class="add" onclick="add()">Savatga qo'shish</button>
 `;
 
 function plus(){count++;document.getElementById("count").innerText=count;}
 function minus(){if(count>1){count--;document.getElementById("count").innerText=count;}}
-function addToCart(){alert("Savatga qo'shildi");}
+function add(){alert("Savatga qo'shildi");}
 
 </script>
 
