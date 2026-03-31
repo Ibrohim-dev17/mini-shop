@@ -6,14 +6,11 @@
 <title>Kitchen Market</title>
 
 <style>
-
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f5f5;
 }
-
-/* HEADER */
 
 .top-header{
 background:white;
@@ -44,11 +41,24 @@ font-size:14px;
 outline:none;
 }
 
-.filter{
-font-size:18px;
+.banner{
+overflow-x:auto;
+padding:12px;
+scroll-snap-type:x mandatory;
 }
 
-/* CATEGORY */
+.banner-track{
+display:flex;
+gap:12px;
+}
+
+.banner-card{
+min-width:85%;
+background:linear-gradient(45deg,#6a5acd,#8a2be2);
+color:white;
+border-radius:18px;
+padding:20px;
+}
 
 .category-section{
 padding:12px;
@@ -64,6 +74,7 @@ align-items:center;
 display:flex;
 gap:12px;
 margin-top:12px;
+overflow-x:auto;
 }
 
 .cat-card{
@@ -72,7 +83,6 @@ border-radius:14px;
 padding:10px;
 width:100px;
 text-align:center;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
 .cat-card img{
@@ -80,60 +90,6 @@ width:70px;
 height:70px;
 border-radius:12px;
 }
-
-.cat-card p{
-font-size:13px;
-margin:6px 0 0;
-}
-
-/* SEE ALL BUTTON */
-
-.see-btn{
-background:#6a5acd;
-color:white;
-padding:8px 14px;
-border-radius:50px;
-text-decoration:none;
-font-size:13px;
-font-weight:600;
-display:inline-block;
-}
-
-/* BANNER */
-
-.banner{
-overflow:hidden;
-padding:12px;
-}
-
-.banner{
-overflow-x:auto;
-padding:12px;
-scroll-snap-type:x mandatory;
--webkit-overflow-scrolling:touch;
-}
-
-.banner::-webkit-scrollbar{
-display:none;
-}
-
-.banner-track{
-display:flex;
-gap:12px;
-}
-
-.banner-card{
-min-width:85%;
-flex:0 0 auto;
-scroll-snap-align:start;
-background:linear-gradient(45deg,#6a5acd,#8a2be2);
-color:white;
-border-radius:18px;
-padding:20px;
-box-shadow:0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* RANDOM PRODUCTS */
 
 .random-section{
 padding:12px;
@@ -143,7 +99,6 @@ padding:12px;
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:12px;
-margin-top:10px;
 }
 
 .product-card{
@@ -151,7 +106,6 @@ background:white;
 border-radius:14px;
 padding:10px;
 text-align:center;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
 .product-card img{
@@ -160,18 +114,11 @@ height:80px;
 border-radius:10px;
 }
 
-.product-card p{
-font-size:14px;
-margin:6px 0;
-}
-
 .price{
 font-size:13px;
 color:#6a5acd;
 font-weight:600;
 }
-
-/* BOTTOM MENU */
 
 .bottom{
 position:fixed;
@@ -182,182 +129,98 @@ background:white;
 display:flex;
 justify-content:space-around;
 padding:12px 0;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 font-size:20px;
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-
 <div class="top-header">
-
 <div class="row">
 <div>☰</div>
 <div>🛍️</div>
 </div>
 
 <div class="search">
-<input type="text" id="searchHome" placeholder="What are you looking for?">
-<div class="filter">⚙️</div>
+<input type="text" placeholder="Qidirish...">
 </div>
-
 </div>
-
-<!-- BANNER -->
 
 <div class="banner">
 <div class="banner-track">
 
 <div class="banner-card">
-<h3>Kitchen Chegirma</h3>
-<p>Termos va choynaklarga katta aksiya</p>
+<h3>Termos Aksiya</h3>
+<p>Katta chegirmalar</p>
 </div>
 
 <div class="banner-card">
 <h3>Blender Aksiya</h3>
-<p>3x1 blenderlar arzon narxda</p>
-</div>
-
-<div class="banner-card">
-<h3>Yangi Mahsulotlar</h3>
-<p>Yangi oshxona jihozlari keldi</p>
+<p>Yangi blenderlar keldi</p>
 </div>
 
 </div>
 </div>
-
-<!-- CATEGORIES -->
 
 <div class="category-section">
-
 <div class="cat-header">
 <h3>Categories</h3>
-<a href="categories.html" class="see-btn">See all</a>
+<a href="categories.html">See all</a>
 </div>
 
 <div class="cat-list">
 
-<div class="cat-card">
+<a href="categories.html?cat=termos" class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Termos</p>
-</div>
+</a>
 
-<div class="cat-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Choynak</p>
-</div>
-
-<div class="cat-card">
+<a href="categories.html?cat=blender" class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Blender</p>
-</div>
+</a>
+
+<a href="categories.html?cat=qozon" class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Qozon</p>
+</a>
 
 </div>
-
 </div>
-
-<!-- POPULAR PRODUCTS -->
 
 <div class="random-section">
 <h3>Popular Products</h3>
 <div class="random-products" id="randomProducts"></div>
 </div>
 
-<!-- BOTTOM MENU -->
-
 <div class="bottom">
-🏠
-🛒
-❤️
-👤
+🏠 🛒 ❤️ 👤
 </div>
 
-<!-- SEARCH SCRIPT -->
-
 <script>
 
-const searchHome = document.getElementById("searchHome");
-const homeCategories = document.querySelectorAll(".cat-card");
-
-searchHome.addEventListener("keyup", function(){
-
-let text = searchHome.value.toLowerCase();
-
-homeCategories.forEach(function(card){
-
-let name = card.innerText.toLowerCase();
-
-if(name.includes(text)){
-card.style.display = "block";
-}else{
-card.style.display = "none";
-}
-
-});
-
-});
-
-</script>
-
-<!-- BANNER AUTO SLIDE -->
-
-<script>
-
-let bannerIndex = 0;
-const bannerTrack = document.getElementById("bannerTrack");
-const bannerCount = document.querySelectorAll(".banner-card").length;
-
-setInterval(() => {
-bannerIndex++;
-if(bannerIndex >= bannerCount){ bannerIndex = 0; }
-bannerTrack.style.transform = "translateX(-" + bannerIndex*92 + "%)";
-}, 3000);
-
-</script>
-
-<!-- RANDOM PRODUCTS WORKING SCRIPT -->
-
-<script>
-
-const allProducts = [
-
-{name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
-{name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
-{name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
-{name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
-{name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-
+const products = [
+{id:1,name:"Termos 1L",price:"120 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"termos"},
+{id:2,name:"Termos 2L",price:"150 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"termos"},
+{id:3,name:"Blender 3x1",price:"220 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"blender"},
+{id:4,name:"Mini Blender",price:"160 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"blender"},
+{id:5,name:"Qozon 5L",price:"180 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"qozon"},
+{id:6,name:"Qozon 10L",price:"260 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"qozon"},
+{id:7,name:"Mikser",price:"150 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"mikser"},
+{id:8,name:"Idishlar",price:"140 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"idish"}
 ];
 
-const randomBox = document.getElementById("randomProducts");
+const random = products.sort(()=>0.5-Math.random()).slice(0,6);
+const box = document.getElementById("randomProducts");
 
-const randomProducts = allProducts
-.sort(() => 0.5 - Math.random())
-.slice(0,6);
-
-randomProducts.forEach(p => {
-randomBox.innerHTML += `
-<div class="product-card">
+random.forEach(p=>{
+box.innerHTML += `
+<a href="product.html?id=${p.id}" class="product-card">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
-</div>
-`;
+</a>`;
 });
 
 </script>
