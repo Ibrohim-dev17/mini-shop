@@ -128,11 +128,13 @@ const box = document.getElementById("productBox");
 data[cat].forEach(p => {
 
 box.innerHTML += `
+<a href="product.html?name=${p.name}&price=${p.price}&img=${p.img}" style="text-decoration:none;color:black;">
 <div class="card">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
 </div>
+</a>
 `;
 
 });
