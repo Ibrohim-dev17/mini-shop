@@ -8,9 +8,8 @@
 <style>
 body{margin:0;font-family:system-ui;background:#f5f5f5;}
 .products{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;}
-.product-card{background:white;border-radius:14px;padding:10px;text-align:center;}
-.product-card img{width:90px;height:90px;border-radius:10px;}
-.price{color:#6a5acd;font-weight:600;font-size:13px;}
+.product{background:white;padding:10px;border-radius:14px;text-align:center;}
+.product img{width:90px;border-radius:10px;}
 </style>
 </head>
 <body>
@@ -20,7 +19,7 @@ body{margin:0;font-family:system-ui;background:#f5f5f5;}
 <script>
 
 const url = new URLSearchParams(window.location.search);
-const category = url.get("cat");
+const cat = url.get("cat");
 
 const products = [
 {id:1,name:"Termos 1L",price:"120 000",img:"https://i.imgur.com/3ZQ3Z5b.png",cat:"termos"},
@@ -33,12 +32,12 @@ const products = [
 
 const box = document.getElementById("products");
 
-products.filter(p=>p.cat===category).forEach(p=>{
+products.filter(p=>p.cat===cat).forEach(p=>{
 box.innerHTML += `
-<a href="product.html?id=${p.id}" class="product-card">
+<a href="product.html?id=${p.id}" class="product">
 <img src="${p.img}">
 <p>${p.name}</p>
-<div class="price">${p.price} so'm</div>
+<b>${p.price} so'm</b>
 </a>`;
 });
 
