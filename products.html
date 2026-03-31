@@ -3,108 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product</title>
+<title>Products</title>
 
 <style>
-
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f5f5;
 }
 
-.product{
+/* HEADER */
+
+.header{
 background:white;
-margin:12px;
-border-radius:16px;
-padding:16px;
-text-align:center;
-}
-
-.product img{
-width:180px;
-border-radius:14px;
-}
-
-.desc{
-margin-top:10px;
-font-size:14px;
-color:#555;
-}
-
-.counter{
+padding:14px;
 display:flex;
-justify-content:center;
 align-items:center;
-gap:14px;
-margin-top:14px;
+gap:10px;
 }
 
-.counter button{
-width:34px;
-height:34px;
-border:none;
-border-radius:8px;
+.back-btn{
+text-decoration:none;
 background:#6a5acd;
 color:white;
-font-size:18px;
+padding:7px 14px;
+border-radius:50px;
+font-size:13px;
+font-weight:600;
 }
 
-.add-btn{
-margin-top:14px;
-background:#6a5acd;
-color:white;
+/* PRODUCTS GRID */
+
+.products{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
 padding:12px;
-border-radius:12px;
-border:none;
-width:100%;
-font-size:15px;
 }
 
+.card{
+background:white;
+border-radius:14px;
+padding:12px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.card img{
+width:90px;
+height:90px;
+border-radius:12px;
+}
+
+.card p{
+margin:6px 0;
+font-size:14px;
+}
+
+.price{
+color:#6a5acd;
+font-size:13px;
+font-weight:600;
+}
 </style>
 </head>
 
 <body>
 
-<div class="product">
-
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-
-<h3>Termos 1L</h3>
-
-<div class="desc">
-Issiq suvni 12 soat issiq saqlaydi. Zanglamaydigan po'latdan tayyorlangan.
+<div class="header">
+<a href="categories.html" class="back-btn">← Back</a>
+<b id="title">Products</b>
 </div>
 
-<div class="counter">
-<button onclick="minus()">-</button>
-<span id="count">1</span>
-<button onclick="plus()">+</button>
-</div>
-
-<button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
-
-</div>
+<div class="products" id="productBox"></div>
 
 <script>
 
-let count = 1;
+/* CATEGORY O'QISH */
 
-function plus(){
-count++;
-document.getElementById("count").innerText = count;
-}
+const url = new URLSearchParams(window.location.search);
+const cat = url.get("cat");
 
-function minus(){
-if(count > 1){
-count--;
-document.getElementById("count").innerText = count;
-}
-}
+/* PRODUCTS */
 
-function addToCart(){
-alert("Mahsulot savatga qo‘shildi");
-}
+const data = {
+
+termos: [
+{name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+blender: [
+{name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+qozon: [
+{name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+mikser: [
+{name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+idishlar: [
+{name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+]
+
+};
+
+/* TITLE */
+
+document.getElementById("title").innerText = cat.toUpperCase();
+
+/* CHIQARISH */
+
+const box = document.getElementById("productBox");
+
+data[cat].forEach(p => {
+
+box.innerHTML += `
+<div class="card">
+<img src="${p.img}">
+<p>${p.name}</p>
+<div class="price">${p.price} so'm</div>
+</div>
+`;
+
+});
 
 </script>
 
