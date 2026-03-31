@@ -348,13 +348,13 @@ const randomProducts = allProducts
 .slice(0,6);
 
 randomProducts.forEach(p => {
-randomBox.innerHTML += 
+randomBox.innerHTML += `
 <div class="product-card">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
 </div>
-;
+`;
 });
 
 </script>
