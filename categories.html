@@ -1,90 +1,191 @@
-<!DOCTYPE html>  <html lang="uz">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Product</title>  <style>  
-  
-body{  
-margin:0;  
-font-family:system-ui;  
-background:#f5f5f5;  
-}  
-  
-.product{  
-background:white;  
-margin:12px;  
-border-radius:16px;  
-padding:16px;  
-text-align:center;  
-}  
-  
-.product img{  
-width:180px;  
-border-radius:14px;  
-}  
-  
-.desc{  
-margin-top:10px;  
-font-size:14px;  
-color:#555;  
-}  
-  
-.counter{  
-display:flex;  
-justify-content:center;  
-align-items:center;  
-gap:14px;  
-margin-top:14px;  
-}  
-  
-.counter button{  
-width:34px;  
-height:34px;  
-border:none;  
-border-radius:8px;  
-background:#6a5acd;  
-color:white;  
-font-size:18px;  
-}  
-  
-.add-btn{  
-margin-top:14px;  
-background:#6a5acd;  
-color:white;  
-padding:12px;  
-border-radius:12px;  
-border:none;  
-width:100%;  
-font-size:15px;  
-}  
-  
-</style>  </head>  <body>  <div class="product">  <img src="https://i.imgur.com/3ZQ3Z5b.png">  <h3>Termos 1L</h3>  <div class="desc">  
-Issiq suvni 12 soat issiq saqlaydi. Zanglamaydigan po'latdan tayyorlangan.  
-</div>  <div class="counter">  
-<button onclick="minus()">-</button>  
-<span id="count">1</span>  
-<button onclick="plus()">+</button>  
-</div>  <button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Categories</title>
 
-</div>  <script>  
-  
-let count = 1;  
-  
-function plus(){  
-count++;  
-document.getElementById("count").innerText = count;  
-}  
-  
-function minus(){  
-if(count > 1){  
-count--;  
-document.getElementById("count").innerText = count;  
-}  
-}  
-  
-function addToCart(){  
-alert("Mahsulot savatga qo‘shildi");  
-}  
-  
-</script>  </body>  
+<style>
+
+body{
+margin:0;
+font-family:system-ui;
+background:#f5f5f5;
+}
+
+/* HEADER */
+
+.header{
+background:white;
+padding:14px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.back-btn{
+text-decoration:none;
+background:#6a5acd;
+color:white;
+padding:7px 14px;
+border-radius:50px;
+font-size:13px;
+font-weight:600;
+display:inline-block;
+} 
+
+/* SEARCH */
+
+.search-box{
+margin:12px;
+background:white;
+border-radius:20px;
+padding:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.search-box input{
+width:100%;
+border:none;
+outline:none;
+font-size:14px;
+background:transparent;
+}
+
+/* CATEGORIES GRID */
+
+.categories{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+padding:14px;
+}
+
+.cat-card{
+background:white;
+border-radius:14px;
+padding:14px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.cat-card img{
+width:80px;
+height:80px;
+border-radius:12px;
+}
+
+.cat-card p{
+margin-top:8px;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+<a href="index.html" class="back-btn">← Back</a>  
+<b>All Categories</b>
+</div>
+
+<!-- SEARCH -->
+
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Search category...">
+</div>
+
+<!-- CATEGORIES -->
+
+<div class="categories">
+
+<a href="products.html?cat=termos" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Termos</p>
+</div>
+</a>
+
+<a href="products.html?cat=choynak" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Choynak</p>
+</div>
+</a>
+
+<a href="products.html?cat=blender" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Blender</p>
+</div>
+</a>
+
+<a href="products.html?cat=qozon" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Qozon</p>
+</div>
+</a>
+
+<a href="products.html?cat=mikser" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Mikser</p>
+</div>
+</a>
+
+<a href="products.html?cat=idishlar" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Idishlar</p>
+</div>
+</a>
+
+</div>
+
+<script>
+
+/* SEARCH */
+
+const search = document.getElementById("searchInput");
+const categories = document.querySelectorAll(".cat-card");
+
+search.addEventListener("keyup", function(){
+
+let text = search.value.toLowerCase();
+
+categories.forEach(function(card){
+
+let name = card.innerText.toLowerCase();
+
+if(name.includes(text)){
+card.style.display = "block";
+}else{
+card.style.display = "none";
+}
+
+});
+
+});
+
+</script> 
+
+<script>
+
+if (window.history && window.history.pushState) {
+
+window.history.pushState('forward', null, '');
+
+window.onpopstate = function () {
+window.history.pushState('forward', null, '');
+};
+
+}
+
+</script>
+ 
+</body>
 </html>
