@@ -1,90 +1,112 @@
-<!DOCTYPE html>  <html lang="uz">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Product</title>  <style>  
-  
-body{  
-margin:0;  
-font-family:system-ui;  
-background:#f5f5f5;  
-}  
-  
-.product{  
-background:white;  
-margin:12px;  
-border-radius:16px;  
-padding:16px;  
-text-align:center;  
-}  
-  
-.product img{  
-width:180px;  
-border-radius:14px;  
-}  
-  
-.desc{  
-margin-top:10px;  
-font-size:14px;  
-color:#555;  
-}  
-  
-.counter{  
-display:flex;  
-justify-content:center;  
-align-items:center;  
-gap:14px;  
-margin-top:14px;  
-}  
-  
-.counter button{  
-width:34px;  
-height:34px;  
-border:none;  
-border-radius:8px;  
-background:#6a5acd;  
-color:white;  
-font-size:18px;  
-}  
-  
-.add-btn{  
-margin-top:14px;  
-background:#6a5acd;  
-color:white;  
-padding:12px;  
-border-radius:12px;  
-border:none;  
-width:100%;  
-font-size:15px;  
-}  
-  
-</style>  </head>  <body>  <div class="product">  <img src="https://i.imgur.com/3ZQ3Z5b.png">  <h3>Termos 1L</h3>  <div class="desc">  
-Issiq suvni 12 soat issiq saqlaydi. Zanglamaydigan po'latdan tayyorlangan.  
-</div>  <div class="counter">  
-<button onclick="minus()">-</button>  
-<span id="count">1</span>  
-<button onclick="plus()">+</button>  
-</div>  <button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product</title>
 
-</div>  <script>  
-  
-let count = 1;  
-  
-function plus(){  
-count++;  
-document.getElementById("count").innerText = count;  
-}  
-  
-function minus(){  
-if(count > 1){  
-count--;  
-document.getElementById("count").innerText = count;  
-}  
-}  
-  
-function addToCart(){  
-alert("Mahsulot savatga qo‘shildi");  
-}  
-  
-</script>  </body>  
+<style>
+
+body{
+margin:0;
+font-family:system-ui;
+background:#f5f5f5;
+}
+
+.product{
+background:white;
+margin:12px;
+border-radius:16px;
+padding:16px;
+text-align:center;
+}
+
+.product img{
+width:180px;
+border-radius:14px;
+}
+
+.desc{
+margin-top:10px;
+font-size:14px;
+color:#555;
+}
+
+.counter{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:14px;
+margin-top:14px;
+}
+
+.counter button{
+width:34px;
+height:34px;
+border:none;
+border-radius:8px;
+background:#6a5acd;
+color:white;
+font-size:18px;
+}
+
+.add-btn{
+margin-top:14px;
+background:#6a5acd;
+color:white;
+padding:12px;
+border-radius:12px;
+border:none;
+width:100%;
+font-size:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="product">
+
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+
+<h3>Termos 1L</h3>
+
+<div class="desc">
+Issiq suvni 12 soat issiq saqlaydi. Zanglamaydigan po'latdan tayyorlangan.
+</div>
+
+<div class="counter">
+<button onclick="minus()">-</button>
+<span id="count">1</span>
+<button onclick="plus()">+</button>
+</div>
+
+<button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
+
+</div>
+
+<script>
+
+let count = 1;
+
+function plus(){
+count++;
+document.getElementById("count").innerText = count;
+}
+
+function minus(){
+if(count > 1){
+count--;
+document.getElementById("count").innerText = count;
+}
+}
+
+function addToCart(){
+alert("Mahsulot savatga qo‘shildi");
+}
+
+</script>
+
+</body>
 </html>
