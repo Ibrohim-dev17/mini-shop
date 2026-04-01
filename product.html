@@ -7,11 +7,18 @@
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f5f5;
+overflow-x:hidden;
 }
+
+/* HEADER */
 
 .header{
 background:white;
@@ -26,7 +33,10 @@ padding:7px 14px;
 border-radius:50px;
 font-size:13px;
 font-weight:600;
+display:inline-block;
 }
+
+/* PRODUCT CARD */
 
 .product{
 background:white;
@@ -38,12 +48,14 @@ text-align:center;
 
 .product img{
 width:200px;
+max-width:100%;
 border-radius:14px;
 }
 
 .name{
 font-size:18px;
 margin-top:10px;
+font-weight:600;
 }
 
 .price{
@@ -56,7 +68,10 @@ margin-top:6px;
 margin-top:10px;
 font-size:14px;
 color:#555;
+line-height:1.4;
 }
+
+/* COUNTER */
 
 .counter{
 display:flex;
@@ -76,6 +91,13 @@ color:white;
 font-size:18px;
 }
 
+#counter{
+font-size:16px;
+font-weight:600;
+}
+
+/* BUTTON */
+
 .add-btn{
 margin-top:14px;
 background:#6a5acd;
@@ -85,6 +107,7 @@ border-radius:12px;
 border:none;
 width:100%;
 font-size:15px;
+font-weight:600;
 }
 
 </style>
@@ -92,9 +115,13 @@ font-size:15px;
 
 <body>
 
+<!-- HEADER -->
+
 <div class="header">
-<a href="products.html" class="back-btn">← Back</a>
+<a href="javascript:history.back()" class="back-btn">← Back</a>
 </div>
+
+<!-- PRODUCT -->
 
 <div class="product">
 
@@ -145,7 +172,7 @@ const allProducts = [
 
 ];
 
-/* Tanlangan mahsulotni topish */
+/* Mahsulotni topish */
 
 const product = allProducts.find(p => p.id === id);
 
@@ -156,6 +183,8 @@ document.getElementById("pName").innerText = product.name;
 document.getElementById("pPrice").innerText = product.price + " so'm";
 document.getElementById("pImg").src = product.img;
 document.getElementById("pDesc").innerText = product.desc;
+}else{
+document.querySelector(".product").innerHTML = "<p>Mahsulot topilmadi</p>";
 }
 
 /* Counter */
@@ -178,18 +207,16 @@ document.getElementById("counter").innerText = count;
 
 function addToCart(){
 
-let name = document.getElementById("pName").innerText;
-let price = document.getElementById("pPrice").innerText;
-let img = document.getElementById("pImg").src;
-let qty = document.getElementById("counter").innerText;
+if(!product) return;
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 cart.push({
-name:name,
-price:price,
-img:img,
-qty:qty
+id:product.id,
+name:product.name,
+price:product.price,
+img:product.img,
+qty:count
 });
 
 localStorage.setItem("cart", JSON.stringify(cart));
