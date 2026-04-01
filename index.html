@@ -239,20 +239,26 @@ font-size:20px;
 
 <div class="cat-list">
 
+<a href="products.html?cat=termos" style="text-decoration:none;color:black;">
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Termos</p>
 </div>
+</a>
 
-<div class="cat-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Choynak</p>
-</div>
-
+<a href="products.html?cat=blender" style="text-decoration:none;color:black;">
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Blender</p>
 </div>
+</a>
+
+<a href="products.html?cat=qozon" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Qozon</p>
+</div>
+</a>
 
 </div>
 
@@ -274,33 +280,6 @@ font-size:20px;
 👤
 </div>
 
-<!-- SEARCH SCRIPT -->
-
-<script>
-
-const searchHome = document.getElementById("searchHome");
-const homeCategories = document.querySelectorAll(".cat-card");
-
-searchHome.addEventListener("keyup", function(){
-
-let text = searchHome.value.toLowerCase();
-
-homeCategories.forEach(function(card){
-
-let name = card.innerText.toLowerCase();
-
-if(name.includes(text)){
-card.style.display = "block";
-}else{
-card.style.display = "none";
-}
-
-});
-
-});
-
-</script>
-
 <!-- BANNER AUTO SLIDE -->
 
 <script>
@@ -313,7 +292,6 @@ bannerIndex++;
 if(bannerIndex >= bannerCount){ bannerIndex = 0; }
 bannerTrack.style.transform = "translateX(-" + bannerIndex*92 + "%)";
 }, 3000);
-
 </script>
 
 <!-- RANDOM PRODUCTS WORKING SCRIPT -->
@@ -322,22 +300,19 @@ bannerTrack.style.transform = "translateX(-" + bannerIndex*92 + "%)";
 
 const allProducts = [
 
-{name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 
-{name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 
-{name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 
-{name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
-{name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 
 ];
 
@@ -349,11 +324,13 @@ const randomProducts = allProducts
 
 randomProducts.forEach(p => {
 randomBox.innerHTML += `
+<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="product-card">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
 </div>
+</a>
 `;
 });
 
