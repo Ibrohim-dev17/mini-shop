@@ -6,11 +6,19 @@
 <title>Savat</title>
 
 <style>
+
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f5f5;
+overflow-x:hidden;
 }
+
+/* HEADER */
 
 .header{
 background:white;
@@ -30,8 +38,11 @@ font-size:13px;
 font-weight:600;
 }
 
+/* CART */
+
 .cart-box{
 padding:14px;
+padding-bottom:100px;
 }
 
 .cart-item{
@@ -51,47 +62,122 @@ height:70px;
 border-radius:10px;
 }
 
+.item-info{
+flex:1;
+}
+
+.item-name{
+font-size:14px;
+margin:0;
+}
+
 .price{
 color:#6a5acd;
 font-weight:600;
 font-size:14px;
+margin-top:4px;
 }
+
+.qty{
+font-size:13px;
+margin-top:4px;
+}
+
+/* TOTAL */
+
+.total-box{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+padding:14px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.total-text{
+font-weight:600;
+}
+
+.clear-btn{
+background:#6a5acd;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:10px;
+font-size:14px;
+}
+
 </style>
 </head>
 
 <body>
+
+<!-- HEADER -->
 
 <div class="header">
 <a href="index.html" class="back-btn">← Back</a>
 <b>Savat</b>
 </div>
 
+<!-- CART ITEMS -->
+
 <div class="cart-box" id="cartBox"></div>
+
+<!-- TOTAL -->
+
+<div class="total-box">
+<div class="total-text">Jami: <span id="total">0</span> so'm</div>
+<button class="clear-btn" onclick="clearCart()">Tozalash</button>
+</div>
 
 <script>
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
 const box = document.getElementById("cartBox");
+const totalText = document.getElementById("total");
 
 if(cart.length === 0){
 box.innerHTML = "<p>Savat bo'sh</p>";
+document.querySelector(".total-box").style.display = "none";
 }
 
+/* Mahsulotlarni chiqarish */
+
+let total = 0;
+
 cart.forEach(p => {
+
+let priceNumber = parseInt(p.price.replace(/\s/g,''));
+let itemTotal = priceNumber * p.qty;
+total += itemTotal;
 
 box.innerHTML += `
 <div class="cart-item">
 <img src="${p.img}">
-<div>
-<p>${p.name}</p>
+<div class="item-info">
+<p class="item-name">${p.name}</p>
 <div class="price">${p.price} so'm</div>
-<p>Soni: ${p.qty}</p>
+<p class="qty">Soni: ${p.qty}</p>
 </div>
 </div>
 `;
 
 });
+
+/* TOTAL chiqarish */
+
+totalText.innerText = total.toLocaleString();
+
+/* SAVATNI TOZALASH */
+
+function clearCart(){
+localStorage.removeItem("cart");
+location.reload();
+}
 
 </script>
 
