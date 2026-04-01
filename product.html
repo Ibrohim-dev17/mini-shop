@@ -103,9 +103,7 @@ font-size:15px;
 <div class="name" id="name"></div>
 <div class="price" id="price"></div>
 
-<div class="desc">
-Issiq suvni 12 soat issiq saqlaydi. Zanglamaydigan po‘latdan tayyorlangan.
-</div>
+<div class="desc" id="desc"></div>
 
 <div class="counter">
 <button onclick="minus()">-</button>
@@ -119,39 +117,47 @@ Issiq suvni 12 soat issiq saqlaydi. Zanglamaydigan po‘latdan tayyorlangan.
 
 <script>
 
-/* URL dan ma'lumot olish */
-
-const url = new URLSearchParams(window.location.search);
+/* URL dan ID olish */
 
 const url = new URLSearchParams(window.location.search);
 const id = url.get("id");
 
+/* Barcha mahsulotlar */
+
 const allProducts = [
 
-{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"1 litr termos. 12 soat issiq saqlaydi."},
+{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"2 litr katta termos. Sayohat uchun zo‘r."},
+{id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Sport uchun yengil termos."},
 
-{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"3 ta funksiyali blender."},
+{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Mini blender. Oshxona uchun qulay."},
+{id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Professional kuchli blender."},
 
-{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 litr qozon. Qalin temir."},
+{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"10 litr katta qozon."},
 
-{id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 tezlikli mikser."},
+{id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Kichik mikser. Arzon variant."},
 
-{id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Oshxona uchun idishlar komplekti."},
+{id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Premium sifatli idishlar."}
 
 ];
 
+/* Tanlangan mahsulotni topish */
+
 const product = allProducts.find(p => p.id === id);
 
+/* Agar topilsa chiqarish */
+
+if(product){
 document.getElementById("name").innerText = product.name;
 document.getElementById("price").innerText = product.price + " so'm";
 document.getElementById("img").src = product.img;
+document.getElementById("desc").innerText = product.desc;
+}
+
 /* Counter */
 
 let count = 1;
