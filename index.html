@@ -63,12 +63,13 @@ overflow:hidden;
 
 .banner-track{
 display:flex;
+gap:12px;          /* bannerlar orasida joy */
 transition:0.35s;
 }
-
 .banner-card{
 min-width:100%;
-height:160px;
+height:42vw;     /* ekran o‘lchamiga moslashadi */
+max-height:200px;
 background:linear-gradient(45deg,#6a5acd,#8a2be2);
 color:white;
 border-radius:18px;
@@ -401,7 +402,7 @@ index--;
 if(index < 0) index = total - 1;
 if(index >= total) index = 0;
 
-track.style.transform = "translateX(-" + index * 100 + "%)";
+track.style.transform = "translateX(-" + (index * (100 + 1.2)) + "%)";
 
 dots.forEach(d => d.classList.remove("active"));
 dots[index].classList.add("active");
