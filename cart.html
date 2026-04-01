@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Savat</title>
+
+<style>
+body{
+margin:0;
+font-family:system-ui;
+background:#f5f5f5;
+}
+
+.header{
+background:white;
+padding:14px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.back-btn{
+text-decoration:none;
+background:#6a5acd;
+color:white;
+padding:7px 14px;
+border-radius:50px;
+font-size:13px;
+font-weight:600;
+}
+
+.cart-box{
+padding:14px;
+}
+
+.cart-item{
+background:white;
+border-radius:14px;
+padding:10px;
+margin-bottom:12px;
+display:flex;
+gap:10px;
+align-items:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.cart-item img{
+width:70px;
+height:70px;
+border-radius:10px;
+}
+
+.price{
+color:#6a5acd;
+font-weight:600;
+font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<a href="index.html" class="back-btn">← Back</a>
+<b>Savat</b>
+</div>
+
+<div class="cart-box" id="cartBox"></div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const box = document.getElementById("cartBox");
+
+if(cart.length === 0){
+box.innerHTML = "<p>Savat bo'sh</p>";
+}
+
+cart.forEach(p => {
+
+box.innerHTML += `
+<div class="cart-item">
+<img src="${p.img}">
+<div>
+<p>${p.name}</p>
+<div class="price">${p.price} so'm</div>
+<p>Soni: ${p.qty}</p>
+</div>
+</div>
+`;
+
+});
+
+</script>
+
+</body>
+</html>
