@@ -98,16 +98,16 @@ font-size:15px;
 
 <div class="product">
 
-<img id="img">
+<img id="pImg">
 
-<div class="name" id="name"></div>
-<div class="price" id="price"></div>
+<div class="name" id="pName"></div>
+<div class="price" id="pPrice"></div>
 
-<div class="desc" id="desc"></div>
+<div class="desc" id="pDesc"></div>
 
 <div class="counter">
 <button onclick="minus()">-</button>
-<span id="count">1</span>
+<span id="counter">1</span>
 <button onclick="plus()">+</button>
 </div>
 
@@ -152,10 +152,10 @@ const product = allProducts.find(p => p.id === id);
 /* Agar topilsa chiqarish */
 
 if(product){
-document.getElementById("name").innerText = product.name;
-document.getElementById("price").innerText = product.price + " so'm";
-document.getElementById("img").src = product.img;
-document.getElementById("desc").innerText = product.desc;
+document.getElementById("pName").innerText = product.name;
+document.getElementById("pPrice").innerText = product.price + " so'm";
+document.getElementById("pImg").src = product.img;
+document.getElementById("pDesc").innerText = product.desc;
 }
 
 /* Counter */
@@ -164,18 +164,38 @@ let count = 1;
 
 function plus(){
 count++;
-document.getElementById("count").innerText = count;
+document.getElementById("counter").innerText = count;
 }
 
 function minus(){
 if(count > 1){
 count--;
-document.getElementById("count").innerText = count;
+document.getElementById("counter").innerText = count;
 }
 }
 
+/* SAVATGA QO‘SHISH */
+
 function addToCart(){
+
+let name = document.getElementById("pName").innerText;
+let price = document.getElementById("pPrice").innerText;
+let img = document.getElementById("pImg").src;
+let qty = document.getElementById("counter").innerText;
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+cart.push({
+name:name,
+price:price,
+img:img,
+qty:qty
+});
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
 alert("Mahsulot savatga qo‘shildi");
+
 }
 
 </script>
