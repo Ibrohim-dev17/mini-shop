@@ -102,17 +102,28 @@ display:inline-block;
 /* BANNER */
 
 .banner{
-overflow:hidden;
 padding:12px;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+}
+
+.banner::-webkit-scrollbar{
+display:none;
 }
 
 .banner-track{
 display:flex;
-transition:0.5s;
+gap:12px;
 }
 
 .banner-card{
-min-width:90%;
+min-width:100%;
+scroll-snap-align:start;
+background:linear-gradient(45deg,#6a5acd,#8a2be2);
+color:white;
+border-radius:18px;
+padding:20px;
+}
 background:linear-gradient(45deg,#6a5acd,#8a2be2);
 color:white;
 border-radius:18px;
@@ -280,19 +291,6 @@ font-size:20px;
 👤
 </div>
 
-<!-- BANNER AUTO SLIDE -->
-
-<script>
-let bannerIndex = 0;
-const bannerTrack = document.getElementById("bannerTrack");
-const bannerCount = document.querySelectorAll(".banner-card").length;
-
-setInterval(() => {
-bannerIndex++;
-if(bannerIndex >= bannerCount){ bannerIndex = 0; }
-bannerTrack.style.transform = "translateX(-" + bannerIndex*92 + "%)";
-}, 3000);
-</script>
 
 <!-- RANDOM PRODUCTS WORKING SCRIPT -->
 
