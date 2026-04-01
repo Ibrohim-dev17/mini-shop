@@ -6,10 +6,16 @@
 <title>Products</title>
 
 <style>
+
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f5f5;
+overflow-x:hidden;
 }
 
 /* HEADER */
@@ -39,6 +45,7 @@ display:grid;
 grid-template-columns:1fr 1fr;
 gap:12px;
 padding:12px;
+padding-bottom:80px;
 }
 
 .card{
@@ -65,15 +72,20 @@ color:#6a5acd;
 font-size:13px;
 font-weight:600;
 }
+
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+
 <div class="header">
 <a href="categories.html" class="back-btn">← Back</a>
 <b id="title">Products</b>
 </div>
+
+<!-- PRODUCTS -->
 
 <div class="products" id="productBox"></div>
 
@@ -84,7 +96,7 @@ font-weight:600;
 const url = new URLSearchParams(window.location.search);
 const cat = url.get("cat");
 
-/* PRODUCTS */
+/* PRODUCTS DATA */
 
 const data = {
 
@@ -117,13 +129,19 @@ idishlar: [
 
 };
 
-/* TITLE */
+/* CATEGORY NOMINI CHIQARISH */
 
+if(cat && data[cat]){
 document.getElementById("title").innerText = cat.toUpperCase();
+}else{
+document.getElementById("title").innerText = "Products";
+}
 
-/* CHIQARISH */
+/* PRODUCTLARNI CHIQARISH */
 
 const box = document.getElementById("productBox");
+
+if(cat && data[cat]){
 
 data[cat].forEach(p => {
 
@@ -138,6 +156,13 @@ box.innerHTML += `
 `;
 
 });
+
+}else{
+
+box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
+
+}
+
 </script>
 
 </body>
