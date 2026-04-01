@@ -18,6 +18,11 @@ background:#f5f5f5;
 overflow-x:hidden;
 }
 
+img{
+max-width:100%;
+height:auto;
+}
+
 /* HEADER */
 
 .top-header{
@@ -49,7 +54,7 @@ font-size:14px;
 outline:none;
 }
 
-/* BANNER (100% ISHLAYDI) */
+/* BANNER (100% TUZATILGAN) */
 
 .banner{
 padding:12px;
@@ -102,6 +107,7 @@ width:8px;
 height:8px;
 background:#ccc;
 border-radius:50%;
+display:block;
 }
 
 .banner-dots .active{
@@ -137,11 +143,67 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 flex-shrink:0;
 }
 
+.cat-card img{
+width:70px;
+height:70px;
+border-radius:12px;
+}
+
+.cat-card p{
+font-size:13px;
+margin:6px 0 0;
+}
+
+/* SEE ALL BUTTON */
+
+.see-btn{
+background:#6a5acd;
+color:white;
+padding:8px 14px;
+border-radius:50px;
+text-decoration:none;
+font-size:13px;
+font-weight:600;
+display:inline-block;
+}
+
 /* PRODUCTS */
 
 .random-section{
 padding:12px;
 padding-bottom:80px;
+}
+
+.random-products{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:10px;
+}
+
+.product-card{
+background:white;
+border-radius:14px;
+padding:10px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.product-card img{
+width:80px;
+height:80px;
+border-radius:10px;
+}
+
+.product-card p{
+font-size:14px;
+margin:6px 0;
+}
+
+.price{
+font-size:13px;
+color:#6a5acd;
+font-weight:600;
 }
 
 /* BOTTOM MENU */
@@ -159,12 +221,20 @@ box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 font-size:20px;
 }
 
+.bottom a{
+text-decoration:none;
+color:black;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+
 <div class="top-header">
+
 <div class="row">
 <div>☰</div>
 <div>🛍️</div>
@@ -173,6 +243,7 @@ font-size:20px;
 <div class="search">
 <input type="text" placeholder="What are you looking for?">
 </div>
+
 </div>
 
 <!-- BANNER -->
@@ -182,24 +253,30 @@ font-size:20px;
 <div class="banner-track" id="bannerTrack">
 
 <div class="banner-slide">
+<a href="product.html?id=termos1" style="text-decoration:none;">
 <div class="banner-card">
 <h3>Kitchen Chegirma</h3>
 <p>Termos 1L aksiya narxda</p>
 </div>
+</a>
 </div>
 
 <div class="banner-slide">
+<a href="product.html?id=blender1" style="text-decoration:none;">
 <div class="banner-card">
 <h3>Blender Aksiya</h3>
 <p>Blender 3x1 arzon narxda</p>
 </div>
+</a>
 </div>
 
 <div class="banner-slide">
+<a href="product.html?id=qozon1" style="text-decoration:none;">
 <div class="banner-card">
 <h3>Yangi Mahsulotlar</h3>
 <p>Qozon 5L yangi keldi</p>
 </div>
+</a>
 </div>
 
 </div>
@@ -210,6 +287,58 @@ font-size:20px;
 <span></span>
 </div>
 
+</div>
+
+<!-- CATEGORIES -->
+
+<div class="category-section">
+
+<div class="cat-header">
+<h3>Categories</h3>
+<a href="categories.html" class="see-btn">See all</a>
+</div>
+
+<div class="cat-list">
+
+<a href="products.html?cat=termos" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Termos</p>
+</div>
+</a>
+
+<a href="products.html?cat=blender" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Blender</p>
+</div>
+</a>
+
+<a href="products.html?cat=qozon" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="https://i.imgur.com/3ZQ3Z5b.png">
+<p>Qozon</p>
+</div>
+</a>
+
+</div>
+
+</div>
+
+<!-- POPULAR PRODUCTS -->
+
+<div class="random-section">
+<h3>Popular Products</h3>
+<div class="random-products" id="randomProducts"></div>
+</div>
+
+<!-- BOTTOM MENU -->
+
+<div class="bottom">
+<a href="index.html">🏠</a>
+<a href="cart.html">🛒</a>
+<a href="#">❤️</a>
+<a href="#">👤</a>
 </div>
 
 <!-- SWIPE SCRIPT -->
@@ -224,15 +353,20 @@ const total = dots.length;
 let startX = 0;
 let endX = 0;
 
-track.addEventListener("touchstart", e => {
+track.addEventListener("touchstart", (e) => {
 startX = e.touches[0].clientX;
 });
 
-track.addEventListener("touchend", e => {
+track.addEventListener("touchend", (e) => {
 endX = e.changedTouches[0].clientX;
 
-if(startX - endX > 50) index++;
-if(endX - startX > 50) index--;
+if(startX - endX > 50){
+index++;
+}
+
+if(endX - startX > 50){
+index--;
+}
 
 if(index < 0) index = total - 1;
 if(index >= total) index = 0;
