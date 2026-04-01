@@ -7,10 +7,15 @@
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f5f5;
+overflow-x:hidden;
 }
 
 /* HEADER */
@@ -31,8 +36,7 @@ padding:7px 14px;
 border-radius:50px;
 font-size:13px;
 font-weight:600;
-display:inline-block;
-} 
+}
 
 /* SEARCH */
 
@@ -59,6 +63,12 @@ display:grid;
 grid-template-columns:1fr 1fr;
 gap:14px;
 padding:14px;
+padding-bottom:80px;
+}
+
+.cat-link{
+text-decoration:none;
+color:black;
 }
 
 .cat-card{
@@ -100,37 +110,37 @@ font-size:14px;
 
 <!-- CATEGORIES -->
 
-<div class="categories">
+<div class="categories" id="categoryList">
 
-<a href="products.html?cat=termos" style="text-decoration:none;color:black;">
+<a href="products.html?cat=termos" class="cat-link">
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Termos</p>
 </div>
 </a>
 
-<a href="products.html?cat=blender" style="text-decoration:none;color:black;">
+<a href="products.html?cat=blender" class="cat-link">
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Blender</p>
 </div>
 </a>
 
-<a href="products.html?cat=qozon" style="text-decoration:none;color:black;">
+<a href="products.html?cat=qozon" class="cat-link">
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Qozon</p>
 </div>
 </a>
 
-<a href="products.html?cat=mikser" style="text-decoration:none;color:black;">
+<a href="products.html?cat=mikser" class="cat-link">
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Mikser</p>
 </div>
 </a>
 
-<a href="products.html?cat=idishlar" style="text-decoration:none;color:black;">
+<a href="products.html?cat=idishlar" class="cat-link">
 <div class="cat-card">
 <img src="https://i.imgur.com/3ZQ3Z5b.png">
 <p>Idishlar</p>
@@ -143,21 +153,21 @@ font-size:14px;
 
 /* SEARCH */
 
-const search = document.getElementById("searchInput");
-const categories = document.querySelectorAll(".cat-card");
+const searchInput = document.getElementById("searchInput");
+const cards = document.querySelectorAll(".cat-card");
 
-search.addEventListener("keyup", function(){
+searchInput.addEventListener("keyup", function(){
 
-let text = search.value.toLowerCase();
+let text = searchInput.value.toLowerCase();
 
-categories.forEach(function(card){
+cards.forEach(function(card){
 
 let name = card.innerText.toLowerCase();
 
 if(name.includes(text)){
-card.style.display = "block";
+card.parentElement.style.display = "block";
 }else{
-card.style.display = "none";
+card.parentElement.style.display = "none";
 }
 
 });
