@@ -61,23 +61,40 @@ font-size:18px;
 /* BANNER */
 
 .banner{
-overflow:hidden;
 padding:12px;
+overflow:hidden;
 }
 
 .banner-track{
 display:flex;
-transition:0.4s;
+transition:0.35s;
 }
 
 .banner-card{
 min-width:100%;
+height:160px; /* TELEFON UCHUN IDEAL RAZMER */
 background:linear-gradient(45deg,#6a5acd,#8a2be2);
 color:white;
 border-radius:18px;
-padding:20px;
+padding:18px;
+display:flex;
+flex-direction:column;
+justify-content:center;
 flex-shrink:0;
 }
+
+.banner-card h3{
+margin:0;
+font-size:18px;
+}
+
+.banner-card p{
+margin-top:6px;
+font-size:14px;
+opacity:0.9;
+}
+
+/* DOTS */
 
 .banner-dots{
 display:flex;
@@ -96,17 +113,6 @@ display:block;
 
 .banner-dots .active{
 background:#6a5acd;
-}
-
-.banner-card h3{
-margin:0;
-font-size:18px;
-}
-
-.banner-card p{
-margin-top:6px;
-font-size:14px;
-opacity:0.9;
 }
 
 /* CATEGORY */
@@ -236,7 +242,7 @@ color:black;
 </div>
 
 <div class="search">
-<input type="text" id="searchHome" placeholder="What are you looking for?">
+<input type="text" placeholder="What are you looking for?">
 <div class="filter">⚙️</div>
 </div>
 
@@ -331,7 +337,7 @@ color:black;
 <a href="#">👤</a>
 </div>
 
-<!-- RANDOM PRODUCTS SCRIPT -->
+<!-- RANDOM PRODUCTS -->
 
 <script>
 
@@ -346,10 +352,7 @@ const allProducts = [
 {id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 
 {id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
-{id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 
 ];
 
@@ -373,41 +376,40 @@ randomBox.innerHTML += `
 
 </script>
 
+<!-- SWIPE BANNER -->
+
 <script>
 
 let index = 0;
 const track = document.getElementById("bannerTrack");
 const dots = document.querySelectorAll(".banner-dots span");
+const total = dots.length;
 
 let startX = 0;
-let moveX = 0;
+let endX = 0;
 
-track.addEventListener("touchstart", function(e){
+track.addEventListener("touchstart", (e) => {
 startX = e.touches[0].clientX;
 });
 
-track.addEventListener("touchmove", function(e){
-moveX = e.touches[0].clientX;
-});
+track.addEventListener("touchend", (e) => {
+endX = e.changedTouches[0].clientX;
 
-track.addEventListener("touchend", function(){
-
-if(startX - moveX > 50){
+if(startX - endX > 50){
 index++;
 }
 
-if(moveX - startX > 50){
+if(endX - startX > 50){
 index--;
 }
 
 if(index < 0) index = 0;
-if(index > 2) index = 2;
+if(index >= total) index = total - 1;
 
 track.style.transform = "translateX(-" + index * 100 + "%)";
 
 dots.forEach(d => d.classList.remove("active"));
 dots[index].classList.add("active");
-
 });
 
 </script>
