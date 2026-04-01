@@ -61,26 +61,41 @@ font-size:18px;
 /* BANNER */
 
 .banner{
+overflow:hidden;
 padding:12px;
-overflow-x:auto;
-}
-
-.banner::-webkit-scrollbar{
-display:none;
 }
 
 .banner-track{
 display:flex;
-gap:12px;
+transition:0.4s;
 }
 
 .banner-card{
-min-width:92%;
+min-width:100%;
 background:linear-gradient(45deg,#6a5acd,#8a2be2);
 color:white;
 border-radius:18px;
 padding:20px;
 flex-shrink:0;
+}
+
+.banner-dots{
+display:flex;
+justify-content:center;
+gap:6px;
+margin-top:8px;
+}
+
+.banner-dots span{
+width:8px;
+height:8px;
+background:#ccc;
+border-radius:50%;
+display:block;
+}
+
+.banner-dots .active{
+background:#6a5acd;
 }
 
 .banner-card h3{
@@ -230,7 +245,8 @@ color:black;
 <!-- BANNER -->
 
 <div class="banner">
-<div class="banner-track">
+
+<div class="banner-track" id="bannerTrack">
 
 <a href="product.html?id=termos1" style="text-decoration:none;">
 <div class="banner-card">
@@ -254,6 +270,13 @@ color:black;
 </a>
 
 </div>
+
+<div class="banner-dots">
+<span class="active"></span>
+<span></span>
+<span></span>
+</div>
+
 </div>
 
 <!-- CATEGORIES -->
@@ -346,6 +369,45 @@ randomBox.innerHTML += `
 </div>
 </a>
 `;
+});
+
+</script>
+
+<script>
+
+let index = 0;
+const track = document.getElementById("bannerTrack");
+const dots = document.querySelectorAll(".banner-dots span");
+
+let startX = 0;
+let moveX = 0;
+
+track.addEventListener("touchstart", function(e){
+startX = e.touches[0].clientX;
+});
+
+track.addEventListener("touchmove", function(e){
+moveX = e.touches[0].clientX;
+});
+
+track.addEventListener("touchend", function(){
+
+if(startX - moveX > 50){
+index++;
+}
+
+if(moveX - startX > 50){
+index--;
+}
+
+if(index < 0) index = 0;
+if(index > 2) index = 2;
+
+track.style.transform = "translateX(-" + index * 100 + "%)";
+
+dots.forEach(d => d.classList.remove("active"));
+dots[index].classList.add("active");
+
 });
 
 </script>
