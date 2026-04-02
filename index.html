@@ -297,8 +297,10 @@ endX=e.changedTouches[0].clientX;
 if(startX-endX>50) index++;
 if(endX-startX>50) index--;
 
-if(index<0) index=2;
-if(index>2) index=0;
+const total = dots.length;
+
+if(index < 0) index = total - 1;
+if(index >= total) index = 0;
 
 track.style.transform="translateX(-"+index*100+"%)";
 
@@ -367,7 +369,7 @@ function toggleFav(e, id, el){
 e.preventDefault();
 e.stopPropagation();
 
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
 
 if(favs.includes(id)){
 favs = favs.filter(x => x !== id);
@@ -386,7 +388,7 @@ window.dispatchEvent(new Event("favsUpdated"));
 }
 
 localStorage.setItem("favs",JSON.stringify(favs));
-}
+
 </script>
 
 </body>
