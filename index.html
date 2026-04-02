@@ -85,14 +85,11 @@ margin-top:12px;
 overflow-x:auto;
 padding-bottom:5px;
 
-/* 🔥 MUHIM */
 scroll-padding-left:12px;
 scroll-padding-right:12px;
 }
 
-.cat-list::-webkit-scrollbar{
-display:none;
-}
+.cat-list::-webkit-scrollbar{display:none;}
 
 .cat-card{
 background:white;
@@ -129,9 +126,7 @@ font-weight:600;
 /* PRODUCTS */
 .random-section{
 padding:12px;
-
-/* 🔥 ENG MUHIM TUZATISH */
-padding-bottom:100px;
+padding-bottom:140px;
 }
 
 .random-products{
@@ -255,14 +250,12 @@ box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 
 <!-- CATEGORY -->
 <div class="category-section">
-
 <div class="cat-header">
 <h3>Categories</h3>
 <a href="categories.html" class="see-btn">See all</a>
 </div>
 
 <div class="cat-list" id="catList"></div>
-
 </div>
 
 <!-- PRODUCTS -->
@@ -345,7 +338,12 @@ const allProducts=[
 
 const box=document.getElementById("randomProducts");
 
-allProducts.forEach(p=>{
+/* 🔥 RANDOM */
+const randomProducts = allProducts
+.sort(() => 0.5 - Math.random())
+.slice(0,8);
+
+randomProducts.forEach(p=>{
 box.innerHTML+=`
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="product-card">
@@ -369,8 +367,6 @@ function toggleFav(e, id, el){
 e.preventDefault();
 e.stopPropagation();
 
-
-
 if(favs.includes(id)){
 favs = favs.filter(x => x !== id);
 el.classList.remove("active");
@@ -382,13 +378,8 @@ el.innerText = "♥";
 }
 
 localStorage.setItem("favs", JSON.stringify(favs));
-
-// 🔥 MUHIM: boshqa sahifalarga signal berish
 window.dispatchEvent(new Event("favsUpdated"));
 }
-
-localStorage.setItem("favs",JSON.stringify(favs));
-
 </script>
 
 </body>
