@@ -229,7 +229,29 @@ font-size:20px;
 text-decoration:none;
 color:black;
 }
+.product-card{
+position:relative;
+}
 
+.heart{
+position:absolute;
+top:8px;
+right:8px;
+font-size:18px;
+cursor:pointer;
+background:white;
+border-radius:50%;
+width:28px;
+height:28px;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.heart.active{
+color:red;
+}
 </style>
 </head>
 
@@ -259,6 +281,9 @@ color:black;
 <div class="banner-slide">
 <a href="product.html?id=termos1">
 <div class="banner-card">
+
+<div class="heart" onclick="toggleFav('termos1', this)">♡</div>
+
 <h3>Kitchen Chegirma</h3>
 <p>Termos 1L aksiya narxda</p>
 </div>
@@ -268,6 +293,10 @@ color:black;
 <div class="banner-slide">
 <a href="product.html?id=blender1">
 <div class="banner-card">
+
+<div class="heart" onclick="toggleFav('blender1', this)">♡</div>
+
+
 <h3>Blender Aksiya</h3>
 <p>Blender 3x1 arzon narxda</p>
 </div>
@@ -277,6 +306,9 @@ color:black;
 <div class="banner-slide">
 <a href="product.html?id=qozon1">
 <div class="banner-card">
+
+<div class="heart" onclick="toggleFav('qozon1', this)">♡</div>
+
 <h3>Yangi Mahsulotlar</h3>
 <p>Qozon 5L yangi keldi</p>
 </div>
@@ -401,13 +433,51 @@ randomProducts.forEach(p => {
 randomBox.innerHTML += `
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="product-card">
+
+<div class="heart" onclick="toggleFav('${p.id}', this)">♡</div>
+
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
+
 </div>
 </a>
 `;
 });
+</script>
+
+<script>
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+function toggleFav(id, el){
+
+if(favs.includes(id)){
+favs = favs.filter(x => x !== id);
+el.classList.remove("active");
+el.innerText = "♡";
+}else{
+favs.push(id);
+el.classList.add("active");
+el.innerText = "♥";
+}
+
+localStorage.setItem("favs", JSON.stringify(favs));
+}
+
+window.addEventListener("load", () => {
+
+document.querySelectorAll(".heart").forEach(el => {
+let id = el.getAttribute("onclick").match(/'(.*?)'/)[1];
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}
+});
+
+});
+
 </script>
 
 </body>
