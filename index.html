@@ -361,11 +361,13 @@ box.innerHTML+=`
 
 <!-- FAVORITE -->
 <script>
-let favs=JSON.parse(localStorage.getItem("favs"))||[];
+
 
 function toggleFav(e, id, el){
 e.preventDefault();
 e.stopPropagation();
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 if(favs.includes(id)){
 favs = favs.filter(x => x !== id);
@@ -378,6 +380,7 @@ el.innerText = "♥";
 }
 
 localStorage.setItem("favs", JSON.stringify(favs));
+
 window.dispatchEvent(new Event("favsUpdated"));
 }
 
