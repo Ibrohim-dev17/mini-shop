@@ -405,7 +405,33 @@ el.innerText = "♥";
 
 });
 
+
 </script>
+
+// 🔥 SAQLANGANLARNI YUKLASHDA HEARTNI TO‘G‘RILASH
+window.addEventListener("load", () => {
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+document.querySelectorAll(".heart").forEach(el => {
+
+let onclickAttr = el.getAttribute("onclick");
+if(!onclickAttr) return;
+
+let id = onclickAttr.split("'")[1];
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}else{
+el.classList.remove("active");
+el.innerText = "♡";
+}
+
+});
+
+});
+
 
 </body>
 </html>
