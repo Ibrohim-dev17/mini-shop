@@ -73,6 +73,30 @@ font-size:13px;
 font-weight:600;
 }
 
+.card{
+position:relative;
+}
+
+.heart{
+position:absolute;
+top:8px;
+right:8px;
+background:white;
+border-radius:50%;
+width:28px;
+height:28px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.heart.active{
+color:red;
+}
+
+
 </style>
 </head>
 
@@ -148,9 +172,13 @@ data[cat].forEach(p => {
 box.innerHTML += `
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="card">
+
+<div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
+
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
+
 </div>
 </a>
 `;
@@ -164,6 +192,43 @@ box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
 }
 
 </script>
+
+<script>
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+function toggleFav(e, id, el){
+e.preventDefault();
+e.stopPropagation();
+
+if(favs.includes(id)){
+favs = favs.filter(x => x !== id);
+el.classList.remove("active");
+el.innerText = "♡";
+}else{
+favs.push(id);
+el.classList.add("active");
+el.innerText = "♥";
+}
+
+localStorage.setItem("favs", JSON.stringify(favs));
+window.dispatchEvent(new Event("favsUpdated"));
+}
+
+// 🔥 sahifa ochilganda yuraklarni tekshiradi
+window.addEventListener("load", () => {
+document.querySelectorAll(".heart").forEach(el => {
+let id = el.getAttribute("onclick").match(/'(.*?)'/)[1];
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}
+});
+});
+
+</script>
+
 
 </body>
 </html>
