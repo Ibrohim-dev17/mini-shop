@@ -363,18 +363,26 @@ box.innerHTML+=`
 <script>
 let favs=JSON.parse(localStorage.getItem("favs"))||[];
 
-function toggleFav(e,id,el){
-e.stopPropagation();
+function toggleFav(e, id, el){
 e.preventDefault();
+e.stopPropagation();
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 if(favs.includes(id)){
-favs=favs.filter(x=>x!==id);
+favs = favs.filter(x => x !== id);
 el.classList.remove("active");
-el.innerText="♡";
+el.innerText = "♡";
 }else{
 favs.push(id);
 el.classList.add("active");
-el.innerText="♥";
+el.innerText = "♥";
+}
+
+localStorage.setItem("favs", JSON.stringify(favs));
+
+// 🔥 MUHIM: boshqa sahifalarga signal berish
+window.dispatchEvent(new Event("favsUpdated"));
 }
 
 localStorage.setItem("favs",JSON.stringify(favs));
