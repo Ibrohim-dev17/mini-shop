@@ -68,29 +68,30 @@ font-weight:600;
 
 <script>
 
-const allProducts = [
-{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-];
+function loadFavs(){
 
-const favs = JSON.parse(localStorage.getItem("favs")) || [];
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 const box = document.getElementById("favBox");
+box.innerHTML = "";
+
+if(favs.length === 0){
+box.innerHTML = "<p>Saqlangan mahsulot yo'q</p>";
+return;
+}
+
+const allProducts = [
+{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+];
 
 const favProducts = allProducts.filter(p => favs.includes(p.id));
-
-if(favProducts.length === 0){
-box.innerHTML = "<p>Hozircha saqlangan mahsulot yo‘q</p>";
-}
 
 favProducts.forEach(p => {
 box.innerHTML += `
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
-<div class="card">
+<div class="product-card">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
@@ -98,8 +99,15 @@ box.innerHTML += `
 </a>
 `;
 });
+}
+
+// page ochilganda
+loadFavs();
+
+// boshqa sahifadan o‘zgarsa ham yangilanadi
+window.addEventListener("storage", loadFavs);
+window.addEventListener("favsUpdated", loadFavs);
 
 </script>
-
 </body>
 </html>
