@@ -15,10 +15,7 @@ background:#f5f5f5;
 overflow-x:hidden;
 }
 
-img{
-max-width:100%;
-height:auto;
-}
+img{max-width:100%;}
 
 /* HEADER */
 .top-header{background:white;padding:14px;}
@@ -31,12 +28,7 @@ border-radius:20px;
 padding:10px;
 display:flex;
 }
-.search input{
-flex:1;
-border:none;
-background:transparent;
-outline:none;
-}
+.search input{flex:1;border:none;background:transparent;outline:none;}
 
 /* BANNER */
 .banner{padding:12px;overflow:hidden;}
@@ -77,7 +69,7 @@ width:8px;height:8px;background:#ccc;border-radius:50%;
 }
 .banner-dots .active{background:#6a5acd;}
 
-/* CATEGORY (ESKI DIZAYN) */
+/* CATEGORY */
 .category-section{padding:12px;}
 
 .cat-header{
@@ -91,6 +83,15 @@ display:flex;
 gap:12px;
 margin-top:12px;
 overflow-x:auto;
+padding-bottom:5px;
+
+/* 🔥 MUHIM */
+scroll-padding-left:12px;
+scroll-padding-right:12px;
+}
+
+.cat-list::-webkit-scrollbar{
+display:none;
 }
 
 .cat-card{
@@ -125,8 +126,13 @@ font-size:13px;
 font-weight:600;
 }
 
-/* PRODUCTS (ESKI RAZMER) */
-.random-section{padding:12px;}
+/* PRODUCTS */
+.random-section{
+padding:12px;
+
+/* 🔥 ENG MUHIM TUZATISH */
+padding-bottom:100px;
+}
 
 .random-products{
 display:grid;
@@ -173,7 +179,6 @@ align-items:center;
 justify-content:center;
 cursor:pointer;
 }
-
 .heart.active{color:red;}
 
 /* BOTTOM */
@@ -186,6 +191,7 @@ background:white;
 display:flex;
 justify-content:space-around;
 padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 }
 </style>
 </head>
@@ -273,7 +279,7 @@ padding:12px;
 <a href="#">👤</a>
 </div>
 
-<!-- SCRIPTS -->
+<!-- SWIPE -->
 <script>
 let index=0;
 const track=document.getElementById("bannerTrack");
@@ -301,11 +307,14 @@ dots[index].classList.add("active");
 });
 </script>
 
+<!-- CATEGORY SCRIPT -->
 <script>
 const categories=[
 {id:"termos",name:"Termos",img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"blender",name:"Blender",img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"mikser",name:"Mikser",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"idish",name:"Idishlar",img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
 const catBox=document.getElementById("catList");
@@ -321,6 +330,7 @@ catBox.innerHTML+=`
 });
 </script>
 
+<!-- PRODUCTS SCRIPT -->
 <script>
 const allProducts=[
 {id:"termos1",name:"Termos 1L",price:"120 000",img:"https://i.imgur.com/3ZQ3Z5b.png"},
@@ -349,6 +359,7 @@ box.innerHTML+=`
 });
 </script>
 
+<!-- FAVORITE -->
 <script>
 let favs=JSON.parse(localStorage.getItem("favs"))||[];
 
