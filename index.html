@@ -6,10 +6,7 @@
 <title>Kitchen Market</title>
 
 <style>
-
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
 margin:0;
@@ -18,24 +15,11 @@ background:#f5f5f5;
 overflow-x:hidden;
 }
 
-img{
-max-width:100%;
-height:auto;
-}
+img{max-width:100%;height:auto;}
 
 /* HEADER */
-
-.top-header{
-background:white;
-padding:14px;
-}
-
-.row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:22px;
-}
+.top-header{background:white;padding:14px;}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:22px;}
 
 .search{
 margin-top:10px;
@@ -55,22 +39,11 @@ outline:none;
 }
 
 /* BANNER */
+.banner{padding:12px;overflow:hidden;}
 
-.banner{
-padding:12px 12px 8px 12px;
-overflow:hidden;
-width:100%;
-}
+.banner-track{display:flex;transition:0.35s;}
 
-.banner-track{
-display:flex;
-transition:0.35s;
-}
-
-.banner-slide{
-min-width:100%;
-flex-shrink:0;
-}
+.banner-slide{min-width:100%;flex-shrink:0;}
 
 .banner-card{
 width:calc(100% - 24px);
@@ -83,52 +56,16 @@ padding:18px;
 display:flex;
 flex-direction:column;
 justify-content:center;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
+position:relative;
 }
 
-.banner-card h3{
-margin:0;
-font-size:18px;
-}
-
-.banner-card p{
-margin-top:6px;
-font-size:14px;
-opacity:0.9;
-}
-
-/* DOTS */
-
-.banner-dots{
-display:flex;
-justify-content:center;
-gap:6px;
-margin-top:8px;
-}
-
-.banner-dots span{
-width:8px;
-height:8px;
-background:#ccc;
-border-radius:50%;
-display:block;
-}
-
-.banner-dots .active{
-background:#6a5acd;
-}
+.banner-dots{display:flex;justify-content:center;gap:6px;margin-top:8px;}
+.banner-dots span{width:8px;height:8px;background:#ccc;border-radius:50%;}
+.banner-dots .active{background:#6a5acd;}
 
 /* CATEGORY */
-
-.category-section{
-padding:12px;
-}
-
-.cat-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+.category-section{padding:12px;}
+.cat-header{display:flex;justify-content:space-between;align-items:center;}
 
 .cat-list{
 display:flex;
@@ -147,18 +84,8 @@ box-shadow:0 2px 8px rgba(0,0,0,0.05);
 flex-shrink:0;
 }
 
-.cat-card img{
-width:70px;
-height:70px;
-border-radius:12px;
-}
-
-.cat-card p{
-font-size:13px;
-margin:6px 0 0;
-}
-
-/* SEE ALL BUTTON */
+.cat-card img{width:70px;height:70px;border-radius:12px;}
+.cat-card p{font-size:13px;margin:6px 0 0;}
 
 .see-btn{
 background:#6a5acd;
@@ -168,15 +95,10 @@ border-radius:50px;
 text-decoration:none;
 font-size:13px;
 font-weight:600;
-display:inline-block;
 }
 
 /* PRODUCTS */
-
-.random-section{
-padding:12px;
-padding-bottom:80px;
-}
+.random-section{padding:12px;padding-bottom:80px;}
 
 .random-products{
 display:grid;
@@ -191,27 +113,32 @@ border-radius:14px;
 padding:10px;
 text-align:center;
 box-shadow:0 2px 8px rgba(0,0,0,0.05);
+position:relative;
 }
 
-.product-card img{
-width:80px;
-height:80px;
-border-radius:10px;
+.product-card img{width:80px;height:80px;border-radius:10px;}
+
+.price{color:#6a5acd;font-weight:600;font-size:13px;}
+
+/* HEART */
+.heart{
+position:absolute;
+top:8px;
+right:8px;
+font-size:18px;
+background:white;
+border-radius:50%;
+width:28px;
+height:28px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
 }
 
-.product-card p{
-font-size:14px;
-margin:6px 0;
-}
+.heart.active{color:red;}
 
-.price{
-font-size:13px;
-color:#6a5acd;
-font-weight:600;
-}
-
-/* BOTTOM MENU */
-
+/* BOTTOM */
 .bottom{
 position:fixed;
 bottom:0;
@@ -222,35 +149,6 @@ display:flex;
 justify-content:space-around;
 padding:12px 0;
 box-shadow:0 -2px 10px rgba(0,0,0,0.1);
-font-size:20px;
-}
-
-.bottom a{
-text-decoration:none;
-color:black;
-}
-.product-card{
-position:relative;
-}
-
-.heart{
-position:absolute;
-top:8px;
-right:8px;
-font-size:18px;
-cursor:pointer;
-background:white;
-border-radius:50%;
-width:28px;
-height:28px;
-display:flex;
-align-items:center;
-justify-content:center;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-.heart.active{
-color:red;
 }
 </style>
 </head>
@@ -258,9 +156,7 @@ color:red;
 <body>
 
 <!-- HEADER -->
-
 <div class="top-header">
-
 <div class="row">
 <div>☰</div>
 <div>🛍️</div>
@@ -269,21 +165,16 @@ color:red;
 <div class="search">
 <input type="text" placeholder="What are you looking for?">
 </div>
-
 </div>
 
 <!-- BANNER -->
-
 <div class="banner">
-
 <div class="banner-track" id="bannerTrack">
 
 <div class="banner-slide">
 <a href="product.html?id=termos1">
 <div class="banner-card">
-
-<div class="heart" onclick="toggleFav('termos1', this)">♡</div>
-
+<div class="heart" onclick="toggleFav(event,'termos1',this)">♡</div>
 <h3>Kitchen Chegirma</h3>
 <p>Termos 1L aksiya narxda</p>
 </div>
@@ -293,10 +184,7 @@ color:red;
 <div class="banner-slide">
 <a href="product.html?id=blender1">
 <div class="banner-card">
-
-<div class="heart" onclick="toggleFav(event, 'termos1', this)">♡</div>
-
-
+<div class="heart" onclick="toggleFav(event,'blender1',this)">♡</div>
 <h3>Blender Aksiya</h3>
 <p>Blender 3x1 arzon narxda</p>
 </div>
@@ -306,9 +194,7 @@ color:red;
 <div class="banner-slide">
 <a href="product.html?id=qozon1">
 <div class="banner-card">
-
-<div class="heart" onclick="toggleFav(event, 'Blender1', this)">♡</div>
-
+<div class="heart" onclick="toggleFav(event,'qozon1',this)">♡</div>
 <h3>Yangi Mahsulotlar</h3>
 <p>Qozon 5L yangi keldi</p>
 </div>
@@ -322,32 +208,25 @@ color:red;
 <span></span>
 <span></span>
 </div>
-
 </div>
 
-<!-- CATEGORIES -->
-
+<!-- CATEGORY -->
 <div class="category-section">
-
 <div class="cat-header">
 <h3>Categories</h3>
 <a href="categories.html" class="see-btn">See all</a>
 </div>
 
-<!-- 🔥 DYNAMIC CATEGORY -->
 <div class="cat-list" id="catList"></div>
-
 </div>
 
-<!-- POPULAR PRODUCTS -->
-
+<!-- PRODUCTS -->
 <div class="random-section">
 <h3>Popular Products</h3>
 <div class="random-products" id="randomProducts"></div>
 </div>
 
-<!-- BOTTOM MENU -->
-
+<!-- BOTTOM -->
 <div class="bottom">
 <a href="index.html">🏠</a>
 <a href="cart.html">🛒</a>
@@ -355,129 +234,102 @@ color:red;
 <a href="#">👤</a>
 </div>
 
-<!-- SWIPE SCRIPT -->
-
+<!-- SWIPE -->
 <script>
-let index = 0;
-const track = document.getElementById("bannerTrack");
-const dots = document.querySelectorAll(".banner-dots span");
-const total = dots.length;
+let index=0;
+const track=document.getElementById("bannerTrack");
+const dots=document.querySelectorAll(".banner-dots span");
+let startX=0,endX=0;
 
-let startX = 0;
-let endX = 0;
-
-track.addEventListener("touchstart", (e) => {
-startX = e.touches[0].clientX;
-});
-
-track.addEventListener("touchend", (e) => {
-endX = e.changedTouches[0].clientX;
-
-if(startX - endX > 50){ index++; }
-if(endX - startX > 50){ index--; }
-
-if(index < 0) index = total - 1;
-if(index >= total) index = 0;
-
-track.style.transform = "translateX(-" + index * 100 + "%)";
-
-dots.forEach(d => d.classList.remove("active"));
+track.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+track.addEventListener("touchend",e=>{
+endX=e.changedTouches[0].clientX;
+if(startX-endX>50) index++;
+if(endX-startX>50) index--;
+if(index<0) index=dots.length-1;
+if(index>=dots.length) index=0;
+track.style.transform=`translateX(-${index*100}%)`;
+dots.forEach(d=>d.classList.remove("active"));
 dots[index].classList.add("active");
 });
 </script>
 
-<!-- 🔥 CATEGORY SCRIPT -->
-
+<!-- CATEGORY SCRIPT -->
 <script>
-const categories = [
-{ id:"termos", name:"Termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-{ id:"blender", name:"Blender", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-{ id:"qozon", name:"Qozon", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-{ id:"mikser", name:"Mikser", img:"https://i.imgur.com/3ZQ3Z5b.png" },
-{ id:"idishlar", name:"Idishlar", img:"https://i.imgur.com/3ZQ3Z5b.png" }
+const categories=[
+{id:"termos",name:"Termos",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender",name:"Blender",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
-const catBox = document.getElementById("catList");
+const catBox=document.getElementById("catList");
 
-categories.forEach(c => {
-catBox.innerHTML += `
+categories.forEach(c=>{
+catBox.innerHTML+=`
 <a href="products.html?cat=${c.id}" style="text-decoration:none;color:black;">
 <div class="cat-card">
 <img src="${c.img}">
 <p>${c.name}</p>
 </div>
-</a>
-`;
+</a>`;
 });
 </script>
 
-<!-- RANDOM PRODUCTS SCRIPT -->
-
+<!-- PRODUCTS SCRIPT -->
 <script>
-const allProducts = [
-{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+const allProducts=[
+{id:"termos1",name:"Termos 1L",price:"120 000",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender1",name:"Blender 3x1",price:"220 000",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon1",name:"Qozon 5L",price:"180 000",img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
-const randomBox = document.getElementById("randomProducts");
+const box=document.getElementById("randomProducts");
 
-const randomProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0,6);
-
-randomProducts.forEach(p => {
-randomBox.innerHTML += `
+allProducts.forEach(p=>{
+box.innerHTML+=`
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="product-card">
 
-<div class="heart" onclick="toggleFav('${p.id}', this)">♡</div>
+<div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
 
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
 
 </div>
-</a>
-`;
+</a>`;
 });
 </script>
 
+<!-- FAVORITE -->
 <script>
+let favs=JSON.parse(localStorage.getItem("favs"))||[];
 
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
-
-function toggleFav(id, el){
+function toggleFav(e,id,el){
+e.stopPropagation();
 
 if(favs.includes(id)){
-favs = favs.filter(x => x !== id);
+favs=favs.filter(x=>x!==id);
 el.classList.remove("active");
-el.innerText = "♡";
+el.innerText="♡";
 }else{
 favs.push(id);
 el.classList.add("active");
-el.innerText = "♥";
+el.innerText="♥";
 }
 
-localStorage.setItem("favs", JSON.stringify(favs));
+localStorage.setItem("favs",JSON.stringify(favs));
 }
 
-window.addEventListener("load", () => {
-
-document.querySelectorAll(".heart").forEach(el => {
-let id = el.getAttribute("onclick").match(/'(.*?)'/)[1];
-
+window.onload=()=>{
+document.querySelectorAll(".heart").forEach(el=>{
+let id=el.getAttribute("onclick").match(/'(.*?)'/)[1];
 if(favs.includes(id)){
 el.classList.add("active");
-el.innerText = "♥";
+el.innerText="♥";
 }
 });
-
-});
-
+};
 </script>
 
 </body>
