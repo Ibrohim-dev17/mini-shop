@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saqlanganlar</title>
+
+<style>
+body{
+margin:0;
+font-family:system-ui;
+background:#f5f5f5;
+}
+
+.header{
+background:white;
+padding:14px;
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.back{
+background:#6a5acd;
+color:white;
+padding:6px 12px;
+border-radius:50px;
+text-decoration:none;
+font-size:13px;
+}
+
+.box{
+padding:12px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.card{
+background:white;
+border-radius:14px;
+padding:10px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.card img{
+width:80px;
+height:80px;
+border-radius:10px;
+}
+
+.price{
+color:#6a5acd;
+font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<a href="index.html" class="back">← Back</a>
+<h3>❤️ Saqlanganlar</h3>
+</div>
+
+<div class="box" id="favBox"></div>
+
+<script>
+
+const allProducts = [
+{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+];
+
+const favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+const box = document.getElementById("favBox");
+
+const favProducts = allProducts.filter(p => favs.includes(p.id));
+
+if(favProducts.length === 0){
+box.innerHTML = "<p>Hozircha saqlangan mahsulot yo‘q</p>";
+}
+
+favProducts.forEach(p => {
+box.innerHTML += `
+<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
+<div class="card">
+<img src="${p.img}">
+<p>${p.name}</p>
+<div class="price">${p.price} so'm</div>
+</div>
+</a>
+`;
+});
+
+</script>
+
+</body>
+</html>
