@@ -354,6 +354,23 @@ box.innerHTML+=`
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
 
+// 🔥 HEART HOLATNI TO‘G‘RILASH
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+document.querySelectorAll(".heart").forEach(el => {
+
+let onclickAttr = el.getAttribute("onclick");
+if(!onclickAttr) return;
+
+let id = onclickAttr.split("'")[1];
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}
+
+});
+
 </div>
 </a>`;
 });
@@ -385,53 +402,10 @@ window.dispatchEvent(new Event("favsUpdated"));
 }
 
 // 🔥 PAGE LOADDA HEARTNI TEKSHIRISH
-window.addEventListener("load", () => {
-
-document.querySelectorAll(".heart").forEach(el => {
-
-let onclickAttr = el.getAttribute("onclick");
-
-if(!onclickAttr) return;
-
-// id ni ajratib olish
-let id = onclickAttr.split("'")[1];
-
-if(favs.includes(id)){
-el.classList.add("active");
-el.innerText = "♥";
-}
-
-});
-
-});
-
 
 </script>
 
-<script>
-window.addEventListener("load", () => {
 
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
-
-document.querySelectorAll(".heart").forEach(el => {
-
-let onclickAttr = el.getAttribute("onclick");
-if(!onclickAttr) return;
-
-let id = onclickAttr.split("'")[1];
-
-if(favs.includes(id)){
-el.classList.add("active");
-el.innerText = "♥";
-}else{
-el.classList.remove("active");
-el.innerText = "♡";
-}
-
-});
-
-});
-</script>
 
 </body>
 </html>
