@@ -354,7 +354,10 @@ box.innerHTML+=`
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
 
-// 🔥 HEART HOLATNI TO‘G‘RILASH
+</div>
+</a>`;
+});
+
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 document.querySelectorAll(".heart").forEach(el => {
@@ -371,9 +374,6 @@ el.innerText = "♥";
 
 });
 
-</div>
-</a>`;
-});
 </script>
 
 <!-- FAVORITE -->
