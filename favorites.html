@@ -91,7 +91,7 @@ const favProducts = allProducts.filter(p => favs.includes(p.id));
 favProducts.forEach(p => {
 box.innerHTML += `
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
-<div class="product-card">
+<div class="card">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
@@ -99,8 +99,6 @@ box.innerHTML += `
 </a>
 `;
 });
-}
-
 // page ochilganda
 loadFavs();
 
