@@ -54,7 +54,8 @@ font-size:14px;
 outline:none;
 }
 
-/* BANNER (100% TUZATILGAN) */
+/* BANNER */
+
 .banner{
 padding:12px 12px 8px 12px;
 overflow:hidden;
@@ -256,7 +257,7 @@ color:black;
 <div class="banner-track" id="bannerTrack">
 
 <div class="banner-slide">
-<a href="product.html?id=termos1" style="text-decoration:none;">
+<a href="product.html?id=termos1">
 <div class="banner-card">
 <h3>Kitchen Chegirma</h3>
 <p>Termos 1L aksiya narxda</p>
@@ -265,7 +266,7 @@ color:black;
 </div>
 
 <div class="banner-slide">
-<a href="product.html?id=blender1" style="text-decoration:none;">
+<a href="product.html?id=blender1">
 <div class="banner-card">
 <h3>Blender Aksiya</h3>
 <p>Blender 3x1 arzon narxda</p>
@@ -274,7 +275,7 @@ color:black;
 </div>
 
 <div class="banner-slide">
-<a href="product.html?id=qozon1" style="text-decoration:none;">
+<a href="product.html?id=qozon1">
 <div class="banner-card">
 <h3>Yangi Mahsulotlar</h3>
 <p>Qozon 5L yangi keldi</p>
@@ -301,30 +302,8 @@ color:black;
 <a href="categories.html" class="see-btn">See all</a>
 </div>
 
-<div class="cat-list">
-
-<a href="products.html?cat=termos" style="text-decoration:none;color:black;">
-<div class="cat-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Termos</p>
-</div>
-</a>
-
-<a href="products.html?cat=blender" style="text-decoration:none;color:black;">
-<div class="cat-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Blender</p>
-</div>
-</a>
-
-<a href="products.html?cat=qozon" style="text-decoration:none;color:black;">
-<div class="cat-card">
-<img src="https://i.imgur.com/3ZQ3Z5b.png">
-<p>Qozon</p>
-</div>
-</a>
-
-</div>
+<!-- 🔥 DYNAMIC CATEGORY -->
+<div class="cat-list" id="catList"></div>
 
 </div>
 
@@ -347,7 +326,6 @@ color:black;
 <!-- SWIPE SCRIPT -->
 
 <script>
-
 let index = 0;
 const track = document.getElementById("bannerTrack");
 const dots = document.querySelectorAll(".banner-dots span");
@@ -363,13 +341,8 @@ startX = e.touches[0].clientX;
 track.addEventListener("touchend", (e) => {
 endX = e.changedTouches[0].clientX;
 
-if(startX - endX > 50){
-index++;
-}
-
-if(endX - startX > 50){
-index--;
-}
+if(startX - endX > 50){ index++; }
+if(endX - startX > 50){ index--; }
 
 if(index < 0) index = total - 1;
 if(index >= total) index = 0;
@@ -378,33 +351,51 @@ track.style.transform = "translateX(-" + index * 100 + "%)";
 
 dots.forEach(d => d.classList.remove("active"));
 dots[index].classList.add("active");
-
 });
-
 </script>
 
+<!-- 🔥 CATEGORY SCRIPT -->
+
 <script>
+const categories = [
+{ id:"termos", name:"Termos", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ id:"blender", name:"Blender", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ id:"qozon", name:"Qozon", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ id:"mikser", name:"Mikser", img:"https://i.imgur.com/3ZQ3Z5b.png" },
+{ id:"idishlar", name:"Idishlar", img:"https://i.imgur.com/3ZQ3Z5b.png" }
+];
 
+const catBox = document.getElementById("catList");
+
+categories.forEach(c => {
+catBox.innerHTML += `
+<a href="products.html?cat=${c.id}" style="text-decoration:none;color:black;">
+<div class="cat-card">
+<img src="${c.img}">
+<p>${c.name}</p>
+</div>
+</a>
+`;
+});
+</script>
+
+<!-- RANDOM PRODUCTS SCRIPT -->
+
+<script>
 const allProducts = [
-
 {id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
 {id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-
 {id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-
 ];
 
 const randomBox = document.getElementById("randomProducts");
 
-const randomProducts = allProducts
-.sort(() => 0.5 - Math.random())
-.slice(0,6);
+const randomProducts = allProducts.sort(() => 0.5 - Math.random()).slice(0,6);
 
 randomProducts.forEach(p => {
 randomBox.innerHTML += `
@@ -417,7 +408,6 @@ randomBox.innerHTML += `
 </a>
 `;
 });
-
 </script>
 
 </body>
