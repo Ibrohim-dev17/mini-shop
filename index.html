@@ -380,6 +380,28 @@ el.innerText = "♥";
 localStorage.setItem("favs", JSON.stringify(favs));
 window.dispatchEvent(new Event("favsUpdated"));
 }
+
+// 🔥 PAGE LOADDA HEARTNI TEKSHIRISH
+window.addEventListener("load", () => {
+
+document.querySelectorAll(".heart").forEach(el => {
+
+let onclickAttr = el.getAttribute("onclick");
+
+if(!onclickAttr) return;
+
+// id ni ajratib olish
+let id = onclickAttr.split("'")[1];
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}
+
+});
+
+});
+
 </script>
 
 </body>
