@@ -105,7 +105,7 @@ color:red;
 <!-- HEADER -->
 
 <div class="header">
-<a href="index.html" class="back-btn">← Back</a>
+<a href="#" onclick="goBack()" class="back-btn">← Back</a>
 <b id="title">Products</b>
 </div>
 
@@ -229,6 +229,18 @@ el.innerText = "♥";
 
 </script>
 
+<script>
+function goBack(){
+const params = new URLSearchParams(window.location.search);
+const from = params.get("from");
+
+if(from === "categories"){
+window.location.href = "categories.html";
+}else{
+window.location.href = "index.html";
+}
+}
+</script>
 
 </body>
 </html>
