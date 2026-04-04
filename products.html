@@ -7,9 +7,7 @@
 
 <style>
 
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
 margin:0;
@@ -55,6 +53,7 @@ border-radius:14px;
 padding:12px;
 text-align:center;
 box-shadow:0 2px 8px rgba(0,0,0,0.05);
+position:relative;
 }
 
 .card img{
@@ -74,9 +73,7 @@ font-size:13px;
 font-weight:600;
 }
 
-.card{
-position:relative;
-}
+/* HEART */
 
 .heart{
 position:absolute;
@@ -96,6 +93,9 @@ box-shadow:0 2px 6px rgba(0,0,0,0.1);
 .heart.active{
 color:red;
 }
+
+/* BOTTOM NAV */
+
 .bottom{
 position:fixed;
 bottom:0;
@@ -127,12 +127,12 @@ z-index:1000;
 
 <script>
 
-/* CATEGORY O'QISH */
+/* URL */
 
 const url = new URLSearchParams(window.location.search);
 const cat = url.get("cat");
 
-/* PRODUCTS DATA */
+/* DATA */
 
 const data = {
 
@@ -165,15 +165,17 @@ idishlar: [
 
 };
 
-/* CATEGORY NOMINI CHIQARISH */
+/* TITLE */
 
 if(cat && data[cat]){
 document.getElementById("title").innerText = cat.toUpperCase();
-}else{
-document.getElementById("title").innerText = "Products";
 }
 
-/* PRODUCTLARNI CHIQARISH */
+/* FAVORITES */
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+/* PRODUCTS */
 
 const box = document.getElementById("productBox");
 
@@ -195,20 +197,26 @@ box.innerHTML += `
 </div>
 `;
 
+});
+
+/* 🔥 HEARTNI YUKLANGANDA TEKSHIRISH */
+
+document.querySelectorAll(".heart").forEach(el => {
+
+let id = el.getAttribute("onclick").match(/'(.*?)'/)[1];
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}
 
 });
 
 }else{
-
 box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
-
 }
 
-</script>
-
-<script>
-
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
+/* ❤️ TOGGLE */
 
 function toggleFav(e, id, el){
 
@@ -231,26 +239,8 @@ el.innerText = "♥";
 localStorage.setItem("favs", JSON.stringify(favs));
 }
 
+/* BACK */
 
-
-window.dispatchEvent(new Event("favsUpdated"));
-}
-
-// 🔥 sahifa ochilganda yuraklarni tekshiradi
-window.addEventListener("load", () => {
-document.querySelectorAll(".heart").forEach(el => {
-let id = el.getAttribute("onclick").match(/'(.*?)'/)[1];
-
-if(favs.includes(id)){
-el.classList.add("active");
-el.innerText = "♥";
-}
-});
-});
-
-</script>
-
-<script>
 function goBack(){
 const params = new URLSearchParams(window.location.search);
 const from = params.get("from");
@@ -261,9 +251,10 @@ window.location.href = "categories.html";
 window.location.href = "index.html";
 }
 }
+
 </script>
 
-<!-- PAGE CONTENT -->
+<!-- BOTTOM NAV -->
 
 <div class="bottom">
 <a href="index.html">🏠</a>
@@ -271,7 +262,6 @@ window.location.href = "index.html";
 <a href="favorites.html">❤️</a>
 <a href="#">👤</a>
 </div>
-
 
 </body>
 </html>
