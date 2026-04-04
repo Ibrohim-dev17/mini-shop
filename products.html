@@ -208,16 +208,15 @@ box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
 
 <script>
 
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 function toggleFav(e, id, el){
 
 if(e){
 e.preventDefault();
 e.stopPropagation();
-e.stopImmediatePropagation(); // 🔥 MUHIM
+e.stopImmediatePropagation();
 }
-
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 if(favs.includes(id)){
 favs = favs.filter(x => x !== id);
@@ -231,6 +230,8 @@ el.innerText = "♥";
 
 localStorage.setItem("favs", JSON.stringify(favs));
 }
+
+
 
 window.dispatchEvent(new Event("favsUpdated"));
 }
