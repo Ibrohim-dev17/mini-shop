@@ -182,18 +182,19 @@ if(cat && data[cat]){
 data[cat].forEach(p => {
 
 box.innerHTML += `
-<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="card">
 
 <div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
 
+<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;display:block;">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
+</a>
 
 </div>
-</a>
 `;
+
 
 });
 
