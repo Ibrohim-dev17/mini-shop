@@ -6,7 +6,6 @@
 <title>Products</title>
 
 <style>
-
 *{box-sizing:border-box;}
 
 body{
@@ -18,7 +17,6 @@ padding-bottom:80px;
 }
 
 /* HEADER */
-
 .header{
 background:white;
 padding:14px;
@@ -37,14 +35,12 @@ font-size:13px;
 font-weight:600;
 }
 
-/* PRODUCTS GRID */
-
+/* PRODUCTS */
 .products{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:12px;
 padding:12px;
-padding-bottom:80px;
 }
 
 .card{
@@ -74,7 +70,6 @@ font-weight:600;
 }
 
 /* HEART */
-
 .heart{
 position:absolute;
 top:8px;
@@ -94,8 +89,7 @@ box-shadow:0 2px 6px rgba(0,0,0,0.1);
 color:red;
 }
 
-/* BOTTOM NAV */
-
+/* BOTTOM */
 .bottom{
 position:fixed;
 bottom:0;
@@ -108,85 +102,66 @@ padding:12px;
 box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 z-index:1000;
 }
-
 </style>
 </head>
 
 <body>
 
 <!-- HEADER -->
-
 <div class="header">
 <a href="#" onclick="goBack()" class="back-btn">← Back</a>
 <b id="title">Products</b>
 </div>
 
 <!-- PRODUCTS -->
-
 <div class="products" id="productBox"></div>
 
 <script>
 
 /* URL */
-
 const url = new URLSearchParams(window.location.search);
 const cat = url.get("cat");
 
 /* DATA */
-
 const data = {
-
 termos: [
 {id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ],
-
 blender: [
 {id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ],
-
 qozon: [
 {id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ],
-
 mikser: [
 {id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ],
-
 idishlar: [
 {id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ]
-
 };
 
 /* TITLE */
-
 if(cat && data[cat]){
 document.getElementById("title").innerText = cat.toUpperCase();
 }
 
-/* FAVORITES */
-
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
-
 /* PRODUCTS */
-
 const box = document.getElementById("productBox");
 
 if(cat && data[cat]){
-
 data[cat].forEach(p => {
-
 box.innerHTML += `
 <div class="card">
 
-<div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
+<div class="heart" data-id="${p.id}">♡</div>
 
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;display:block;">
 <img src="${p.img}">
@@ -196,51 +171,51 @@ box.innerHTML += `
 
 </div>
 `;
-
 });
-
-/* 🔥 HEARTNI YUKLANGANDA TEKSHIRISH */
-
-document.querySelectorAll(".heart").forEach(el => {
-
-let id = el.getAttribute("onclick").match(/'(.*?)'/)[1];
-
-if(favs.includes(id)){
-el.classList.add("active");
-el.innerText = "♥";
-}
-
-});
-
 }else{
 box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
 }
 
-/* ❤️ TOGGLE */
+/* ❤️ FAVORITES */
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-function toggleFav(e, id, el){
+/* CLICK EVENT (ENG MUHIM QISM) */
+document.addEventListener("click", function(e){
 
-if(e){
+if(e.target.classList.contains("heart")){
+
 e.preventDefault();
 e.stopPropagation();
-e.stopImmediatePropagation();
-}
+
+let id = e.target.getAttribute("data-id");
 
 if(favs.includes(id)){
 favs = favs.filter(x => x !== id);
-el.classList.remove("active");
-el.innerText = "♡";
+e.target.classList.remove("active");
+e.target.innerText = "♡";
 }else{
 favs.push(id);
-el.classList.add("active");
-el.innerText = "♥";
+e.target.classList.add("active");
+e.target.innerText = "♥";
 }
 
 localStorage.setItem("favs", JSON.stringify(favs));
 }
+});
+
+/* LOADDA HEARTNI TEKSHIRISH */
+window.addEventListener("load", () => {
+document.querySelectorAll(".heart").forEach(el => {
+let id = el.getAttribute("data-id");
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}
+});
+});
 
 /* BACK */
-
 function goBack(){
 const params = new URLSearchParams(window.location.search);
 const from = params.get("from");
@@ -254,8 +229,7 @@ window.location.href = "index.html";
 
 </script>
 
-<!-- BOTTOM NAV -->
-
+<!-- BOTTOM -->
 <div class="bottom">
 <a href="index.html">🏠</a>
 <a href="cart.html">🛒</a>
