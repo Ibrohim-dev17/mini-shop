@@ -209,10 +209,13 @@ box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
 
 
 function toggleFav(e, id, el){
+
+if(e){
 e.preventDefault();
 e.stopPropagation();
+e.stopImmediatePropagation(); // 🔥 MUHIM
+}
 
-// 🔥 ENG MUHIM JOY
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 if(favs.includes(id)){
