@@ -68,6 +68,23 @@ box-shadow:0 -2px 10px rgba(0,0,0,0.1);
 z-index:1000;
 }
 
+.heart{
+position:absolute;
+top:8px;
+right:8px;
+background:white;
+border-radius:50%;
+width:28px;
+height:28px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+}
+
+.heart.active{
+color:red;
+}
 
 </style>
 </head>
@@ -136,17 +153,39 @@ const favProducts = allProducts.filter(p => favs.includes(p.id));
 
 favProducts.forEach(p => {
 box.innerHTML += `
-<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="card">
+
+<div class="heart active" onclick="removeFav('${p.id}', this)">♥</div>
+
+<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
-</div>
 </a>
+
+</div>
 `;
 });
 
 }
+
+function removeFav(id, el){
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+favs = favs.filter(x => x !== id);
+
+localStorage.setItem("favs", JSON.stringify(favs));
+
+// kartani o‘chirish
+el.parentElement.remove();
+
+// agar bo‘sh bo‘lib qolsa
+if(favs.length === 0){
+document.getElementById("favBox").innerHTML = "<p>Saqlangan mahsulot yo'q</p>";
+}
+}
+
 
 // page ochilganda
 loadFavs();
