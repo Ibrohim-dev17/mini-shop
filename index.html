@@ -340,10 +340,12 @@ const allProducts=[
 const box=document.getElementById("randomProducts");
 
 /* 🔥 RANDOM */
-const randomProducts = allProducts
-.sort(() => 0.5 - Math.random())
-.slice(0,8);
+const randomProducts = [...allProducts];
 
+for(let i = randomProducts.length - 1; i > 0; i--){
+let j = Math.floor(Math.random() * (i + 1));
+[randomProducts[i], randomProducts[j]] = [randomProducts[j], randomProducts[i]];
+}
 randomProducts.forEach(p=>{
 box.innerHTML+=`
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
