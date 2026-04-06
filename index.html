@@ -359,39 +359,39 @@ idishlar: [
 
 };
 
+/* HAMMASINI BIRGA */
 let allProducts = [];
-
 Object.values(data).forEach(arr => {
 allProducts = allProducts.concat(arr);
 });
 
-
-
-
-const box=document.getElementById("randomProducts");
-
-/* 🔥 RANDOM */
-const randomProducts = [...allProducts];
-
-for(let i = randomProducts.length - 1; i > 0; i--){
+/* RANDOM */
+const shuffled = [...allProducts];
+for(let i = shuffled.length - 1; i > 0; i--){
 let j = Math.floor(Math.random() * (i + 1));
-[randomProducts[i], randomProducts[j]] = [randomProducts[j], randomProducts[i]];
+[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 }
-randomProducts.forEach(p=>{
+
+/* CHIQARISH */
+const box = document.getElementById("randomProducts");
+
+shuffled.forEach(p=>{
 box.innerHTML += `
-<div class="card">
-
-<div class="heart active" onclick="toggleFav(event,'${p.id}',this)">♥</div>
-
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
+<div class="product-card">
+
+<div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
+
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
-</a>
 
 </div>
+</a>
 `;
+});
 
+/* ❤️ FUNKSIYA */
 function toggleFav(e, id, el){
 e.preventDefault();
 e.stopPropagation();
@@ -402,10 +402,6 @@ if(favs.includes(id)){
 favs = favs.filter(x => x !== id);
 el.classList.remove("active");
 el.innerText = "♡";
-
-// kartani ham o‘chiramiz
-el.parentElement.remove();
-
 }else{
 favs.push(id);
 el.classList.add("active");
@@ -415,24 +411,12 @@ el.innerText = "♥";
 localStorage.setItem("favs", JSON.stringify(favs));
 }
 
-<div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
-
-<img src="${p.img}">
-<p>${p.name}</p>
-<div class="price">${p.price} so'm</div>
-
-</div>
-</a>`;
-});
-
+/* ❤️ TEKSHIRISH */
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 document.querySelectorAll(".heart").forEach(el => {
 
-let onclickAttr = el.getAttribute("onclick");
-if(!onclickAttr) return;
-
-let id = onclickAttr.split("'")[1];
+let id = el.getAttribute("onclick").split("'")[1];
 
 if(favs.includes(id)){
 el.classList.add("active");
