@@ -81,7 +81,12 @@ align-items:center;
 justify-content:center;
 cursor:pointer;
 }
-
+.heart.active{
+color:red;
+}
+.card{
+position:relative;
+}
 .heart.active{
 color:red;
 }
@@ -151,18 +156,16 @@ allProducts = allProducts.concat(arr);
 
 const favProducts = allProducts.filter(p => favs.includes(p.id));
 
-favProducts.forEach(p => {
-box.innerHTML += `
-<div class="card">
+function removeFav(id, el){
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-<div class="heart active" onclick="removeFav('${p.id}', this)">♥</div>
+favs = favs.filter(x => x !== id);
 
-<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
-<img src="${p.img}">
-<p>${p.name}</p>
-<div class="price">${p.price} so'm</div>
-</a>
+localStorage.setItem("favs", JSON.stringify(favs));
 
+// kartani o‘chirish
+el.parentElement.remove();
+}
 </div>
 `;
 });
