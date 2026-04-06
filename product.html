@@ -136,6 +136,22 @@ font-size:18px;
 .heart.active{
 color:red;
 }
+
+.heart{
+position:absolute;
+top:8px;
+right:8px;
+background:white;
+border-radius:50%;
+width:28px;
+height:28px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+}
+.heart.active{color:red;}
+
 </style>
 </head>
 
@@ -149,8 +165,7 @@ color:red;
 <!-- PRODUCT -->
 <div class="product">
 
-<div class="heart" id="favBtn" onclick="toggleFav()">♡</div>
-
+<div class="heart" id="favBtn" onclick="toggleFav(event,'',this)">♡</div>
 <img id="pImg">
 
 <div class="name" id="pName"></div>
@@ -198,6 +213,16 @@ const allProducts = [
 
 /* PRODUCT TOPISH */
 const product = allProducts.find(p => p.id === id);
+
+/* ❤️ TEKSHIRISH */
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+if(product && favs.includes(product.id)){
+const el = document.getElementById("favBtn");
+el.classList.add("active");
+el.innerText = "♥";
+}
+
 
 /* CHIQARISH */
 if(product){
@@ -251,19 +276,23 @@ localStorage.setItem("cart", JSON.stringify(cart));
 alert("Mahsulot savatga qo‘shildi");
 }
 
-function toggleFav(){
+function toggleFav(e, id, el){
+e.preventDefault();
+e.stopPropagation();
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
-const btn = document.getElementById("favBtn");
 
-if(favs.includes(product.id)){
-favs = favs.filter(x => x !== product.id);
-btn.classList.remove("active");
-btn.innerText = "♡";
+// product.id ishlatamiz
+let pid = product.id;
+
+if(favs.includes(pid)){
+favs = favs.filter(x => x !== pid);
+el.classList.remove("active");
+el.innerText = "♡";
 }else{
-favs.push(product.id);
-btn.classList.add("active");
-btn.innerText = "♥";
+favs.push(pid);
+el.classList.add("active");
+el.innerText = "♥";
 }
 
 localStorage.setItem("favs", JSON.stringify(favs));
