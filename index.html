@@ -378,9 +378,42 @@ let j = Math.floor(Math.random() * (i + 1));
 [randomProducts[i], randomProducts[j]] = [randomProducts[j], randomProducts[i]];
 }
 randomProducts.forEach(p=>{
-box.innerHTML+=`
+box.innerHTML += `
+<div class="card">
+
+<div class="heart active" onclick="toggleFav(event,'${p.id}',this)">♥</div>
+
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
-<div class="product-card">
+<img src="${p.img}">
+<p>${p.name}</p>
+<div class="price">${p.price} so'm</div>
+</a>
+
+</div>
+`;
+
+function toggleFav(e, id, el){
+e.preventDefault();
+e.stopPropagation();
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+if(favs.includes(id)){
+favs = favs.filter(x => x !== id);
+el.classList.remove("active");
+el.innerText = "♡";
+
+// kartani ham o‘chiramiz
+el.parentElement.remove();
+
+}else{
+favs.push(id);
+el.classList.add("active");
+el.innerText = "♥";
+}
+
+localStorage.setItem("favs", JSON.stringify(favs));
+}
 
 <div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
 
