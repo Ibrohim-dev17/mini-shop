@@ -170,10 +170,6 @@ box.innerHTML += `
 `;
 });
 
-favProducts.forEach(p => {
-    box.innerHTML += `...`
-});
-
 function removeFav(id, el){
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
