@@ -167,13 +167,13 @@ if(cat && data[cat]){
 
 data[cat].forEach(p => {
 
-let isFav = favs.find(x => x.id === p.id);
+let isFav = favs.includes(p.id);
 
 box.innerHTML += `
 <div class="card">
 
 <div class="heart ${isFav ? "active" : ""}" 
-onclick='toggleFav(event, ${JSON.stringify(p)}, this)'>
+onclick="toggleFav(event,'${p.id}',this)"
 ${isFav ? "♥" : "♡"}
 </div>
 
