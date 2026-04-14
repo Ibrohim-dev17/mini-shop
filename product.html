@@ -169,7 +169,7 @@ position:relative;
 
 <!-- PRODUCT -->
 <div class="product">
-<div class="heart" id="favBtn" onclick="toggleFav(event,'',this)">♡</div>
+<div class="heart" id="favBtn" onclick="toggleFav(event, product.id, this)">♡</div>
 
 <img id="pImg">
 
@@ -197,22 +197,22 @@ const id = url.get("id");
 /* DATA */
 const allProducts = [
 
-{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"1 litr termos. 12 soat issiq saqlaydi."},
-{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"2 litr katta termos. Sayohat uchun zo‘r."},
-{id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Sport uchun yengil termos."},
+{id:"termos1", name:"Termos 1L", price:"120000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"1 litr termos. 12 soat issiq saqlaydi."},
+{id:"termos2", name:"Termos 2L", price:"150000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"2 litr katta termos. Sayohat uchun zo‘r."},
+{id:"termos3", name:"Sport Termos", price:"110000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Sport uchun yengil termos."},
 
-{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"3 ta funksiyali blender."},
-{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Mini blender. Oshxona uchun qulay."},
-{id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Professional kuchli blender."},
+{id:"blender1", name:"Blender 3x1", price:"220000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"3 ta funksiyali blender."},
+{id:"blender2", name:"Mini Blender", price:"160000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Mini blender. Oshxona uchun qulay."},
+{id:"blender3", name:"Professional Blender", price:"390000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Professional kuchli blender."},
 
-{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 litr qozon. Qalin temir."},
-{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"10 litr katta qozon."},
+{id:"qozon1", name:"Qozon 5L", price:"180000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 litr qozon. Qalin temir."},
+{id:"qozon2", name:"Qozon 10L", price:"260000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"10 litr katta qozon."},
 
-{id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 tezlikli mikser."},
-{id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Kichik mikser. Arzon variant."},
+{id:"mikser1", name:"Mikser 5 Speed", price:"150000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 tezlikli mikser."},
+{id:"mikser2", name:"Mini Mikser", price:"95000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Kichik mikser. Arzon variant."},
 
-{id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Oshxona uchun idishlar komplekti."},
-{id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Premium sifatli idishlar."}
+{id:"idish1", name:"Idishlar To‘plami", price:"150000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Oshxona uchun idishlar komplekti."},
+{id:"idish2", name:"Premium Idishlar", price:"260000", img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Premium sifatli idishlar."}
 
 ];
 
@@ -220,14 +220,17 @@ const allProducts = [
 const product = allProducts.find(p => p.id === id);
 
 /* ❤️ TEKSHIRISH */
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
+const favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+const favBtn = document.getElementById("favBtn");
 
 if(product && favs.includes(product.id)){
-const el = document.getElementById("favBtn");
-el.classList.add("active");
-el.innerText = "♥";
+favBtn.classList.add("active");
+favBtn.innerText = "♥";
+}else{
+favBtn.classList.remove("active");
+favBtn.innerText = "♡";
 }
-
 
 /* CHIQARISH */
 if(product){
