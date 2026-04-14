@@ -174,7 +174,15 @@ searchInput.addEventListener("keyup", function(){
 
 let text = searchInput.value.toLowerCase();
 
-cards.forEach(function(card){
+cards.forEach(card => {
+let name = card.innerText.toLowerCase();
+
+if(name.includes(text)){
+card.closest("a").style.display = "block";
+}else{
+card.closest("a").style.display = "none";
+}
+});
 
 let name = card.innerText.toLowerCase();
 
