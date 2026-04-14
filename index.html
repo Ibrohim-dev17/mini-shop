@@ -399,7 +399,7 @@ box.innerHTML = html;
 <a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="product-card">
 
-<div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
+<div class="heart" data-id="${p.id}" onclick="toggleFav(event,'${p.id}',this)">♡</div>
 
 <img src="${p.img}">
 <p>${p.name}</p>
@@ -433,7 +433,7 @@ let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 document.querySelectorAll(".heart").forEach(el => {
 
-let id = el.getAttribute("onclick").split("'")[1];
+let id = el.dataset.id;
 
 if(favs.includes(id)){
 el.classList.add("active");
