@@ -309,7 +309,7 @@ const categories=[
 {id:"blender",name:"Blender",img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"mikser",name:"Mikser",img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"idish",name:"Idishlar",img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"idishlar",name:"Idishlar",img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
 const catBox=document.getElementById("catList");
@@ -392,9 +392,7 @@ box.innerHTML += `
 });
 
 /* ❤️ FUNKSIYA */
-function toggleFav(e, id, el){
-e.preventDefault();
-e.stopPropagation();
+
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
