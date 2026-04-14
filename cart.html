@@ -164,7 +164,7 @@ let total = 0;
 
 cart.forEach(p => {
 
-let priceNumber = parseInt(p.price.replace(/\s/g,''));
+let priceNumber = p.price;
 let itemTotal = priceNumber * p.qty;
 total += itemTotal;
 
@@ -183,7 +183,7 @@ box.innerHTML += `
 
 /* TOTAL chiqarish */
 
-totalText.innerText = total.toLocaleString();
+totalText.innerText = total.toLocaleString() + " so'm";
 
 /* SAVATNI TOZALASH */
 
