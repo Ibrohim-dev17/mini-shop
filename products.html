@@ -172,8 +172,7 @@ let isFav = favs.includes(p.id);
 box.innerHTML += `
 <div class="card">
 
-<div class="heart ${isFav ? "active" : ""}" 
-onclick="toggleFav(event,'${p.id}',this)"
+<div class="heart ${isFav ? "active" : ""}" onclick="toggleFav(event,'${p.id}',this)">
 ${isFav ? "♥" : "♡"}
 </div>
 
@@ -193,23 +192,26 @@ box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
 }
 
 /* ❤️ TOGGLE */
-function toggleFav(e, product, el){
+function toggleFav(e, id, el){
 
 e.preventDefault();
 e.stopPropagation();
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-let index = favs.findIndex(x => x.id === product.id);
+let index = favs.indexOf(id);
 
 if(index !== -1){
 favs.splice(index,1);
 el.classList.remove("active");
 el.innerText = "♡";
 }else{
-favs.push(product);
+favs.push(id);
 el.classList.add("active");
 el.innerText = "♥";
+}
+
+localStorage.setItem("favs", JSON.stringify(favs));
 }
 
 localStorage.setItem("favs", JSON.stringify(favs));
