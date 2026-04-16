@@ -217,7 +217,7 @@ const allProducts = [
 ];
 
 /* PRODUCT TOPISH */
-const product = allProducts.find(p => p.id === id);
+const product = allProducts.find(p => String(p.id) === String(id));
 
 /* ❤️ TEKSHIRISH */
 const favs = JSON.parse(localStorage.getItem("favs")) || [];
