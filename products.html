@@ -165,6 +165,8 @@ const box = document.getElementById("productBox");
 
 if(cat && data[cat]){
 
+
+
 data[cat].forEach(p => {
 
 let isFav = favs.includes(p.id);
@@ -184,7 +186,6 @@ ${isFav ? "♥" : "♡"}
 
 </div>
 `;
-
 });
 
 }else{
@@ -209,9 +210,6 @@ el.innerText = "♡";
 favs.push(id);
 el.classList.add("active");
 el.innerText = "♥";
-}
-
-localStorage.setItem("favs", JSON.stringify(favs));
 }
 
 localStorage.setItem("favs", JSON.stringify(favs));
