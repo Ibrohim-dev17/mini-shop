@@ -6,77 +6,100 @@
 <title>Kitchen Market</title>
 
 <style>
+
+*{box-sizing:border-box;}
 body{
 margin:0;
-font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-background:#f5f6fa;
+font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+background:#f2f2f7;
 color:#111;
 }
 
-a{text-decoration:none;color:inherit;}
-*{box-sizing:border-box;}
-
-svg{width:22px;height:22px}
-
 /* HEADER */
-.top-header{
-padding:12px;
-background:white;
+.header{
 position:sticky;
 top:0;
+background:rgba(255,255,255,0.8);
+backdrop-filter:blur(12px);
+padding:14px;
 z-index:10;
-border-bottom:1px solid #eee;
 }
 
-.row{
-display:flex;
-justify-content:space-between;
-align-items:center;
+.logo{
+font-size:18px;
+font-weight:700;
 }
 
-.icon-btn{
-width:38px;
-height:38px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:12px;
-background:#f3f3f3;
-}
-
-/* SEARCH */
 .search{
 margin-top:10px;
-background:#f3f3f3;
-border-radius:20px;
+background:#e9e9ee;
+border-radius:14px;
 padding:10px;
-display:flex;
 }
+
 .search input{
-border:none;
-background:transparent;
-outline:none;
 width:100%;
+border:none;
+background:none;
+outline:none;
+font-size:14px;
+}
+
+/* BANNER */
+.banner{
+padding:12px;
+}
+
+.banner-card{
+background:linear-gradient(135deg,#6a5acd,#8a2be2);
+color:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:12px;
+position:relative;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 
 /* CATEGORY */
+.section{
+padding:12px;
+}
+
+.section-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
 .cat-list{
 display:flex;
 gap:12px;
 overflow-x:auto;
-padding:12px;
 }
 
 .cat-card{
+min-width:90px;
 background:white;
-border-radius:18px;
+border-radius:16px;
 padding:12px;
 text-align:center;
-min-width:110px;
+box-shadow:0 4px 15px rgba(0,0,0,0.05);
+}
+
+.cat-card img{
+width:50px;
+height:50px;
+object-fit:contain;
+}
+
+.cat-card p{
+font-size:12px;
+margin-top:6px;
 }
 
 /* PRODUCTS */
-.random-products{
+.products{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:12px;
@@ -85,136 +108,133 @@ padding:12px;
 
 .product-card{
 background:white;
-border-radius:14px;
-padding:10px;
+border-radius:18px;
+padding:12px;
+box-shadow:0 6px 20px rgba(0,0,0,0.06);
 position:relative;
-text-align:center;
+transition:0.2s;
 }
 
-.price{color:#6a5acd;font-weight:600}
+.product-card:active{
+transform:scale(0.97);
+}
+
+.product-card img{
+width:100%;
+height:110px;
+object-fit:contain;
+background:#fafafa;
+border-radius:12px;
+}
+
+.product-card p{
+font-size:14px;
+margin:6px 0;
+}
+
+.price{
+color:#0071e3;
+font-weight:600;
+}
 
 /* HEART */
 .heart{
 position:absolute;
-top:8px;
-right:8px;
-width:32px;
-height:32px;
+top:10px;
+right:10px;
+width:30px;
+height:30px;
 border-radius:50%;
+background:white;
 display:flex;
 align-items:center;
 justify-content:center;
-background:white;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
-cursor:pointer;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+font-size:14px;
 }
+.heart.active{color:red;}
 
-/* BOTTOM NAV */
+/* BOTTOM */
 .bottom{
 position:fixed;
 bottom:0;
 left:0;
 right:0;
-background:white;
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(10px);
 display:flex;
 justify-content:space-around;
 padding:12px;
 border-top:1px solid #eee;
 }
 
-.nav-item{
-display:flex;
-flex-direction:column;
-align-items:center;
-font-size:11px;
-color:#555;
-gap:3px;
+.bottom a{
+font-size:20px;
 }
 
-.nav-item svg{width:20px;height:20px}
 </style>
 </head>
 
 <body>
 
 <!-- HEADER -->
-<div class="top-header">
-<div class="row">
-
-<div class="icon-btn">
-<!-- MENU ICON -->
-<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
-<path d="M3 6h18M3 12h18M3 18h18"/>
-</svg>
-</div>
-
-<div class="icon-btn">
-<!-- SHOP ICON -->
-<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
-<path d="M6 2h12l2 7H4l2-7z"/>
-<path d="M4 9h16l-1 13H5L4 9z"/>
-</svg>
-</div>
-
-</div>
+<div class="header">
+<div class="logo">Kitchen Market</div>
 
 <div class="search">
-<input type="text" placeholder="Search...">
+<input type="text" placeholder="Search products...">
 </div>
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+
+<div class="banner-card">
+<h3>🔥 Chegirma</h3>
+<p>Termoslar arzon narxda</p>
+</div>
+
+<div class="banner-card">
+<h3>⚡ Yangi mahsulot</h3>
+<p>Blender 3x1 keldi</p>
+</div>
+
 </div>
 
 <!-- CATEGORY -->
+<div class="section">
+<div class="section-header">
+<h3>Categories</h3>
+<a href="categories.html">See all</a>
+</div>
+
 <div class="cat-list" id="catList"></div>
+</div>
 
 <!-- PRODUCTS -->
-<div class="random-products" id="randomProducts"></div>
+<div class="section">
+<h3>Popular Products</h3>
+</div>
 
-<!-- BOTTOM NAV -->
+<div class="products" id="randomProducts"></div>
+
+<!-- BOTTOM -->
 <div class="bottom">
-
-<a href="index.html" class="nav-item">
-<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
-<path d="M3 12l9-9 9 9"/>
-<path d="M9 21V9h6v12"/>
-</svg>
-<span>Home</span>
-</a>
-
-<a href="cart.html" class="nav-item">
-<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
-<path d="M6 6h15l-1.5 9h-13z"/>
-<path d="M6 6l-2-3"/>
-<circle cx="9" cy="20" r="1"/>
-<circle cx="18" cy="20" r="1"/>
-</svg>
-<span>Cart</span>
-</a>
-
-<a href="favorites.html" class="nav-item">
-<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
-<path d="M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3c0 6.5-8 11-8 11z"/>
-</svg>
-<span>Fav</span>
-</a>
-
-<a href="#" class="nav-item">
-<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
-<circle cx="12" cy="8" r="4"/>
-<path d="M4 22c2-5 14-5 16 0"/>
-</svg>
-<span>Profile</span>
-</a>
-
+<a href="index.html">🏠</a>
+<a href="cart.html">🛒</a>
+<a href="favorites.html">❤️</a>
+<a href="#">👤</a>
 </div>
 
 <script>
+
 /* CATEGORY */
 const categories=[
-{id:"termos",name:"Termos"},
-{id:"blender",name:"Blender"},
-{id:"qozon",name:"Qozon"},
-{id:"mikser",name:"Mikser"},
-{id:"idishlar",name:"Idishlar"}
+{id:"termos",name:"Termos",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender",name:"Blender",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"mikser",name:"Mikser",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"idishlar",name:"Idishlar",img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
 const catBox=document.getElementById("catList");
@@ -223,25 +243,17 @@ categories.forEach(c=>{
 catBox.innerHTML += `
 <a href="products.html?cat=${c.id}">
 <div class="cat-card">
+<img src="${c.img}">
 <p>${c.name}</p>
 </div>
 </a>
 `;
 });
-</script>
 
-<script>
 /* PRODUCTS */
-const data={
-termos:[
-{id:"termos1",name:"Termos 1L",price:"120 000",img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-blender:[
-{id:"blender1",name:"Blender",price:"220 000",img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-qozon:[
-{id:"qozon1",name:"Qozon",price:"180 000",img:"https://i.imgur.com/3ZQ3Z5b.png"}
-]
+const data = {
+termos:[{id:"termos1",name:"Termos 1L",price:"120000",img:"https://i.imgur.com/3ZQ3Z5b.png"}],
+blender:[{id:"blender1",name:"Blender 3x1",price:"220000",img:"https://i.imgur.com/3ZQ3Z5b.png"}]
 };
 
 let all=[];
@@ -249,21 +261,16 @@ Object.values(data).forEach(a=>all=all.concat(a));
 
 const box=document.getElementById("randomProducts");
 
-all.slice(0,4).forEach(p=>{
+all.forEach(p=>{
 box.innerHTML += `
+<a href="product.html?id=${p.id}">
 <div class="product-card">
-
-<div class="heart" onclick="toggleFav(event,'${p.id}',this)">
-<svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
-<path d="M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-3 4.5 4.5 0 0 1 8 3c0 6.5-8 11-8 11z"/>
-</svg>
-</div>
-
+<div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
-
 </div>
+</a>
 `;
 });
 
@@ -276,14 +283,17 @@ let favs=JSON.parse(localStorage.getItem("favs"))||[];
 
 if(favs.includes(id)){
 favs=favs.filter(x=>x!==id);
-el.style.color="black";
+el.classList.remove("active");
+el.innerText="♡";
 }else{
 favs.push(id);
-el.style.color="red";
+el.classList.add("active");
+el.innerText="♥";
 }
 
 localStorage.setItem("favs",JSON.stringify(favs));
 }
+
 </script>
 
 </body>
