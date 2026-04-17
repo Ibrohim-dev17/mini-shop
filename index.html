@@ -2,129 +2,182 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Kitchen Market</title>
 
 <style>
 
-*{box-sizing:border-box;}
 body{
 margin:0;
-font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-background:#f2f2f7;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+background:#f5f6fa;
 color:#111;
 }
 
-/* HEADER */
-.header{
-position:sticky;
-top:0;
-background:rgba(255,255,255,0.8);
-backdrop-filter:blur(12px);
-padding:14px;
-z-index:10;
+a{
+text-decoration:none;
+color:inherit;
 }
 
-.logo{
-font-size:18px;
-font-weight:700;
+*{box-sizing:border-box;}
+
+body{
+margin:0;
+font-family:system-ui;
+background:#f5f5f5;
+overflow-x:hidden;
+}
+
+img{max-width:100%;}
+
+/* HEADER */
+.header{
+background: rgba(255,255,255,0.9);
+backdrop-filter: blur(10px);
+padding:14px;
+display:flex;
+align-items:center;
+gap:10px;
+border-bottom:1px solid #eee;
+position:sticky;
+top:0;
+z-index:10;
 }
 
 .search{
 margin-top:10px;
-background:#e9e9ee;
-border-radius:14px;
+background:#f3f3f3;
+border-radius:20px;
 padding:10px;
+display:flex;
 }
-
-.search input{
-width:100%;
-border:none;
-background:none;
-outline:none;
-font-size:14px;
-}
+.search input{flex:1;border:none;background:transparent;outline:none;}
 
 /* BANNER */
-.banner{
-padding:12px;
+.banner{padding:12px;overflow:hidden;}
+
+.banner-track{
+display:flex;
+transition:0.35s;
+}
+
+.banner-slide{
+min-width:100%;
+flex-shrink:0;
 }
 
 .banner-card{
-background:linear-gradient(135deg,#6a5acd,#8a2be2);
+width:calc(100% - 24px);
+margin:0 12px;
+height:170px;
+background:linear-gradient(45deg,#6a5acd,#8a2be2);
 color:white;
-padding:20px;
-border-radius:20px;
-margin-bottom:12px;
+border-radius:18px;
+padding:18px;
 position:relative;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+display:flex;
+flex-direction:column;
+justify-content:center;
 }
+
+.banner-dots{
+display:flex;
+justify-content:center;
+gap:6px;
+margin-top:8px;
+}
+
+.banner-dots span{
+width:8px;height:8px;background:#ccc;border-radius:50%;
+}
+.banner-dots .active{background:#6a5acd;}
 
 /* CATEGORY */
-.section{
-padding:12px;
-}
+.category-section{padding:12px;}
 
-.section-header{
+.cat-header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:10px;
 }
 
 .cat-list{
 display:flex;
 gap:12px;
+margin-top:12px;
 overflow-x:auto;
+padding-bottom:5px;
+
+scroll-padding-left:12px;
+scroll-padding-right:12px;
 }
 
-.cat-card{
-min-width:90px;
+.cat-list::-webkit-scrollbar{display:none;}
+
+.card{
 background:white;
-border-radius:16px;
-padding:12px;
+border-radius:20px;
+padding:14px;
 text-align:center;
-box-shadow:0 4px 15px rgba(0,0,0,0.05);
+box-shadow:0 10px 25px rgba(0,0,0,0.06);
+transition:0.2s;
+position:relative;
 }
 
-.cat-card img{
-width:50px;
-height:50px;
+.card:active{
+transform:scale(0.97);
+}
+
+.card img{
+width:100%;
+height:120px;
 object-fit:contain;
+background:#fafafa;
+border-radius:16px;
+padding:10px;
 }
 
 .cat-card p{
-font-size:12px;
-margin-top:6px;
+font-size:13px;
+margin:6px 0 0;
+}
+
+/* SEE ALL */
+.see-btn{
+background:#6a5acd;
+color:white;
+padding:8px 14px;
+border-radius:50px;
+text-decoration:none;
+font-size:13px;
+font-weight:600;
 }
 
 /* PRODUCTS */
-.products{
+.random-section{
+padding:12px;
+padding-bottom:140px;
+}
+
+.random-products{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:12px;
-padding:12px;
 }
 
 .product-card{
 background:white;
-border-radius:18px;
-padding:12px;
-box-shadow:0 6px 20px rgba(0,0,0,0.06);
+border-radius:14px;
+padding:10px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
 position:relative;
-transition:0.2s;
-}
-
-.product-card:active{
-transform:scale(0.97);
 }
 
 .product-card img{
-width:100%;
-height:110px;
-object-fit:contain;
-background:#fafafa;
-border-radius:12px;
+width:80px;
+height:80px;
+border-radius:10px;
 }
 
 .product-card p{
@@ -134,7 +187,9 @@ margin:6px 0;
 
 .price{
 color:#0071e3;
+font-size:14px;
 font-weight:600;
+margin-top:6px;
 }
 
 /* HEART */
@@ -142,15 +197,15 @@ font-weight:600;
 position:absolute;
 top:10px;
 right:10px;
-width:30px;
-height:30px;
+width:32px;
+height:32px;
 border-radius:50%;
-background:white;
 display:flex;
 align-items:center;
 justify-content:center;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-font-size:14px;
+background:white;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+font-size:16px;
 }
 .heart.active{color:red;}
 
@@ -161,62 +216,87 @@ bottom:0;
 left:0;
 right:0;
 background:rgba(255,255,255,0.9);
-backdrop-filter:blur(10px);
+backdrop-filter: blur(10px);
 display:flex;
 justify-content:space-around;
 padding:12px;
 border-top:1px solid #eee;
 }
-
-.bottom a{
-font-size:20px;
-}
-
 </style>
 </head>
 
 <body>
 
 <!-- HEADER -->
-<div class="header">
-<div class="logo">Kitchen Market</div>
+<div class="top-header">
+<div class="row">
+<div>☰</div>
+<div>🛍️</div>
+</div>
 
 <div class="search">
-<input type="text" placeholder="Search products...">
+<input type="text" placeholder="Search...">
 </div>
 </div>
 
 <!-- BANNER -->
 <div class="banner">
+<div class="banner-track" id="bannerTrack">
 
+<div class="banner-slide">
+<a href="product.html?id=termos1">
 <div class="banner-card">
-<h3>🔥 Chegirma</h3>
-<p>Termoslar arzon narxda</p>
+<div class="heart" onclick="toggleFav(event,'termos1',this)">♡</div>
+<h3>Kitchen Chegirma</h3>
+<p>Termos 1L aksiya narxda</p>
+</div>
+</a>
 </div>
 
+<div class="banner-slide">
+<a href="product.html?id=blender1">
 <div class="banner-card">
-<h3>⚡ Yangi mahsulot</h3>
-<p>Blender 3x1 keldi</p>
+<div class="heart" onclick="toggleFav(event,'blender1',this)">♡</div>
+<h3>Blender Aksiya</h3>
+<p>Blender 3x1 arzon narxda</p>
+</div>
+</a>
 </div>
 
+<div class="banner-slide">
+<a href="product.html?id=qozon1">
+<div class="banner-card">
+<div class="heart" onclick="toggleFav(event,'qozon1',this)">♡</div>
+<h3>Yangi Mahsulotlar</h3>
+<p>Qozon 5L yangi keldi</p>
+</div>
+</a>
+</div>
+
+</div>
+
+<div class="banner-dots">
+<span class="active"></span>
+<span></span>
+<span></span>
+</div>
 </div>
 
 <!-- CATEGORY -->
-<div class="section">
-<div class="section-header">
+<div class="category-section">
+<div class="cat-header">
 <h3>Categories</h3>
-<a href="categories.html">See all</a>
+<a href="categories.html" class="see-btn">See all</a>
 </div>
 
 <div class="cat-list" id="catList"></div>
 </div>
 
 <!-- PRODUCTS -->
-<div class="section">
+<div class="random-section">
 <h3>Popular Products</h3>
+<div class="random-products" id="randomProducts"></div>
 </div>
-
-<div class="products" id="randomProducts"></div>
 
 <!-- BOTTOM -->
 <div class="bottom">
@@ -226,9 +306,38 @@ font-size:20px;
 <a href="#">👤</a>
 </div>
 
+<!-- SWIPE -->
 <script>
+let index=0;
+const track=document.getElementById("bannerTrack");
+const dots=document.querySelectorAll(".banner-dots span");
 
-/* CATEGORY */
+let startX=0,endX=0;
+
+track.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+});
+
+track.addEventListener("touchend",e=>{
+endX=e.changedTouches[0].clientX;
+
+if(startX-endX>50) index++;
+if(endX-startX>50) index--;
+
+const total = dots.length;
+
+if(index < 0) index = total - 1;
+if(index >= total) index = 0;
+
+track.style.transform="translateX(-"+index*100+"%)";
+
+dots.forEach(d=>d.classList.remove("active"));
+dots[index].classList.add("active");
+});
+</script>
+
+<!-- CATEGORY SCRIPT -->
+<script>
 const categories=[
 {id:"termos",name:"Termos",img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"blender",name:"Blender",img:"https://i.imgur.com/3ZQ3Z5b.png"},
@@ -240,61 +349,165 @@ const categories=[
 const catBox=document.getElementById("catList");
 
 categories.forEach(c=>{
-catBox.innerHTML += `
-<a href="products.html?cat=${c.id}">
+catBox.innerHTML += 
+<a href="products.html?cat=${c.id}&from=home" style="text-decoration:none;color:black;">
 <div class="cat-card">
 <img src="${c.img}">
 <p>${c.name}</p>
 </div>
 </a>
-`;
+;
 });
+</script>
 
-/* PRODUCTS */
+<!-- PRODUCTS SCRIPT -->
+<script>
 const data = {
-termos:[{id:"termos1",name:"Termos 1L",price:"120000",img:"https://i.imgur.com/3ZQ3Z5b.png"}],
-blender:[{id:"blender1",name:"Blender 3x1",price:"220000",img:"https://i.imgur.com/3ZQ3Z5b.png"}]
+
+termos: [
+{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+blender: [
+{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+qozon: [
+{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+mikser: [
+{id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+],
+
+idishlar: [
+{id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+]
+
 };
 
-let all=[];
-Object.values(data).forEach(a=>all=all.concat(a));
+/* HAMMASINI BIRGA */
+let allProducts = [];
+Object.values(data).forEach(arr => {
+allProducts = allProducts.concat(arr);
+});
 
-const box=document.getElementById("randomProducts");
+/* RANDOM */
+const shuffled = [...allProducts];
+for(let i = shuffled.length - 1; i > 0; i--){
+let j = Math.floor(Math.random() * (i + 1));
+[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
 
-all.forEach(p=>{
-box.innerHTML += `
-<a href="product.html?id=${p.id}">
+/* CHIQARISH */
+const box = document.getElementById("randomProducts");
+
+let html = "";
+
+shuffled.slice(0,6).forEach(p=>{
+html += 
+<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
 <div class="product-card">
+
 <div class="heart" onclick="toggleFav(event,'${p.id}',this)">♡</div>
+
 <img src="${p.img}">
 <p>${p.name}</p>
 <div class="price">${p.price} so'm</div>
+
+</div>
+</a>
+;
+});
+
+box.innerHTML = html;
+
+
+<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;">
+<div class="product-card">
+
+<div class="heart" data-id="${p.id}" onclick="toggleFav(event,'${p.id}',this)">♡</div>
+
+<img src="${p.img}">
+<p>${p.name}</p>
+<div class="price">${p.price} so'm</div>
+
 </div>
 </a>
 `;
 });
 
-/* FAVORITE */
-function toggleFav(e,id,el){
-e.preventDefault();
-e.stopPropagation();
+/* ❤️ FUNKSIYA */
 
-let favs=JSON.parse(localStorage.getItem("favs"))||[];
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 if(favs.includes(id)){
-favs=favs.filter(x=>x!==id);
+favs = favs.filter(x => x !== id);
 el.classList.remove("active");
-el.innerText="♡";
+el.innerText = "♡";
 }else{
 favs.push(id);
 el.classList.add("active");
-el.innerText="♥";
+el.innerText = "♥";
 }
 
-localStorage.setItem("favs",JSON.stringify(favs));
+localStorage.setItem("favs", JSON.stringify(favs));
 }
+
+/* ❤️ TEKSHIRISH */
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+document.querySelectorAll(".heart").forEach(el => {
+
+let id = el.dataset.id;
+
+if(favs.includes(id)){
+el.classList.add("active");
+el.innerText = "♥";
+}
+
+});
 
 </script>
+
+<!-- FAVORITE -->
+<script>
+
+
+function toggleFav(e, id, el){
+e.preventDefault();
+e.stopPropagation();
+
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+if(favs.includes(id)){
+favs = favs.filter(x => x !== id);
+el.classList.remove("active");
+el.innerText = "♡";
+}else{
+favs.push(id);
+el.classList.add("active");
+el.innerText = "♥";
+}
+
+localStorage.setItem("favs", JSON.stringify(favs));
+
+window.dispatchEvent(new Event("favsUpdated"));
+}
+
+// 🔥 PAGE LOADDA HEARTNI TEKSHIRISH
+
+</script>
+
+
 
 </body>
 </html>
