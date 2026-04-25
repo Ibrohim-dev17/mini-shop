@@ -5,26 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kitchen Market</title>
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
 <style>
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f6fa;
-color:#111;
 }
 
 a{ text-decoration:none; color:inherit; }
-*{ box-sizing:border-box; }
+*{box-sizing:border-box;}
 
-img{ max-width:100%; }
+img{max-width:100%;}
 
 /* HEADER */
 .header{
-background:#fff;
-padding:14px;
 display:flex;
 align-items:center;
-justify-content:space-between;
+gap:10px;
+padding:12px;
+background:#fff;
 position:sticky;
 top:0;
 z-index:10;
@@ -33,30 +34,28 @@ border-bottom:1px solid #eee;
 
 .search{
 flex:1;
-margin-left:10px;
-background:#f2f2f2;
-border-radius:20px;
-padding:8px 12px;
 display:flex;
 align-items:center;
+background:#f2f2f2;
+padding:8px 12px;
+border-radius:20px;
 }
 
 .search input{
 border:none;
-background:transparent;
 outline:none;
+background:transparent;
 width:100%;
 }
 
 /* BANNER */
 .banner{
-padding:12px;
 overflow:hidden;
 }
 
 .banner-track{
 display:flex;
-transition:0.3s;
+transition:0.4s;
 }
 
 .banner-slide{
@@ -64,8 +63,8 @@ min-width:100%;
 }
 
 .banner-card{
-height:160px;
-margin:0 12px;
+height:170px;
+margin:10px;
 border-radius:18px;
 background:linear-gradient(135deg,#6a5acd,#8a2be2);
 color:white;
@@ -73,7 +72,6 @@ padding:16px;
 display:flex;
 flex-direction:column;
 justify-content:center;
-position:relative;
 }
 
 /* CATEGORY */
@@ -83,8 +81,8 @@ padding:12px;
 
 .cat-list{
 display:flex;
-gap:12px;
 overflow-x:auto;
+gap:12px;
 padding-bottom:8px;
 }
 
@@ -94,7 +92,12 @@ background:#fff;
 padding:10px;
 border-radius:14px;
 text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
+box-shadow:0 5px 12px rgba(0,0,0,0.05);
+}
+
+.cat-card img{
+width:60px;
+height:60px;
 }
 
 /* PRODUCTS */
@@ -108,9 +111,8 @@ gap:12px;
 background:#fff;
 border-radius:14px;
 padding:10px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
 position:relative;
+box-shadow:0 5px 12px rgba(0,0,0,0.05);
 }
 
 .card img{
@@ -121,7 +123,7 @@ object-fit:contain;
 .price{
 color:#6a5acd;
 font-weight:600;
-margin-top:6px;
+margin-top:5px;
 }
 
 /* HEART */
@@ -129,8 +131,8 @@ margin-top:6px;
 position:absolute;
 top:8px;
 right:8px;
-width:30px;
-height:30px;
+width:32px;
+height:32px;
 border-radius:50%;
 background:#fff;
 display:flex;
@@ -138,6 +140,7 @@ align-items:center;
 justify-content:center;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
 cursor:pointer;
+font-size:14px;
 }
 
 .heart.active{ color:red; }
@@ -153,6 +156,7 @@ display:flex;
 justify-content:space-around;
 padding:10px;
 border-top:1px solid #eee;
+font-size:18px;
 }
 </style>
 </head>
@@ -161,10 +165,11 @@ border-top:1px solid #eee;
 
 <!-- HEADER -->
 <div class="header">
-<div>☰</div>
+<i class="fa fa-bars"></i>
 
 <div class="search">
-<input placeholder="Qidirish...">
+<i class="fa fa-search"></i>
+<input id="searchInput" placeholder="Qidirish...">
 </div>
 </div>
 
@@ -174,41 +179,39 @@ border-top:1px solid #eee;
 
 <div class="banner-slide">
 <div class="banner-card">
-<h3>Kitchen Aksiya</h3>
+<h3>Aksiya</h3>
 <p>Eng yaxshi mahsulotlar</p>
 </div>
 </div>
 
 <div class="banner-slide">
 <div class="banner-card">
-<h3>Chegirmalar</h3>
-<p>50% gacha chegirma</p>
+<h3>Chegirma</h3>
+<p>50% gacha</p>
 </div>
 </div>
 
 </div>
 </div>
 
-<!-- CATEGORIES -->
+<!-- CATEGORY -->
 <div class="section">
 <h3>Kategoriyalar</h3>
-
 <div class="cat-list" id="catList"></div>
 </div>
 
 <!-- PRODUCTS -->
 <div class="section">
-<h3>Mahsulotlar</h3>
-
+<h3>Popular Products</h3>
 <div class="grid" id="productBox"></div>
 </div>
 
 <!-- BOTTOM -->
 <div class="bottom">
-<a href="#">🏠</a>
-<a href="cart.html">🛒</a>
-<a href="favorites.html">❤️</a>
-<a href="#">👤</a>
+<i class="fa fa-home"></i>
+<i class="fa fa-cart-shopping"></i>
+<i class="fa fa-heart"></i>
+<i class="fa fa-user"></i>
 </div>
 
 <script>
@@ -217,30 +220,34 @@ border-top:1px solid #eee;
 const categories=[
 {id:"termos",name:"Termos",img:"https://i.imgur.com/3ZQ3Z5b.png"},
 {id:"blender",name:"Blender",img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"mikser",name:"Mikser",img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"idishlar",name:"Idishlar",img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
 const data={
 termos:[
 {id:"termos1",name:"Termos 1L",price:120000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos2",name:"Termos 2L",price:150000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"termos2",name:"Termos 2L",price:150000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"termos3",name:"Sport",price:110000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ],
 blender:[
-{id:"blender1",name:"Blender 3x1",price:220000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
+{id:"blender1",name:"Blender 3x1",price:220000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender2",name:"Mini Blender",price:160000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
+{id:"blender3",name:"Pro Blender",price:390000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ],
 qozon:[
 {id:"qozon1",name:"Qozon 5L",price:180000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ]
 };
 
-/* FAVORITES */
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
+let favs=JSON.parse(localStorage.getItem("favs"))||[];
 
-/* CATEGORIES */
+/* CATEGORY */
 const catBox=document.getElementById("catList");
 
 categories.forEach(c=>{
-catBox.innerHTML += `
+catBox.innerHTML+=`
 <a href="products.html?cat=${c.id}">
 <div class="cat-card">
 <img src="${c.img}">
@@ -249,16 +256,18 @@ catBox.innerHTML += `
 </a>`;
 });
 
-/* PRODUCTS */
+/* PRODUCTS (6 TA RANDOM) */
 let all=[];
-Object.values(data).forEach(arr=>all.push(...arr));
+Object.values(data).forEach(a=>all.push(...a));
+
+all=all.sort(()=>0.5-Math.random()).slice(0,6);
 
 const box=document.getElementById("productBox");
 
 all.forEach(p=>{
 let isFav=favs.includes(p.id);
 
-box.innerHTML += `
+box.innerHTML+=`
 <div class="card">
 
 <div class="heart ${isFav?'active':''}" onclick="toggleFav('${p.id}',this)">
@@ -274,7 +283,7 @@ ${isFav?'♥':'♡'}
 </div>`;
 });
 
-/* FAVORITE */
+/* FAVORITES */
 function toggleFav(id,el){
 
 if(favs.includes(id)){
@@ -289,6 +298,25 @@ el.innerText="♥";
 
 localStorage.setItem("favs",JSON.stringify(favs));
 }
+
+/* SEARCH */
+document.getElementById("searchInput").addEventListener("input",e=>{
+let val=e.target.value.toLowerCase();
+
+document.querySelectorAll(".card").forEach(card=>{
+let name=card.innerText.toLowerCase();
+card.style.display=name.includes(val)?"block":"none";
+});
+});
+
+/* SIMPLE BANNER SWIPE */
+let i=0;
+const track=document.getElementById("bannerTrack");
+
+setInterval(()=>{
+i=(i+1)%2;
+track.style.transform=`translateX(-${i*100}%)`;
+},3000);
 
 </script>
 
