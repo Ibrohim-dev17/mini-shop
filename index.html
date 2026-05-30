@@ -102,9 +102,9 @@ height:60px;
 
 /* PRODUCTS */
 .grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:12px;
 }
 
 .card{
@@ -248,12 +248,10 @@ const catBox=document.getElementById("catList");
 
 categories.forEach(c=>{
 catBox.innerHTML+=`
-<a href="products.html?cat=${c.id}">
-<div class="cat-card">
-<img src="${c.img}">
-<p>${c.name}</p>
-</div>
-</a>`;
+<div class="cat-card" onclick="filterCategory('${c.id}')">
+  <img src="${c.img}">
+  <p>${c.name}</p>
+</div>`;
 });
 
 /* PRODUCTS (6 TA RANDOM) */
@@ -271,7 +269,7 @@ box.innerHTML+=`
 <div class="card">
 
 <div class="heart ${isFav?'active':''}" onclick="toggleFav('${p.id}',this)">
-${isFav?'♥':'♡'}
+  <i class="fa ${isFav?'fa-heart':'fa-heart-o'}"></i>
 </div>
 
 <a href="product.html?id=${p.id}">
@@ -285,37 +283,52 @@ ${isFav?'♥':'♡'}
 
 /* FAVORITES */
 function toggleFav(id,el){
-
-if(favs.includes(id)){
-favs=favs.filter(x=>x!==id);
-el.classList.remove("active");
-el.innerText="♡";
-}else{
-favs.push(id);
-el.classList.add("active");
-el.innerText="♥";
+  let icon=el.querySelector("i");
+  if(favs.includes(id)){
+    favs=favs.filter(x=>x!==id);
+    el.classList.remove("active");
+    icon.className="fa fa-heart-o";
+  }else{
+    favs.push(id);
+    el.classList.add("active");
+    icon.className="fa fa-heart";
+  }
+  localStorage.setItem("favs",JSON.stringify(favs));
 }
-
-localStorage.setItem("favs",JSON.stringify(favs));
-}
-
 /* SEARCH */
 document.getElementById("searchInput").addEventListener("input",e=>{
 let val=e.target.value.toLowerCase();
 
 document.querySelectorAll(".card").forEach(card=>{
-let name=card.innerText.toLowerCase();
+let name=card.querySelector("p").innerText.toLowerCase();
 card.style.display=name.includes(val)?"block":"none";
 });
 });
 
+function filterCategory(catId){
+  box.innerHTML="";
+  data[catId].forEach(p=>{
+    let isFav=favs.includes(p.id);
+    box.innerHTML+=`
+    <div class="card">
+      <div class="heart ${isFav?'active':''}" onclick="toggleFav('${p.id}',this)">
+        <i class="fa ${isFav?'fa-heart':'fa-heart-o'}"></i>
+      </div>
+      <img src="${p.img}">
+      <p>${p.name}</p>
+      <div class="price">${p.price.toLocaleString()} so'm</div>
+    </div>`;
+  });
+}
+
 /* SIMPLE BANNER SWIPE */
 let i=0;
 const track=document.getElementById("bannerTrack");
+const slides=document.querySelectorAll(".banner-slide").length;
 
 setInterval(()=>{
-i=(i+1)%2;
-track.style.transform=`translateX(-${i*100}%)`;
+  i=(i+1)%slides;
+  track.style.transform=`translateX(-${i*100}%)`;
 },3000);
 
 </script>
