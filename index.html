@@ -58,8 +58,8 @@ width:100%;
 
 /* BANNER */
 .banner{
-  padding:0;
   margin:12px;
+  overflow:hidden;
 }
 
 .banner-slider{
@@ -72,6 +72,16 @@ padding-bottom:10px;
 
 touch-action: pan-x;
 -webkit-overflow-scrolling: touch;
+}
+
+.banner-card{
+  flex:0 0 100%;
+  min-height:170px;
+  border-radius:22px;
+  padding:20px;
+  color:#fff;
+  scroll-snap-align:start;
+  box-shadow:none;
 }
 
 .banner1{
@@ -106,9 +116,12 @@ background:#6a5acd;
 
 .banner-wrapper{
   overflow:hidden;
+  border-radius:22px;
 }
+
 .banner-slider{
   display:flex;
+  gap:0;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   scroll-behavior:smooth;
@@ -246,6 +259,21 @@ body{
 .banner-wrapper{
   overflow:hidden;
 }
+
+.banner-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.banner-card h2,
+.banner-card p{
+  margin:0;
+}
+
+.banner-card h2{
+  margin-bottom:15px;
+}
+
+
 
 </style>
 </head>
@@ -479,9 +507,10 @@ if (window.Telegram && Telegram.WebApp) {
 
 function updateDots(){
   const cards = document.querySelectorAll(".banner-card");
-  const width = cards[0].offsetWidth + 12;
+  const width = cards[0].offsetWidth;
 
-  let i = Math.round(slider.scrollLeft / width) % dots.length;
+  let i = Math.round(slider.scrollLeft / width);
+i = i % 3;
   if (i < 0) i = 0;
 
   dots.forEach(d => d.classList.remove("active"));
@@ -493,10 +522,7 @@ const slider = document.getElementById("slider");
 const items = Array.from(slider.children);
 
 // clone for infinite loop
-items.forEach(item => {
-  const clone = item.cloneNode(true);
-  slider.appendChild(clone);
-});
+
 
 
 const dots = document.querySelectorAll(".dot");
@@ -518,7 +544,7 @@ function autoSlide() {
   if (userScrolling) return;
 
   const cards = document.querySelectorAll(".banner-card");
-  const width = cards[0].offsetWidth + 12;
+  const width = cards[0].offsetWidth;
 
   index++;
 
