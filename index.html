@@ -87,6 +87,11 @@ touch-action: pan-x;
 display:none;
 }
 
+.banner-slider {
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+
 .banner-card{
 flex:0 0 85%;
 scroll-snap-align:start;
@@ -539,15 +544,6 @@ slider.addEventListener("scroll", () => {
 
 let index = 0;
 let userScrolling = false;
-
-function autoSlide() {
-  if (userScrolling) return;
-
-  const cards = document.querySelectorAll(".banner-card");
-  const gap = 12;
-  const width = slider.querySelector(".banner-card").offsetWidth + gap;
-
-  index++;
 
   
 function autoSlide() {
