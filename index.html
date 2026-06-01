@@ -13,15 +13,11 @@
 
 
 body{
-margin:0;
-font-family:system-ui;
-background:#f5f6fa;
-
-overscroll-behavior-x: none;
-
-body{
-  overscroll-behavior-x: none;
-  overscroll-behavior-y: none;
+  margin:0;
+  font-family:system-ui;
+  background:#f5f6fa;
+  overscroll-behavior-x:none;
+  overscroll-behavior-y:none;
 }
 
 }
@@ -142,8 +138,9 @@ background:#6a5acd;
   display:none;
 }
 
+
 .banner-card{
-  flex:0 0 100%;
+  flex:0 0 calc(100% - 12px);
   min-height:170px;
   border-radius:22px;
   padding:20px;
@@ -153,12 +150,7 @@ background:#6a5acd;
 }
 
 
-color:white;
-padding:16px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-}
+
 
 /* CATEGORY */
 .section{
@@ -287,47 +279,39 @@ body {
 </div>
 
 <!-- BANNER -->
+<!-- BANNER -->
 <div class="banner">
 
   <div class="banner-wrapper">
 
     <div class="banner-slider" id="slider">
-      ...
+
+      <a href="product.html?id=termos1&from=banner" class="banner-card banner1">
+        <h2>🔥 Premium Termos</h2>
+        <p>Issiq va sovuq ichimliklar uchun</p>
+      </a>
+
+      <a href="product.html?id=blender1&from=banner" class="banner-card banner2">
+        <h2>⚡ Blender Aksiyasi</h2>
+        <p>Kitchen uchun eng yaxshi tanlov</p>
+      </a>
+
+      <a href="product.html?id=qozon1&from=banner" class="banner-card banner3">
+        <h2>🍲 Qozonlar</h2>
+        <p>Chegirmali narxlarda</p>
+      </a>
+
     </div>
 
   </div>
 
   <div class="dots">
-    ...
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
   </div>
 
 </div>
-
-<a href="product.html?id=termos1&from=banner" class="banner-card banner1">
-<h2>🔥 Premium Termos</h2>
-<p>Issiq va sovuq ichimliklar uchun</p>
-</a>
-
-<a href="product.html?id=blender1&from=banner" class="banner-card banner2">
-<h2>⚡ Blender Aksiyasi</h2>
-<p>Kitchen uchun eng yaxshi tanlov</p>
-</a>
-
-<a href="product.html?id=qozon1&from=banner" class="banner-card banner3">
-<h2>🍲 Qozonlar</h2>
-<p>Chegirmali narxlarda</p>
-</a>
-
-</div>
-
-<div class="dots">
-<span class="dot active"></span>
-<span class="dot"></span>
-<span class="dot"></span>
-</div>
-
-</div>
-
 <!-- CATEGORY -->
 <div class="section">
 <h3>Kategoriyalar</h3>
