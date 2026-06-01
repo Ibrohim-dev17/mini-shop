@@ -208,10 +208,10 @@ font-size:18px;
 
 <!-- BOTTOM -->
 <div class="bottom">
-<i class="fa fa-home"></i>
-<i class="fa fa-cart-shopping"></i>
-<i class="fa fa-heart"></i>
-<i class="fa fa-user"></i>
+  <a href="index.html"><i class="fa fa-home"></i></a>
+  <a href="cart.html"><i class="fa fa-cart-shopping"></i></a>
+  <a href="favorites.html"><i class="fa fa-heart"></i></a>
+  <a href="categories.html"><i class="fa fa-list"></i></a>
 </div>
 
 <script>
@@ -248,10 +248,10 @@ const catBox=document.getElementById("catList");
 
 categories.forEach(c=>{
 catBox.innerHTML+=`
-<div class="cat-card" onclick="filterCategory('${c.id}')">
+<a href="products.html?cat=${c.id}&from=index" class="cat-card">
   <img src="${c.img}">
   <p>${c.name}</p>
-</div>`;
+</a>
 });
 
 /* PRODUCTS (6 TA RANDOM) */
@@ -266,19 +266,20 @@ all.forEach(p=>{
 let isFav=favs.includes(p.id);
 
 box.innerHTML+=`
-<div class="card">
 
-<div class="heart ${isFav?'active':''}" onclick="toggleFav('${p.id}',this)">
-  <i class="fa ${isFav?'fa-heart':'fa-heart-o'}"></i>
+<div class="card">
+  <div class="heart ${isFav?'active':''}" onclick="toggleFav('${p.id}',this)">
+    <i class="fa ${isFav?'fa-heart':'fa-heart-o'}"></i>
+  </div>
+  <a href="product.html?id=${p.id}">
+    <img src="${p.img}">
+    <p>${p.name}</p>
+    <div class="price">${p.price.toLocaleString()} so'm</div>
+  </a>
 </div>
 
-<a href="product.html?id=${p.id}">
-<img src="${p.img}">
-<p>${p.name}</p>
-<div class="price">${p.price.toLocaleString()} so'm</div>
-</a>
 
-</div>`;
+
 });
 
 /* FAVORITES */
@@ -330,6 +331,16 @@ setInterval(()=>{
   i=(i+1)%slides;
   track.style.transform=`translateX(-${i*100}%)`;
 },3000);
+
+/* SEARCH */
+document.getElementById("searchInput").addEventListener("input", e => {
+  let val = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".card").forEach(card => {
+    let name = card.querySelector("p").innerText.toLowerCase();
+    card.style.display = name.includes(val) ? "block" : "none";
+  });
+});
 
 </script>
 
