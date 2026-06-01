@@ -178,20 +178,48 @@ img { max-width: 100%; }
 }
 .heart.active { color: red; }
 
-/* PASTKI ICONLAR PANELI - MUXKAM QOTIB TURADI */
+/* PASTDAGI ICONLAR PANELI - YANGI ZAMONAVIY USLUBDEK */
 .bottom {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: #fff;
+  height: 65px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px); /* Orqa fonni chiroyli xira qiladi */
+  -webkit-backdrop-filter: blur(15px);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 1px solid #eee;
+  border-top: 1px solid rgba(0, 0, 0, 0.04); /* Nozik chiziq */
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03); /* Silliq soya */
   z-index: 1000;
+  padding: 0 10px;
 }
+
+.bottom a {
+  color: #b0b0b5; /* Aktiv bo'lmagan iconlar rangi */
+  font-size: 22px;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+}
+
+/* Aktiv (aynan shu sahifa ochilganda) iconning ko'rinishi */
+.bottom a.active {
+  color: #6a5acd; /* Asosiy binafsha rang */
+  background: rgba(106, 90, 205, 0.08); /* Yumshoq fon */
+}
+
+/* Bosganda yengil effekt */
+.bottom a:active {
+  transform: scale(0.9);
+}
+
 </style>
 
 </head>
@@ -242,12 +270,15 @@ img { max-width: 100%; }
     <div class="grid" id="productBox"></div>
   </div>
 
-</div> <div class="bottom">
-  <a href="index.html"><i class="fa fa-home"></i></a>
-  <a href="cart.html"><i class="fa fa-cart-shopping"></i></a>
-  <a href="favorites.html"><i class="fa fa-heart"></i></a>
-  <a href="categories.html"><i class="fa fa-list"></i></a>
+</div> 
+
+<div class="bottom">
+  <a href="index.html" class="active"><i class="fa-solid fa-house"></i></a>
+  <a href="categories.html"><i class="fa-solid fa-list"></i></a>
+  <a href="cart.html"><i class="fa-solid fa-basket-shopping"></i></a>
+  <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
 </div>
+
 
 <script>
 // Telegram WebApp sozlamalari
