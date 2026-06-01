@@ -166,17 +166,25 @@ img { max-width: 100%; }
   right: 8px;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 18px; /* Yurakcha biroz kattaroq va aniq ko'rinishi uchun */
+  color: #b0b0b5;  /* Bosilmaganda och kulrang (shaffof fon ustida chiroyli turadi) */
   z-index: 2;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
-.heart.active { color: red; }
+
+/* Sichqoncha borilganda yoki bosilganda yengil kattalashish effekti */
+.heart:active {
+  transform: scale(1.2);
+}
+
+.heart.active { 
+  color: #ff3b30; /* Bosilganda yorqin zamonaviy qizil rang */
+}
+
 
 /* PASTDAGI ICONLAR PANELI - YANGI ZAMONAVIY USLUBDEK */
 .bottom {
@@ -353,22 +361,26 @@ function renderProducts(productsList) {
 }
 renderProducts(all);
 
-/* FAVORITES TOGGLE */
+
+/* FAVORITES TOGGLE (YANGI SHAFFOF USLUB UCHUN) */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
-    // Agar massivda bo'lsa - o'chiramiz
+    // Agar ro'yxatda bo'lsa - o'chiramiz
     favs = favs.filter(x => x !== id);
     el.classList.remove("active");
-    icon.className = "fa fa-heart-o"; // Bo'sh yurakcha
+    icon.className = "fa-regular fa-heart"; // Konturli bo'sh yurakcha
   } else {
-    // Agar massivda bo'lmasa - qo'shamiz
+    // Agar ro'yxatda bo'lmasa - qo'shamiz
     favs.push(id);
     el.classList.add("active");
-    icon.className = "fa fa-heart"; // To'la yurakcha
+    icon.className = "fa-solid fa-heart"; // Ichki to'la qizil yurakcha
   }
   // LocalStorage ga saqlash
   localStorage.setItem("favs", JSON.stringify(favs));
+  
+  // Boshqa sahifalar ham bilishi uchun event
+  window.dispatchEvent(new Event('favsUpdated'));
 }
 
 
