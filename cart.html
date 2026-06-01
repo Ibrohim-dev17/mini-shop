@@ -356,28 +356,25 @@ function renderCart() {
   totalText.innerText = total.toLocaleString() + " so'm";
 }
 
-/* MAHSULOT SONINI O'ZGARTIRISH (PLUS / MINUS) */
+/* MAHSULOT SONINI O'ZGARTIRISH (ENG KAMI 1 BO'LIB TO'XTAYDI) */
 function changeQty(index, amount) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   if (!cart[index]) return;
 
-  cart[index].qty += amount;
+  // Yangi sonni hisoblaymiz
+  let newQty = cart[index].qty + amount;
 
-  if (cart[index].qty <= 0) {
-    cart.splice(index, 1); // Agar 0 bo'lib ketsa ro'yxatdan o'chiradi
+  // Agar yangi son 1 dan kichik bo'lsa, uni 1 da qulflaymiz (0 bo'lib o'chib ketmaydi)
+  if (newQty < 1) {
+    cart[index].qty = 1;
+  } else {
+    cart[index].qty = newQty;
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+  renderCart(); // Sahifani qayta chizish
 }
 
-/* BITTALIK MAHSULOTNI O'CHIRISH */
-function deleteItem(index) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-}
 
 /* SAVATNI TO'LIQ TOZALASH */
 function clearCart() {
@@ -392,6 +389,16 @@ function checkout() {
 
 // Sahifa yuklanganda ishga tushirish
 renderCart();
+
+/* BITTALIK MAHSULOTNI FAQAT AXLA QUTISI BOSILGANDA O'CHIRISH */
+function deleteItem(index) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.splice(index, 1); // Faqat shu yerda ro'yxatdan butunlay o'chadi
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+
 </script>
 
 </body>
