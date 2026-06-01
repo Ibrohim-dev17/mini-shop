@@ -5,15 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kitchen Market</title>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
+
+html{
+  overscroll-behavior: none;
+}
+
 body{
 margin:0;
 font-family:system-ui;
 background:#f5f6fa;
 
 overscroll-behavior-x: none;
+
+body{
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: none;
+}
+
 }
 
 a{ text-decoration:none; color:inherit; }
@@ -435,6 +448,12 @@ dots[index].classList.add("active");
 }
 
 });
+
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.disableVerticalSwipes();
+  Telegram.WebApp.expand();
+}
+
 
 </script>
 
