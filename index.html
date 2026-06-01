@@ -15,6 +15,11 @@ html{
   overscroll-behavior: none;
 }
 
+html, body {
+  overscroll-behavior: none;
+  overflow-x: hidden;
+}
+
 body{
 margin:0;
 font-family:system-ui;
@@ -461,13 +466,6 @@ function goBack(){
 
 
 
- - slider.offsetLeft;
-  scrollLeft = slider.scrollLeft;
-});
-
-
-
-
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.disableVerticalSwipes();
   Telegram.WebApp.expand();
@@ -477,21 +475,7 @@ if (window.Telegram && Telegram.WebApp) {
 
 
 
-const slider = document.getElementById("slider");
-const dots = document.querySelectorAll(".dot");
 
-function updateDots(){
-  const card = slider.querySelector(".banner-card");
-  const gap = 12;
-
-  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
-
-  dots.forEach(d => d.classList.remove("active"));
-
-  if(dots[index]){
-    dots[index].classList.add("active");
-  }
-}
 
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
