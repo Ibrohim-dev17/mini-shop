@@ -124,6 +124,33 @@ background:#ccc;
 background:#6a5acd;
 }
 
+.banner-wrapper{
+  overflow:hidden;
+}
+
+.banner-slider{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  touch-action: pan-x;
+  scroll-behavior:smooth;
+}
+
+.banner-slider::-webkit-scrollbar{
+  display:none;
+}
+
+.banner-card{
+  flex:0 0 90%;
+  min-height:160px;
+  border-radius:20px;
+  padding:20px;
+  color:white;
+  scroll-snap-align:start;
+}
+
 
 color:white;
 padding:16px;
@@ -431,17 +458,32 @@ function goBack(){
   history.back();
 }
 
-const slider=document.querySelector(".banner-slider");
-const dots=document.querySelectorAll(".dot");
+const slider = document.getElementById("slider");
 
-slider.addEventListener("scroll",()=>{
+let isDown = false;
+let startX;
+let scrollLeft;
 
-let index=Math.round(
-slider.scrollLeft /
-(slider.querySelector(".banner-card").offsetWidth+12)
-);
+// drag start
+slider.addEventListener("mousedown", (e) => {
+  isDown = true;
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
 
-dots.forEach(d=>d.classList.remove("active"));
+// drag end
+slider.addEventListener("mouseleave", () => isDown = false);
+slider.addEventListener("mouseup", () => isDown = false);
+
+// drag move
+slider.addEventListener("mousemove", (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 1.5;
+  slider.scrollLeft = scrollLeft - walk;
+});
 
 if(dots[index]){
 dots[index].classList.add("active");
@@ -453,6 +495,20 @@ if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.disableVerticalSwipes();
   Telegram.WebApp.expand();
 }
+
+slider.addEventListener("scroll", () => {
+  const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+  // oxiriga yetganda boshiga qaytaradi
+  if (slider.scrollLeft >= maxScroll) {
+    slider.scrollTo({ left: 1, behavior: "instant" });
+  }
+
+  // boshiga yetganda oxiriga olib boradi
+  if (slider.scrollLeft <= 0) {
+    slider.scrollTo({ left: maxScroll - 1, behavior: "instant" });
+  }
+});
 
 
 </script>
