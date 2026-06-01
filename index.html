@@ -261,7 +261,7 @@ font-size:18px;
 <!-- BANNER -->
 <div class="banner">
 
-<div class="banner-slider">
+<div class="banner-slider" id="slider">
 
 <a href="product.html?id=termos1&from=banner" class="banner-card banner1">
 <h2>🔥 Premium Termos</h2>
@@ -459,9 +459,7 @@ function goBack(){
 }
 
 
-let isDown = false;
-let startX;
-let scrollLeft;
+
 
  - slider.offsetLeft;
   scrollLeft = slider.scrollLeft;
@@ -475,19 +473,25 @@ if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.expand();
 }
 
-slider.addEventListener("scroll", () => {
-  const maxScroll = slider.scrollWidth - slider.clientWidth;
 
-  // oxiriga yetganda boshiga qaytaradi
-  if (slider.scrollLeft >= maxScroll) {
-    slider.scrollTo({ left: 1, behavior: "instant" });
-  }
 
-  // boshiga yetganda oxiriga olib boradi
-  if (slider.scrollLeft <= 0) {
-    slider.scrollTo({ left: maxScroll - 1, behavior: "instant" });
+
+
+const slider = document.getElementById("slider");
+const dots = document.querySelectorAll(".dot");
+
+function updateDots(){
+  const card = slider.querySelector(".banner-card");
+  const gap = 12;
+
+  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
+
+  dots.forEach(d => d.classList.remove("active"));
+
+  if(dots[index]){
+    dots[index].classList.add("active");
   }
-});
+}
 
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
@@ -507,26 +511,6 @@ function updateDots(){
 
 slider.addEventListener("scroll", updateDots);
 window.addEventListener("load", updateDots);
-
-const slider = document.getElementById("slider");
-const dots = document.querySelectorAll(".dot");
-
-function updateDots(){
-  const card = slider.querySelector(".banner-card");
-  const gap = 12;
-
-  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
-
-  dots.forEach(d => d.classList.remove("active"));
-
-  if(dots[index]){
-    dots[index].classList.add("active");
-  }
-}
-
-slider.addEventListener("scroll", updateDots);
-window.addEventListener("load", updateDots);
-
 
 </script>
 
