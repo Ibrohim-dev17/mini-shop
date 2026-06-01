@@ -326,16 +326,20 @@ renderProducts(all);
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
+    // Agar massivda bo'lsa - o'chiramiz
     favs = favs.filter(x => x !== id);
     el.classList.remove("active");
-    icon.className = "fa fa-heart-o";
+    icon.className = "fa fa-heart-o"; // Bo'sh yurakcha
   } else {
+    // Agar massivda bo'lmasa - qo'shamiz
     favs.push(id);
     el.classList.add("active");
-    icon.className = "fa fa-heart";
+    icon.className = "fa fa-heart"; // To'la yurakcha
   }
+  // LocalStorage ga saqlash
   localStorage.setItem("favs", JSON.stringify(favs));
 }
+
 
 /* SEARCH FUNCTION */
 document.getElementById("searchInput").addEventListener("input", e => {
