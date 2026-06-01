@@ -2,273 +2,297 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Products</title>
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-body{
-margin:0;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-background:#f5f6fa;
-color:#111;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Butun ekranning siljib ketishini qat'iy cheklaydi */
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f5f6fa;
+  color: #111;
 }
 
-a{
-text-decoration:none;
-color:inherit;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
+* { box-sizing: border-box; }
 
-*{box-sizing:border-box;}
-
-body{
-margin:0;
-font-family:system-ui;
-background:#f5f5f5;
-overflow-x:hidden;
-padding-bottom:80px;
+/* FAOQAT SHU QISM SKROL BO'LADI */
+.main-content {
+  height: calc(100vh - 65px); /* Ekran balandligidan yangi menyu joyini chegiradi */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 /* HEADER */
-.header{
-background: rgba(255,255,255,0.9);
-backdrop-filter: blur(10px);
-padding:14px;
-display:flex;
-align-items:center;
-gap:10px;
-border-bottom:1px solid #eee;
-position:sticky;
-top:0;
-z-index:10;
+.header {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.back-btn{
-text-decoration:none;
-background:#6a5acd;
-color:white;
-padding:7px 14px;
-border-radius:50px;
-font-size:13px;
-font-weight:600;
+.back-btn {
+  background: #6a5acd;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-/* PRODUCTS */
-.products{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-padding:12px;
+.header b {
+  font-size: 18px;
 }
 
-.card{
-background:white;
-border-radius:20px;
-padding:14px;
-text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,0.06);
-transition:0.2s;
-position:relative;
+/* PRODUCTS GRID */
+.products {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 12px 20px 12px;
 }
 
-.card:active{
-transform:scale(0.97);
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.04);
+  transition: 0.2s;
+  position: relative;
 }
 
-
-.card img{
-width:100%;
-height:120px;
-object-fit:contain;
-background:#fafafa;
-border-radius:16px;
-padding:10px;
+.card:active {
+  transform: scale(0.97);
 }
 
-.card p{
-margin:6px 0;
-font-size:14px;
+.card img {
+  width: 100%;
+  height: 110px;
+  object-fit: contain;
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 8px;
 }
 
-.price{
-color:#0071e3;
-font-size:14px;
-font-weight:600;
-margin-top:6px;
+.card p {
+  margin: 8px 0 4px 0;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-/* HEART */
-
-.heart{
-position:absolute;
-top:10px;
-right:10px;
-width:32px;
-height:32px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-background:white;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-font-size:16px;
+.price {
+  color: #6a5acd; /* Rang binafshaga moslandi */
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.heart.active{
-color:red;
+/* SHAFFOF YURAKCHA - ORQASIDA OQ DOIRA YO'Q */
+.heart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: #b0b0b5; /* Bosilmaganda shaffof och kulrang kontur */
+  z-index: 2;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-/* BOTTOM */
-
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:rgba(255,255,255,0.9);
-backdrop-filter: blur(10px);
-display:flex;
-justify-content:space-around;
-padding:12px;
-border-top:1px solid #eee;
+.heart:active {
+  transform: scale(1.2);
 }
 
+.heart.active {
+  color: #ff3b30; /* Bosilganda yorqin qizil */
+}
+
+/* PASTDAGI ICONLAR PANELI - YANGI ZAMONAVIY USLUB */
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
+  z-index: 1000;
+  padding: 0 10px;
+}
+
+.bottom a {
+  color: #b0b0b5;
+  font-size: 22px;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+}
+
+.bottom a:active {
+  transform: scale(0.9);
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-<a href="#" onclick="goBack()" class="back-btn">← Back</a>
-<b id="title">Products</b>
+<div class="main-content">
+
+  <div class="header">
+    <a href="#" onclick="goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>
+    <b id="title">Mahsulotlar</b>
+  </div>
+
+  <div class="products" id="productBox"></div>
+
 </div>
 
-<!-- PRODUCTS -->
-<div class="products" id="productBox"></div>
+<div class="bottom">
+  <a href="index.html"><i class="fa-solid fa-house"></i></a>
+  <a href="categories.html"><i class="fa-solid fa-list"></i></a>
+  <a href="cart.html"><i class="fa-solid fa-basket-shopping"></i></a>
+  <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+</div>
 
 <script>
+// Telegram sozlamalari
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
+    Telegram.WebApp.disableVerticalSwipes();
+  }
+}
 
-/* URL */
+/* URL PARAMS */
 const url = new URLSearchParams(window.location.search);
 const cat = url.get("cat");
 
-/* DATA */
+/* BARCHA DATA */
 const data = {
-
-termos: [
-{id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-
-blender: [
-{id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-
-qozon: [
-{id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-
-mikser: [
-{id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-
-idishlar: [
-{id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-]
-
+  termos: [
+    {id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ],
+  blender: [
+    {id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ],
+  qozon: [
+    {id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ],
+  mikser: [
+    {id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ],
+  idishlar: [
+    {id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ]
 };
 
-/* TITLE */
+/* TITLENI YANGILASH */
 if(cat && data[cat]){
-document.getElementById("title").innerText = cat.toUpperCase();
+  document.getElementById("title").innerText = cat.toUpperCase();
 }
 
 /* FAVORITES */
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* PRODUCTS CHIQARISH */
+/* PRODUCTS CHIQARISH (YANGILANDI) */
 const box = document.getElementById("productBox");
 
 if(cat && data[cat]){
-
-
-
-data[cat].forEach(p => {
-
-let isFav = favs.includes(p.id);
-
-box.innerHTML += `
-<div class="card">
-
-<div class="heart ${isFav ? "active" : ""}" onclick="toggleFav(event,'${p.id}',this)">
-${isFav ? "♥" : "♡"}
-</div>
-
-<a href="product.html?id=${p.id}" style="text-decoration:none;color:black;display:block;">
-<img src="${p.img}">
-<p>${p.name}</p>
-<div class="price">${p.price} so'm</div>
-</a>
-
-</div>
-`;
-});
-
-}else{
-box.innerHTML = "<p style='padding:20px'>Mahsulot topilmadi</p>";
+  data[cat].forEach(p => {
+    let isFav = favs.includes(p.id);
+    box.innerHTML += `
+    <div class="card">
+      <div class="heart ${isFav ? "active" : ""}" onclick="toggleFav(event,'${p.id}',this)">
+        <i class="${isFav ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
+      </div>
+      <a href="product.html?id=${p.id}">
+        <img src="${p.img}">
+        <p>${p.name}</p>
+        <div class="price">${p.price} so'm</div>
+      </a>
+    </div>
+    `;
+  });
+} else {
+  box.innerHTML = "<p style='padding:20px; text-align:center; color:#888;'>Mahsulot topilmadi</p>";
 }
 
-/* ❤️ TOGGLE */
+/* ❤️ TOGGLE (YANGILANDI) */
 function toggleFav(e, id, el){
+  e.preventDefault();
+  e.stopPropagation();
+  
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  let icon = el.querySelector("i");
+  let index = favs.indexOf(id);
 
-e.preventDefault();
-e.stopPropagation();
+  if(index !== -1){
+    favs.splice(index, 1);
+    el.classList.remove("active");
+    icon.className = "fa-regular fa-heart"; /* Bo'sh konturli */
+  } else {
+    favs.push(id);
+    el.classList.add("active");
+    icon.className = "fa-solid fa-heart"; /* Ichki to'la qizil */
+  }
 
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
-
-let index = favs.indexOf(id);
-
-if(index !== -1){
-favs.splice(index,1);
-el.classList.remove("active");
-el.innerText = "♡";
-}else{
-favs.push(id);
-el.classList.add("active");
-el.innerText = "♥";
+  localStorage.setItem("favs", JSON.stringify(favs));
+  window.dispatchEvent(new Event('favsUpdated'));
 }
 
-localStorage.setItem("favs", JSON.stringify(favs));
-}
-
-/* BACK */
+/* ORQAGA QAYTISH FUNKSIYASI */
 function goBack(){
-const params = new URLSearchParams(window.location.search);
-const from = params.get("from");
+  const params = new URLSearchParams(window.location.search);
+  const from = params.get("from");
 
-if(from === "categories"){
-window.location.href = "categories.html";
-}else{
-window.location.href = "index.html";
+  if(from === "categories"){
+    window.location.href = "categories.html";
+  } else {
+    window.location.href = "index.html";
+  }
 }
-}
-
 </script>
-
-<!-- BOTTOM -->
-<div class="bottom">
-<a href="index.html">🏠</a>
-<a href="cart.html">🛒</a>
-<a href="favorites.html">❤️</a>
-<a href="#">👤</a>
-</div>
 
 </body>
 </html>
