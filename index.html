@@ -458,34 +458,17 @@ function goBack(){
   history.back();
 }
 
-const slider = document.getElementById("slider");
 
 let isDown = false;
 let startX;
 let scrollLeft;
 
-// drag start
-slider.addEventListener("mousedown", (e) => {
-  isDown = true;
-  startX = e.pageX - slider.offsetLeft;
+ - slider.offsetLeft;
   scrollLeft = slider.scrollLeft;
 });
 
 
 
-// drag move
-slider.addEventListener("mousemove", (e) => {
-  if (!isDown) return;
-  e.preventDefault();
-
-  const x = e.pageX - slider.offsetLeft;
-  const walk = (x - startX) * 1.5;
-  slider.scrollLeft = scrollLeft - walk;
-});
-
-
-
-});
 
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.disableVerticalSwipes();
@@ -505,6 +488,25 @@ slider.addEventListener("scroll", () => {
     slider.scrollTo({ left: maxScroll - 1, behavior: "instant" });
   }
 });
+
+const slider = document.getElementById("slider");
+const dots = document.querySelectorAll(".dot");
+
+function updateDots(){
+  const card = slider.querySelector(".banner-card");
+  const gap = 12;
+
+  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
+
+  dots.forEach(d => d.classList.remove("active"));
+
+  if(dots[index]){
+    dots[index].classList.add("active");
+  }
+}
+
+slider.addEventListener("scroll", updateDots);
+window.addEventListener("load", updateDots);
 
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
