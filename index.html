@@ -50,23 +50,41 @@ width:100%;
 
 /* BANNER */
 .banner{
-overflow:hidden;
-}
-
-.banner-track{
+padding:12px;
 display:flex;
-transition:0.4s;
-}
-
-.banner-slide{
-min-width:100%;
+flex-direction:column;
+gap:12px;
 }
 
 .banner-card{
-height:170px;
-margin:10px;
-border-radius:18px;
-background:linear-gradient(135deg,#6a5acd,#8a2be2);
+display:block;
+padding:20px;
+border-radius:20px;
+color:white;
+min-height:150px;
+box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+.banner-card:nth-child(1){
+background:linear-gradient(135deg,#ff6b6b,#ff8e53);
+}
+
+.banner-card:nth-child(2){
+background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+.banner-card:nth-child(3){
+background:linear-gradient(135deg,#43e97b,#38f9d7);
+}
+
+.banner-card h2{
+margin:0 0 10px;
+}
+
+.banner-card p{
+margin:0;
+opacity:.9;
+}
 color:white;
 padding:16px;
 display:flex;
@@ -165,6 +183,7 @@ font-size:18px;
 
 <!-- HEADER -->
 <div class="header">
+<button onclick="goBack()">← Orqaga</button>
 <i class="fa fa-bars"></i>
 
 <div class="search">
@@ -175,23 +194,22 @@ font-size:18px;
 
 <!-- BANNER -->
 <div class="banner">
-<div class="banner-track" id="bannerTrack">
 
-<div class="banner-slide">
-<div class="banner-card">
-<h3>Aksiya</h3>
-<p>Eng yaxshi mahsulotlar</p>
-</div>
-</div>
+<a href="product.html?id=termos1&from=banner" class="banner-card banner1">
+  <h2>🔥 Premium Termos</h2>
+  <p>Issiq va sovuq ichimliklar uchun</p>
+</a>
 
-<div class="banner-slide">
-<div class="banner-card">
-<h3>Chegirma</h3>
-<p>50% gacha</p>
-</div>
-</div>
+<a href="product.html?id=blender1&from=banner" class="banner-card banner2">
+  <h2>⚡ Blender Aksiyasi</h2>
+  <p>Kitchen uchun eng yaxshi tanlov</p>
+</a>
 
-</div>
+<a href="product.html?id=qozon1&from=banner" class="banner-card banner3">
+  <h2>🍲 Qozonlar</h2>
+  <p>Chegirmali narxlarda</p>
+</a>
+
 </div>
 
 <!-- CATEGORY -->
@@ -322,15 +340,7 @@ function filterCategory(catId){
   });
 }
 
-/* SIMPLE BANNER SWIPE */
-let i=0;
-const track=document.getElementById("bannerTrack");
-const slides=document.querySelectorAll(".banner-slide").length;
 
-setInterval(()=>{
-  i=(i+1)%slides;
-  track.style.transform=`translateX(-${i*100}%)`;
-},3000);
 
 /* SEARCH */
 document.getElementById("searchInput").addEventListener("input", e => {
@@ -342,15 +352,7 @@ document.getElementById("searchInput").addEventListener("input", e => {
   });
 });
 
-/* SIMPLE BANNER SWIPE */
-let i=0;
-const track=document.getElementById("bannerTrack");
-const slides=document.querySelectorAll(".banner-slide").length;
 
-setInterval(()=>{
-  i=(i+1)%slides;
-  track.style.transform=`translateX(-${i*100}%)`;
-},3000);
 
 
 /* CARTGA QO‘SHISH */
@@ -367,6 +369,18 @@ function addToCart(product){
 }
 
 /* FAVORITES toggleFav funksiyasi allaqachon bor, shuni ishlatamiz */
+
+function goBack(){
+
+  const params = new URLSearchParams(location.search);
+
+  if(params.get("from")==="banner"){
+      location.href="index.html";
+      return;
+  }
+
+  history.back();
+}
 
 </script>
 
