@@ -2,243 +2,77 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Kitchen Market</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
-
-
-body{
-  margin:0;
-  font-family:system-ui;
-  background:#f5f6fa;
-  overscroll-behavior-x:none;
-  overscroll-behavior-y:none;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f5f6fa;
+  overscroll-behavior: none; /* Telegramda keraksiz tortilishlarni yo'qotadi */
 }
 
-}
-
-a{ text-decoration:none; color:inherit; }
-*{box-sizing:border-box;}
-
-img{max-width:100%;}
+a { text-decoration: none; color: inherit; }
+* { box-sizing: border-box; }
+img { max-width: 100%; }
 
 /* HEADER */
-.header{
-display:flex;
-align-items:center;
-gap:10px;
-padding:12px;
-background:#fff;
-position:sticky;
-top:0;
-z-index:10;
-border-bottom:1px solid #eee;
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid #eee;
 }
 
-.search{
-flex:1;
-display:flex;
-align-items:center;
-background:#f2f2f2;
-padding:8px 12px;
-border-radius:20px;
+.search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #f2f2f2;
+  padding: 8px 12px;
+  border-radius: 20px;
 }
 
-.search input{
-border:none;
-outline:none;
-background:transparent;
-width:100%;
+.search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
 }
 
 /* BANNER */
-.banner{
-  margin:12px;
-  overflow:hidden;
+.banner {
+  margin: 12px;
+  overflow: hidden;
+  position: relative;
 }
 
-.banner-slider{
-display:flex;
-gap:12px;
-overflow-x:auto;
-scroll-snap-type:x mandatory;
-scroll-behavior:smooth;
-padding-bottom:10px;
-
-touch-action: pan-x;
--webkit-overflow-scrolling: touch;
+.banner-wrapper {
+  overflow: hidden;
+  border-radius: 22px;
+  width: 100%;
 }
 
-.banner-card{
-  flex:0 0 100%;
-  min-height:170px;
-  border-radius:22px;
-  padding:20px;
-  color:#fff;
-  scroll-snap-align:start;
-  box-shadow:none;
-}
-
-.banner1{
-background:linear-gradient(135deg,#ff6b6b,#ff8e53);
-}
-
-.banner2{
-background:linear-gradient(135deg,#4facfe,#00f2fe);
-}
-
-.banner3{
-background:linear-gradient(135deg,#43e97b,#38f9d7);
-}
-
-.dots{
-display:flex;
-justify-content:center;
-gap:8px;
-margin-top:6px;
-}
-
-.dot{
-width:8px;
-height:8px;
-border-radius:50%;
-background:#ccc;
-}
-
-.dot.active{
-background:#6a5acd;
-}
-
-.banner-wrapper{
-  overflow:hidden;
-  border-radius:22px;
-}
-
-.banner-slider{
-  display:flex;
-  gap:0;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  scroll-behavior:smooth;
-  -webkit-overflow-scrolling:touch;
-  touch-action:pan-x;
-}
-
-.banner-slider::-webkit-scrollbar{
-  display:none;
-}
-
-
-/* CATEGORY */
-.section{
-padding:12px;
-}
-
-.cat-list{
-display:flex;
-overflow-x:auto;
-gap:12px;
-padding-bottom:8px;
-}
-
-.cat-card{
-min-width:90px;
-background:#fff;
-padding:10px;
-border-radius:14px;
-text-align:center;
-box-shadow:0 5px 12px rgba(0,0,0,0.05);
-}
-
-.cat-card img{
-width:60px;
-height:60px;
-}
-
-/* PRODUCTS */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:12px;
-}
-
-.card{
-background:#fff;
-border-radius:14px;
-padding:10px;
-position:relative;
-box-shadow:0 5px 12px rgba(0,0,0,0.05);
-}
-
-.card img{
-height:80px;
-object-fit:contain;
-}
-
-.price{
-color:#6a5acd;
-font-weight:600;
-margin-top:5px;
-}
-
-/* HEART */
-.heart{
-position:absolute;
-top:8px;
-right:8px;
-width:32px;
-height:32px;
-border-radius:50%;
-background:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
-cursor:pointer;
-font-size:14px;
-}
-
-.heart.active{ color:red; }
-
-/* BOTTOM */
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#fff;
-display:flex;
-justify-content:space-around;
-padding:10px;
-border-top:1px solid #eee;
-font-size:18px;
-}
-
-html, body {
-  overflow-x: hidden;
-  overscroll-behavior: none;
-}
-
-body {
-  margin: 0;
-  font-family: system-ui;
-  background: #f5f6fa;
-  touch-action: pan-y;
-}
-
-/* FIX banner swipe + Telegram */
 .banner-slider {
   display: flex;
-  gap: 12px;
-  overflow-x: scroll;
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
+  /* Eng muhim qism: faqat gorizontal harakatga ruxsat berish */
+  touch-action: pan-x !important; 
   overscroll-behavior-x: contain;
 }
 
@@ -246,75 +80,166 @@ body {
   display: none;
 }
 
-html,
-body{
-  overflow-x:hidden !important;
-  width:100%;
+.banner-card {
+  flex: 0 0 100%;
+  min-height: 170px;
+  padding: 20px;
+  color: #fff;
+  scroll-snap-align: start;
+  touch-action: pan-x !important; /* Kartalar ustida ham vertikal yopilishni bloklaydi */
 }
 
-.banner{
-  overflow:hidden;
+.banner-card h2, .banner-card p {
+  margin: 0;
+}
+.banner-card h2 {
+  margin-bottom: 15px;
 }
 
-.banner-wrapper{
-  overflow:hidden;
+.banner1 { background: linear-gradient(135deg,#ff6b6b,#ff8e53); }
+.banner2 { background: linear-gradient(135deg,#4facfe,#00f2fe); }
+.banner3 { background: linear-gradient(135deg,#43e97b,#38f9d7); }
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
 }
 
-.banner-slider::-webkit-scrollbar {
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  transition: background 0.3s ease;
+}
+
+.dot.active {
+  background: #6a5acd;
+}
+
+/* CATEGORY */
+.section {
+  padding: 12px;
+}
+
+.cat-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.cat-list::-webkit-scrollbar {
   display: none;
 }
 
-.banner-card h2,
-.banner-card p{
-  margin:0;
+.cat-card {
+  min-width: 90px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.05);
 }
 
-.banner-card h2{
-  margin-bottom:15px;
+.cat-card img {
+  width: 60px;
+  height: 60px;
 }
 
+/* PRODUCTS */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  padding-bottom: 60px; /* Bottom bar yopib qo'ymasligi uchun */
+}
 
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px;
+  position: relative;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+}
 
+.card img {
+  height: 80px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.price {
+  color: #6a5acd;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+/* HEART */
+.heart {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 2;
+}
+
+.heart.active { color: red; }
+
+/* BOTTOM NAV */
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px;
+  border-top: 1px solid #eee;
+  font-size: 18px;
+  z-index: 100;
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
-<i class="fa fa-bars"></i>
-
-<div class="search">
-<i class="fa fa-search"></i>
-<input id="searchInput" placeholder="Qidirish...">
+  <i class="fa fa-bars"></i>
+  <div class="search">
+    <i class="fa fa-search"></i>
+    <input id="searchInput" placeholder="Qidirish...">
+  </div>
 </div>
-</div>
 
-<!-- BANNER -->
-<!-- BANNER -->
 <div class="banner">
-
   <div class="banner-wrapper">
-
     <div class="banner-slider" id="slider">
-
       <a href="product.html?id=termos1&from=banner" class="banner-card banner1">
         <h2>🔥 Premium Termos</h2>
         <p>Issiq va sovuq ichimliklar uchun</p>
       </a>
-
       <a href="product.html?id=blender1&from=banner" class="banner-card banner2">
         <h2>⚡ Blender Aksiyasi</h2>
         <p>Kitchen uchun eng yaxshi tanlov</p>
       </a>
-
       <a href="product.html?id=qozon1&from=banner" class="banner-card banner3">
         <h2>🍲 Qozonlar</h2>
         <p>Chegirmali narxlarda</p>
       </a>
-
     </div>
-
   </div>
 
   <div class="dots">
@@ -322,21 +247,18 @@ body{
     <span class="dot"></span>
     <span class="dot"></span>
   </div>
-
 </div>
-<!-- CATEGORY -->
+
 <div class="section">
-<h3>Kategoriyalar</h3>
-<div class="cat-list" id="catList"></div>
+  <h3>Kategoriyalar</h3>
+  <div class="cat-list" id="catList"></div>
 </div>
 
-<!-- PRODUCTS -->
 <div class="section">
-<h3>Popular Products</h3>
-<div class="grid" id="productBox"></div>
+  <h3>Popular Products</h3>
+  <div class="grid" id="productBox"></div>
 </div>
 
-<!-- BOTTOM -->
 <div class="bottom">
   <a href="index.html"><i class="fa fa-home"></i></a>
   <a href="cart.html"><i class="fa fa-cart-shopping"></i></a>
@@ -345,241 +267,164 @@ body{
 </div>
 
 <script>
+// Telegram WebApp sozlamalari
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+  // Vertikal va gorizontal keraksiz swipe yopilishlarini cheklash
+  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
+    Telegram.WebApp.disableVerticalSwipes();
+  }
+}
 
 /* DATA */
-const categories=[
-{id:"termos",name:"Termos",img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender",name:"Blender",img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"qozon",name:"Qozon",img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"mikser",name:"Mikser",img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"idishlar",name:"Idishlar",img:"https://i.imgur.com/3ZQ3Z5b.png"}
+const categories = [
+  {id:"termos", name:"Termos", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"blender", name:"Blender", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"qozon", name:"Qozon", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"mikser", name:"Mikser", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"idishlar", name:"Idishlar", img:"https://i.imgur.com/3ZQ3Z5b.png"}
 ];
 
-const data={
-termos:[
-{id:"termos1",name:"Termos 1L",price:120000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos2",name:"Termos 2L",price:150000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"termos3",name:"Sport",price:110000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-blender:[
-{id:"blender1",name:"Blender 3x1",price:220000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender2",name:"Mini Blender",price:160000,img:"https://i.imgur.com/3ZQ3Z5b.png"},
-{id:"blender3",name:"Pro Blender",price:390000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
-],
-qozon:[
-{id:"qozon1",name:"Qozon 5L",price:180000,img:"https://i.imgur.com/3ZQ3Z5b.png"}
-]
+const data = {
+  termos: [
+    {id:"termos1", name:"Termos 1L", price:120000, img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"termos2", name:"Termos 2L", price:150000, img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"termos3", name:"Sport", price:110000, img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ],
+  blender: [
+    {id:"blender1", name:"Blender 3x1", price:220000, img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"blender2", name:"Mini Blender", price:160000, img:"https://i.imgur.com/3ZQ3Z5b.png"},
+    {id:"blender3", name:"Pro Blender", price:390000, img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ],
+  qozon: [
+    {id:"qozon1", name:"Qozon 5L", price:180000, img:"https://i.imgur.com/3ZQ3Z5b.png"}
+  ]
 };
 
-let favs=JSON.parse(localStorage.getItem("favs"))||[];
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* CATEGORY */
-const catBox=document.getElementById("catList");
-
-categories.forEach(c=>{
-catBox.innerHTML+=`
-<a href="products.html?cat=${c.id}&from=index" class="cat-card">
-  <img src="${c.img}">
-  <p>${c.name}</p>
-</a>
+/* CATEGORIES RENDER */
+const catBox = document.getElementById("catList");
+categories.forEach(c => {
+  catBox.innerHTML += `
+  <a href="products.html?cat=${c.id}&from=index" class="cat-card">
+    <img src="${c.img}">
+    <p>${c.name}</p>
+  </a>`;
 });
 
-/* PRODUCTS (6 TA RANDOM) */
-let all=[];
-Object.values(data).forEach(a=>all.push(...a));
+/* PRODUCTS RENDER */
+let all = [];
+Object.values(data).forEach(a => all.push(...a));
+all = all.sort(() => 0.5 - Math.random()).slice(0, 6);
 
-all=all.sort(()=>0.5-Math.random()).slice(0,6);
-
-const box=document.getElementById("productBox");
-
-all.forEach(p=>{
-let isFav=favs.includes(p.id);
-
-box.innerHTML+=`
-
-<div class="card">
-  <div class="heart ${isFav?'active':''}" onclick="toggleFav('${p.id}',this)">
-    <i class="fa ${isFav?'fa-heart':'fa-heart-o'}"></i>
-  </div>
-  <a href="product.html?id=${p.id}">
-    <img src="${p.img}">
-    <p>${p.name}</p>
-    <div class="price">${p.price.toLocaleString()} so'm</div>
-  </a>
-</div>
-
-
-
-});
-
-/* FAVORITES */
-function toggleFav(id,el){
-  let icon=el.querySelector("i");
-  if(favs.includes(id)){
-    favs=favs.filter(x=>x!==id);
-    el.classList.remove("active");
-    icon.className="fa fa-heart-o";
-  }else{
-    favs.push(id);
-    el.classList.add("active");
-    icon.className="fa fa-heart";
-  }
-  localStorage.setItem("favs",JSON.stringify(favs));
-}
-/* SEARCH */
-document.getElementById("searchInput").addEventListener("input",e=>{
-let val=e.target.value.toLowerCase();
-
-document.querySelectorAll(".card").forEach(card=>{
-let name=card.querySelector("p").innerText.toLowerCase();
-card.style.display=name.includes(val)?"block":"none";
-});
-});
-
-function filterCategory(catId){
-  box.innerHTML="";
-  data[catId].forEach(p=>{
-    let isFav=favs.includes(p.id);
-    box.innerHTML+=`
+const box = document.getElementById("productBox");
+function renderProducts(productsList) {
+  box.innerHTML = "";
+  productsList.forEach(p => {
+    let isFav = favs.includes(p.id);
+    box.innerHTML += `
     <div class="card">
-      <div class="heart ${isFav?'active':''}" onclick="toggleFav('${p.id}',this)">
-        <i class="fa ${isFav?'fa-heart':'fa-heart-o'}"></i>
+      <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
+        <i class="fa ${isFav ? 'fa-heart' : 'fa-heart-o'}"></i>
       </div>
-      <img src="${p.img}">
-      <p>${p.name}</p>
-      <div class="price">${p.price.toLocaleString()} so'm</div>
+      <a href="product.html?id=${p.id}">
+        <img src="${p.img}">
+        <p>${p.name}</p>
+        <div class="price">${p.price.toLocaleString()} so'm</div>
+      </a>
     </div>`;
   });
 }
+renderProducts(all);
 
+/* FAVORITES TOGGLE */
+function toggleFav(id, el) {
+  let icon = el.querySelector("i");
+  if (favs.includes(id)) {
+    favs = favs.filter(x => x !== id);
+    el.classList.remove("active");
+    icon.className = "fa fa-heart-o";
+  } else {
+    favs.push(id);
+    el.classList.add("active");
+    icon.className = "fa fa-heart";
+  }
+  localStorage.setItem("favs", JSON.stringify(favs));
+}
 
-
-/* SEARCH */
+/* SEARCH FUNCTION */
 document.getElementById("searchInput").addEventListener("input", e => {
   let val = e.target.value.toLowerCase();
-
   document.querySelectorAll(".card").forEach(card => {
     let name = card.querySelector("p").innerText.toLowerCase();
     card.style.display = name.includes(val) ? "block" : "none";
   });
 });
 
+/* SLIDER LOGIC FOR TELEGRAM */
+const slider = document.getElementById("slider");
+const dots = document.querySelectorAll(".dot");
+let index = 0;
+let userScrolling = false;
+let scrollTimeout;
 
-
-
-/* CARTGA QO‘SHISH */
-function addToCart(product){
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let item = cart.find(p => p.id === product.id);
-  if(item){
-    item.qty += 1;
-  }else{
-    product.qty = 1;
-    cart.push(product);
-  }
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-/* FAVORITES toggleFav funksiyasi allaqachon bor, shuni ishlatamiz */
-
-function goBack(){
-
-  const params = new URLSearchParams(location.search);
-
-  if(params.get("from")==="banner"){
-      location.href="index.html";
-      return;
-  }
-
-  history.back();
-}
-
-
-
-
-if (window.Telegram && Telegram.WebApp) {
-  Telegram.WebApp.disableVerticalSwipes();
-  Telegram.WebApp.expand();
-}
-
-
-
-
-function updateDots(){
+function updateDots() {
   const cards = document.querySelectorAll(".banner-card");
+  if(cards.length === 0) return;
   const width = cards[0].offsetWidth;
-
   let i = Math.round(slider.scrollLeft / width);
-i = i % 3;
+  i = i % dots.length;
   if (i < 0) i = 0;
 
   dots.forEach(d => d.classList.remove("active"));
-  dots[i].classList.add("active");
+  if(dots[i]) dots[i].classList.add("active");
 }
-
-
-const slider = document.getElementById("slider");
-const items = Array.from(slider.children);
-
-// clone for infinite loop
-
-
-
-const dots = document.querySelectorAll(".dot");
-
-
-let scrollTimeout;
 
 slider.addEventListener("scroll", () => {
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(updateDots, 50);
 });
 
-
-let index = 0;
-let userScrolling = false;
-
-  
+// Avtomatik slide funksiyasi
 function autoSlide() {
   if (userScrolling) return;
-
   const cards = document.querySelectorAll(".banner-card");
   const width = cards[0].offsetWidth;
 
   index++;
+  if (index >= cards.length) {
+    index = 0;
+  }
 
   slider.scrollTo({
     left: index * width,
     behavior: "smooth"
   });
-
-  updateDots();
-
-  // LOOP RESET (FAKE INFINITE EMAS, REAL FIX)
-  if (index >= cards.length / 2) {
-    setTimeout(() => {
-      slider.scrollTo({ left: 0, behavior: "auto" });
-      index = 0;
-    }, 500);
-  }
 }
 
-setInterval(autoSlide, 3000);
+let autoSlideInterval = setInterval(autoSlide, 3000);
 
-slider.addEventListener("touchstart", () => userScrolling = true);
+// Telegram yopilib ketishini oldini olish uchun Touch hodisalari boshqaruvi
+slider.addEventListener("touchstart", (e) => {
+  userScrolling = true;
+  clearInterval(autoSlideInterval);
+}, { passive: true });
+
 slider.addEventListener("touchend", () => {
-  setTimeout(() => userScrolling = false, 2000);
+  setTimeout(() => {
+    userScrolling = false;
+    clearInterval(autoSlideInterval);
+    autoSlideInterval = setInterval(autoSlide, 3000);
+  }, 2000);
 });
 
-
+// Slider ustida yonga yurgizganda Telegram hodisalarini to'xtatib qolish (Muhim!)
 slider.addEventListener("touchmove", e => {
-  e.stopPropagation();
-});
+  e.stopPropagation(); 
+}, { passive: true });
 
 </script>
-
 </body>
 </html>
-
-
-
