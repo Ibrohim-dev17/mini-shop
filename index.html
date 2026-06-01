@@ -342,6 +342,32 @@ document.getElementById("searchInput").addEventListener("input", e => {
   });
 });
 
+/* SIMPLE BANNER SWIPE */
+let i=0;
+const track=document.getElementById("bannerTrack");
+const slides=document.querySelectorAll(".banner-slide").length;
+
+setInterval(()=>{
+  i=(i+1)%slides;
+  track.style.transform=`translateX(-${i*100}%)`;
+},3000);
+
+
+/* CARTGA QO‘SHISH */
+function addToCart(product){
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let item = cart.find(p => p.id === product.id);
+  if(item){
+    item.qty += 1;
+  }else{
+    product.qty = 1;
+    cart.push(product);
+  }
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+/* FAVORITES toggleFav funksiyasi allaqachon bor, shuni ishlatamiz */
+
 </script>
 
 </body>
