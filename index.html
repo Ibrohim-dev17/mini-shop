@@ -505,14 +505,14 @@ if (window.Telegram && Telegram.WebApp) {
 
 
 function updateDots(){
-  const width = slider.querySelector(".banner-card").offsetWidth + 12;
+  const cards = document.querySelectorAll(".banner-card");
+  const width = cards[0].offsetWidth + 12;
 
   let i = Math.round(slider.scrollLeft / width) % 3;
 
-  if (!dots) return;
+  if (i < 0) i = 0;
 
   dots.forEach(d => d.classList.remove("active"));
-
   dots[i].classList.add("active");
 }
 
@@ -527,11 +527,7 @@ items.forEach(item => {
 });
 
 
-let dots;
-
-window.addEventListener("load", () => {
-  dots = document.querySelectorAll(".dot");
-});
+const dots = document.querySelectorAll(".dot");
 
 
 let scrollTimeout;
@@ -549,7 +545,8 @@ let userScrolling = false;
 function autoSlide() {
   if (userScrolling) return;
 
-  const width = slider.querySelector(".banner-card").offsetWidth + 12;
+  const cards = document.querySelectorAll(".banner-card");
+  const width = cards[0].offsetWidth + 12;
 
   index++;
 
@@ -558,14 +555,15 @@ function autoSlide() {
     behavior: "smooth"
   });
 
-  if (index >= 3) {
+  updateDots();
+
+  // LOOP RESET (FAKE INFINITE EMAS, REAL FIX)
+  if (index >= cards.length / 2) {
     setTimeout(() => {
       slider.scrollTo({ left: 0, behavior: "auto" });
       index = 0;
-    }, 600);
+    }, 500);
   }
-
-  updateDots();
 }
 
 setInterval(autoSlide, 3000);
