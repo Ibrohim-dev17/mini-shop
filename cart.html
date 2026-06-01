@@ -2,224 +2,397 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Savat</title>
 
+<!-- Font Awesome v6 (Barcha sahifalar bilan bir xil) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-
-body{
-margin:0;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-background:#f5f6fa;
-color:#111;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Telegramda keraksiz skrol bo'lishini cheklaydi */
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f5f6fa;
+  color: #111;
 }
 
-a{
-text-decoration:none;
-color:inherit;
-}
+a { text-decoration: none; color: inherit; }
+* { box-sizing: border-box; }
 
-*{
-box-sizing:border-box;
-}
-
-body{
-margin:0;
-font-family:system-ui;
-background:#f5f5f5;
-overflow-x:hidden;
-padding-bottom:80px;
+/* SKROL FAOQAT SHU BLOK ICHIDA BO'LADI */
+.main-content {
+  height: calc(100vh - 150px); /* Pastki menyu va jami summa bloki uchun joy chegirildi */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 /* HEADER */
-
-.header{
-background: rgba(255,255,255,0.9);
-backdrop-filter: blur(10px);
-padding:14px;
-display:flex;
-align-items:center;
-gap:10px;
-border-bottom:1px solid #eee;
-position:sticky;
-top:0;
-z-index:10;
+.header {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.back-btn{
-text-decoration:none;
-background:#6a5acd;
-color:white;
-padding:7px 14px;
-border-radius:50px;
-font-size:13px;
-font-weight:600;
+.back-btn {
+  background: #6a5acd;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-/* CART */
-
-.cart-box{
-padding:14px;
-padding-bottom:100px;
+.header b {
+  font-size: 18px;
 }
 
-.cart-item{
-background:white;
-border-radius:14px;
-padding:10px;
-margin-bottom:12px;
-display:flex;
-gap:10px;
-align-items:center;
-box-shadow:0 2px 8px rgba(0,0,0,0.05);
+/* CART ITEMS */
+.cart-box {
+  padding: 12px;
 }
 
-.cart-item img{
-width:70px;
-height:70px;
-border-radius:10px;
+.cart-item {
+  background: white;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  position: relative;
 }
 
-.item-info{
-flex:1;
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: #fafafa;
+  padding: 6px;
 }
 
-.item-name{
-font-size:14px;
-margin:0;
+.item-info {
+  flex: 1;
 }
 
-.price{
-color:#6a5acd;
-font-weight:600;
-font-size:14px;
-margin-top:4px;
+.item-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
 }
 
-.qty{
-font-size:13px;
-margin-top:4px;
+.price {
+  color: #6a5acd;
+  font-weight: 700;
+  font-size: 15px;
 }
 
-/* TOTAL */
-
-.total-box{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:white;
-padding:14px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
-display:flex;
-justify-content:space-between;
-align-items:center;
+/* SAVAT ICHIDAGI PLUS MINUS */
+.item-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
 }
 
-.total-text{
-font-weight:600;
+.item-counter {
+  display: flex;
+  align-items: center;
+  background: #f1f2f6;
+  padding: 3px;
+  border-radius: 10px;
+  gap: 10px;
 }
 
-.clear-btn{
-background:#6a5acd;
-color:white;
-border:none;
-padding:10px 16px;
-border-radius:10px;
-font-size:14px;
-}
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:rgba(255,255,255,0.9);
-backdrop-filter: blur(10px);
-display:flex;
-justify-content:space-around;
-padding:12px;
-border-top:1px solid #eee;
+.item-counter button {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: white;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 
+.item-counter span {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* O'CHIRISH TUGMASI */
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #ff3b30;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* SAVAT BO'SH HOLATI */
+.empty-cart {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+}
+.empty-cart i {
+  font-size: 50px;
+  color: #ccc;
+  margin-bottom: 12px;
+}
+
+/* JAMI SUMMA BLOKI (BOTTOM MENYUDAN TEPADA TURADI) */
+.total-box {
+  position: fixed;
+  bottom: 65px; /* Pastki menyudan tepaga ko'tarildi */
+  left: 0;
+  right: 0;
+  height: 85px;
+  background: white;
+  padding: 12px 16px;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 999;
+  border-top: 1px solid #eee;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-text {
+  font-size: 14px;
+  color: #666;
+}
+.total-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #6a5acd;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.clear-btn {
+  background: #f1f2f6;
+  color: #555;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.order-btn {
+  flex: 1;
+  background: #6a5acd;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* PASTDAGI ICONLAR PANELI (Savat aktiv) */
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  z-index: 1000;
+  padding: 0 10px;
+}
+
+.bottom a {
+  color: #b0b0b5;
+  font-size: 22px;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+}
+
+/* Savat sahifasi ochilgani uchun savat iconi aktiv */
+.bottom a.active {
+  color: #6a5acd;
+  background: rgba(106, 90, 205, 0.08);
+}
+
+.bottom a:active { transform: scale(0.9); }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
+<!-- ASOSIY SKROL BLOKI -->
+<div class="main-content">
+  <!-- HEADER -->
+  <div class="header">
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>
+    <b>Savat</b>
+  </div>
 
-<div class="header">
-<a href="index.html" class="back-btn">← Back</a>
-<b>Savat</b>
+  <!-- MAHSULOTLAR RO'YXATI -->
+  <div class="cart-box" id="cartBox"></div>
 </div>
 
-<!-- CART ITEMS -->
+<!-- JAMI SUMMA VA AMALLAR PANEL -->
+<div class="total-box" id="totalBox">
+  <div class="total-row">
+    <span class="total-text">Jami summa:</span>
+    <span class="total-amount" id="total">0 so'm</span>
+  </div>
+  <div class="action-buttons">
+    <button class="clear-btn" onclick="clearCart()">Tozalash</button>
+    <a href="#" class="order-btn" onclick="checkout()">Rasmiylashtirish</a>
+  </div>
+</div>
 
-<div class="cart-box" id="cartBox"></div>
-
-<!-- TOTAL -->
-
-<div class="total-box">
-<div class="total-text">Jami: <span id="total">0</span> so'm</div>
-<button class="clear-btn" onclick="clearCart()">Tozalash</button>
+<!-- PASTDAGI NAVIGATION PANEL -->
+<div class="bottom">
+  <a href="index.html"><i class="fa-solid fa-house"></i></a>
+  <a href="categories.html"><i class="fa-solid fa-list"></i></a>
+  <a href="cart.html" class="active"><i class="fa-solid fa-basket-shopping"></i></a>
+  <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
 </div>
 
 <script>
+// Telegram WebApp yuklash
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
+    Telegram.WebApp.disableVerticalSwipes();
+  }
+}
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
 const box = document.getElementById("cartBox");
 const totalText = document.getElementById("total");
+const totalBox = document.getElementById("totalBox");
 
-if(cart.length === 0){
-box.innerHTML = "<p>Savat bo'sh</p>";
-document.querySelector(".total-box").style.display = "none";
+/* SAVATNI RENDR QILISH */
+function renderCart() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  box.innerHTML = "";
+  
+  if (cart.length === 0) {
+    box.innerHTML = `
+      <div class="empty-cart">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <p>Savatingiz hozircha bo'sh</p>
+      </div>`;
+    totalBox.style.display = "none";
+    return;
+  }
+
+  totalBox.style.display = "flex";
+  let total = 0;
+
+  cart.forEach((p, index) => {
+    // Narxni tekshirish (agar string bo'lsa raqamga o'girish)
+    let cleanPrice = typeof p.price === 'string' ? parseInt(p.price.replace(/\s/g, '')) : p.price;
+    let itemTotal = cleanPrice * p.qty;
+    total += itemTotal;
+
+    box.innerHTML += `
+      <div class="cart-item">
+        <img src="${p.img}">
+        <div class="item-info">
+          <p class="item-name">${p.name}</p>
+          <div class="price">${cleanPrice.toLocaleString()} so'm</div>
+          
+          <div class="item-actions">
+            <!-- Plus/Minus Tugmalari -->
+            <div class="item-counter">
+              <button onclick="changeQty(${index}, -1)">-</button>
+              <span>${p.qty}</span>
+              <button onclick="changeQty(${index}, 1)">+</button>
+            </div>
+            <!-- O'chirish Tugmasi -->
+            <button class="delete-btn" onclick="deleteItem(${index})">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  totalText.innerText = total.toLocaleString() + " so'm";
 }
 
-/* Mahsulotlarni chiqarish */
+/* MAHSULOT SONINI O'ZGARTIRISH (PLUS / MINUS) */
+function changeQty(index, amount) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (!cart[index]) return;
 
-let total = 0;
+  cart[index].qty += amount;
 
-cart.forEach(p => {
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1); // Agar 0 bo'lib ketsa ro'yxatdan o'chiradi
+  }
 
-let priceNumber = p.price;
-let itemTotal = priceNumber * p.qty;
-total += itemTotal;
-
-box.innerHTML += `
-<div class="cart-item">
-<img src="${p.img}">
-<div class="item-info">
-<p class="item-name">${p.name}</p>
-<div class="price">${p.price} so'm</div>
-<p class="qty">Soni: ${p.qty}</p>
-</div>
-</div>
-`;
-
-});
-
-/* TOTAL chiqarish */
-
-totalText.innerText = total.toLocaleString() + " so'm";
-
-/* SAVATNI TOZALASH */
-
-function clearCart(){
-localStorage.removeItem("cart");
-location.reload();
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
 }
 
+/* BITTALIK MAHSULOTNI O'CHIRISH */
+function deleteItem(index) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+/* SAVATNI TO'LIQ TOZALASH */
+function clearCart() {
+  localStorage.removeItem("cart");
+  renderCart();
+}
+
+/* BUYURTMA BERISH (CHECKOUT) */
+function checkout() {
+  alert("Buyurtmangiz qabul qilindi!");
+}
+
+// Sahifa yuklanganda ishga tushirish
+renderCart();
 </script>
-
-<!-- boshqa contentlar -->
-
-<div class="bottom">
-<a href="index.html">🏠</a>
-<a href="cart.html">🛒</a>
-<a href="favorites.html">❤️</a>
-<a href="#">👤</a>
-</div>
-
 
 </body>
 </html>
