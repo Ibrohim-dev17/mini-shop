@@ -12,6 +12,8 @@ body{
 margin:0;
 font-family:system-ui;
 background:#f5f6fa;
+
+overscroll-behavior-x: none;
 }
 
 a{ text-decoration:none; color:inherit; }
@@ -60,6 +62,9 @@ overflow-x:auto;
 scroll-snap-type:x mandatory;
 scroll-behavior:smooth;
 padding-bottom:10px;
+
+touch-action: pan-x;
+-webkit-overflow-scrolling: touch;
 }
 
 .banner-slider::-webkit-scrollbar{
