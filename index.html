@@ -504,8 +504,7 @@ function updateDots(){
   const realCount = 3;
 
   const gap = 12;
-  const width = cards[0].offsetWidth + gap;
-
+  const width = slider.querySelector(".banner-card").offsetWidth + gap;
   let i = Math.round(slider.scrollLeft / width) % realCount;
 
   dots.forEach(d => d.classList.remove("active"));
@@ -524,18 +523,35 @@ items.forEach(item => {
   const clone = item.cloneNode(true);
   slider.appendChild(clone);
 });
-const dots = document.querySelectorAll(".dot");
 
 
-slider.addEventListener("scroll", updateDots);
+let dots;
+
+window.addEventListener("load", () => {
+  dots = document.querySelectorAll(".dot");
+});
+
+
+let scrollTimeout;
+
+slider.addEventListener("scroll", () => {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(updateDots, 50);
+});
+
+
+
+
 
 
 let index = 0;
 
 function autoSlide() {
+  if (userScrolling) return;
+
   const cards = document.querySelectorAll(".banner-card");
   const gap = 12;
-  const width = cards[0].offsetWidth + gap;
+  const width = slider.querySelector(".banner-card").offsetWidth + gap;
 
   index++;
 
@@ -553,6 +569,14 @@ function autoSlide() {
 }
 
 setInterval(autoSlide, 3000);
+
+let userScrolling = false;
+
+slider.addEventListener("touchstart", () => userScrolling = true);
+slider.addEventListener("touchend", () => {
+  setTimeout(() => userScrolling = false, 2000);
+});
+
 
 </script>
 
