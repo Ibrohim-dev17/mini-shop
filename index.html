@@ -11,6 +11,17 @@
 
 <style>
 
+html, body {
+  overflow-x: hidden;
+}
+
+.banner-slider {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
 html{
   overscroll-behavior: none;
 }
@@ -487,28 +498,27 @@ if (window.Telegram && Telegram.WebApp) {
 
 
 
+function updateDots(){
+  const card = slider.querySelector(".banner-card");
+  const gap = 12;
 
+  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
+
+  dots.forEach(d => d.classList.remove("active"));
+
+  if(dots[index]){
+    dots[index].classList.add("active");
+  }
+}
 
 
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 
-function updateDots(){
-  const cards = document.querySelectorAll(".banner-card");
-  const index = Math.round(slider.scrollLeft / slider.clientWidth);
-
-  dots.forEach(d => d.classList.remove("active"));
-  if(dots[index]) dots[index].classList.add("active");
-}
 
 slider.addEventListener("scroll", updateDots);
 window.addEventListener("load", updateDots);
 
-document.addEventListener("touchmove", function(e){
-  if (!e.target.closest(".banner-slider")) {
-    e.preventDefault();
-  }
-}, { passive: false });
 
 </script>
 
