@@ -58,7 +58,8 @@ width:100%;
 
 /* BANNER */
 .banner{
-padding:12px;
+  padding:0;
+  margin:12px;
 }
 
 .banner-slider{
@@ -72,23 +73,6 @@ padding-bottom:10px;
 touch-action: pan-x;
 -webkit-overflow-scrolling: touch;
 }
-.banner-slider {
-  touch-action: pan-x;
-  overflow-x: scroll;
-  overscroll-behavior-x: contain;
-}
-
-
-.banner-slider::-webkit-scrollbar{
-display:none;
-}
-
-.banner-slider {
-  touch-action: pan-x;
-  overscroll-behavior-x: contain;
-}
-
-
 
 .banner1{
 background:linear-gradient(135deg,#ff6b6b,#ff8e53);
@@ -123,33 +107,18 @@ background:#6a5acd;
 .banner-wrapper{
   overflow:hidden;
 }
-
 .banner-slider{
   display:flex;
-  gap:12px;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
-  touch-action: pan-x;
   scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x;
 }
 
 .banner-slider::-webkit-scrollbar{
   display:none;
 }
-
-
-.banner-card{
-  flex:0 0 calc(100% - 12px);
-  min-height:170px;
-  border-radius:22px;
-  padding:20px;
-  color:white;
-  box-shadow:0 10px 25px rgba(0,0,0,.15);
-  scroll-snap-align:start;
-}
-
-
 
 
 /* CATEGORY */
@@ -263,6 +232,21 @@ body {
 .banner-slider::-webkit-scrollbar {
   display: none;
 }
+
+html,
+body{
+  overflow-x:hidden !important;
+  width:100%;
+}
+
+.banner{
+  overflow:hidden;
+}
+
+.banner-wrapper{
+  overflow:hidden;
+}
+
 </style>
 </head>
 
@@ -497,8 +481,7 @@ function updateDots(){
   const cards = document.querySelectorAll(".banner-card");
   const width = cards[0].offsetWidth + 12;
 
-  let i = Math.round(slider.scrollLeft / width) % 3;
-
+  let i = Math.round(slider.scrollLeft / width) % dots.length;
   if (i < 0) i = 0;
 
   dots.forEach(d => d.classList.remove("active"));
