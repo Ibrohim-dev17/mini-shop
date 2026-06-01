@@ -2,342 +2,405 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Product</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Product Details</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-
-body{
-margin:0;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-background:#f5f6fa;
-color:#111;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Telegram ichida faqat kontent skrol bo'ladi */
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f5f6fa;
+  color: #111;
 }
 
-a{
-text-decoration:none;
-color:inherit;
-}
+a { text-decoration: none; color: inherit; }
+* { box-sizing: border-box; }
 
-*{box-sizing:border-box;}
-
-body{
-margin:0;
-font-family:system-ui;
-background:#f5f5f5;
-overflow-x:hidden;
-padding-bottom:80px;
+/* FAOQAT SHU DIV SKROL BO'LADI */
+.main-content {
+  height: calc(100vh - 65px); /* Menyu balandligi chegirildi */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  padding-bottom: 30px;
 }
 
 /* HEADER */
-.header{
-background: rgba(255,255,255,0.9);
-backdrop-filter: blur(10px);
-padding:14px;
-display:flex;
-align-items:center;
-gap:10px;
-border-bottom:1px solid #eee;
-position:sticky;
-top:0;
-z-index:10;
+.header {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.back-btn{
-text-decoration:none;
-background:#6a5acd;
-color:white;
-padding:7px 14px;
-border-radius:50px;
-font-size:13px;
-font-weight:600;
-display:inline-block;
+.back-btn {
+  background: #6a5acd;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-/* PRODUCT */
-.product{
-background:white;
-margin:12px;
-border-radius:16px;
-padding:16px;
-text-align:center;
+/* PRODUCT CONTAINER */
+.product-container {
+  position: relative;
+  margin: 12px;
 }
 
-.product img{
-width:200px;
-max-width:100%;
-border-radius:14px;
+/* RASM BLOKI - KATTA VA CHIROYLI */
+.image-box {
+  background: white;
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  position: relative;
+  width: 100%;
 }
 
-.name{
-font-size:18px;
-margin-top:10px;
-font-weight:600;
+.image-box img {
+  width: 100%;
+  max-width: 280px; /* Rasm katta va sifatli chiqishi uchun */
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
 }
 
-.price{
-color:#6a5acd;
-font-weight:600;
-margin-top:6px;
+/* SHAFFOF YURAKCHA (Rasm burchagida) */
+.heart {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 22px;
+  color: #b0b0b5; /* Bosilmaganda och kulrang kontur */
+  z-index: 5;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.desc{
-margin-top:10px;
-font-size:14px;
-color:#555;
-line-height:1.4;
+.heart:active { transform: scale(1.2); }
+.heart.active { color: #ff3b30; }
+
+/* MAHSULOT DETALLARI */
+.details-box {
+  background: white;
+  margin-top: 12px;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
-/* COUNTER */
-.counter{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:14px;
-margin-top:14px;
+.name {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
 }
 
-.counter button{
-width:34px;
-height:34px;
-border:none;
-border-radius:8px;
-background:#6a5acd;
-color:white;
-font-size:18px;
+.price {
+  color: #6a5acd;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 15px;
 }
 
-#counter{
-font-size:16px;
-font-weight:600;
+.desc-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
 }
 
-/* BUTTON */
-.add-btn{
-margin-top:14px;
-background:#6a5acd;
-color:white;
-padding:12px;
-border-radius:12px;
-border:none;
-width:100%;
-font-size:15px;
-font-weight:600;
+.desc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 20px;
 }
+
+/* COUNTER ZAMONAVIY USLUBDA */
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f1f2f6;
+  padding: 6px;
+  border-radius: 16px;
+  width: 130px;
+  margin: 0 auto 20px auto;
+}
+
+.counter button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  color: #111;
+  font-size: 18px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+#counter {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* SAVATGA QO'SHISH TUGMASI */
+.add-btn {
+  background: #6a5acd;
+  color: white;
+  padding: 15px;
+  border-radius: 16px;
+  border: none;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.add-btn:active {
+  background: #574bba;
+}
+
+/* TOAST BILDIRISHNOMA (Alert o'rniga zamonaviy xabar) */
+.toast {
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 2000;
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast.show { top: 20px; }
 
 /* BOTTOM NAV */
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:rgba(255,255,255,0.9);
-backdrop-filter: blur(10px);
-display:flex;
-justify-content:space-around;
-padding:12px;
-border-top:1px solid #eee;
+.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
+  z-index: 1000;
+  padding: 0 10px;
 }
 
-
-.heart{
-position:absolute;
-top:10px;
-right:10px;
-width:32px;
-height:32px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-background:white;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-font-size:16px;
+.bottom a {
+  color: #b0b0b5;
+  font-size: 22px;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
 }
 
-.heart.active{
-color:red;
-}
-
-.heart{
-position:absolute;
-top:8px;
-right:8px;
-background:white;
-border-radius:50%;
-width:28px;
-height:28px;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-}
-.heart.active{color:red;}
-
-
-.product{
-position:relative;
-}
-
+.bottom a:active { transform: scale(0.9); }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-<a href="index.html" class="back-btn">← Back</a>
+<div id="toast" class="toast">Savatga qo‘shildi!</div>
+
+<div class="main-content">
+
+  <div class="header">
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>
+  </div>
+
+  <div class="product-container" id="productBox">
+    <div class="image-box">
+      <div class="heart" id="favBtn" onclick="toggleFav(event)">
+        <i class="fa-regular fa-heart"></i>
+      </div>
+      <img id="pImg" src="">
+    </div>
+
+    <div class="details-box">
+      <div class="name" id="pName"></div>
+      <div class="price" id="pPrice"></div>
+      
+      <div class="desc-title">Mahsulot haqida</div>
+      <div class="desc" id="pDesc"></div>
+
+      <div class="counter">
+        <button onclick="minus()">-</button>
+        <span id="counter">1</span>
+        <button onclick="plus()">+</button>
+      </div>
+
+      <button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
+    </div>
+  </div>
+
 </div>
 
-<!-- PRODUCT -->
-<div class="product">
-<div class="heart" id="favBtn" onclick="toggleFav(event, product.id, this)">♡</div>
-
-<img id="pImg">
-
-<div class="name" id="pName"></div>
-<div class="price" id="pPrice"></div>
-
-<div class="desc" id="pDesc"></div>
-
-<div class="counter">
-<button onclick="minus()">-</button>
-<span id="counter">1</span>
-<button onclick="plus()">+</button>
-</div>
-
-<button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
-
+<div class="bottom">
+  <a href="index.html"><i class="fa-solid fa-house"></i></a>
+  <a href="categories.html"><i class="fa-solid fa-list"></i></a>
+  <a href="cart.html"><i class="fa-solid fa-basket-shopping"></i></a>
+  <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
 </div>
 
 <script>
+// Telegram sozlamalari
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
+    Telegram.WebApp.disableVerticalSwipes();
+  }
+}
 
-/* URL */
+/* URL PARAMS */
 const url = new URLSearchParams(window.location.search);
 const id = url.get("id");
 
-/* DATA */
+/* DATA (XATOLARI TUZATILDI: VERGULLAR QO'YILDI) */
 const allProducts = [
-
-{id:"termos1", name:"Termos 1L", price:120000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"1 litr termos. 12 soat issiq saqlaydi."},
-{id:"termos2", name:"Termos 2L", price:150000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"2 litr katta termos. Sayohat uchun zo‘r."},
-{id:"termos3", name:"Sport Termos", price:110000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Sport uchun yengil termos."},
-
-{id:"blender1", name:"Blender 3x1", price:220000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"3 ta funksiyali blender."},
-{id:"blender2", name:"Mini Blender", price:160000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Mini blender. Oshxona uchun qulay."},
-{id:"blender3", name:"Professional Blender", price:390000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Professional kuchli blender."},
-
-{id:"qozon1", name:"Qozon 5L", price:180000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 litr qozon. Qalin temir."},
-{id:"qozon2", name:"Qozon 10L", price:260000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"10 litr katta qozon."},
-
-{id:"mikser1", name:"Mikser 5 Speed", price:150000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 tezlikli mikser."},
-{id:"mikser2", name:"Mini Mikser", price:95000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Kichik mikser. Arzon variant."},
-
-{id:"idish1", name:"Idishlar To‘plami", price:150000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Oshxona uchun idishlar komplekti."},
-{id:"idish2", name:"Premium Idishlar", price:260000 img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Premium sifatli idishlar."}
-
+  {id:"termos1", name:"Termos 1L", price:120000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"1 litr termos. 12 soat issiq saqlaydi. Sifatli zanglamas po'latdan yasalgan."},
+  {id:"termos2", name:"Termos 2L", price:150000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"2 litr katta termos. Oila va sayohat uchun eng zo‘r tanlov."},
+  {id:"termos3", name:"Sport Termos", price:110000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Sport uchun qulay va yengil ixcham termos."},
+  {id:"blender1", name:"Blender 3x1", price:220000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"3 ta funksiyali yuqori sifatli blender. Mevalar va muzlarni oson maydalaydi."},
+  {id:"blender2", name:"Mini Blender", price:160000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Mini blender. Har qanday sharoitda oshxona uchun juda qulay."},
+  {id:"blender3", name:"Professional Blender", price:390000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Professional va o'ta kuchli blender, og'ir ishlar uchun."},
+  {id:"qozon1", name:"Qozon 5L", price:180000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 litrli qalin quyma temir qozon. Ovqatlar mazali pishadi."},
+  {id:"qozon2", name:"Qozon 10L", price:260000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"10 litrli katta va baquvvat qozon, katta oilalar va marosimlar uchun."},
+  {id:"mikser1", name:"Mikser 5 Speed", price:150000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 xil tezlik rejimiga ega qulay oshxona mikseri."},
+  {id:"mikser2", name:"Mini Mikser", price:95000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Kichik va ixcham mikser. Hamyonbop va qulay variant."},
+  {id:"idish1", name:"Idishlar To‘plami", price:150000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Oshxona bezagi uchun maxsus sifatli idishlar komplekti."},
+  {id:"idish2", name:"Premium Idishlar", price:260000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Premium turkumidagi nafis va chidamli idishlar to'plami."}
 ];
 
 /* PRODUCT TOPISH */
 const product = allProducts.find(p => String(p.id) === String(id));
 
-/* ❤️ TEKSHIRISH */
-const favs = JSON.parse(localStorage.getItem("favs")) || [];
-
-const favBtn = document.getElementById("favBtn");
-
-if(product && favs.includes(product.id)){
-favBtn.classList.add("active");
-favBtn.innerText = "♥";
-}else{
-favBtn.classList.remove("active");
-favBtn.innerText = "♡";
-}
-
-/* CHIQARISH */
-if(product){
-document.getElementById("pName").innerText = product.name;
-document.getElementById("pPrice").innerText = product.price.toLocaleString() + " so'm";
-document.getElementById("pImg").src = product.img;
-document.getElementById("pDesc").innerText = product.desc;
-}else{
-document.querySelector(".product").innerHTML = "<p>Mahsulot topilmadi</p>";
-}
-
-/* COUNTER */
-let count = 1;
-
-function plus(){
-count++;
-document.getElementById("counter").innerText = count;
-}
-
-function minus(){
-if(count > 1){
-count--;
-document.getElementById("counter").innerText = count;
-}
-}
-
-/* SAVAT (FIX QILINDI) */
-function addToCart(){
-
-if(!product) return;
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-// borligini tekshirish
-let existing = cart.find(item => item.id === product.id);
-
-if(existing){
-existing.qty += count;
-}else{
-cart.push({
-id:product.id,
-name:product.name,
-price:product.price,
-img:product.img,
-qty:count
-});
-}
-
-localStorage.setItem("cart", JSON.stringify(cart));
-
-alert("Mahsulot savatga qo‘shildi");
-}
-
-function toggleFav(e, id, el){
-e.preventDefault();
-e.stopPropagation();
-
+/* FAVORITES TEKSHIRISH VA YUKLASH */
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
+const favBtn = document.getElementById("favBtn");
+const icon = favBtn.querySelector("i");
 
-// product.id ishlatamiz
-let pid = product.id;
+if (product) {
+  // Ma'lumotlarni chiqarish
+  document.getElementById("pName").innerText = product.name;
+  document.getElementById("pPrice").innerText = product.price.toLocaleString() + " so'm";
+  document.getElementById("pImg").src = product.img;
+  document.getElementById("pDesc").innerText = product.desc;
 
-if(favs.includes(pid)){
-favs = favs.filter(x => x !== pid);
-el.classList.remove("active");
-el.innerText = "♡";
-}else{
-favs.push(pid);
-el.classList.add("active");
-el.innerText = "♥";
+  // Yurakcha holati
+  if (favs.includes(product.id)) {
+    favBtn.classList.add("active");
+    icon.className = "fa-solid fa-heart";
+  } else {
+    favBtn.classList.remove("active");
+    icon.className = "fa-regular fa-heart";
+  }
+} else {
+  document.getElementById("productBox").innerHTML = "<p style='text-align:center; padding:50px; color:#888;'>Mahsulot topilmadi</p>";
 }
 
-localStorage.setItem("favs", JSON.stringify(favs));
+/* COUNTER LOGIC */
+let count = 1;
+function plus() {
+  count++;
+  document.getElementById("counter").innerText = count;
+}
+function minus() {
+  if (count > 1) {
+    count--;
+    document.getElementById("counter").innerText = count;
+  }
 }
 
+/* SAVATGA QO'SHISH FUNKSIYASI */
+function addToCart() {
+  if (!product) return;
 
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let existing = cart.find(item => item.id === product.id);
+
+  if (existing) {
+    existing.qty += count;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      img: product.img,
+      qty: count
+    });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // Zamonaviy Toast xabarni chiqarish
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+  setTimeout(() => { toast.classList.remove("show"); }, 2000);
+}
+
+/* SHAFFOF YURAKCHA TOGGLE FUNKSIYASI */
+function toggleFav(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!product) return;
+
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  const pid = product.id;
+
+  if (favs.includes(pid)) {
+    favs = favs.filter(x => x !== pid);
+    favBtn.classList.remove("active");
+    icon.className = "fa-regular fa-heart";
+  } else {
+    favs.push(pid);
+    favBtn.classList.add("active");
+    icon.className = "fa-solid fa-heart";
+  }
+
+  localStorage.setItem("favs", JSON.stringify(favs));
+  window.dispatchEvent(new Event('favsUpdated'));
+}
 </script>
-
-<!-- BOTTOM NAV -->
-<div class="bottom">
-<a href="index.html">🏠</a>
-<a href="cart.html">🛒</a>
-<a href="favorites.html">❤️</a>
-<a href="#">👤</a>
-</div>
 
 </body>
 </html>
