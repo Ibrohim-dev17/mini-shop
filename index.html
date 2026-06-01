@@ -19,6 +19,13 @@ html, body {
   overscroll-behavior: none;
   overflow-x: hidden;
 }
+html, body {
+  overscroll-behavior: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+}
+
 
 body{
 margin:0;
@@ -84,6 +91,12 @@ padding-bottom:10px;
 touch-action: pan-x;
 -webkit-overflow-scrolling: touch;
 }
+.banner-slider {
+  touch-action: pan-x;
+  overflow-x: scroll;
+  overscroll-behavior-x: contain;
+}
+
 
 .banner-slider::-webkit-scrollbar{
 display:none;
@@ -481,20 +494,21 @@ const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 
 function updateDots(){
-  const card = slider.querySelector(".banner-card");
-  const gap = 12;
-
-  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
+  const cards = document.querySelectorAll(".banner-card");
+  const index = Math.round(slider.scrollLeft / slider.clientWidth);
 
   dots.forEach(d => d.classList.remove("active"));
-
-  if(dots[index]){
-    dots[index].classList.add("active");
-  }
+  if(dots[index]) dots[index].classList.add("active");
 }
 
 slider.addEventListener("scroll", updateDots);
 window.addEventListener("load", updateDots);
+
+document.addEventListener("touchmove", function(e){
+  if (!e.target.closest(".banner-slider")) {
+    e.preventDefault();
+  }
+}, { passive: false });
 
 </script>
 
