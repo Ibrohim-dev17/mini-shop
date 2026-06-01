@@ -471,9 +471,7 @@ slider.addEventListener("mousedown", (e) => {
   scrollLeft = slider.scrollLeft;
 });
 
-// drag end
-slider.addEventListener("mouseleave", () => isDown = false);
-slider.addEventListener("mouseup", () => isDown = false);
+
 
 // drag move
 slider.addEventListener("mousemove", (e) => {
@@ -485,9 +483,7 @@ slider.addEventListener("mousemove", (e) => {
   slider.scrollLeft = scrollLeft - walk;
 });
 
-if(dots[index]){
-dots[index].classList.add("active");
-}
+
 
 });
 
@@ -509,6 +505,25 @@ slider.addEventListener("scroll", () => {
     slider.scrollTo({ left: maxScroll - 1, behavior: "instant" });
   }
 });
+
+const slider = document.getElementById("slider");
+const dots = document.querySelectorAll(".dot");
+
+function updateDots(){
+  const card = slider.querySelector(".banner-card");
+  const gap = 12;
+
+  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
+
+  dots.forEach(d => d.classList.remove("active"));
+
+  if(dots[index]){
+    dots[index].classList.add("active");
+  }
+}
+
+slider.addEventListener("scroll", updateDots);
+window.addEventListener("load", updateDots);
 
 
 </script>
