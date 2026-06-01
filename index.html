@@ -500,18 +500,15 @@ if (window.Telegram && Telegram.WebApp) {
 
 
 function updateDots(){
-  const cards = document.querySelectorAll(".banner-card");
-  const realCount = 3;
+  const width = slider.querySelector(".banner-card").offsetWidth + 12;
 
-  const gap = 12;
-  const width = slider.querySelector(".banner-card").offsetWidth + gap;
-  let i = Math.round(slider.scrollLeft / width) % realCount;
+  let i = Math.round(slider.scrollLeft / width) % 3;
+
+  if (!dots) return;
 
   dots.forEach(d => d.classList.remove("active"));
 
-  if(dots[i]){
-    dots[i].classList.add("active");
-  }
+  dots[i].classList.add("active");
 }
 
 
@@ -540,11 +537,8 @@ slider.addEventListener("scroll", () => {
 });
 
 
-
-
-
-
 let index = 0;
+let userScrolling = false;
 
 function autoSlide() {
   if (userScrolling) return;
@@ -555,14 +549,24 @@ function autoSlide() {
 
   index++;
 
-  if (index >= cards.length / 2) {
-    slider.scrollTo({ left: 0, behavior: "auto" });
-    index = 0;
-  } else {
-    slider.scrollTo({
-      left: index * width,
-      behavior: "smooth"
-    });
+  
+function autoSlide() {
+  if (userScrolling) return;
+
+  const width = slider.querySelector(".banner-card").offsetWidth + 12;
+
+  index++;
+
+  slider.scrollTo({
+    left: index * width,
+    behavior: "smooth"
+  });
+
+  if (index >= 3) {
+    setTimeout(() => {
+      slider.scrollTo({ left: 0, behavior: "auto" });
+      index = 0;
+    }, 600);
   }
 
   updateDots();
@@ -570,13 +574,15 @@ function autoSlide() {
 
 setInterval(autoSlide, 3000);
 
-let userScrolling = false;
-
 slider.addEventListener("touchstart", () => userScrolling = true);
 slider.addEventListener("touchend", () => {
   setTimeout(() => userScrolling = false, 2000);
 });
 
+
+slider.addEventListener("touchmove", e => {
+  e.stopPropagation();
+});
 
 </script>
 
