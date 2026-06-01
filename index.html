@@ -11,32 +11,6 @@
 
 <style>
 
-html, body {
-  overflow-x: hidden;
-}
-
-.banner-slider {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-}
-
-html{
-  overscroll-behavior: none;
-}
-
-html, body {
-  overscroll-behavior: none;
-  overflow-x: hidden;
-}
-html, body {
-  overscroll-behavior: none;
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: 100%;
-}
-
 
 body{
 margin:0;
@@ -272,6 +246,33 @@ padding:10px;
 border-top:1px solid #eee;
 font-size:18px;
 }
+
+html, body {
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui;
+  background: #f5f6fa;
+  touch-action: pan-y;
+}
+
+/* FIX banner swipe + Telegram */
+.banner-slider {
+  display: flex;
+  gap: 12px;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+
+.banner-slider::-webkit-scrollbar {
+  display: none;
+}
 </style>
 </head>
 
@@ -499,26 +500,59 @@ if (window.Telegram && Telegram.WebApp) {
 
 
 function updateDots(){
-  const card = slider.querySelector(".banner-card");
-  const gap = 12;
+  const cards = document.querySelectorAll(".banner-card");
+  const realCount = 3;
 
-  const index = Math.round(slider.scrollLeft / (card.offsetWidth + gap));
+  const gap = 12;
+  const width = cards[0].offsetWidth + gap;
+
+  let i = Math.round(slider.scrollLeft / width) % realCount;
 
   dots.forEach(d => d.classList.remove("active"));
 
-  if(dots[index]){
-    dots[index].classList.add("active");
+  if(dots[i]){
+    dots[i].classList.add("active");
   }
 }
 
 
 const slider = document.getElementById("slider");
+const items = Array.from(slider.children);
+
+// clone for infinite loop
+items.forEach(item => {
+  const clone = item.cloneNode(true);
+  slider.appendChild(clone);
+});
 const dots = document.querySelectorAll(".dot");
 
 
 slider.addEventListener("scroll", updateDots);
-window.addEventListener("load", updateDots);
 
+
+let index = 0;
+
+function autoSlide() {
+  const cards = document.querySelectorAll(".banner-card");
+  const gap = 12;
+  const width = cards[0].offsetWidth + gap;
+
+  index++;
+
+  if (index >= cards.length / 2) {
+    slider.scrollTo({ left: 0, behavior: "auto" });
+    index = 0;
+  } else {
+    slider.scrollTo({
+      left: index * width,
+      behavior: "smooth"
+    });
+  }
+
+  updateDots();
+}
+
+setInterval(autoSlide, 3000);
 
 </script>
 
