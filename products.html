@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Products</title>
+<title>Mahsulotlar</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<script src="data.js"></script>
 
 <style>
 html, body {
@@ -20,11 +22,7 @@ html, body {
   color: #111;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
+a { text-decoration: none; color: inherit; }
 * { box-sizing: border-box; }
 
 /* FAOQAT SHU QISM SKROL BO'LADI */
@@ -60,6 +58,7 @@ a {
 
 .header b {
   font-size: 18px;
+  text-transform: capitalize; /* Kategoriya nomini chiroyli bosh harfda chiqaradi */
 }
 
 /* PRODUCTS GRID */
@@ -80,9 +79,7 @@ a {
   position: relative;
 }
 
-.card:active {
-  transform: scale(0.97);
-}
+.card:active { transform: scale(0.97); }
 
 .card img {
   width: 100%;
@@ -97,15 +94,21 @@ a {
   margin: 8px 0 4px 0;
   font-size: 14px;
   font-weight: 500;
+  text-align: left;
+  /* Matn uzun bo'lsa chiroyli qisqartirish */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .price {
-  color: #6a5acd; /* Rang binafshaga moslandi */
+  color: #6a5acd;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  text-align: left;
 }
 
-/* SHAFFOF YURAKCHA - ORQASIDA OQ DOIRA YO'Q */
+/* ❤️ SHAFFOF YURAKCHA */
 .heart {
   position: absolute;
   top: 8px;
@@ -117,20 +120,15 @@ a {
   justify-content: center;
   cursor: pointer;
   font-size: 18px;
-  color: #b0b0b5; /* Bosilmaganda shaffof och kulrang kontur */
+  color: #b0b0b5;
   z-index: 2;
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.heart:active {
-  transform: scale(1.2);
-}
+.heart:active { transform: scale(1.2); }
+.heart.active { color: #ff3b30; }
 
-.heart.active {
-  color: #ff3b30; /* Bosilganda yorqin qizil */
-}
-
-/* PASTDAGI ICONLAR PANELI - YANGI ZAMONAVIY USLUB */
+/* PASTDAGI ICONLAR PANELI */
 .bottom {
   position: fixed;
   bottom: 0;
@@ -161,9 +159,12 @@ a {
   border-radius: 16px;
 }
 
-.bottom a:active {
-  transform: scale(0.9);
+.bottom a.active {
+  color: #6a5acd;
+  background: rgba(106, 90, 205, 0.08);
 }
+
+.bottom a:active { transform: scale(0.9); }
 </style>
 </head>
 
@@ -181,8 +182,8 @@ a {
 </div>
 
 <div class="bottom">
-  <a href="index.html"><i class="fa-solid fa-house"></i></a>
-  <a href="categories.html"><i class="fa-solid fa-list"></i></a>
+  <a href="index.html" id="navHome"><i class="fa-solid fa-house"></i></a>
+  <a href="categories.html" id="navCat"><i class="fa-solid fa-list"></i></a>
   <a href="cart.html"><i class="fa-solid fa-basket-shopping"></i></a>
   <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
 </div>
@@ -197,95 +198,99 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* URL PARAMS */
-const url = new URLSearchParams(window.location.search);
-const cat = url.get("cat");
+/* URL PARAMS ORQALI KATEGORIYANI ANIQLASH */
+const urlParams = new URLSearchParams(window.location.search);
+const cat = urlParams.get("cat");
+const from = urlParams.get("from");
 
-/* BARCHA DATA */
-const data = {
-  termos: [
-    {id:"termos1", name:"Termos 1L", price:"120 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-    {id:"termos2", name:"Termos 2L", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-    {id:"termos3", name:"Sport Termos", price:"110 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-  ],
-  blender: [
-    {id:"blender1", name:"Blender 3x1", price:"220 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-    {id:"blender2", name:"Mini Blender", price:"160 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-    {id:"blender3", name:"Professional Blender", price:"390 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-  ],
-  qozon: [
-    {id:"qozon1", name:"Qozon 5L", price:"180 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-    {id:"qozon2", name:"Qozon 10L", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-  ],
-  mikser: [
-    {id:"mikser1", name:"Mikser 5 Speed", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-    {id:"mikser2", name:"Mini Mikser", price:"95 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-  ],
-  idishlar: [
-    {id:"idish1", name:"Idishlar To‘plami", price:"150 000", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-    {id:"idish2", name:"Premium Idishlar", price:"260 000", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-  ]
-};
-
-/* TITLENI YANGILASH */
-if(cat && data[cat]){
-  document.getElementById("title").innerText = cat.toUpperCase();
+// Qayerdan kelganiga qarab pastki menyuni aktivlashtirish
+if(from === "categories") {
+  document.getElementById("navCat").classList.add("active");
+} else {
+  document.getElementById("navHome").classList.add("active");
 }
 
-/* FAVORITES */
+/* SEVIMLILAR (LOCAL STORAGE) */
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* PRODUCTS CHIQARISH (YANGILANDI) */
-const box = document.getElementById("productBox");
+/* TITLENI YANGILASH */
+if(cat){
+  document.getElementById("title").innerText = cat;
+}
 
-if(cat && data[cat]){
-  data[cat].forEach(p => {
+/* MARKAZIY `allProducts` (data.js) RO'YXATIDAN FILTER QILISH */
+const box = document.getElementById("productBox");
+const filteredProducts = allProducts.filter(p => p.category === cat);
+
+if(filteredProducts.length > 0){
+  filteredProducts.forEach(p => {
     let isFav = favs.includes(p.id);
     box.innerHTML += `
     <div class="card">
       <div class="heart ${isFav ? "active" : ""}" onclick="toggleFav(event,'${p.id}',this)">
-        <i class="${isFav ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
+        <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
       </div>
-      <a href="product.html?id=${p.id}">
+      <a href="product.html?id=${p.id}&cat=${cat}&from=${from || 'index'}">
         <img src="${p.img}">
         <p>${p.name}</p>
-        <div class="price">${p.price} so'm</div>
+        <div class="price">${p.price.toLocaleString()} so'm</div>
       </a>
     </div>
     `;
   });
 } else {
-  box.innerHTML = "<p style='padding:20px; text-align:center; color:#888;'>Mahsulot topilmadi</p>";
+  box.innerHTML = "<p style='grid-column: 1/-1; padding:40px; text-align:center; color:#888;'>Ushbu kategoriyada mahsulotlar mavjud emas 😕</p>";
 }
 
-/* ❤️ TOGGLE (YANGILANDI) */
+/* ❤️ SEVIMLILAR FUNKSIYASI */
 function toggleFav(e, id, el){
   e.preventDefault();
   e.stopPropagation();
-  
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
   let icon = el.querySelector("i");
   let index = favs.indexOf(id);
 
   if(index !== -1){
     favs.splice(index, 1);
     el.classList.remove("active");
-    icon.className = "fa-regular fa-heart"; /* Bo'sh konturli */
+    icon.className = "fa-regular fa-heart";
   } else {
     favs.push(id);
     el.classList.add("active");
-    icon.className = "fa-solid fa-heart"; /* Ichki to'la qizil */
+    icon.className = "fa-solid fa-heart";
   }
 
   localStorage.setItem("favs", JSON.stringify(favs));
+  
+  // Markaziy badgelarni real vaqtda yangilash uchun hodisalar
+  if (typeof updateBottomBadges === 'function') updateBottomBadges();
   window.dispatchEvent(new Event('favsUpdated'));
 }
 
-/* ORQAGA QAYTISH FUNKSIYASI */
-function goBack(){
-  const params = new URLSearchParams(window.location.search);
-  const from = params.get("from");
+/* TELEGRAM TEZKOR MAIN BUTTON */
+function updateTelegramMainButton() {
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
 
+    if (totalQty > 0) {
+      Telegram.WebApp.MainButton.setText(`Savatni ko'rish (${totalQty} ta mahsulot)`);
+      Telegram.WebApp.MainButton.show();
+      Telegram.WebApp.MainButton.onClick(function() {
+        window.location.href = "cart.html";
+      });
+    } else {
+      Telegram.WebApp.MainButton.hide();
+    }
+  }
+}
+
+// Boshlang'ich yuklashlar
+if (typeof updateBottomBadges === 'function') updateBottomBadges();
+updateTelegramMainButton();
+
+/* ORQAGA QAYTISH TIZIMI */
+function goBack(){
   if(from === "categories"){
     window.location.href = "categories.html";
   } else {
