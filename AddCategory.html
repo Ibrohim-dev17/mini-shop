@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yangi Kategoriya</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
+        .input-box { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ccc; margin-bottom: 20px; }
+        .btn-save { width: 100%; padding: 15px; background: #11998e; color: white; border: none; border-radius: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2>Yangi kategoriya kiriting</h2>
+    <input type="text" id="catName" class="input-box" placeholder="Kategoriya nomi...">
+    <button class="btn-save" onclick="saveCategory()">Saqlash</button>
+
+    <script>
+        function saveCategory() {
+            const name = document.getElementById('catName').value;
+            if (name) {
+                // LocalStorage orqali bazani olish
+                let db = JSON.parse(localStorage.getItem('adminDB')) || {};
+                db[name] = []; // Yangi kategoriya qo'shish
+                localStorage.setItem('adminDB', JSON.stringify(db));
+                
+                // Asosiy sahifaga qaytish
+                window.location.href = 'admin_panel.html';
+            } else {
+                alert("Iltimos, nom kiriting!");
+            }
+        }
+    </script>
+</body>
+</html>
