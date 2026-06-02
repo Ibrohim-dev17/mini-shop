@@ -164,11 +164,16 @@ img { max-width: 100%; }
   box-shadow: 0 4px 10px rgba(0,0,0,0.03);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+}
+.card a {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 .card img { height: 100px; width: 100%; object-fit: contain; }
-.card p { margin: 8px 0 4px 0; font-size: 14px; font-weight: 500; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.price { color: #6a5acd; font-weight: 700; margin-top: 5px; font-size: 14px; margin-bottom: 8px; }
+.card p { margin: 8px 0 4px 0; font-size: 14px; font-weight: 500; color: #333; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.price { color: #6a5acd; font-weight: 700; margin: 8px 0; font-size: 14px; }
+
 
 .heart {
   position: absolute;
@@ -355,7 +360,7 @@ function renderProducts(productsList) {
 
   productsList.forEach(p => {
     let isFav = favs.includes(p.id);
-    box.innerHTML += `
+        box.innerHTML += `
     <div class="card">
       <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
         <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
@@ -367,6 +372,7 @@ function renderProducts(productsList) {
       </a>
       <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
     </div>`;
+
   });
 }
 
