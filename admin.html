@@ -2,91 +2,71 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <title>Admin Panel</title>
     <style>
-        :root { --main: #6a5acd; }
-        body { font-family: system-ui; background: #f4f4f9; padding: 20px; }
+        body { font-family: sans-serif; display: flex; height: 100vh; margin: 0; }
         
-        /* Kategoriya paneli uchun yangi uslublar */
-        .category-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: #fff;
-            padding: 15px;
-            border-radius: 12px;
-            overflow-x: auto; /* Agar juda ko'p bo'lsa scroll qiladi */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        .add-btn {
-            background: var(--main);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-            font-size: 20px;
-        }
+        /* Chap menyu */
+        .sidebar { width: 250px; background: #333; color: white; padding: 20px; }
+        .menu-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #444; }
+        .menu-item:hover { background: #444; }
 
-        .category-item {
-            background: #eee;
-            padding: 8px 15px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
+        /* Asosiy kontent */
+        .content { flex-grow: 1; padding: 30px; background: #f4f4f4; }
+        .page { display: none; }
+        .page.active { display: block; }
 
-        .category-item i { cursor: pointer; color: #ff6b6b; }
+        /* Kategoriya stilgi */
+        .category-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px #ccc; }
+        .cat-list { margin-top: 20px; }
+        .cat-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
 
-<div class="category-container">
-    <div class="add-btn" onclick="addCategoryPrompt()">
-        <i class="fas fa-plus"></i>
-    </div>
-    
-    <div id="categoryList" style="display: flex; gap: 10px;">
+<div class="sidebar">
+    <h3>Admin Panel</h3>
+    <div class="menu-item" onclick="showPage('dashboard')">Bosh sahifa</div>
+    <div class="menu-item" onclick="showPage('categories')">Kategoriyalar</div>
+</div>
+
+<div class="content">
+    <div id="categories" class="page">
+        <div class="category-card">
+            <h2>Kategoriyalar Boshqaruvi</h2>
+            <button onclick="addCategory()">+ Yangi Kategoriya qo'shish</button>
+            
+            <div class="cat-list" id="cList">
+                </div>
         </div>
+    </div>
 </div>
 
 <script>
-    let categories = ["Elektronika", "Kiyim-kechak", "Uy buyumlari"];
+    let categories = [];
 
-    function renderCategories() {
-        const list = document.getElementById('categoryList');
-        list.innerHTML = categories.map(cat => `
-            <div class="category-item">
-                ${cat}
-                <i class="fas fa-times" onclick="removeCategory('${cat}')"></i>
-            </div>
-        `).join('');
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 
-    function addCategoryPrompt() {
-        const name = prompt("Yangi kategoriya nomi:");
+    function addCategory() {
+        const name = prompt("Kategoriya nomini kiriting:");
         if (name) {
             categories.push(name);
-            renderCategories();
+            renderList();
         }
     }
 
-    function removeCategory(name) {
-        categories = categories.filter(c => c !== name);
-        renderCategories();
+    function renderList() {
+        const list = document.getElementById('cList');
+        list.innerHTML = categories.map(c => `
+            <div class="cat-item">
+                <span>${c}</span>
+                <button onclick="deleteCategory('${c}')">O'chirish</button>
+            </div>
+        `).join('');
     }
-
-    // Boshlang'ich render
-    renderCategories();
 </script>
-
 </body>
 </html>
