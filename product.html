@@ -1,73 +1,83 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mahsulot tafsilotlari</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* ... Oldingi stillar ... */
-        .counter { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 20px 0; }
-        .counter button { width: 40px; height: 40px; border: none; border-radius: 12px; background: #eee; font-size: 20px; cursor: pointer; }
-        .bottom { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; padding: 0 20px; z-index: 1000; }
-        .bottom i { font-size: 24px; color: #6a5acd; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Mahsulot tafsilotlari</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="data.js"></script>
+<style>
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; background: #f5f6fa; color: #111; }
+a { text-decoration: none; color: inherit; }
+* { box-sizing: border-box; }
+.main-content { height: calc(100vh - 65px); overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 30px; }
+.header { background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 14px; display: flex; align-items: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; }
+.back-btn { background: #6a5acd; color: white; padding: 6px 14px; border-radius: 50px; font-size: 13px; cursor: pointer; }
+.product-container { margin: 12px; }
+.image-box { background: white; border-radius: 24px; padding: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; }
+.image-box img { width: 100%; max-width: 280px; height: auto; }
+.heart { position: absolute; top: 15px; right: 15px; font-size: 22px; color: #b0b0b5; cursor: pointer; }
+.heart.active { color: #ff3b30; }
+.details-box { background: white; margin-top: 12px; border-radius: 24px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+.name { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.price { color: #6a5acd; font-weight: 700; font-size: 20px; margin-bottom: 5px; }
+/* RATING STIL */
+.rating-box { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
+.stars { color: #ffc107; font-size: 14px; }
+.rating-text { font-size: 13px; color: #777; font-weight: 500; }
+/* --- */
+.desc-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.desc { font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 20px; }
+.counter { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; padding: 6px; border-radius: 16px; width: 130px; margin: 0 auto 20px auto; }
+.counter button { width: 36px; height: 36px; border: none; border-radius: 12px; background: white; font-weight: 600; }
+.add-btn { background: #6a5acd; color: white; padding: 15px; border-radius: 16px; border: none; width: 100%; font-size: 16px; font-weight: 600; }
+.bottom { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: rgba(255, 255, 255, 0.95); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 1000; }
+</style>
 </head>
 <body>
 
 <div class="main-content">
   <div class="header"><div onclick="history.back()" class="back-btn">Orqaga</div></div>
-  
-  <div class="product-container">
+  <div class="product-container" id="productBox">
     <div class="image-box">
       <div class="heart" id="favBtn" onclick="toggleFav()"><i class="fa-regular fa-heart"></i></div>
       <img id="pImg" src="">
     </div>
-    
     <div class="details-box">
       <div class="name" id="pName"></div>
       <div class="price" id="pPrice"></div>
-      
-      <div class="counter">
-        <button onclick="updateQty(-1)">-</button>
-        <span id="qty" style="font-size: 18px; font-weight: bold;">1</span>
-        <button onclick="updateQty(1)">+</button>
+      <div class="rating-box">
+        <div class="stars" id="pStars"></div>
+        <span class="rating-text" id="pRating"></span>
       </div>
-
+      <div class="desc-title">Mahsulot haqida</div>
+      <div class="desc" id="pDesc"></div>
       <button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
     </div>
   </div>
 </div>
 
-<div class="bottom">
-    <a href="index.html"><i class="fa-solid fa-house"></i></a>
-    <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
-    <a href="profile.html"><i class="fa-solid fa-user"></i></a>
-</div>
-
 <script>
-    let qty = 1;
+const urlParams = new URLSearchParams(window.location.search);
+const product = allProducts.find(p => String(p.id) === String(urlParams.get("id")));
 
-    // Yurakcha funksiyasi
-    function toggleFav() {
-        const btn = document.getElementById('favBtn');
-        btn.classList.toggle('active');
-        const icon = btn.querySelector('i');
-        icon.classList.toggle('fa-regular');
-        icon.classList.toggle('fa-solid');
-    }
+if (product) {
+  document.getElementById("pName").innerText = product.name;
+  document.getElementById("pPrice").innerText = product.price.toLocaleString() + " so'm";
+  document.getElementById("pImg").src = product.img;
+  document.getElementById("pDesc").innerText = product.desc;
 
-    // Sonni o'zgartirish
-    function updateQty(val) {
-        qty = Math.max(1, qty + val);
-        document.getElementById('qty').innerText = qty;
-    }
-
-    // Savatga qo'shish
-    function addToCart() {
-        alert("Mahsulot savatga qo'shildi: " + qty + " ta");
-        // Bu yerda localStorage yoki Telegram API orqali ma'lumotni saqlaysiz
-    }
+  // RATING LOGIKASI
+  const starsContainer = document.getElementById("pStars");
+  const ratingText = document.getElementById("pRating");
+  let starsHtml = "";
+  for (let i = 1; i <= 5; i++) {
+    starsHtml += i <= Math.round(product.rating) ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
+  }
+  starsContainer.innerHTML = starsHtml;
+  ratingText.innerText = `${product.rating} (${product.reviewsCount} ta sharh)`;
+}
 </script>
 </body>
 </html>
