@@ -2,85 +2,91 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --main: #6a5acd; }
         body { font-family: system-ui; background: #f4f4f9; padding: 20px; }
-        .card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { padding: 10px 20px; border-radius: 8px; border: none; background: #ddd; cursor: pointer; }
-        .tab-btn.active { background: var(--main); color: #fff; }
-        .content-section { display: none; }
-        .content-section.active { display: block; }
-        .item-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
-        .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 12px; }
-        .status-active { background: #d4edda; color: #155724; }
-        .status-sleep { background: #fff3cd; color: #856404; }
+        
+        /* Kategoriya paneli uchun yangi uslublar */
+        .category-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            overflow-x: auto; /* Agar juda ko'p bo'lsa scroll qiladi */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .add-btn {
+            background: var(--main);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        .category-item {
+            background: #eee;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .category-item i { cursor: pointer; color: #ff6b6b; }
     </style>
 </head>
 <body>
 
-<div class="tabs">
-    <button class="tab-btn active" onclick="showSection('products')">Mahsulotlar</button>
-    <button class="tab-btn" onclick="showSection('categories')">Kategoriyalar</button>
+<div class="category-container">
+    <div class="add-btn" onclick="addCategoryPrompt()">
+        <i class="fas fa-plus"></i>
+    </div>
+    
+    <div id="categoryList" style="display: flex; gap: 10px;">
+        </div>
 </div>
 
-<!-- Mahsulotlar Bo'limi -->
-<section id="products" class="content-section active">
-    <div class="card">
-        <h3>Yangi Mahsulot</h3>
-        <input type="text" id="pName" placeholder="Nomi" style="width:100%; margin-bottom:10px; padding:8px;">
-        <input type="file" id="pImgFile" accept="image/*" style="margin-bottom:10px;">
-        <button onclick="saveProduct()" class="tab-btn active">Saqlash</button>
-    </div>
-    <div id="pList"></div>
-</section>
-
-<!-- Kategoriyalar Bo'limi -->
-<section id="categories" class="content-section">
-    <div class="card">
-        <h3>Kategoriya qo'shish</h3>
-        <input type="text" id="catName" placeholder="Kategoriya nomi">
-        <button onclick="saveCategory()" class="tab-btn active">Qo'shish</button>
-    </div>
-    <div id="cList"></div>
-</section>
-
 <script>
-function showSection(id) {
-    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    event.target.classList.add('active');
-}
+    let categories = ["Elektronika", "Kiyim-kechak", "Uy buyumlari"];
 
-// Rasm yuklash (Base64 ga o'girish)
-function getBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
+    function renderCategories() {
+        const list = document.getElementById('categoryList');
+        list.innerHTML = categories.map(cat => `
+            <div class="category-item">
+                ${cat}
+                <i class="fas fa-times" onclick="removeCategory('${cat}')"></i>
+            </div>
+        `).join('');
+    }
 
-async function saveProduct() {
-    const file = document.getElementById('pImgFile').files[0];
-    let imgBase64 = "";
-    if (file) imgBase64 = await getBase64(file);
-    
-    // Serverga yuborish logikasi...
-    console.log("Ma'lumot:", { name: document.getElementById('pName').value, img: imgBase64 });
-    alert("Saqlandi!");
-}
+    function addCategoryPrompt() {
+        const name = prompt("Yangi kategoriya nomi:");
+        if (name) {
+            categories.push(name);
+            renderCategories();
+        }
+    }
 
-function saveCategory() {
-    const name = document.getElementById('catName').value;
-    // Baza logikasi...
-    alert("Kategoriya qo'shildi: " + name);
-}
+    function removeCategory(name) {
+        categories = categories.filter(c => c !== name);
+        renderCategories();
+    }
+
+    // Boshlang'ich render
+    renderCategories();
 </script>
+
 </body>
 </html>
