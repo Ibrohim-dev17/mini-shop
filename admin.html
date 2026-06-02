@@ -2,71 +2,101 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel</title>
+    <title>Admin Panel Pro</title>
     <style>
-        body { font-family: sans-serif; display: flex; height: 100vh; margin: 0; }
-        
-        /* Chap menyu */
-        .sidebar { width: 250px; background: #333; color: white; padding: 20px; }
-        .menu-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #444; }
-        .menu-item:hover { background: #444; }
-
-        /* Asosiy kontent */
-        .content { flex-grow: 1; padding: 30px; background: #f4f4f4; }
-        .page { display: none; }
-        .page.active { display: block; }
-
-        /* Kategoriya stilgi */
-        .category-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px #ccc; }
-        .cat-list { margin-top: 20px; }
-        .cat-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; margin: 0; background: #f4f4f9; }
+        .sidebar { width: 220px; background: #2c3e50; color: white; height: 100vh; padding: 20px; }
+        .menu-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #3e5871; transition: 0.3s; }
+        .menu-item:hover { background: #34495e; }
+        .content { flex-grow: 1; padding: 30px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; }
+        .cat-item { padding: 15px; border: 1px solid #eee; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h3>Admin Panel</h3>
-    <div class="menu-item" onclick="showPage('dashboard')">Bosh sahifa</div>
-    <div class="menu-item" onclick="showPage('categories')">Kategoriyalar</div>
+    <h3>Admin</h3>
+    <div class="menu-item" onclick="showSection('cat-section')">Kategoriyalar</div>
+    <div class="menu-item" onclick="alert('Boshqa sozlamalar...')">Sozlamalar</div>
 </div>
 
 <div class="content">
-    <div id="categories" class="page">
-        <div class="category-card">
-            <h2>Kategoriyalar Boshqaruvi</h2>
-            <button onclick="addCategory()">+ Yangi Kategoriya qo'shish</button>
-            
-            <div class="cat-list" id="cList">
-                </div>
-        </div>
+    <div id="cat-section" class="card">
+        <h2>Kategoriyalar</h2>
+        <button class="btn" onclick="addCategory()">+ Yangi Kategoriya</button>
+        <div id="cat-list"></div>
+    </div>
+
+    <div id="prod-section" class="card hidden">
+        <button class="btn" onclick="showSection('cat-section')">⬅️ Orqaga</button>
+        <h2 id="current-cat-title"></h2>
+        <input type="text" id="pName" placeholder="Mahsulot nomi">
+        <button class="btn" onclick="addProduct()">Mahsulot qo'shish</button>
+        <div id="prod-list"></div>
     </div>
 </div>
 
 <script>
-    let categories = [];
+    let db = JSON.parse(localStorage.getItem('adminDB')) || {}; // Ma'lumotlarni saqlash
+    let activeCat = "";
 
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+    function showSection(id) {
+        document.getElementById('cat-section').classList.add('hidden');
+        document.getElementById('prod-section').classList.add('hidden');
+        document.getElementById(id).classList.remove('hidden');
+        if(id === 'cat-section') renderCategories();
     }
 
     function addCategory() {
-        const name = prompt("Kategoriya nomini kiriting:");
-        if (name) {
-            categories.push(name);
-            renderList();
+        const name = prompt("Kategoriya nomi:");
+        if(name && !db[name]) {
+            db[name] = [];
+            save(); renderCategories();
         }
     }
 
-    function renderList() {
-        const list = document.getElementById('cList');
-        list.innerHTML = categories.map(c => `
+    function renderCategories() {
+        const list = document.getElementById('cat-list');
+        list.innerHTML = Object.keys(db).map(cat => `
             <div class="cat-item">
-                <span>${c}</span>
-                <button onclick="deleteCategory('${c}')">O'chirish</button>
+                <span onclick="openCategory('${cat}')" style="cursor:pointer; font-weight:bold;">${cat}</span>
+                <button onclick="deleteCat('${cat}')">🗑️</button>
             </div>
         `).join('');
     }
+
+    function openCategory(name) {
+        activeCat = name;
+        document.getElementById('current-cat-title').innerText = "Kategoriya: " + name;
+        showSection('prod-section');
+        renderProducts();
+    }
+
+    function addProduct() {
+        const name = document.getElementById('pName').value;
+        if(name) {
+            db[activeCat].push(name);
+            document.getElementById('pName').value = "";
+            save(); renderProducts();
+        }
+    }
+
+    function renderProducts() {
+        const list = document.getElementById('prod-list');
+        list.innerHTML = db[activeCat].map((p, i) => `
+            <div class="cat-item">${p} <button onclick="delProd(${i})">O'chirish</button></div>
+        `).join('');
+    }
+
+    function save() { localStorage.setItem('adminDB', JSON.stringify(db)); }
+    function deleteCat(name) { delete db[name]; save(); renderCategories(); }
+    function delProd(index) { db[activeCat].splice(index, 1); save(); renderProducts(); }
+    
+    renderCategories();
 </script>
+
 </body>
 </html>
