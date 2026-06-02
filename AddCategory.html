@@ -15,18 +15,37 @@
     <div class="box">
         <h2>Yangi Kategoriya</h2>
         <input type="text" id="name" placeholder="Kategoriya nomi">
-        <input type="text" id="img" placeholder="Rasm havolasi (URL)">
+        
+        <label style="font-size: 14px; color: #666;">Rasm tanlash (ixtiyoriy):</label>
+        <input type="file" id="imgFile" accept="image/*">
+        
         <button class="btn" onclick="save()">Saqlash</button>
     </div>
 
     <script>
         function save() {
             const name = document.getElementById('name').value;
-            const img = document.getElementById('img').value;
-            if(!name || !img) return alert("Hamma maydonni to'ldiring!");
+            const fileInput = document.getElementById('imgFile');
             
+            if(!name) return alert("Iltimos, kategoriya nomini kiriting!");
+
+            const reader = new FileReader();
+            
+            // Agar rasm tanlangan bo'lsa
+            if(fileInput.files && fileInput.files[0]) {
+                reader.onload = function(e) {
+                    saveToDB(name, e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                // Agar rasm tanlanmasa, bo'sh joy yoki standart rasm bilan saqlash
+                saveToDB(name, 'https://via.placeholder.com/60?text=No+Img');
+            }
+        }
+
+        function saveToDB(name, imgData) {
             let db = JSON.parse(localStorage.getItem('adminDB')) || [];
-            db.push({ name, img });
+            db.push({ name, img: imgData });
             localStorage.setItem('adminDB', JSON.stringify(db));
             window.location.href = 'SavedCategories.html';
         }
