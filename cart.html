@@ -8,7 +8,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<!-- DATA.JS ENG TEPADA BO'LISHI SHART -->
+<!-- DATA.JS TEPADA BO'LISHI SHART -->
 <script src="data.js"></script>
 
 <style>
@@ -202,7 +202,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 4px;
-  color: #444; /* Bu yerda CSS xatoligi to'g'rilandi (+px o'chirildi) */
+  color: #444;
 }
 
 .input-group input, .input-group textarea {
@@ -322,7 +322,7 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <script>
-// Telegram sozlamalari
+// Telegram WebApp yuklash
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -334,10 +334,10 @@ if (window.Telegram && Telegram.WebApp) {
 const listBox = document.getElementById("cartList");
 const totalBlock = document.getElementById("totalBlock");
 
-// Telegram tugmasi bosilganda faqat bir marta ishlashi uchun bitta global bog'lanish yaratamiz
+// MUAMMONING ASOSIY YECHIMI: Hodisani global darajada faqat bir marta bog'laymiz!
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
-  Telegram.WebApp.MainButton.offClick(openOrderModal); // Eski dublikatlarni tozalash
-  Telegram.WebApp.MainButton.onClick(openOrderModal);  // Faqat bitta toza eshituvchi
+  Telegram.WebApp.MainButton.offClick(openOrderModal); // Eski dublikatlarni o'chirish
+  Telegram.WebApp.MainButton.onClick(openOrderModal);  // Faqat 1 ta faol eshituvchi
 }
 
 /* SAVATNI EKRAINGA RENDERING QILISH */
@@ -353,6 +353,7 @@ function renderCart() {
         <a href="index.html" style="display:inline-block; margin-top:15px; background:#6a5acd; color:white; padding:8px 20px; border-radius:50px; font-size:14px;">Xarid qilish</a>
       </div>`;
     totalBlock.style.display = "none";
+    
     if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
       Telegram.WebApp.MainButton.hide();
     }
@@ -386,10 +387,13 @@ function renderCart() {
   document.getElementById("totalItems").innerText = totalQty + " ta";
   document.getElementById("totalPrice").innerText = totalPrice.toLocaleString() + " so'm";
 
-  // MainButton matnini xavfsiz yangilash
+  // MainButton matnini xatolarsiz real vaqtda yangilash
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
     Telegram.WebApp.MainButton.setText(`BUYURTMA BERISH (${totalPrice.toLocaleString()} so'm)`);
-    Telegram.WebApp.MainButton.show();
+    // Agar tugma yashirin bo'lsa, uni faqat bir marta ko'rsatamiz
+    if (!Telegram.WebApp.MainButton.isVisible) {
+      Telegram.WebApp.MainButton.show();
+    }
   }
 
   if (typeof updateBottomBadges === 'function') updateBottomBadges();
@@ -406,7 +410,7 @@ function changeQty(id, delta) {
       cart = cart.filter(x => x.id !== id);
     }
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
+    renderCart(); // Savat va narxlar qayta chiziladi, lekin bosilish funksiyasi o'chib ketmaydi!
   }
 }
 
@@ -459,7 +463,7 @@ function sendOrder() {
   message += `\n💰 Jami summa: ${totalPrice.toLocaleString()} so'm`;
 
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
-    localStorage.removeItem("cart"); // Yuborishdan oldin tozalanadi
+    localStorage.removeItem("cart"); 
     Telegram.WebApp.sendData(message); 
   } else {
     alert("Buyurtma muvaffaqiyatli qabul qilindi! (Telegram muhitidan tashqaridasiz)");
@@ -470,7 +474,7 @@ function sendOrder() {
   }
 }
 
-// Boshlang'ich yuklash
+// Birinchi yuklash
 renderCart();
 </script>
 
