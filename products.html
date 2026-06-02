@@ -77,9 +77,13 @@ a { text-decoration: none; color: inherit; }
   box-shadow: 0 5px 12px rgba(0,0,0,0.04);
   transition: 0.2s;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.card:active { transform: scale(0.97); }
+/* Karta o'zining active animatsiyasini tugmadan tashqari holatda saqlaydi */
+.card:active { transform: scale(0.98); }
 
 .card img {
   width: 100%;
@@ -106,6 +110,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 14px;
   font-weight: 700;
   text-align: left;
+  margin-bottom: 8px;
 }
 
 /* ❤️ SHAFFOF YURAKCHA */
@@ -127,6 +132,33 @@ a { text-decoration: none; color: inherit; }
 
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
+
+/* SAVATGA QO'SHISH ICHKI TUGMASI */
+.add-to-cart-btn {
+  background: #f1f2f6;
+  color: #6a5acd;
+  border: none;
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  margin-top: auto;
+  position: relative;
+  z-index: 3;
+}
+.add-to-cart-btn:active { background: #6a5acd; color: white; transform: scale(0.95); }
+
+/* TOAST (BILDIRISHNOMA) */
+.toast {
+  position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
+  border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 2000;
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast.show { top: 20px; }
 
 /* PASTDAGI ICONLAR PANELI */
 .bottom {
@@ -169,6 +201,9 @@ a { text-decoration: none; color: inherit; }
 </head>
 
 <body>
+
+<!-- Toast xabarnoma elementi -->
+<div id="toast" class="toast">Savatga qo‘shildi!</div>
 
 <div class="main-content">
 
@@ -235,6 +270,7 @@ if(filteredProducts.length > 0){
         <p>${p.name}</p>
         <div class="price">${p.price.toLocaleString()} so'm</div>
       </a>
+      <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
     </div>
     `;
   });
@@ -261,10 +297,41 @@ function toggleFav(e, id, el){
   }
 
   localStorage.setItem("favs", JSON.stringify(favs));
-  
-  // Markaziy badgelarni real vaqtda yangilash uchun hodisalar
+
   if (typeof updateBottomBadges === 'function') updateBottomBadges();
   window.dispatchEvent(new Event('favsUpdated'));
+}
+
+/* SAVATGA QO'SHISH FUNKSIYASI */
+function addToCart(e, id) {
+  e.preventDefault();
+  e.stopPropagation(); // Karta havolasiga o'tib ketishni to'xtatadi
+  
+  let p = allProducts.find(x => x.id === id);
+  if (!p) return;
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let existing = cart.find(item => item.id === id);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // Telegram pastki tugmasini yangilash
+  updateTelegramMainButton();
+
+  if (typeof updateBottomBadges === 'function') {
+    updateBottomBadges();
+  }
+
+  // Toast bildirishnomasini ko'rsatish
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+  setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
 /* TELEGRAM TEZKOR MAIN BUTTON */
@@ -276,13 +343,17 @@ function updateTelegramMainButton() {
     if (totalQty > 0) {
       Telegram.WebApp.MainButton.setText(`Savatni ko'rish (${totalQty} ta mahsulot)`);
       Telegram.WebApp.MainButton.show();
-      Telegram.WebApp.MainButton.onClick(function() {
-        window.location.href = "cart.html";
-      });
     } else {
       Telegram.WebApp.MainButton.hide();
     }
   }
+}
+
+// Telegram MainButton bosilganda savatga o'tish hodisasini bir marta sozlash
+if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+  Telegram.WebApp.MainButton.onClick(function() {
+    window.location.href = "cart.html";
+  });
 }
 
 // Boshlang'ich yuklashlar
