@@ -8,6 +8,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+<!-- DATA.JS ENG TEPADA BO'LISHI SHART -->
 <script src="data.js"></script>
 
 <style>
@@ -201,7 +202,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 4px;
-  color: #44px;
+  color: #444; /* Bu yerda CSS xatoligi to'g'rilandi (+px o'chirildi) */
 }
 
 .input-group input, .input-group textarea {
@@ -321,6 +322,7 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <script>
+// Telegram sozlamalari
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -331,6 +333,12 @@ if (window.Telegram && Telegram.WebApp) {
 
 const listBox = document.getElementById("cartList");
 const totalBlock = document.getElementById("totalBlock");
+
+// Telegram tugmasi bosilganda faqat bir marta ishlashi uchun bitta global bog'lanish yaratamiz
+if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+  Telegram.WebApp.MainButton.offClick(openOrderModal); // Eski dublikatlarni tozalash
+  Telegram.WebApp.MainButton.onClick(openOrderModal);  // Faqat bitta toza eshituvchi
+}
 
 /* SAVATNI EKRAINGA RENDERING QILISH */
 function renderCart() {
@@ -378,11 +386,10 @@ function renderCart() {
   document.getElementById("totalItems").innerText = totalQty + " ta";
   document.getElementById("totalPrice").innerText = totalPrice.toLocaleString() + " so'm";
 
-  // Telegram native pastki tugmasini sozlash
+  // MainButton matnini xavfsiz yangilash
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
     Telegram.WebApp.MainButton.setText(`BUYURTMA BERISH (${totalPrice.toLocaleString()} so'm)`);
     Telegram.WebApp.MainButton.show();
-    Telegram.WebApp.MainButton.onClick(openOrderModal);
   }
 
   if (typeof updateBottomBadges === 'function') updateBottomBadges();
@@ -413,7 +420,7 @@ function clearCart() {
 function openOrderModal() {
   document.getElementById("orderModal").classList.add("open");
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
-    Telegram.WebApp.MainButton.hide(); // Oyna ochilganda pastki tugma xalaqit bermasligi uchun yashiramiz
+    Telegram.WebApp.MainButton.hide();
   }
 }
 
@@ -431,34 +438,31 @@ function sendOrder() {
   const phone = document.getElementById("custPhone").value.trim();
   const address = document.getElementById("custAddress").value.trim();
 
-  if (!name || phone === "+998" || !address) {
-    alert("Iltimos, barcha maydonlarni to'liq to'ldiring!");
+  if (!name || phone === "+998" || phone.length < 9 || !address) {
+    alert("Iltimos, barcha maydonlarni to'g'ri va to'liq to'ldiring!");
     return;
   }
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-  // Botga boradigan chiroyli xabar matni shabloni
   let message = `🛒 YANGI BUYURTMA!\n\n`;
   message += `👤 Mijoz: ${name}\n`;
   message += `📞 Telefon: ${phone}\n`;
   message += `📍 Manzil: ${address}\n\n`;
   message += `📦 Mahsulotlar:\n`;
-  
+
   cart.forEach((item, index) => {
     message += `${index + 1}. ${item.name} - ${item.qty} ta (${(item.price * item.qty).toLocaleString()} so'm)\n`;
   });
 
   message += `\n💰 Jami summa: ${totalPrice.toLocaleString()} so'm`;
 
-  // Telegram WebApp ga ma'lumotni xavfsiz uzatish
-  if (window.Telegram && Telegram.WebApp) {
-    Telegram.WebApp.sendData(message); // Ushbu kod ma'lumotni botga yuboradi va oynani avtomatik yopadi
-    localStorage.removeItem("cart"); // Savatni tozalaymiz
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
+    localStorage.removeItem("cart"); // Yuborishdan oldin tozalanadi
+    Telegram.WebApp.sendData(message); 
   } else {
-    // Agar brauzerda sinab ko'rayotgan bo'lsangiz
-    alert("Buyurtma muvaffaqiyatli qabul qilindi! (Telegramdan tashqarida bo'lganingiz sababli ma'lumot konsolga chiqarildi)");
+    alert("Buyurtma muvaffaqiyatli qabul qilindi! (Telegram muhitidan tashqaridasiz)");
     console.log(message);
     localStorage.removeItem("cart");
     closeOrderModal();
@@ -466,7 +470,7 @@ function sendOrder() {
   }
 }
 
-// Birinchi yuklanganda savatni tekshirish
+// Boshlang'ich yuklash
 renderCart();
 </script>
 
