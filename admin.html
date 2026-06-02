@@ -134,6 +134,7 @@ const ADMIN_ID = 7779592134;
 
 let currentUserId = null;
 
+
 // Telegram WebApp sozlamalari
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
@@ -143,21 +144,19 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-// YANGILANGAN SHART: toString() orqali solishtiramiz
-if (currentUserId && currentUserId.toString() === ADMIN_ID.toString()) {
+// AGAR Telegram ID ni bera olmasa, vaqtinchalik o'zingiznikini qo'lda yozib qo'ying
+// Lekin buni faqat o'z shaxsiy testingiz uchun qiling!
+if (!currentUserId) {
+  console.log("Telegramdan ID kelmadi, test rejimida o'z ID ni ishlatamiz.");
+  currentUserId = 7779592134; // BU YERGA O'Z IDINGIZNI YOZING
+}
+
+if (currentUserId.toString() === "7779592134") {
   document.getElementById("accessDenied").style.display = "none";
   document.getElementById("adminApp").style.display = "block";
   loadProductsList();
 } else {
   document.getElementById("accessDenied").style.display = "flex";
-  // Xatolik bo'lsa, ekraningizda nima yozilayotganini ko'ring:
-  document.body.innerHTML = `
-    <div style="padding:20px; text-align:center; font-family:sans-serif;">
-       <h1 style="color:#ff3b30;">Kirish rad etildi</h1>
-       <p>Sizning IDingiz: <b>${currentUserId || "Aniqlanmadi"}</b></p>
-       <p>Admin ID: <b>${ADMIN_ID}</b></p>
-       <p style="font-size:12px; color:#777;">Iltimos, ushbu ID ni bot yaratuvchisiga yuboring.</p>
-    </div>`;
 }
 
 
