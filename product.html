@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Product Details</title>
+<title>Mahsulot tafsilotlari</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<!-- DATA.JS ENG TEPADA BO'LISHI SHART -->
 <script src="data.js"></script>
 
 <style>
@@ -55,6 +54,7 @@ a { text-decoration: none; color: inherit; }
   border-radius: 50px;
   font-size: 13px;
   font-weight: 500;
+  cursor: pointer;
 }
 
 /* PRODUCT CONTAINER */
@@ -243,7 +243,7 @@ a { text-decoration: none; color: inherit; }
 
 <div class="main-content">
   <div class="header">
-    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>
+    <div onclick="goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</div>
   </div>
 
   <div class="product-container" id="productBox">
@@ -288,9 +288,11 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* URL PARAMS */
-const url = new URLSearchParams(window.location.search);
-const id = url.get("id");
+/* URL PARAMS ORQALI IDENTIFIKATSIYA */
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get("id");
+const cat = urlParams.get("cat");
+const from = urlParams.get("from");
 
 /* MAHSULOTNI DATA.JS ICHIDAN QIDIRISH */
 const product = allProducts.find(p => String(p.id) === String(id));
@@ -317,7 +319,7 @@ if (product) {
   document.getElementById("productBox").innerHTML = "<p style='text-align:center; padding:50px; color:#888;'>Mahsulot topilmadi</p>";
 }
 
-/* COUNTER */
+/* COUNTER LOGIKASI */
 let count = 1;
 function plus() {
   count++;
@@ -330,7 +332,7 @@ function minus() {
   }
 }
 
-/* SAVATGA QO'SHISH */
+/* SAVATGA QO'SHISH FUNKSIYASI */
 function addToCart() {
   if (!product) return;
 
@@ -350,18 +352,18 @@ function addToCart() {
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
-  
-  // Pastki menyudagi badgelarni darhol yangilash (data.js funksiyasi)
-  if (typeof updateBottomBadges === 'function') {
-    updateBottomBadges();
-  }
 
+  // Pastki menyudagi qizil badge belgilarini va Telegram tugmasini yangilash
+  if (typeof updateBottomBadges === 'function') updateBottomBadges();
+  updateTelegramMainButton();
+
+  // Toast bildirishnomasini chiqarish
   const toast = document.getElementById("toast");
   toast.classList.add("show");
   setTimeout(() => { toast.classList.remove("show"); }, 2000);
 }
 
-/* YURAKCHA TOGGLE */
+/* YURAKCHA TOGGLE (SEVIMLILAR) */
 function toggleFav(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -381,9 +383,43 @@ function toggleFav(e) {
   }
 
   localStorage.setItem("favs", JSON.stringify(favs));
-  
-  // Ma'lumot yangilanganini bildirish
+
+  // Global badgelarni darhol yangilash
+  if (typeof updateBottomBadges === 'function') updateBottomBadges();
   window.dispatchEvent(new Event('favsUpdated'));
+}
+
+/* TELEGRAM MAIN BUTTON INTEGRATSIYASI */
+function updateTelegramMainButton() {
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+
+    if (totalQty > 0) {
+      Telegram.WebApp.MainButton.setText(`Savatni ko'rish (${totalQty} ta mahsulot)`);
+      Telegram.WebApp.MainButton.show();
+      Telegram.WebApp.MainButton.onClick(function() {
+        window.location.href = "cart.html";
+      });
+    } else {
+      Telegram.WebApp.MainButton.hide();
+    }
+  }
+}
+
+// Dastlab badgelar va Telegram tugmasini yuklash
+if (typeof updateBottomBadges === 'function') updateBottomBadges();
+updateTelegramMainButton();
+
+/* INTELLEKTUAL ORQAGA QAYTISH FUNKSIYASI */
+function goBack() {
+  if (from === "banner") {
+    window.location.href = "index.html";
+  } else if (from === "categories" || from === "index") {
+    window.location.href = `products.html?cat=${cat}&from=${from}`;
+  } else {
+    window.location.href = "index.html"; // Standart holatda bosh sahifaga
+  }
 }
 </script>
 
