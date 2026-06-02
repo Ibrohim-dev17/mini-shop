@@ -234,6 +234,26 @@ a { text-decoration: none; color: inherit; }
 }
 
 .bottom a:active { transform: scale(0.9); }
+
+/* REYTING UCHUN USLUBLAR */
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+.stars {
+  color: #ffc107;
+  font-size: 16px;
+}
+.rating-text {
+  font-size: 14px;
+  color: #666;
+}
+.stars i { margin-right: 2px; }
+
+
 </style>
 </head>
 
@@ -257,6 +277,11 @@ a { text-decoration: none; color: inherit; }
     <div class="details-box">
       <div class="name" id="pName"></div>
       <div class="price" id="pPrice"></div>
+<div class="rating-container" onclick="handleRating()">
+  <div class="stars" id="pStars"></div>
+  <div class="rating-text" id="pReviews"></div>
+</div>
+
 
       <div class="desc-title">Mahsulot haqida</div>
       <div class="desc" id="pDesc"></div>
@@ -308,6 +333,14 @@ if (product) {
   document.getElementById("pImg").src = product.img;
   document.getElementById("pDesc").innerText = product.desc;
 
+  // REYTINGNI CHIZISH (YANGI QO'SHILGAN QISM)
+  const starsContainer = document.getElementById("pStars");
+  const fullStars = Math.round(product.rating);
+  starsContainer.innerHTML = Array(5).fill(0).map((_, i) => 
+    `<i class="${i < fullStars ? 'fa-solid' : 'fa-regular'} fa-star"></i>`
+  ).join('');
+  document.getElementById("pReviews").innerText = `${product.rating} (${product.reviewsCount} ta sharh)`;
+
   if (favs.includes(product.id)) {
     favBtn.classList.add("active");
     icon.className = "fa-solid fa-heart";
@@ -315,9 +348,8 @@ if (product) {
     favBtn.classList.remove("active");
     icon.className = "fa-regular fa-heart";
   }
-} else {
-  document.getElementById("productBox").innerHTML = "<p style='text-align:center; padding:50px; color:#888;'>Mahsulot topilmadi</p>";
 }
+
 
 /* COUNTER LOGIKASI */
 let count = 1;
@@ -421,6 +453,12 @@ function goBack() {
     window.location.href = "index.html"; // Standart holatda bosh sahifaga
   }
 }
+
+function handleRating() {
+  alert("Siz ushbu mahsulotni baholamoqchisiz!");
+}
+
+
 </script>
 
 </body>
