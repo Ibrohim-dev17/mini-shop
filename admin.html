@@ -143,13 +143,17 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-// Xavfsizlik filtri: Kirgan foydalanuvchi IDsi adminnikiga teng bo'lsa panelni ochadi
-if (currentUserId === ADMIN_ID || currentUserId === 7779592134) {
-
+// TEST: Agar ID 0 bo'lsa, demak Telegram noto'g'ri ulangan
+if (currentUserId == 7779592134) {
   document.getElementById("accessDenied").style.display = "none";
   document.getElementById("adminApp").style.display = "block";
   loadProductsList();
+} else {
+  // Agar ID noto'g'ri bo'lsa, sahifada o'sha ID ni ko'rsatib beradi
+  document.getElementById("accessDenied").style.display = "flex";
+  document.body.innerHTML = "<h1>Sizning IDingiz: " + currentUserId + "</h1><p>Admin ID: 7779592134</p>";
 }
+
 
 // Bildirishnoma chiqarish funksiyasi
 function showToast(text, isError = false) {
