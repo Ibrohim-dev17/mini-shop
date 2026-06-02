@@ -162,10 +162,13 @@ img { max-width: 100%; }
   padding: 12px;
   position: relative;
   box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .card img { height: 100px; width: 100%; object-fit: contain; }
-.card p { margin: 8px 0 4px 0; font-size: 14px; font-weight: 500; color: #333; }
-.price { color: #6a5acd; font-weight: 700; margin-top: 5px; font-size: 14px; }
+.card p { margin: 8px 0 4px 0; font-size: 14px; font-weight: 500; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.price { color: #6a5acd; font-weight: 700; margin-top: 5px; font-size: 14px; margin-bottom: 8px; }
 
 .heart {
   position: absolute;
@@ -185,6 +188,31 @@ img { max-width: 100%; }
 
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
+
+/* SAVATGA QO'SHISH ICHKI TUGMASI */
+.add-to-cart-btn {
+  background: #f1f2f6;
+  color: #6a5acd;
+  border: none;
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  margin-top: auto;
+}
+.add-to-cart-btn:active { background: #6a5acd; color: white; }
+
+/* TOAST (BILDIRISHNOMA) */
+.toast {
+  position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
+  border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 2000;
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast.show { top: 20px; }
 
 /* PASTDAGI ICONLAR PANELI */
 .bottom {
@@ -228,6 +256,8 @@ img { max-width: 100%; }
 </head>
 
 <body>
+
+<div id="toast" class="toast">Savatga qo‘shildi!</div>
 
 <div class="main-content">
 
@@ -322,7 +352,7 @@ function renderProducts(productsList) {
     box.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#888; padding:20px;">Hech narsa topilmadi 😕</p>`;
     return;
   }
-  
+
   productsList.forEach(p => {
     let isFav = favs.includes(p.id);
     box.innerHTML += `
@@ -335,6 +365,7 @@ function renderProducts(productsList) {
         <p>${p.name}</p>
         <div class="price">${p.price.toLocaleString()} so'm</div>
       </a>
+      <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
     </div>`;
   });
 }
@@ -361,6 +392,37 @@ function toggleFav(id, el) {
 }
 
 
+/* SAVATGA QO'SHISH FUNKSIYASI */
+function addToCart(e, id) {
+  e.preventDefault();
+  let p = allProducts.find(x => x.id === id);
+  if (!p) return;
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let existing = cart.find(item => item.id === id);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // Telegram pastki tugmasini yangilash
+  updateTelegramMainButton();
+
+  if (typeof updateBottomBadges === 'function') {
+    updateBottomBadges();
+  }
+
+  // Toast bildirishnomasini ko'rsatish
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+  setTimeout(() => { toast.classList.remove("show"); }, 1500);
+}
+
+
 /* HAQIQIY MULTI-QIDIRUV TIZIMI (MAKSIMAL OPTIMIZATSIYA) */
 document.getElementById("searchInput").addEventListener("input", e => {
   let val = e.target.value.trim().toLowerCase();
@@ -379,7 +441,7 @@ document.getElementById("searchInput").addEventListener("input", e => {
     bannerBlock.style.display = "none";
     categoriesBlock.style.display = "none";
     sectionTitle.innerText = "Qidiruv natijalari";
-    
+
     // barcha mahsulotlar (allProducts) ichidan mos keladiganlarini qidiramiz
     let filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
     renderProducts(filtered);
