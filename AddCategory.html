@@ -22,33 +22,47 @@
         <button class="btn" onclick="save()">Saqlash</button>
     </div>
 
-    <script>
-        function save() {
-            const name = document.getElementById('name').value;
-            const fileInput = document.getElementById('imgFile');
-            
-            if(!name) return alert("Iltimos, kategoriya nomini kiriting!");
+ <script>
+    function save() {
+        const name = document.getElementById('name').value;
+        const fileInput = document.getElementById('imgFile');
+        if(!name) return alert("Kategoriya nomini kiriting!");
 
+        if(fileInput.files && fileInput.files[0]) {
             const reader = new FileReader();
-            
-            // Agar rasm tanlangan bo'lsa
-            if(fileInput.files && fileInput.files[0]) {
-                reader.onload = function(e) {
-                    saveToDB(name, e.target.result);
+            reader.onload = function(e) {
+                // Rasm hajmini kichraytirish uchun Canvas ishlatamiz
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 200; // Rasm enini 200px qilib kichraytiramiz
+                    const scale = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scale;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7); // 70% sifat bilan saqlash
+                    saveToDB(name, dataUrl);
                 };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                // Agar rasm tanlanmasa, bo'sh joy yoki standart rasm bilan saqlash
-                saveToDB(name, 'https://via.placeholder.com/60?text=No+Img');
-            }
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            saveToDB(name, 'https://via.placeholder.com/60');
         }
+    }
 
-        function saveToDB(name, imgData) {
+    function saveToDB(name, imgData) {
+        try {
             let db = JSON.parse(localStorage.getItem('adminDB')) || [];
             db.push({ name, img: imgData });
             localStorage.setItem('adminDB', JSON.stringify(db));
             window.location.href = 'SavedCategories.html';
+        } catch(e) {
+            alert("Xotira to'ldi yoki rasm juda katta!");
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
