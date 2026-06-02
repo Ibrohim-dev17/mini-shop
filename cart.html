@@ -81,8 +81,17 @@ a { text-decoration: none; color: inherit; }
 }
 .input-group input:focus, .input-group textarea:focus { border-color: #6a5acd; background: #fff; }
 
-.submit-btn { background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.submit-btn:disabled { background: #a29bfe; cursor: not-allowed; }
+/* TELEFON TUGMASI USLUBLARI */
+.phone-verification-box {
+  background: #f0efff; border: 1px dashed #6a5acd; padding: 12px; border-radius: 14px; text-align: center; margin-bottom: 15px;
+}
+.phone-btn {
+  background: #24a1de; color: white; border: none; width: 100%; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 3px 10px rgba(36, 161, 222, 0.2);
+}
+.phone-btn.verified { background: #34c759; box-shadow: 0 3px 10px rgba(52, 199, 89, 0.2); cursor: not-allowed; }
+
+.submit-btn { background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px; }
+.submit-btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
 
 /* HISTORY CARD */
 .history-list { display: flex; flex-direction: column; gap: 10px; }
@@ -137,10 +146,17 @@ a { text-decoration: none; color: inherit; }
       <label>Yetkazib berish manzili</label>
       <textarea id="custAddress" rows="3" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
     </div>
-    <p style="font-size:12px; color:#777; margin: 5px 0 15px 0;"><i class="fa-solid fa-shield-halved"></i> Telefon raqamingiz Telegram orqali xavfsiz so'raladi.</p>
-    <button class="submit-btn" id="submitBtn" onclick="processOrderFlow()">
-      <i class="fa-solid fa-phone"></i> Davom etish va raqamni yuborish
-    </button>
+
+    <div class="phone-verification-box">
+      <p style="font-size:12px; color:#444; margin: 0 0 10px 0; font-weight:600;">
+        <i class="fa-solid fa-shield-halved" style="color:#6a5acd;"></i> Xavfsizlik: Telefon raqamingizni tasdiqlang
+      </p>
+      <button type="button" class="phone-btn" id="phoneAuthBtn" onclick="requestTelegramContact()">
+        <i class="fa-solid fa-phone"></i> Telegram raqamni ulashish
+      </button>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="sendOrder()" disabled>Buyurtmani yakunlash</button>
   </div>
 </div>
 
@@ -163,7 +179,8 @@ a { text-decoration: none; color: inherit; }
 
 <script>
 let isTelegramApp = false;
-let userTgId = "7779592134"; // Standart test ID
+let userTgId = "7779592134"; 
+let verifiedPhoneNumber = ""; // Tasdiqlangan raqam shu yerga tushadi
 
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
   isTelegramApp = true;
@@ -257,45 +274,62 @@ function openHistoryModal() {
         </div>`;
     });
   }
-  document.getElementById("historyModal").classList.add("add");
   document.getElementById("historyModal").classList.add("open");
 }
 function closeHistoryModal() { document.getElementById("historyModal").classList.remove("open"); }
 
-/* BUYURTMA BERISH BOSQICHLARI */
-function processOrderFlow() {
+
+/* TELEGRAMDAN RAQAMNI SO'RASH MANTIQI */
+function requestTelegramContact() {
+  if (isTelegramApp && Telegram.WebApp.requestContact) {
+    Telegram.WebApp.requestContact(function(callbackData) {
+      if (callbackData && callbackData.status === 'sent') {
+        // Raqam muvaffaqiyatli ulashildi. Telegram xavfsizlik yuzasidan raqam matnini to'g'ridan to'g'ri Mini App'ga bermasligi mumkin,
+        // lekin u botga shifrlangan maxsus xabar (contact) yuboradi. 
+        // Biz xaridorni aldolmasligi uchun jarayonni tasdiqlaymiz.
+        
+        verifiedPhoneNumber = "Telegram orqali tasdiqlandi ✅";
+        
+        const btn = document.getElementById("phoneAuthBtn");
+        btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Raqam tasdiqlandi`;
+        btn.classList.add("verified");
+        btn.onclick = null; // Qayta bosilmaydigan qilish
+        
+        // "Buyurtmani yakunlash" tugmasini faollashtiramiz
+        document.getElementById("submitBtn").disabled = false;
+      } else {
+        alert("Xavfsizlik uchun telefon raqamingizni tasdiqlashingiz shart!");
+      }
+    });
+  } else {
+    // Agar dasturchi brauzerda test qilayotgan bo'lsa (Fallback)
+    let mockPhone = prompt("Telegram raqamingizni kiriting (Faqat test rejimida ko'rinadi):");
+    if(mockPhone && mockPhone.trim().length > 5) {
+      verifiedPhoneNumber = mockPhone.trim();
+      const btn = document.getElementById("phoneAuthBtn");
+      btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Raqam tasdiqlandi`;
+      btn.classList.add("verified");
+      document.getElementById("submitBtn").disabled = false;
+    }
+  }
+}
+
+
+/* BUYURTMANI YUBORISH */
+function sendOrder() {
   const name = document.getElementById("custName").value.trim();
   const address = document.getElementById("custAddress").value.trim();
+  const submitBtn = document.getElementById("submitBtn");
 
   if (!name || !address) {
     alert("Iltimos, ismingiz va manzilingizni to'liq kiriting!");
     return;
   }
-
-  // Agar foydalanuvchi haqiqiy Telegram ichidan kirgan bo'lsa
-  if (isTelegramApp && Telegram.WebApp.requestContact) {
-    Telegram.WebApp.requestContact(function(callbackData) {
-      if (callbackData && callbackData.status === 'sent' && callbackData.response) {
-        // Telefon raqam muvaffaqiyatli olindi (Telegram bu ma'lumotni shifrlangan holda yuboradi)
-        // Biz xavfsiz va aniq bo'lishi uchun obyektdan raqamni ajratib olishga harakat qilamiz yoki default xabar beramiz
-        sendOrderWithDetails(name, address, "Telegram orqali tasdiqlandi");
-      } else {
-        alert("Buyurtmani yakunlash uchun telefon raqamingizni tasdiqlashingiz shart!");
-      }
-    });
-  } else {
-    // Agar brauzerdan ochilgan bo'lsa, qo'lda raqam so'raymiz (Test rejim uchun)
-    let manualPhone = prompt("Telefon raqamingizni kiriting (Masalan: +998901234567):");
-    if (manualPhone && manualPhone.trim().length > 5) {
-      sendOrderWithDetails(name, address, manualPhone.trim());
-    } else {
-      alert("Telefon raqam kiritilmadi!");
-    }
+  if (!verifiedPhoneNumber) {
+    alert("Iltimos, avval telefon raqamingizni tasdiqlang!");
+    return;
   }
-}
 
-function sendOrderWithDetails(name, address, phone) {
-  const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
   submitBtn.innerText = "Yuborilmoqda...";
 
@@ -304,15 +338,15 @@ function sendOrderWithDetails(name, address, phone) {
   let orderId = Math.floor(1000 + Math.random() * 9000);
   let orderDate = new Date().toLocaleDateString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
 
-  // Tarixga yozish
+  // Tarixga saqlash
   let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
   history.push({ id: orderId, date: orderDate, items: cart, total: totalPrice });
   localStorage.setItem("orderHistory", JSON.stringify(history));
 
-  // Admin guruhiga yoki bot egasiga boradigan to'liq xabar
+  // Admin / Guruh uchun xabar matni
   let message = `🛒 <b>YANGI BUYURTMA (ID: #${orderId})</b>\n\n`;
   message += `👤 <b>Mijoz:</b> ${name}\n`;
-  message += `📞 <b>Tel:</b> ${phone}\n`;
+  message += `📞 <b>Tel:</b> ${verifiedPhoneNumber}\n`;
   message += `📍 <b>Manzil:</b> ${address}\n\n`;
   message += `📦 <b>Mahsulotlar:</b>\n`;
   cart.forEach((item, index) => {
@@ -321,36 +355,37 @@ function sendOrderWithDetails(name, address, phone) {
   message += `\n💰 <b>Jami summa:</b> ${totalPrice.toLocaleString()} so'm`;
 
   const BOT_TOKEN = "8715142645:AAHpYkJ3HapkOD0V8efCIppiOpMkRp3ihO0";
-  const ADMIN_CHAT_ID = "7779592134";
 
-  // Admin yoki guruhga xarid ma'lumotlarini yuborish
+  // 1-Bosqich: Adminga ma'lumotlarni yuborish
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: ADMIN_CHAT_ID, text: message, parse_mode: "HTML" })
+    body: JSON.stringify({ chat_id: "7779592134", text: message, parse_mode: "HTML" })
   }).then(() => {
-    // Mijozning o'ziga ham botda tasdiq xabarini yuborish
-    let userMessage = `🎉 <b>Rahmat! Buyurtmangiz qabul qilindi.</b>\n\n<b>ID:</b> #${orderId}\n<b>Summa:</b> ${totalPrice.toLocaleString()} so'm\n\nTez orada operatorlarimiz siz bilan bog'lanishadi.`;
     
+    // 2-Bosqich: Xaridorning o'ziga botda tabrik xabari yuborish
     fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: userTgId, text: userMessage, parse_mode: "HTML" })
+      body: JSON.stringify({
+        chat_id: userTgId,
+        text: `🎉 <b>Buyurtmangiz muvaffaqiyatli qabul qilindi!</b>\n\n<b>ID:</b> #${orderId}\n<b>Jami:</b> ${totalPrice.toLocaleString()} so'm\n\nTez orada siz bilan bog'lanamiz.`,
+        parse_mode: "HTML"
+      })
     }).finally(() => {
       localStorage.removeItem("cart");
       closeOrderModal();
       renderCart();
-      alert("Buyurtmangiz muvaffaqiyatli qabul qilindi!");
+      alert("Buyurtmangiz muvaffaqiyatli yuborildi!");
       if (isTelegramApp && Telegram.WebApp.close) {
         Telegram.WebApp.close();
       }
     });
 
   }).catch(() => {
-    alert("Xatolik yuz berdi! Qayta urinib ko'ring.");
-  }).finally(() => {
+    alert("Xatolik yuz berdi!");
     submitBtn.disabled = false;
-    submitBtn.innerText = "Davom etish va raqamni yuborish";
+    submitBtn.innerText = "Buyurtmani yakunlash";
   });
 }
 
