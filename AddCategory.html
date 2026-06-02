@@ -22,47 +22,46 @@
         <button class="btn" onclick="save()">Saqlash</button>
     </div>
 
- <script>
+<script>
+    // Siz yuborgan to'g'ri havola
+    const API_URL = "https://script.google.com/macros/s/AKfycbyO_0Xgm0sz6j3-GGzpM_SKYXVCAUqo0go8l0irGq_8AN-lZAh3ImnnlGrY1Byrljvy8g/exec";
+
     function save() {
         const name = document.getElementById('name').value;
         const fileInput = document.getElementById('imgFile');
-        if(!name) return alert("Kategoriya nomini kiriting!");
+        
+        if(!name) return alert("Iltimos, kategoriya nomini kiriting!");
 
         if(fileInput.files && fileInput.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Rasm hajmini kichraytirish uchun Canvas ishlatamiz
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 200; // Rasm enini 200px qilib kichraytiramiz
-                    const scale = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scale;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7); // 70% sifat bilan saqlash
-                    saveToDB(name, dataUrl);
-                };
-                img.src = e.target.result;
+                sendToGoogleSheets(name, e.target.result);
             };
             reader.readAsDataURL(fileInput.files[0]);
         } else {
-            saveToDB(name, 'https://via.placeholder.com/60');
+            sendToGoogleSheets(name, ""); 
         }
     }
 
-    function saveToDB(name, imgData) {
-        try {
-            let db = JSON.parse(localStorage.getItem('adminDB')) || [];
-            db.push({ name, img: imgData });
-            localStorage.setItem('adminDB', JSON.stringify(db));
+    function sendToGoogleSheets(name, imgData) {
+        // Ma'lumotni Google Sheets'ga yuborish
+        fetch(API_URL, {
+            method: "POST",
+            mode: 'no-cors',
+            body: JSON.stringify({ 
+                action: "addCategory", 
+                name: name, 
+                img: imgData 
+            })
+        })
+        .then(() => {
+            alert("Muvaffaqiyatli saqlandi!");
             window.location.href = 'SavedCategories.html';
-        } catch(e) {
-            alert("Xotira to'ldi yoki rasm juda katta!");
-        }
+        })
+        .catch(err => alert("Xatolik yuz berdi: " + err));
     }
 </script>
+
 
 </body>
 </html>
