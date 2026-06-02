@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Saqlangan Kategoriyalar</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 10px; }
+        .card { background: white; padding: 10px; border-radius: 15px; display: flex; align-items: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <h2>Kiritilgan kategoriyalar</h2>
+    <div id="list"></div>
+    <button onclick="window.location.href='admin_panel.html'" style="margin-top:20px; width:100%; padding:15px;">Orqaga</button>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('adminDB')) || [];
+        const list = document.getElementById('list');
+        list.innerHTML = db.map(item => `
+            <div class="card">
+                <img src="${item.img}">
+                <h3>${item.name}</h3>
+            </div>
+        `).join('');
+    </script>
+</body>
+</html>
