@@ -23,43 +23,27 @@
     </div>
 
 <script>
-    // Siz yuborgan to'g'ri havola
-    const API_URL = "https://script.google.com/macros/s/AKfycbyO_0Xgm0sz6j3-GGzpM_SKYXVCAUqo0go8l0irGq_8AN-lZAh3ImnnlGrY1Byrljvy8g/exec";
+ function doGet() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  // Sarlavhani o'tkazib yuborib, JSON formatida jo'natamiz
+  var result = data.slice(1).map(function(row) {
+    return { name: row[1], img: row[2] };
+  });
+  return ContentService.createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
-    function save() {
-        const name = document.getElementById('name').value;
-        const fileInput = document.getElementById('imgFile');
-        
-        if(!name) return alert("Iltimos, kategoriya nomini kiriting!");
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  if (data.action == "addCategory") {
+    sheet.appendRow([new Date(), data.name, data.img]);
+    return ContentService.createTextOutput(JSON.stringify({status: "success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
 
-        if(fileInput.files && fileInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                sendToGoogleSheets(name, e.target.result);
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            sendToGoogleSheets(name, ""); 
-        }
-    }
-
-    function sendToGoogleSheets(name, imgData) {
-        // Ma'lumotni Google Sheets'ga yuborish
-        fetch(API_URL, {
-            method: "POST",
-            mode: 'no-cors',
-            body: JSON.stringify({ 
-                action: "addCategory", 
-                name: name, 
-                img: imgData 
-            })
-        })
-        .then(() => {
-            alert("Muvaffaqiyatli saqlandi!");
-            window.location.href = 'SavedCategories.html';
-        })
-        .catch(err => alert("Xatolik yuz berdi: " + err));
-    }
 </script>
 
 
