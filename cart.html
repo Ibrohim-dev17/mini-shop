@@ -2,533 +2,125 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Savat</title>
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="data.js"></script>
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f6fa;
-  color: #111;
-}
+:root { --primary: #6a5acd; --danger: #ff3b30; }
+body { font-family: sans-serif; background: #f8f9fa; margin: 0; padding-bottom: 120px; }
 
-a { text-decoration: none; color: inherit; }
-* { box-sizing: border-box; }
+/* CART ITEM */
+.cart-list { padding: 16px; }
+.cart-item { background: white; border-radius: 16px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.item-img { width: 60px; height: 60px; border-radius: 12px; background: #eee; }
+.item-info { flex: 1; }
+.item-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+.item-price { color: var(--primary); font-weight: 700; font-size: 13px; }
 
-.main-content {
-  height: calc(100vh - 65px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-  padding-bottom: 80px; /* Tugma uchun joy ajratildi */
-}
+.controls { display: flex; align-items: center; gap: 12px; }
+.qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #f0f0f0; font-weight: bold; }
+.delete-btn { color: var(--danger); cursor: pointer; padding: 5px; }
 
-/* HEADER */
-.header {
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(10px);
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #eee;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
+/* BUYURTMA TUGMASI (STICKY) */
+.checkout-panel { position: fixed; bottom: 70px; left: 16px; right: 16px; background: white; padding: 16px; border-radius: 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; z-index: 999; }
+.checkout-total { font-weight: 700; font-size: 18px; }
+.checkout-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; }
 
-.header b { font-size: 18px; }
-
-.clear-cart-btn {
-  color: #ff3b30;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-/* CART LIST */
-.cart-list { padding: 12px; }
-
-.cart-item {
-  background: white;
-  border-radius: 18px;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  position: relative;
-}
-
-.cart-item img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-  background: #fafafa;
-  border-radius: 12px;
-}
-
-.item-details { flex: 1; min-width: 0; }
-
-.item-name {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0 0 4px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 25px; /* O'chirish tugmasi uchun joy */
-}
-
-.item-price {
-  color: #6a5acd;
-  font-weight: 700;
-  font-size: 14px;
-}
-
-/* DONALAB O'CHIRISH TUGMASI */
-.delete-item-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  color: #ff3b30;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 4px;
-  transition: transform 0.2s;
-}
-.delete-item-btn:active {
-  transform: scale(0.85);
-}
-
-/* SANOQ TUGMALARI */
-.item-counter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #f1f2f6;
-  padding: 4px;
-  border-radius: 12px;
-}
-
-.item-counter button {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 8px;
-  background: white;
-  font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-
-.item-counter span {
-  font-size: 14px;
-  font-weight: 700;
-  min-width: 16px;
-  text-align: center;
-}
-
-/* JAMI SUMMA BLOKI */
-.total-box {
-  background: white;
-  margin: 12px;
-  padding: 16px;
-  border-radius: 18px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-}
-
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: #666;
-}
-
-.total-row.main {
-  font-size: 18px;
-  font-weight: 700;
-  color: #111;
-  border-top: 1px dashed #eee;
-  padding-top: 10px;
-  margin-top: 10px;
-}
-
-/* TELEGRAM TUGMASI CHIQMAGANDA ISHLAYDIGAN ZAXIRA TUGMA */
-.fallback-order-btn {
-  background: #2cb742;
-  color: white;
-  margin: 15px 12px;
-  padding: 15px;
-  border-radius: 16px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  display: none; /* Odatiy holatda yashirin, skript aniqlaydi */
-  box-shadow: 0 4px 15px rgba(44, 183, 66, 0.3);
-}
-.fallback-order-btn:active {
-  background: #249935;
-}
-
-/* BUYURTMA BERISH MODAL OYNASI */
-.modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: flex-end;
-  z-index: 2000;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.modal.open {
-  visibility: visible;
-  opacity: 1;
-}
-
-.modal-content {
-  background: white;
-  width: 100%;
-  border-radius: 24px 24px 0 0;
-  padding: 20px;
-  transform: translateY(100%);
-  transition: transform 0.3s ease;
-}
-
-.modal.open .modal-content {
-  transform: translateY(0);
-}
-
-.modal-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.close-modal {
-  color: #999;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.input-group { margin-bottom: 12px; }
-.input-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #444;
-}
-
-.input-group input, .input-group textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  outline: none;
-  font-size: 14px;
-  font-family: inherit;
-  background: #fafafa;
-}
-
-.input-group input:focus, .input-group textarea:focus {
-  border-color: #6a5acd;
-  background: #fff;
-}
-
-.submit-btn {
-  background: #6a5acd;
-  color: white;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 10px;
-}
-
-.submit-btn:active { background: #574bba; }
-
-/* BOTTOM NAV */
-.bottom {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: 65px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
-  z-index: 1000;
-  padding: 0 10px;
-}
-
-.bottom a {
-  color: #b0b0b5;
-  font-size: 22px;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px; height: 50px;
-  border-radius: 16px;
-}
-
-.bottom a.active {
-  color: #6a5acd;
-  background: rgba(106, 90, 205, 0.08);
-}
+/* TARIX BO'LIMI */
+.history-section { padding: 16px; margin-top: 20px; }
+.history-item { background: #fff; padding: 12px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; border: 1px solid #eee; }
 </style>
 </head>
-
 <body>
 
-<div class="main-content">
-  <div class="header">
-    <b>Savat</b>
-    <span class="clear-cart-btn" onclick="clearCart()"><i class="fa-solid fa-trash-can"></i> Tozalash</span>
-  </div>
-
-  <div class="cart-list" id="cartList"></div>
-
-  <div id="totalBlock" class="total-box" style="display: none;">
-    <div class="total-row">
-      <span>Mahsulotlar soni:</span>
-      <span id="totalItems">0 ta</span>
-    </div>
-    <div class="total-row main">
-      <span>Jami summa:</span>
-      <span id="totalPrice">0 so'm</span>
-    </div>
-  </div>
-  
-  <!-- ZAXIRA TUGMA: Agar Telegram MainButton ishlamay qolsa, ekran yuzasida chiqadi -->
-  <div id="fallbackBtn" class="fallback-order-btn" onclick="openOrderModal()">Buyurtma berish</div>
+<div class="cart-list" id="cartList"></div>
+<div id="checkoutPanel" class="checkout-panel" style="display:none;">
+    <div class="checkout-total" id="totalPriceText">0 so'm</div>
+    <button class="checkout-btn" onclick="openOrderModal()">Buyurtma berish</button>
 </div>
 
-<div class="modal" id="orderModal">
-  <div class="modal-content">
-    <div class="modal-title">
-      <span>Ma'lumotlarni kiriting</span>
-      <i class="fa-solid fa-xmark close-modal" onclick="closeOrderModal()"></i>
-    </div>
-    <div class="input-group">
-      <label>Ismingiz</label>
-      <input type="text" id="custName" placeholder="Masalan: Ali Valiyev">
-    </div>
-    <div class="input-group">
-      <label>Telefon raqamingiz</label>
-      <input type="tel" id="custPhone" value="+998">
-    </div>
-    <div class="input-group">
-      <label>Yetkazib berish manzili</label>
-      <textarea id="custAddress" rows="2" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
-    </div>
-    <button class="submit-btn" onclick="sendOrder()">Buyurtmani yakunlash</button>
-  </div>
-</div>
-
-<div class="bottom">
-  <a href="index.html"><i class="fa-solid fa-house"></i></a>
-  <a href="categories.html"><i class="fa-solid fa-list"></i></a>
-  <a href="cart.html" class="active"><i class="fa-solid fa-basket-shopping"></i></a>
-  <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+<div class="history-section">
+    <h4><i class="fa-solid fa-clock-rotate-left"></i> Buyurtmalar tarixi</h4>
+    <div id="orderHistory"></div>
 </div>
 
 <script>
-let isTelegramApp = false;
-
-if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
-  isTelegramApp = true;
-  Telegram.WebApp.ready();
-  Telegram.WebApp.expand();
-  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
-    Telegram.WebApp.disableVerticalSwipes();
-  }
-}
-
-const listBox = document.getElementById("cartList");
-const totalBlock = document.getElementById("totalBlock");
-const fallbackBtn = document.getElementById("fallbackBtn");
-
-if (isTelegramApp && Telegram.WebApp.MainButton) {
-  Telegram.WebApp.MainButton.offClick(openOrderModal);
-  Telegram.WebApp.MainButton.onClick(openOrderModal);
-}
-
-/* SAVATNI RENDERING QILISH */
 function renderCart() {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  listBox.innerHTML = "";
-
-  if (cart.length === 0) {
-    listBox.innerHTML = `
-      <div style="text-align:center; padding:60px 20px; color:#888;">
-        <i class="fa-solid fa-basket-shopping" style="font-size: 50px; margin-bottom:15px; color:#ccc;"></i>
-        <p style="font-size:16px; margin:0;">Savatingiz hozircha bo'sh</p>
-        <a href="index.html" style="display:inline-block; margin-top:15px; background:#6a5acd; color:white; padding:8px 20px; border-radius:50px; font-size:14px;">Xarid qilish</a>
-      </div>`;
-    totalBlock.style.display = "none";
-    fallbackBtn.style.display = "none";
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let list = document.getElementById("cartList");
+    let panel = document.getElementById("checkoutPanel");
     
-    if (isTelegramApp && Telegram.WebApp.MainButton) {
-      Telegram.WebApp.MainButton.hide();
+    list.innerHTML = "";
+    if (cart.length === 0) {
+        list.innerHTML = "<p style='text-align:center; color:#999;'>Savat bo'sh</p>";
+        panel.style.display = "none";
+    } else {
+        panel.style.display = "flex";
+        let total = 0;
+        cart.forEach(item => {
+            total += (item.price * item.qty);
+            list.innerHTML += `
+                <div class="cart-item">
+                    <div class="item-img"></div>
+                    <div class="item-info">
+                        <div class="item-title">${item.name}</div>
+                        <div class="item-price">${item.price.toLocaleString()} so'm</div>
+                    </div>
+                    <div class="controls">
+                        <i class="fa-solid fa-trash-can delete-btn" onclick="removeItem('${item.id}')"></i>
+                        <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                    </div>
+                </div>`;
+        });
+        document.getElementById("totalPriceText").innerText = total.toLocaleString() + " so'm";
     }
-    if (typeof updateBottomBadges === 'function') updateBottomBadges();
-    return;
-  }
-
-  totalBlock.style.display = "block";
-  let totalQty = 0;
-  let totalPrice = 0;
-
-  cart.forEach(item => {
-    totalQty += item.qty;
-    totalPrice += (item.price * item.qty);
-
-    listBox.innerHTML += `
-      <div class="cart-item">
-        <img src="${item.img}">
-        <div class="item-details">
-          <h4 class="item-name">${item.name}</h4>
-          <div class="item-price">${(item.price * item.qty).toLocaleString()} so'm</div>
-        </div>
-        <div class="item-counter">
-          <button onclick="changeQty('${item.id}', -1)">-</button>
-          <span>${item.qty}</span>
-          <button onclick="changeQty('${item.id}', 1)">+</button>
-        </div>
-        <!-- MAHSULOTNI BITTA BOSISHDA O'CHIRISH -->
-        <i class="fa-solid fa-trash-can delete-item-btn" onclick="removeItem('${item.id}')"></i>
-      </div>`;
-  });
-
-  document.getElementById("totalItems").innerText = totalQty + " ta";
-  document.getElementById("totalPrice").innerText = totalPrice.toLocaleString() + " so'm";
-
-  // AGAR TELEGRAM REJIMIDA BO'LSA VA TUGMA MAVJUD BO'LSA
-  if (isTelegramApp && Telegram.WebApp.MainButton) {
-    Telegram.WebApp.MainButton.setText(`BUYURTMA BERISH (${totalPrice.toLocaleString()} so'm)`);
-    if (!Telegram.WebApp.MainButton.isVisible) {
-      Telegram.WebApp.MainButton.show();
-    }
-    fallbackBtn.style.display = "none"; // Telegram tugmasi bor bo'lsa zaxirani yashiramiz
-  } else {
-    // Brauzerda ochilgan bo'lsa ekrandagi yashil tugmani chiqaradi
-    fallbackBtn.innerText = `Buyurtma berish (${totalPrice.toLocaleString()} so'm)`;
-    fallbackBtn.style.display = "block";
-  }
-
-  if (typeof updateBottomBadges === 'function') updateBottomBadges();
+    renderHistory();
 }
 
-/* SANOQNI O'ZGARTIRISH (1 da qotadi) */
 function changeQty(id, delta) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let item = cart.find(x => x.id === id);
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let item = cart.find(x => x.id === id);
+    if (item) {
+        item.qty += delta;
+        if (item.qty < 1) item.qty = 1;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+    }
+}
 
-  if (item) {
-    item.qty += delta;
-    if (item.qty < 1) item.qty = 1; // 1 dan kamaytirmaydi
+function removeItem(id) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart = cart.filter(x => x.id !== id);
     localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
-  }
 }
 
-/* DONALAB SAVATDAN O'CHIRISH */
-function removeItem(id) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart = cart.filter(x => x.id !== id); // Tanlangan mahsulotni ro'yxatdan olib tashlaydi
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+// TARIXNI SAQLASH VA KO'RSATISH
+function saveOrderToHistory(cart) {
+    let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
+    let order = {
+        date: new Date().toLocaleDateString(),
+        items: cart,
+        total: cart.reduce((sum, i) => sum + (i.price * i.qty), 0)
+    };
+    history.push(order);
+    localStorage.setItem("orderHistory", JSON.stringify(history));
 }
 
-/* HAMMASINI TOZALASH */
-function clearCart() {
-  if(confirm("Savatingizni butunlay bo'shatmoqchimisiz?")) {
-    localStorage.removeItem("cart");
-    renderCart();
-  }
-}
-
-/* MODAL OYNALARNI BOSHQARISH */
-function openOrderModal() {
-  document.getElementById("orderModal").classList.add("open");
-  if (isTelegramApp && Telegram.WebApp.MainButton) {
-    Telegram.WebApp.MainButton.hide();
-  }
-}
-
-function closeOrderModal() {
-  document.getElementById("orderModal").classList.remove("open");
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  if (cart.length > 0 && isTelegramApp && Telegram.WebApp.MainButton) {
-    Telegram.WebApp.MainButton.show();
-  }
-}
-
-/* Telegram Botga Buyurtma Yuborish */
-function sendOrder() {
-  const name = document.getElementById("custName").value.trim();
-  const phone = document.getElementById("custPhone").value.trim();
-  const address = document.getElementById("custAddress").value.trim();
-
-  if (!name || phone === "+998" || phone.length < 9 || !address) {
-    alert("Iltimos, barcha maydonlarni to'g'ri va to'liq to'ldiring!");
-    return;
-  }
-
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-  let message = `🛒 YANGI BUYURTMA!\n\n`;
-  message += `👤 Mijoz: ${name}\n`;
-  message += `📞 Telefon: ${phone}\n`;
-  message += `📍 Manzil: ${address}\n\n`;
-  message += `📦 Mahsulotlar:\n`;
-
-  cart.forEach((item, index) => {
-    message += `${index + 1}. ${item.name} - ${item.qty} ta (${(item.price * item.qty).toLocaleString()} so'm)\n`;
-  });
-
-  message += `\n💰 Jami summa: ${totalPrice.toLocaleString()} so'm`;
-
-  if (isTelegramApp && Telegram.WebApp.sendData) {
-    localStorage.removeItem("cart"); 
-    Telegram.WebApp.sendData(message); 
-  } else {
-    alert("Buyurtma muvaffaqiyatli qabul qilindi!");
-    console.log(message);
-    localStorage.removeItem("cart");
-    closeOrderModal();
-    renderCart();
-  }
+function renderHistory() {
+    let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
+    let histDiv = document.getElementById("orderHistory");
+    histDiv.innerHTML = history.length ? "" : "<p style='color:#999; font-size:12px;'>Hozircha buyurtmalar yo'q</p>";
+    history.forEach(h => {
+        histDiv.innerHTML += `<div class="history-item">📅 ${h.date} | 💰 ${h.total.toLocaleString()} so'm</div>`;
+    });
 }
 
 renderCart();
 </script>
-
 </body>
 </html>
