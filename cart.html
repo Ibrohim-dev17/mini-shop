@@ -7,7 +7,6 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <script src="data.js"></script>
 
 <style>
@@ -30,7 +29,7 @@ a { text-decoration: none; color: inherit; }
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
-  padding-bottom: 20px;
+  padding-bottom: 80px; /* Tugma uchun joy ajratildi */
 }
 
 /* HEADER */
@@ -68,6 +67,7 @@ a { text-decoration: none; color: inherit; }
   gap: 12px;
   margin-bottom: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  position: relative;
 }
 
 .cart-item img {
@@ -87,12 +87,28 @@ a { text-decoration: none; color: inherit; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: 25px; /* O'chirish tugmasi uchun joy */
 }
 
 .item-price {
   color: #6a5acd;
   font-weight: 700;
   font-size: 14px;
+}
+
+/* DONALAB O'CHIRISH TUGMASI */
+.delete-item-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #ff3b30;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.2s;
+}
+.delete-item-btn:active {
+  transform: scale(0.85);
 }
 
 /* SANOQ TUGMALARI */
@@ -147,6 +163,24 @@ a { text-decoration: none; color: inherit; }
   border-top: 1px dashed #eee;
   padding-top: 10px;
   margin-top: 10px;
+}
+
+/* TELEGRAM TUGMASI CHIQMAGANDA ISHLAYDIGAN ZAXIRA TUGMA */
+.fallback-order-btn {
+  background: #2cb742;
+  color: white;
+  margin: 15px 12px;
+  padding: 15px;
+  border-radius: 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: none; /* Odatiy holatda yashirin, skript aniqlaydi */
+  box-shadow: 0 4px 15px rgba(44, 183, 66, 0.3);
+}
+.fallback-order-btn:active {
+  background: #249935;
 }
 
 /* BUYURTMA BERISH MODAL OYNASI */
@@ -289,6 +323,9 @@ a { text-decoration: none; color: inherit; }
       <span id="totalPrice">0 so'm</span>
     </div>
   </div>
+  
+  <!-- ZAXIRA TUGMA: Agar Telegram MainButton ishlamay qolsa, ekran yuzasida chiqadi -->
+  <div id="fallbackBtn" class="fallback-order-btn" onclick="openOrderModal()">Buyurtma berish</div>
 </div>
 
 <div class="modal" id="orderModal">
@@ -321,7 +358,10 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <script>
-if (window.Telegram && Telegram.WebApp) {
+let isTelegramApp = false;
+
+if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
+  isTelegramApp = true;
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
   if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
@@ -331,13 +371,14 @@ if (window.Telegram && Telegram.WebApp) {
 
 const listBox = document.getElementById("cartList");
 const totalBlock = document.getElementById("totalBlock");
+const fallbackBtn = document.getElementById("fallbackBtn");
 
-if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+if (isTelegramApp && Telegram.WebApp.MainButton) {
   Telegram.WebApp.MainButton.offClick(openOrderModal);
   Telegram.WebApp.MainButton.onClick(openOrderModal);
 }
 
-/* SAVATNI EKRAINGA RENDERING QILISH */
+/* SAVATNI RENDERING QILISH */
 function renderCart() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   listBox.innerHTML = "";
@@ -350,8 +391,9 @@ function renderCart() {
         <a href="index.html" style="display:inline-block; margin-top:15px; background:#6a5acd; color:white; padding:8px 20px; border-radius:50px; font-size:14px;">Xarid qilish</a>
       </div>`;
     totalBlock.style.display = "none";
+    fallbackBtn.style.display = "none";
     
-    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+    if (isTelegramApp && Telegram.WebApp.MainButton) {
       Telegram.WebApp.MainButton.hide();
     }
     if (typeof updateBottomBadges === 'function') updateBottomBadges();
@@ -378,50 +420,63 @@ function renderCart() {
           <span>${item.qty}</span>
           <button onclick="changeQty('${item.id}', 1)">+</button>
         </div>
+        <!-- MAHSULOTNI BITTA BOSISHDA O'CHIRISH -->
+        <i class="fa-solid fa-trash-can delete-item-btn" onclick="removeItem('${item.id}')"></i>
       </div>`;
   });
 
   document.getElementById("totalItems").innerText = totalQty + " ta";
   document.getElementById("totalPrice").innerText = totalPrice.toLocaleString() + " so'm";
 
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+  // AGAR TELEGRAM REJIMIDA BO'LSA VA TUGMA MAVJUD BO'LSA
+  if (isTelegramApp && Telegram.WebApp.MainButton) {
     Telegram.WebApp.MainButton.setText(`BUYURTMA BERISH (${totalPrice.toLocaleString()} so'm)`);
     if (!Telegram.WebApp.MainButton.isVisible) {
       Telegram.WebApp.MainButton.show();
     }
+    fallbackBtn.style.display = "none"; // Telegram tugmasi bor bo'lsa zaxirani yashiramiz
+  } else {
+    // Brauzerda ochilgan bo'lsa ekrandagi yashil tugmani chiqaradi
+    fallbackBtn.innerText = `Buyurtma berish (${totalPrice.toLocaleString()} so'm)`;
+    fallbackBtn.style.display = "block";
   }
 
   if (typeof updateBottomBadges === 'function') updateBottomBadges();
 }
 
-/* SANOQNI O'ZGARTIRISH (1 dan pastga tushmaydigan qilindi) */
+/* SANOQNI O'ZGARTIRISH (1 da qotadi) */
 function changeQty(id, delta) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let item = cart.find(x => x.id === id);
 
   if (item) {
     item.qty += delta;
-    
-    // AGAR NIKOH/SANOQ 1 DAN PASTGA TUSHMOQCHI BO'LSA, UNI 1 DA QOTIRAMIZ
-    if (item.qty < 1) {
-      item.qty = 1;
-    }
-    
+    if (item.qty < 1) item.qty = 1; // 1 dan kamaytirmaydi
     localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
   }
 }
 
-/* SAVATNI TOZALASH */
-function clearCart() {
-  localStorage.removeItem("cart");
+/* DONALAB SAVATDAN O'CHIRISH */
+function removeItem(id) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart = cart.filter(x => x.id !== id); // Tanlangan mahsulotni ro'yxatdan olib tashlaydi
+  localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
+}
+
+/* HAMMASINI TOZALASH */
+function clearCart() {
+  if(confirm("Savatingizni butunlay bo'shatmoqchimisiz?")) {
+    localStorage.removeItem("cart");
+    renderCart();
+  }
 }
 
 /* MODAL OYNALARNI BOSHQARISH */
 function openOrderModal() {
   document.getElementById("orderModal").classList.add("open");
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+  if (isTelegramApp && Telegram.WebApp.MainButton) {
     Telegram.WebApp.MainButton.hide();
   }
 }
@@ -429,7 +484,7 @@ function openOrderModal() {
 function closeOrderModal() {
   document.getElementById("orderModal").classList.remove("open");
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  if (cart.length > 0 && window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+  if (cart.length > 0 && isTelegramApp && Telegram.WebApp.MainButton) {
     Telegram.WebApp.MainButton.show();
   }
 }
@@ -460,11 +515,11 @@ function sendOrder() {
 
   message += `\n💰 Jami summa: ${totalPrice.toLocaleString()} so'm`;
 
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.sendData) {
+  if (isTelegramApp && Telegram.WebApp.sendData) {
     localStorage.removeItem("cart"); 
     Telegram.WebApp.sendData(message); 
   } else {
-    alert("Buyurtma muvaffaqiyatli qabul qilindi! (Telegram muhitidan tashqaridasiz)");
+    alert("Buyurtma muvaffaqiyatli qabul qilindi!");
     console.log(message);
     localStorage.removeItem("cart");
     closeOrderModal();
