@@ -2,50 +2,50 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kategoriya qo'shish</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; margin: 0; background: #f0f2f5; }
-        .box { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 15px; background: #6a11cb; color: white; border: none; border-radius: 10px; font-weight: bold; }
+        body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
+        input, button { width: 100%; padding: 15px; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc; }
+        button { background: #28a745; color: white; border: none; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>Yangi Kategoriya</h2>
-        <input type="text" id="name" placeholder="Kategoriya nomi">
-        
-        <label style="font-size: 14px; color: #666;">Rasm tanlash (ixtiyoriy):</label>
-        <input type="file" id="imgFile" accept="image/*">
-        
-        <button class="btn" onclick="save()">Saqlash</button>
-    </div>
+    <h2>Yangi Kategoriya</h2>
+    <input type="text" id="name" placeholder="Kategoriya nomi">
+    <input type="file" id="imgFile" accept="image/*">
+    <button onclick="saveData()">Saqlash</button>
 
-<script>
- function doGet() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = sheet.getDataRange().getValues();
-  // Sarlavhani o'tkazib yuborib, JSON formatida jo'natamiz
-  var result = data.slice(1).map(function(row) {
-    return { name: row[1], img: row[2] };
-  });
-  return ContentService.createTextOutput(JSON.stringify(result))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+    <script>
+        async function saveData() {
+            const name = document.getElementById('name').value;
+            const file = document.getElementById('imgFile').files[0];
+            if (!name || !file) return alert("Nom va rasm tanlang!");
 
-function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var data = JSON.parse(e.postData.contents);
-  if (data.action == "addCategory") {
-    sheet.appendRow([new Date(), data.name, data.img]);
-    return ContentService.createTextOutput(JSON.stringify({status: "success"}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
+            // 1. Rasmni ImgBB ga yuklash (Link olish uchun)
+            const formData = new FormData();
+            formData.append("image", file);
+            const res = await fetch("https://api.imgbb.com/1/upload?key=8730999818818228399e527011d82137", {
+                method: "POST", body: formData
+            });
+            const imgData = await res.json();
+            const imgUrl = imgData.data.url;
 
-</script>
+            // 2. Npoint ga ma'lumotni qo'shish
+            const dbUrl = "https://api.npoint.io/1187b075e735a62911e8";
+            const response = await fetch(dbUrl);
+            let data = await response.json();
+            data.push({ name: name, img: imgUrl });
 
+            await fetch(dbUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
 
+            alert("Muvaffaqiyatli saqlandi!");
+            window.location.href = 'SavedCategories.html';
+        }
+    </script>
 </body>
 </html>
