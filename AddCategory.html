@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yangi Kategoriya</title>
+    <title>Kategoriya qo'shish</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
-        .input-box { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ccc; margin-bottom: 20px; }
-        .btn-save { width: 100%; padding: 15px; background: #11998e; color: white; border: none; border-radius: 12px; font-weight: bold; }
+        body { font-family: sans-serif; padding: 20px; margin: 0; background: #f0f2f5; }
+        .box { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; background: #6a11cb; color: white; border: none; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <h2>Yangi kategoriya kiriting</h2>
-    <input type="text" id="catName" class="input-box" placeholder="Kategoriya nomi...">
-    <button class="btn-save" onclick="saveCategory()">Saqlash</button>
+    <div class="box">
+        <h2>Yangi Kategoriya</h2>
+        <input type="text" id="name" placeholder="Kategoriya nomi">
+        <input type="text" id="img" placeholder="Rasm havolasi (URL)">
+        <button class="btn" onclick="save()">Saqlash</button>
+    </div>
 
     <script>
-        function saveCategory() {
-            const name = document.getElementById('catName').value;
-            if (name) {
-                // LocalStorage orqali bazani olish
-                let db = JSON.parse(localStorage.getItem('adminDB')) || {};
-                db[name] = []; // Yangi kategoriya qo'shish
-                localStorage.setItem('adminDB', JSON.stringify(db));
-                
-                // Asosiy sahifaga qaytish
-                window.location.href = 'admin_panel.html';
-            } else {
-                alert("Iltimos, nom kiriting!");
-            }
+        function save() {
+            const name = document.getElementById('name').value;
+            const img = document.getElementById('img').value;
+            if(!name || !img) return alert("Hamma maydonni to'ldiring!");
+            
+            let db = JSON.parse(localStorage.getItem('adminDB')) || [];
+            db.push({ name, img });
+            localStorage.setItem('adminDB', JSON.stringify(db));
+            window.location.href = 'SavedCategories.html';
         }
     </script>
 </body>
