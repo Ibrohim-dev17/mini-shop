@@ -234,6 +234,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 .bottom a:active { transform: scale(0.9); }
+
+.rating-box { display: flex; align-items: center; gap: 8px; margin: -5px 0 15px 0; }
+.stars { color: #ffc107; font-size: 14px; }
+.rating-text { font-size: 13px; color: #777; font-weight: 500; }
+
+
 </style>
 </head>
 
@@ -257,6 +263,11 @@ a { text-decoration: none; color: inherit; }
     <div class="details-box">
       <div class="name" id="pName"></div>
       <div class="price" id="pPrice"></div>
+<div class="rating-box">
+  <div class="stars" id="pStars"></div>
+  <span class="rating-text" id="pRating"></span>
+</div>
+
 
       <div class="desc-title">Mahsulot haqida</div>
       <div class="desc" id="pDesc"></div>
