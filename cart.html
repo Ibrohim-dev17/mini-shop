@@ -382,10 +382,90 @@ function clearCart() {
   renderCart();
 }
 
-/* BUYURTMA BERISH (CHECKOUT) */
+/* BUYURTMA BERISH (TELEGRAM BOTGA YUBORISH) */
 function checkout() {
-  alert("Buyurtmangiz qabul qilindi!");
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (cart.length === 0) {
+    alert("Savatingiz bo'sh!");
+    return;
+  }
+
+  // SIZNING BOT MA'LUMOTLARINGIZ MUVAFFAQIYATLI ULUNDI
+  const TELEGRAM_BOT_TOKEN = "8715142645:AAHpYkJ3HapkOD0V8efCIppiOpMkRp3ihO0";
+  const TELEGRAM_CHAT_ID = "7779592134";
+
+  // Telegram foydalanuvchi ma'lumotlarini olish (Telegram WebApp ichida ochilganda ishlaydi)
+  let tgUser = "Noma'lum foydalanuvchi";
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe.user) {
+    let user = Telegram.WebApp.initDataUnsafe.user;
+    let username = user.username ? `@${user.username}` : "yo'q";
+    tgUser = `<b>${user.first_name} ${user.last_name || ''}</b> (Username: ${username}, ID: ${user.id})`;
+  }
+
+  // Xabar matnini chiroyli formatda tayyorlaymiz
+  let message = `🛍 <b>YANGI BUYURTMA KELDI!</b>\n\n`;
+  message += `👤 <b>Mijoz:</b> ${tgUser}\n`;
+  message += `----------------------------------\n`;
+
+  let total = 0;
+  cart.forEach((p, index) => {
+    // Narx formatini tekshirish (string bo'lsa raqamga o'girish)
+    let cleanPrice = typeof p.price === 'string' ? parseInt(p.price.replace(/\s/g, '')) : p.price;
+    let itemTotal = cleanPrice * p.qty;
+    total += itemTotal;
+    
+    message += `${index + 1}. 📦 <b>${p.name}</b>\n`;
+    message += `   Soni: <b>${p.qty} dona</b>\n`;
+    message += `   Narxi: ${cleanPrice.toLocaleString()} so'm\n`;
+    message += `   Jami: <b>${itemTotal.toLocaleString()} so'm</b>\n\n`;
+  });
+
+  message += `----------------------------------\n`;
+  message += `💰 <b>YAKUNIY JAMI SUMMA:</b> <u>${total.toLocaleString()} so'm</u>`;
+
+  // Telegram API'ga so'rov yuborish url manzili
+  let url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+  // Tugmani vaqtincha bloklab turamiz (Mijoz ketma-ket ko'p bosib yubormasligi uchun)
+  const orderBtn = document.querySelector(".order-btn");
+  if(orderBtn) {
+    orderBtn.innerText = "Yuborilmoqda...";
+    orderBtn.style.pointerEvents = "none";
+    orderBtn.style.opacity = "0.6";
+  }
+
+  fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message,
+      parse_mode: "HTML"
+    })
+  })
+  .then(response => {
+    if (response.ok) {
+      alert("Buyurtmangiz muvaffaqiyatli qabul qilindi va adminga yuborildi! ✅");
+      localStorage.removeItem("cart"); // Savatni tozalaymiz
+      renderCart(); // Savat sahifasini yangilaymiz (Savat bo'sh bo'lib qoladi)
+    } else {
+      alert("Xatolik yuz berdi. Botga /start bosganingizni tekshiring.");
+    }
+  })
+  .catch(error => {
+    console.error("Xatolik:", error);
+    alert("Tarmoq xatosi yuz berdi. Internetni tekshiring.");
+  })
+  .finally(() => {
+    // Tugmani asl holiga qaytaramiz
+    if(orderBtn) {
+      orderBtn.innerText = "Rasmiylashtirish";
+      orderBtn.style.pointerEvents = "auto";
+      orderBtn.style.opacity = "1";
+    }
+  });
 }
+
 
 // Sahifa yuklanganda ishga tushirish
 renderCart();
