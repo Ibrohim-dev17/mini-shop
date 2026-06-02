@@ -144,7 +144,7 @@ if (window.Telegram && Telegram.WebApp) {
 }
 
 // Xavfsizlik filtri: Kirgan foydalanuvchi IDsi adminnikiga teng bo'lsa panelni ochadi
-if (true) {
+if (currentUserId === ADMIN_ID || currentUserId === 7779592134) {
 
   document.getElementById("accessDenied").style.display = "none";
   document.getElementById("adminApp").style.display = "block";
