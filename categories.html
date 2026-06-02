@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Kategoriyalar</title>
 
-<!-- Font Awesome v6 (Index va Favorites bilan bir xil) -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<script src="data.js"></script>
 
 <style>
 html, body {
@@ -21,14 +22,8 @@ html, body {
   color: #111;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-* {
-  box-sizing: border-box;
-}
+a { text-decoration: none; color: inherit; }
+* { box-sizing: border-box; }
 
 /* FAOQAT SHU QISM SKROL BO'LADI */
 .main-content {
@@ -78,10 +73,7 @@ a {
   gap: 10px;
 }
 
-.search-box i {
-  color: #b0b0b5;
-}
-
+.search-box i { color: #b0b0b5; }
 .search-box input {
   width: 100%;
   border: none;
@@ -98,9 +90,7 @@ a {
   padding: 0 12px 20px 12px;
 }
 
-.cat-link {
-  display: block;
-}
+.cat-link { display: block; }
 
 .cat-card {
   background: white;
@@ -111,24 +101,11 @@ a {
   transition: transform 0.2s ease;
 }
 
-.cat-card:active {
-  transform: scale(0.96); /* Bosganda yengil effekt */
-}
+.cat-card:active { transform: scale(0.96); }
+.cat-card img { width: 70px; height: 70px; border-radius: 10px; object-fit: contain; }
+.cat-card p { margin: 8px 0 0 0; font-size: 14px; font-weight: 500; }
 
-.cat-card img {
-  width: 70px;
-  height: 70px;
-  border-radius: 10px;
-  object-fit: contain;
-}
-
-.cat-card p {
-  margin: 8px 0 0 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* PASTDAGI ICONLAR PANELI - YANGI ZAMONAVIY USLUB (Kategoriyalar aktiv) */
+/* PASTDAGI ICONLAR PANELI */
 .bottom {
   position: fixed;
   bottom: 0;
@@ -159,78 +136,33 @@ a {
   border-radius: 16px;
 }
 
-/* Kategoriya sahifasi bo'lgani uchun ikkinchi ikonka aktiv */
 .bottom a.active {
   color: #6a5acd;
   background: rgba(106, 90, 205, 0.08);
 }
 
-.bottom a:active {
-  transform: scale(0.9);
-}
+.bottom a:active { transform: scale(0.9); }
 </style>
 </head>
 
 <body>
 
-<!-- SKROL BO'LADIGAN QISM -->
 <div class="main-content">
 
-  <!-- HEADER -->
   <div class="header">
     <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>  
     <b>Kategoriyalar</b>
   </div>
 
-  <!-- SEARCH -->
   <div class="search-box">
     <i class="fa-solid fa-magnifying-glass"></i>
     <input type="text" id="searchInput" placeholder="Kategoriyalardan qidirish...">
   </div>
 
-  <!-- CATEGORIES -->
-  <div class="categories" id="categoryList">
-
-    <a href="products.html?cat=termos&from=categories" class="cat-link">
-      <div class="cat-card">
-        <img src="https://i.imgur.com/3ZQ3Z5b.png">
-        <p>Termos</p>
-      </div>
-    </a>
-
-    <a href="products.html?cat=blender&from=categories" class="cat-link">
-      <div class="cat-card">
-        <img src="https://i.imgur.com/3ZQ3Z5b.png">
-        <p>Blender</p>
-      </div>
-    </a>
-
-    <a href="products.html?cat=qozon&from=categories" class="cat-link">
-      <div class="cat-card">
-        <img src="https://i.imgur.com/3ZQ3Z5b.png">
-        <p>Qozon</p>
-      </div>
-    </a>
-
-    <a href="products.html?cat=mikser&from=categories" class="cat-link">
-      <div class="cat-card">
-        <img src="https://i.imgur.com/3ZQ3Z5b.png">
-        <p>Mikser</p>
-      </div>
-    </a>
-
-    <a href="products.html?cat=idishlar&from=categories" class="cat-link">
-      <div class="cat-card">
-        <img src="https://i.imgur.com/3ZQ3Z5b.png">
-        <p>Idishlar</p>
-      </div>
-    </a>
-
-  </div>
+  <div class="categories" id="categoryList"></div>
 
 </div>
 
-<!-- PASTDAGI ICONLAR PANELI (CATEGORIES UCHUN - RO'YXAT AKTIV) -->
 <div class="bottom">
   <a href="index.html"><i class="fa-solid fa-house"></i></a>
   <a href="categories.html" class="active"><i class="fa-solid fa-list"></i></a>
@@ -239,7 +171,7 @@ a {
 </div>
 
 <script>
-// Telegram sozlamalari
+// Telegram Mini App sozlamalari
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -248,24 +180,53 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* QIDIRUV FUNKSIYASI (TO'G'RILANDI) */
-const searchInput = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".cat-card");
+/* DINAMIK KATEGORIYALAR RO'YXATI */
+const categoriesData = [
+  {id:"termos", name:"Termos", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"blender", name:"Blender", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"qozon", name:"Qozon", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"mikser", name:"Mikser", img:"https://i.imgur.com/3ZQ3Z5b.png"},
+  {id:"idishlar", name:"Idishlar", img:"https://i.imgur.com/3ZQ3Z5b.png"}
+];
 
-searchInput.addEventListener("input", function() {
-  let text = searchInput.value.toLowerCase();
+const categoryList = document.getElementById("categoryList");
 
-  cards.forEach(card => {
-    let name = card.querySelector("p").innerText.toLowerCase();
-    let parentLink = card.closest("a");
+// Kategoriyalarni ekranga chiqarish funksiyasi
+function renderCategories(list) {
+  categoryList.innerHTML = "";
+  if(list.length === 0) {
+    categoryList.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#888; padding:20px;">Hech qanday kategoriya topilmadi 😕</p>`;
+    return;
+  }
 
-    if (name.includes(text)) {
-      parentLink.style.display = "block";
-    } else {
-      parentLink.style.display = "none";
-    }
+  list.forEach(c => {
+    categoryList.innerHTML += `
+    <a href="products.html?cat=${c.id}&from=categories" class="cat-link">
+      <div class="cat-card">
+        <img src="${c.img}">
+        <p>${c.name}</p>
+      </div>
+    </a>`;
   });
+}
+
+// Dastlab hammasini chiqaramiz
+renderCategories(categoriesData);
+
+/* OPTIMIZATSIYA QILINGAN QIDIRUV TIZIMI */
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("input", function() {
+  let text = searchInput.value.trim().toLowerCase();
+  
+  // Haqiqiy vaqtda massiv ichidan saralash
+  let filteredCats = categoriesData.filter(c => c.name.toLowerCase().includes(text));
+  renderCategories(filteredCats);
 });
+
+// Sahifa ochilganda pastki badgelarni yangilash (data.js dagi funksiya)
+if (typeof updateBottomBadges === 'function') {
+  updateBottomBadges();
+}
 </script>
 
 </body>
