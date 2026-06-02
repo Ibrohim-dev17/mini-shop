@@ -11,213 +11,64 @@
 
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f6fa;
-  color: #111;
+  margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+  font-family: system-ui, -apple-system, sans-serif; background: #f5f6fa; color: #111;
 }
-
 a { text-decoration: none; color: inherit; }
 * { box-sizing: border-box; }
 
 .main-content {
-  height: calc(100vh - 65px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-  padding-bottom: 110px;
+  height: calc(100vh - 65px); overflow-y: auto; -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain; padding-bottom: 110px;
 }
 
 /* HEADER */
 .header {
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(10px);
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #eee;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 14px;
+  display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10;
 }
-
 .header b { font-size: 18px; }
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.history-trigger-btn {
-  color: #6a5acd;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  background: rgba(106, 90, 205, 0.1);
-  padding: 6px 12px;
-  border-radius: 50px;
-}
-
-.clear-cart-btn {
-  color: #ff3b30;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
+.header-right { display: flex; align-items: center; gap: 15px; }
+.history-trigger-btn { color: #6a5acd; font-size: 14px; font-weight: 600; cursor: pointer; background: rgba(106, 90, 205, 0.1); padding: 6px 12px; border-radius: 50px; }
+.clear-cart-btn { color: #ff3b30; font-size: 14px; font-weight: 500; cursor: pointer; }
 
 /* CART LIST */
 .cart-list { padding: 12px; }
-
 .cart-item {
-  background: white;
-  border-radius: 18px;
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  position: relative;
+  background: white; border-radius: 18px; padding: 14px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); position: relative;
 }
-
-.cart-item img {
-  width: 65px;
-  height: 65px;
-  object-fit: contain;
-  background: #fafafa;
-  border-radius: 12px;
-}
-
+.cart-item img { width: 65px; height: 65px; object-fit: contain; background: #fafafa; border-radius: 12px; }
 .item-details { flex: 1; min-width: 0; }
-
-.item-name {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0 0 6px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.item-price {
-  color: #6a5acd;
-  font-weight: 700;
-  font-size: 14px;
-}
+.item-name { font-size: 15px; font-weight: 600; margin: 0 0 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-price { color: #6a5acd; font-weight: 700; font-size: 14px; }
 
 /* ACTIONS */
-.item-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
+.item-actions { display: flex; align-items: center; gap: 14px; }
 .delete-item-btn {
-  color: #ff3b30;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 6px;
-  background: rgba(255, 59, 48, 0.08);
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
+  color: #ff3b30; font-size: 16px; cursor: pointer; padding: 6px; background: rgba(255, 59, 48, 0.08); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
 .delete-item-btn:active { transform: scale(0.85); }
 
-.item-counter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #f1f2f6;
-  padding: 4px;
-  border-radius: 12px;
-}
-
-.item-counter button {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 8px;
-  background: white;
-  font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-
-.item-counter span {
-  font-size: 14px;
-  font-weight: 700;
-  min-width: 16px;
-  text-align: center;
-}
+.item-counter { display: flex; align-items: center; gap: 10px; background: #f1f2f6; padding: 4px; border-radius: 12px; }
+.item-counter button { width: 28px; height: 28px; border: none; border-radius: 8px; background: white; font-weight: 600; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.item-counter span { font-size: 14px; font-weight: 700; min-width: 16px; text-align: center; }
 
 /* STICKY PANEL */
 .checkout-sticky-panel {
-  position: fixed;
-  bottom: 80px;
-  left: 12px;
-  right: 12px;
-  background: white;
-  border-radius: 20px;
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
-  z-index: 999;
+  position: fixed; bottom: 80px; left: 12px; right: 12px; background: white; border-radius: 20px; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -4px 24px rgba(0,0,0,0.08); z-index: 999;
 }
-
 .checkout-info .label { font-size: 12px; color: #777; display: block; margin-bottom: 2px; }
 .checkout-info .price { font-size: 18px; font-weight: 800; color: #111; }
-
-.checkout-action-btn {
-  background: #6a5acd;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 14px;
-  font-size: 15px;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(106, 90, 205, 0.2);
-}
+.checkout-action-btn { background: #6a5acd; color: white; border: none; padding: 12px 24px; border-radius: 14px; font-size: 15px; font-weight: 700; box-shadow: 0 4px 12px rgba(106, 90, 205, 0.2); }
 .checkout-action-btn:active { background: #574bba; }
 
 /* MODALS */
 .modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: flex-end;
-  z-index: 2000;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s ease;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: flex-end; z-index: 2000; visibility: hidden; opacity: 0; transition: all 0.3s ease;
 }
-
 .modal.open { visibility: visible; opacity: 1; }
-
-.modal-content {
-  background: white;
-  width: 100%;
-  border-radius: 24px 24px 0 0;
-  padding: 22px;
-  transform: translateY(100%);
-  transition: transform 0.3s ease;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
+.modal-content { background: white; width: 100%; border-radius: 24px 24px 0 0; padding: 22px; transform: translateY(100%); transition: transform 0.3s ease; max-height: 80vh; overflow-y: auto; }
 .modal.open .modal-content { transform: translateY(0); }
 .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
 .close-modal { color: #999; font-size: 20px; cursor: pointer; }
@@ -230,9 +81,7 @@ a { text-decoration: none; color: inherit; }
 }
 .input-group input:focus, .input-group textarea:focus { border-color: #6a5acd; background: #fff; }
 
-.submit-btn {
-  background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px;
-}
+.submit-btn { background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px; }
 .submit-btn:disabled { background: #a29bfe; cursor: not-allowed; }
 
 /* HISTORY CARD */
@@ -244,21 +93,9 @@ a { text-decoration: none; color: inherit; }
 
 /* BOTTOM NAV */
 .bottom {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: 65px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
-  z-index: 1000;
-  padding: 0 10px;
+  position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(0, 0, 0, 0.04); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03); z-index: 1000; padding: 0 10px;
 }
-
 .bottom a { color: #b0b0b5; font-size: 22px; transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 16px; }
 .bottom a.active { color: #6a5acd; background: rgba(106, 90, 205, 0.08); }
 </style>
@@ -297,13 +134,10 @@ a { text-decoration: none; color: inherit; }
       <input type="text" id="custName" placeholder="Masalan: Ali Valiyev">
     </div>
     <div class="input-group">
-      <label>Telefon raqamingiz</label>
-      <input type="tel" id="custPhone" value="+998">
-    </div>
-    <div class="input-group">
       <label>Yetkazib berish manzili</label>
-      <textarea id="custAddress" rows="2" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
+      <textarea id="custAddress" rows="3" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
     </div>
+    <p style="font-size:12px; color:#777; margin: 5px 0 15px 0;"><i class="fa-solid fa-circle-info"></i> Keyingi qadamda haqiqiy telefon raqamingiz so'raladi.</p>
     <button class="submit-btn" id="submitBtn" onclick="sendOrder()">Buyurtmani yakunlash</button>
   </div>
 </div>
@@ -327,10 +161,15 @@ a { text-decoration: none; color: inherit; }
 
 <script>
 let isTelegramApp = false;
+let userTgId = "7779592134"; // Standart holatda sizning ID, agar TG dan kirsa dinamik o'zgaradi
+
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
   isTelegramApp = true;
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
+  if(Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+    userTgId = Telegram.WebApp.initDataUnsafe.user.id;
+  }
 }
 
 const listBox = document.getElementById("cartList");
@@ -348,18 +187,14 @@ function renderCart() {
         <a href="index.html" style="display:inline-block; margin-top:15px; background:#6a5acd; color:white; padding:8px 20px; border-radius:50px; font-size:14px;">Xarid qilish</a>
       </div>`;
     stickyPanel.style.display = "none";
-    if (typeof updateBottomBadges === 'function') updateBottomBadges();
     return;
   }
 
   stickyPanel.style.display = "flex";
-  let totalQty = 0;
-  let totalPrice = 0;
+  let totalQty = 0; let totalPrice = 0;
 
   cart.forEach(item => {
-    totalQty += item.qty;
-    totalPrice += (item.price * item.qty);
-
+    totalQty += item.qty; totalPrice += (item.price * item.qty);
     listBox.innerHTML += `
       <div class="cart-item">
         <img src="${item.img}">
@@ -380,32 +215,24 @@ function renderCart() {
 
   document.getElementById("totalItemsText").innerText = `Jami ${totalQty} ta mahsulot`;
   document.getElementById("totalPriceText").innerText = totalPrice.toLocaleString() + " so'm";
-  if (typeof updateBottomBadges === 'function') updateBottomBadges();
 }
 
 function changeQty(id, delta) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let item = cart.find(x => x.id === id);
   if (item) {
-    item.qty += delta;
-    if (item.qty < 1) item.qty = 1;
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
+    item.qty += delta; if (item.qty < 1) item.qty = 1;
+    localStorage.setItem("cart", JSON.stringify(cart)); renderCart();
   }
 }
 
 function removeItem(id) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart = cart.filter(x => x.id !== id);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+  cart = cart.filter(x => x.id !== id); localStorage.setItem("cart", JSON.stringify(cart)); renderCart();
 }
 
 function clearCart() {
-  if (confirm("Savatingizni bo'shatmoqchimisiz?")) {
-    localStorage.removeItem("cart");
-    renderCart();
-  }
+  if (confirm("Savatingizni bo'shatmoqchimisiz?")) { localStorage.removeItem("cart"); renderCart(); }
 }
 
 function openOrderModal() { document.getElementById("orderModal").classList.add("open"); }
@@ -414,8 +241,7 @@ function closeOrderModal() { document.getElementById("orderModal").classList.rem
 function openHistoryModal() {
   const historyListContent = document.getElementById("historyListContent");
   let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
-  historyListContent.innerHTML = "";
-  
+  history.innerHTML = "";
   if (history.length === 0) {
     historyListContent.innerHTML = `<p style="text-align:center; color:#999; font-size:14px; padding:30px 0;">Hozircha buyurtmalar tarixi mavjud emas.</p>`;
   } else {
@@ -423,10 +249,7 @@ function openHistoryModal() {
       let itemsSummary = order.items.map(i => `${i.name} (${i.qty} ta)`).join(", ");
       historyListContent.innerHTML += `
         <div class="history-card">
-          <div class="history-card-top">
-            <span>ID: #${order.id}</span>
-            <span>${order.date}</span>
-          </div>
+          <div class="history-card-top"><span>ID: #${order.id}</span><span>${order.date}</span></div>
           <div class="history-card-items">${itemsSummary}</div>
           <div class="history-card-price">${order.total.toLocaleString()} so'm</div>
         </div>`;
@@ -436,19 +259,17 @@ function openHistoryModal() {
 }
 function closeHistoryModal() { document.getElementById("historyModal").classList.remove("open"); }
 
-/* TELEGRAM BOT INTERGATSION FUNKSIYASI */
+/* SMART BUYURTMA YUBORISH MANTIQI */
 function sendOrder() {
   const name = document.getElementById("custName").value.trim();
-  const phone = document.getElementById("custPhone").value.trim();
   const address = document.getElementById("custAddress").value.trim();
   const submitBtn = document.getElementById("submitBtn");
 
-  if (!name || phone === "+998" || phone.length < 9 || !address) {
-    alert("Iltimos, barcha maydonlarni to'g'ri va to'liq to'ldiring!");
+  if (!name || !address) {
+    alert("Iltimos, ismingiz va manzilingizni to'liq kiriting!");
     return;
   }
 
-  // Tugmani bloklaymiz (dublikat buyurtma ketmasligi uchun)
   submitBtn.disabled = true;
   submitBtn.innerText = "Yuborilmoqda...";
 
@@ -457,16 +278,14 @@ function sendOrder() {
   let orderId = Math.floor(1000 + Math.random() * 9000);
   let orderDate = new Date().toLocaleDateString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
 
-  // 1. Tarix ro'yxatiga yozish
+  // Tarixga yozish
   let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
-  let newOrder = { id: orderId, date: orderDate, items: cart, total: totalPrice };
-  history.push(newOrder);
+  history.push({ id: orderId, date: orderDate, items: cart, total: totalPrice });
   localStorage.setItem("orderHistory", JSON.stringify(history));
 
-  // 2. Chiroyli Telegram Xabari formatlash
+  // Botga ma'lumotni tayyorlab yuboramiz
   let message = `🛒 <b>YANGI BUYURTMA (ID: #${orderId})</b>\n\n`;
   message += `👤 <b>Mijoz:</b> ${name}\n`;
-  message += `📞 <b>Telefon:</b> ${phone}\n`;
   message += `📍 <b>Manzil:</b> ${address}\n\n`;
   message += `📦 <b>Mahsulotlar:</b>\n`;
   cart.forEach((item, index) => {
@@ -474,38 +293,41 @@ function sendOrder() {
   });
   message += `\n💰 <b>Jami summa:</b> ${totalPrice.toLocaleString()} so'm`;
 
-  // 3. To'g'ridan-to'g'ri Telegram API ga yuborish
   const BOT_TOKEN = "8715142645:AAHpYkJ3HapkOD0V8efCIppiOpMkRp3ihO0";
-  const CHAT_ID = "7779592134";
+  
+  // 1-bosqich: Admin yoki guruhga xarid ma'lumotlarini yuborish (Raqamsiz variant)
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: "7779592134", text: message, parse_mode: "HTML" })
+  });
+
+  // 2-bosqich: Xaridorning o'ziga bot ichida "Telefon raqamni tasdiqlash" tugmasini yuborish
+  let replyMarkup = {
+    keyboard: [[{ text: "📱 Telefon raqamni tasdiqlash", request_contact: true }]],
+    resize_keyboard: true,
+    one_time_keyboard: true
+  };
 
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: CHAT_ID,
-      text: message,
-      parse_mode: "HTML"
+      chat_id: userTgId,
+      text: `🎉 Buyurtmangiz qabul qilinishi uchun pastdagi <b>"📱 Telefon raqamni tasdiqlash"</b> tugmasini bosing.`,
+      parse_mode: "HTML",
+      reply_markup: replyMarkup
     })
-  })
-  .then(res => {
-    if (res.ok) {
-      alert("Buyurtmangiz muvaffaqiyatli qabul qilindi!");
-      localStorage.removeItem("cart");
-      closeOrderModal();
-      renderCart();
-      // Agarda Telegram ichida ochilgan bo'lsa WebApp o'zi yopiladi
-      if (isTelegramApp && Telegram.WebApp.close) {
-        Telegram.WebApp.close();
-      }
-    } else {
-      alert("Xatolik yuz berdi. Bot sozlamalarini tekshiring.");
+  }).then(() => {
+    localStorage.removeItem("cart");
+    closeOrderModal();
+    renderCart();
+    if (isTelegramApp && Telegram.WebApp.close) {
+      Telegram.WebApp.close();
     }
-  })
-  .catch(err => {
-    alert("Tarmoq xatosi! Buyurtma yuborilmadi.");
-    console.error(err);
-  })
-  .finally(() => {
+  }).catch(() => {
+    alert("Xatolik yuz berdi!");
+  }).finally(() => {
     submitBtn.disabled = false;
     submitBtn.innerText = "Buyurtmani yakunlash";
   });
@@ -513,6 +335,5 @@ function sendOrder() {
 
 renderCart();
 </script>
-
 </body>
 </html>
