@@ -463,6 +463,12 @@ function checkout() {
 
 // Sahifa yuklanganda ishga tushirish
 renderCart();
+
+// Vaqtincha xotirani tozalash uchun (tekshirib bo'lgach o'chirasiz)
+localStorage.setItem("favs", JSON.stringify([]));
+updateBottomBadges();
+
+
 </script>
 
 </body>
