@@ -29,7 +29,7 @@ a { text-decoration: none; color: inherit; }
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
-  padding-bottom: 110px; /* Pastki sticky panel uchun joy */
+  padding-bottom: 110px;
 }
 
 /* HEADER */
@@ -111,11 +111,11 @@ a { text-decoration: none; color: inherit; }
   font-size: 14px;
 }
 
-/* O'CHIRISH VA SANOQ INTEGRATSIYASI */
+/* ACTIONS */
 .item-actions {
   display: flex;
   align-items: center;
-  gap: 14px; /* O'chirish va sanoq o'rtasidagi xavfsiz masofa */
+  gap: 14px;
 }
 
 .delete-item-btn {
@@ -161,10 +161,10 @@ a { text-decoration: none; color: inherit; }
   text-align: center;
 }
 
-/* STICKY BUYURTMA PANELI (ZAMONAVIY) */
+/* STICKY PANEL */
 .checkout-sticky-panel {
   position: fixed;
-  bottom: 80px; /* Bottom navbar tepasida turishi uchun */
+  bottom: 80px;
   left: 12px;
   right: 12px;
   background: white;
@@ -177,17 +177,8 @@ a { text-decoration: none; color: inherit; }
   z-index: 999;
 }
 
-.checkout-info .label {
-  font-size: 12px;
-  color: #777;
-  display: block;
-  margin-bottom: 2px;
-}
-.checkout-info .price {
-  font-size: 18px;
-  font-weight: 800;
-  color: #111;
-}
+.checkout-info .label { font-size: 12px; color: #777; display: block; margin-bottom: 2px; }
+.checkout-info .price { font-size: 18px; font-weight: 800; color: #111; }
 
 .checkout-action-btn {
   background: #6a5acd;
@@ -201,7 +192,7 @@ a { text-decoration: none; color: inherit; }
 }
 .checkout-action-btn:active { background: #574bba; }
 
-/* MODAL OYNALAR (SABLOON) */
+/* MODALS */
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -214,10 +205,7 @@ a { text-decoration: none; color: inherit; }
   transition: all 0.3s ease;
 }
 
-.modal.open {
-  visibility: visible;
-  opacity: 1;
-}
+.modal.open { visibility: visible; opacity: 1; }
 
 .modal-content {
   background: white;
@@ -231,16 +219,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .modal.open .modal-content { transform: translateY(0); }
-
-.modal-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
 .close-modal { color: #999; font-size: 20px; cursor: pointer; }
 
 /* INPUTS */
@@ -254,39 +233,14 @@ a { text-decoration: none; color: inherit; }
 .submit-btn {
   background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px;
 }
+.submit-btn:disabled { background: #a29bfe; cursor: not-allowed; }
 
-/* TARIX RO'YXATI */
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.history-card {
-  background: #f8f9fa;
-  border-radius: 14px;
-  padding: 12px;
-  border: 1px solid #eee;
-}
-.history-card-top {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-.history-card-items {
-  font-size: 14px;
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 4px;
-}
-.history-card-price {
-  font-size: 14px;
-  font-weight: 700;
-  color: #6a5acd;
-  text-align: right;
-}
+/* HISTORY CARD */
+.history-list { display: flex; flex-direction: column; gap: 10px; }
+.history-card { background: #f8f9fa; border-radius: 14px; padding: 12px; border: 1px solid #eee; }
+.history-card-top { display: flex; justify-content: space-between; font-size: 13px; color: #666; margin-bottom: 6px; font-weight: 500; }
+.history-card-items { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 4px; }
+.history-card-price { font-size: 14px; font-weight: 700; color: #6a5acd; text-align: right; }
 
 /* BOTTOM NAV */
 .bottom {
@@ -305,10 +259,7 @@ a { text-decoration: none; color: inherit; }
   padding: 0 10px;
 }
 
-.bottom a {
-  color: #b0b0b5; font-size: 22px; transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 16px;
-}
-
+.bottom a { color: #b0b0b5; font-size: 22px; transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 16px; }
 .bottom a.active { color: #6a5acd; background: rgba(106, 90, 205, 0.08); }
 </style>
 </head>
@@ -353,7 +304,7 @@ a { text-decoration: none; color: inherit; }
       <label>Yetkazib berish manzili</label>
       <textarea id="custAddress" rows="2" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
     </div>
-    <button class="submit-btn" onclick="sendOrder()">Buyurtmani yakunlash</button>
+    <button class="submit-btn" id="submitBtn" onclick="sendOrder()">Buyurtmani yakunlash</button>
   </div>
 </div>
 
@@ -363,8 +314,7 @@ a { text-decoration: none; color: inherit; }
       <span><i class="fa-solid fa-clock-rotate-left"></i> Buyurtmalaringiz tarixi</span>
       <i class="fa-solid fa-xmark close-modal" onclick="closeHistoryModal()"></i>
     </div>
-    <div class="history-list" id="historyListContent">
-      </div>
+    <div class="history-list" id="historyListContent"></div>
   </div>
 </div>
 
@@ -381,20 +331,11 @@ if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
   isTelegramApp = true;
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
-  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
-    Telegram.WebApp.disableVerticalSwipes();
-  }
 }
 
 const listBox = document.getElementById("cartList");
 const stickyPanel = document.getElementById("stickyPanel");
 
-// Telegram tugmasini to'liq o'chirib, o'rniga o'zimizning universal modern tugmamizdan foydalanamiz
-if (isTelegramApp && Telegram.WebApp.MainButton) {
-  Telegram.WebApp.MainButton.hide();
-}
-
-/* SAVATNI EKRAINGA RENDERING QILISH */
 function renderCart() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   listBox.innerHTML = "";
@@ -439,15 +380,12 @@ function renderCart() {
 
   document.getElementById("totalItemsText").innerText = `Jami ${totalQty} ta mahsulot`;
   document.getElementById("totalPriceText").innerText = totalPrice.toLocaleString() + " so'm";
-
   if (typeof updateBottomBadges === 'function') updateBottomBadges();
 }
 
-/* SANOQNI O'ZGARTIRISH (1 da qotadi) */
 function changeQty(id, delta) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let item = cart.find(x => x.id === id);
-
   if (item) {
     item.qty += delta;
     if (item.qty < 1) item.qty = 1;
@@ -456,7 +394,6 @@ function changeQty(id, delta) {
   }
 }
 
-/* DONALAB SAVATDAN O'CHIRISH */
 function removeItem(id) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   cart = cart.filter(x => x.id !== id);
@@ -464,30 +401,25 @@ function removeItem(id) {
   renderCart();
 }
 
-/* HAMMASINI TOZALASH */
 function clearCart() {
-  if (confirm("Savatingizni butunlay bo'shatmoqchimisiz?")) {
+  if (confirm("Savatingizni bo'shatmoqchimisiz?")) {
     localStorage.removeItem("cart");
     renderCart();
   }
 }
 
-/* MODAL OYNALARNI BOSHQARISH */
 function openOrderModal() { document.getElementById("orderModal").classList.add("open"); }
 function closeOrderModal() { document.getElementById("orderModal").classList.remove("open"); }
 
-/* TARIX MODAL OYNASINI BOSHQARISH VA YUKLASH */
 function openHistoryModal() {
   const historyListContent = document.getElementById("historyListContent");
   let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
-  
   historyListContent.innerHTML = "";
   
   if (history.length === 0) {
     historyListContent.innerHTML = `<p style="text-align:center; color:#999; font-size:14px; padding:30px 0;">Hozircha buyurtmalar tarixi mavjud emas.</p>`;
   } else {
-    // Oxirgi buyurtma eng tepada ko'rinishi uchun teskari aylantiramiz
-    history.reverse().forEach(order => {
+    history.slice().reverse().forEach(order => {
       let itemsSummary = order.items.map(i => `${i.name} (${i.qty} ta)`).join(", ");
       historyListContent.innerHTML += `
         <div class="history-card">
@@ -500,59 +432,83 @@ function openHistoryModal() {
         </div>`;
     });
   }
-  
   document.getElementById("historyModal").classList.add("open");
 }
-
 function closeHistoryModal() { document.getElementById("historyModal").classList.remove("open"); }
 
-/* Telegram Botga Buyurtma Yuborish */
+/* TELEGRAM BOT INTERGATSION FUNKSIYASI */
 function sendOrder() {
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const address = document.getElementById("custAddress").value.trim();
+  const submitBtn = document.getElementById("submitBtn");
 
   if (!name || phone === "+998" || phone.length < 9 || !address) {
     alert("Iltimos, barcha maydonlarni to'g'ri va to'liq to'ldiring!");
     return;
   }
 
+  // Tugmani bloklaymiz (dublikat buyurtma ketmasligi uchun)
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Yuborilmoqda...";
+
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  let orderId = Math.floor(1000 + Math.random() * 9000);
+  let orderDate = new Date().toLocaleDateString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
 
-  // BUYURTMA TARIXIGA SAQLASH MANTIQI
+  // 1. Tarix ro'yxatiga yozish
   let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
-  let newOrder = {
-    id: Math.floor(1000 + Math.random() * 9000), // Random 4 xonali ID
-    date: new Date().toLocaleDateString('uz-UZ', { hour: '2-digit', minute: '2-digit' }),
-    items: cart,
-    total: totalPrice
-  };
+  let newOrder = { id: orderId, date: orderDate, items: cart, total: totalPrice };
   history.push(newOrder);
   localStorage.setItem("orderHistory", JSON.stringify(history));
 
-  // Telegram Xabari
-  let message = `🛒 YANGI BUYURTMA!\n\n`;
-  message += `👤 Mijoz: ${name}\n`;
-  message += `📞 Telefon: ${phone}\n`;
-  message += `📍 Manzil: ${address}\n\n`;
-  message += `📦 Mahsulotlar:\n`;
-
+  // 2. Chiroyli Telegram Xabari formatlash
+  let message = `🛒 <b>YANGI BUYURTMA (ID: #${orderId})</b>\n\n`;
+  message += `👤 <b>Mijoz:</b> ${name}\n`;
+  message += `📞 <b>Telefon:</b> ${phone}\n`;
+  message += `📍 <b>Manzil:</b> ${address}\n\n`;
+  message += `📦 <b>Mahsulotlar:</b>\n`;
   cart.forEach((item, index) => {
-    message += `${index + 1}. ${item.name} - ${item.qty} ta (${(item.price * item.qty).toLocaleString()} so'm)\n`;
+    message += `${index + 1}. ${item.name} - <b>${item.qty} ta</b> (${(item.price * item.qty).toLocaleString()} so'm)\n`;
   });
+  message += `\n💰 <b>Jami summa:</b> ${totalPrice.toLocaleString()} so'm`;
 
-  message += `\n💰 Jami summa: ${totalPrice.toLocaleString()} so'm`;
+  // 3. To'g'ridan-to'g'ri Telegram API ga yuborish
+  const BOT_TOKEN = "8715142645:AAHpYkJ3HapkOD0V8efCIppiOpMkRp3ihO0";
+  const CHAT_ID = "7779592134";
 
-  if (isTelegramApp && Telegram.WebApp.sendData) {
-    localStorage.removeItem("cart"); 
-    Telegram.WebApp.sendData(message); 
-  } else {
-    alert("Buyurtma muvaffaqiyatli qabul qilindi!");
-    localStorage.removeItem("cart");
-    closeOrderModal();
-    renderCart();
-  }
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text: message,
+      parse_mode: "HTML"
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      alert("Buyurtmangiz muvaffaqiyatli qabul qilindi!");
+      localStorage.removeItem("cart");
+      closeOrderModal();
+      renderCart();
+      // Agarda Telegram ichida ochilgan bo'lsa WebApp o'zi yopiladi
+      if (isTelegramApp && Telegram.WebApp.close) {
+        Telegram.WebApp.close();
+      }
+    } else {
+      alert("Xatolik yuz berdi. Bot sozlamalarini tekshiring.");
+    }
+  })
+  .catch(err => {
+    alert("Tarmoq xatosi! Buyurtma yuborilmadi.");
+    console.error(err);
+  })
+  .finally(() => {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Buyurtmani yakunlash";
+  });
 }
 
 renderCart();
