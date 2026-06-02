@@ -2,56 +2,38 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel Pro</title>
+    <title>Admin Panel</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; display: flex; margin: 0; background: #f4f4f9; }
-        .sidebar { width: 220px; background: #2c3e50; color: white; height: 100vh; padding: 20px; }
-        .menu-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #3e5871; transition: 0.3s; }
-        .menu-item:hover { background: #34495e; }
-        .content { flex-grow: 1; padding: 30px; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; }
-        .cat-item { padding: 15px; border: 1px solid #eee; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn { padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; background: #6a5acd; color: white; width: 100%; font-weight: bold; }
+        .cat-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { background: #555; margin-bottom: 15px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <h3>Admin</h3>
-    <div class="menu-item" onclick="showSection('cat-section')">Kategoriyalar</div>
-    <div class="menu-item" onclick="alert('Boshqa sozlamalar...')">Sozlamalar</div>
+<div class="container" id="cat-view">
+    <h2>Kategoriyalar</h2>
+    <button class="btn" onclick="addCategory()">+ Yangi Kategoriya qo'shish</button>
+    <div id="cat-list" style="margin-top:20px;"></div>
 </div>
 
-<div class="content">
-    <div id="cat-section" class="card">
-        <h2>Kategoriyalar</h2>
-        <button class="btn" onclick="addCategory()">+ Yangi Kategoriya</button>
-        <div id="cat-list"></div>
-    </div>
-
-    <div id="prod-section" class="card hidden">
-        <button class="btn" onclick="showSection('cat-section')">⬅️ Orqaga</button>
-        <h2 id="current-cat-title"></h2>
-        <input type="text" id="pName" placeholder="Mahsulot nomi">
-        <button class="btn" onclick="addProduct()">Mahsulot qo'shish</button>
-        <div id="prod-list"></div>
-    </div>
+<div class="container hidden" id="prod-view">
+    <button class="btn back-btn" onclick="goBack()">⬅️ Orqaga</button>
+    <h2 id="cat-title"></h2>
+    <input type="text" id="pName" style="width:100%; padding:10px; margin-bottom:10px;" placeholder="Mahsulot nomi">
+    <button class="btn" onclick="addProduct()">Mahsulot qo'shish</button>
+    <div id="prod-list" style="margin-top:20px;"></div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('adminDB')) || {}; // Ma'lumotlarni saqlash
+    let db = JSON.parse(localStorage.getItem('adminDB')) || {}; 
     let activeCat = "";
 
-    function showSection(id) {
-        document.getElementById('cat-section').classList.add('hidden');
-        document.getElementById('prod-section').classList.add('hidden');
-        document.getElementById(id).classList.remove('hidden');
-        if(id === 'cat-section') renderCategories();
-    }
-
     function addCategory() {
-        const name = prompt("Kategoriya nomi:");
+        const name = prompt("Kategoriya nomini kiriting:");
         if(name && !db[name]) {
             db[name] = [];
             save(); renderCategories();
@@ -62,17 +44,23 @@
         const list = document.getElementById('cat-list');
         list.innerHTML = Object.keys(db).map(cat => `
             <div class="cat-item">
-                <span onclick="openCategory('${cat}')" style="cursor:pointer; font-weight:bold;">${cat}</span>
-                <button onclick="deleteCat('${cat}')">🗑️</button>
+                <span onclick="openCategory('${cat}')" style="cursor:pointer; font-weight:bold; color:#6a5acd;">${cat}</span>
+                <button onclick="deleteCat('${cat}')" style="background:#ff3b30; border:none; color:white; padding:5px 10px; border-radius:4px;">O'chirish</button>
             </div>
         `).join('');
     }
 
     function openCategory(name) {
         activeCat = name;
-        document.getElementById('current-cat-title').innerText = "Kategoriya: " + name;
-        showSection('prod-section');
+        document.getElementById('cat-title').innerText = "Kategoriya: " + name;
+        document.getElementById('cat-view').classList.add('hidden');
+        document.getElementById('prod-view').classList.remove('hidden');
         renderProducts();
+    }
+
+    function goBack() {
+        document.getElementById('cat-view').classList.remove('hidden');
+        document.getElementById('prod-view').classList.add('hidden');
     }
 
     function addProduct() {
@@ -87,13 +75,13 @@
     function renderProducts() {
         const list = document.getElementById('prod-list');
         list.innerHTML = db[activeCat].map((p, i) => `
-            <div class="cat-item">${p} <button onclick="delProd(${i})">O'chirish</button></div>
+            <div class="cat-item">${p} <button onclick="delProd(${i})" style="background:#ff3b30; border:none; color:white; padding:5px 10px; border-radius:4px;">O'chirish</button></div>
         `).join('');
     }
 
     function save() { localStorage.setItem('adminDB', JSON.stringify(db)); }
-    function deleteCat(name) { delete db[name]; save(); renderCategories(); }
-    function delProd(index) { db[activeCat].splice(index, 1); save(); renderProducts(); }
+    function deleteCat(name) { if(confirm("O'chirishni istaysizmi?")) { delete db[name]; save(); renderCategories(); } }
+    function delProd(i) { db[activeCat].splice(i, 1); save(); renderProducts(); }
     
     renderCategories();
 </script>
