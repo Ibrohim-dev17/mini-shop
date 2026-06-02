@@ -15,15 +15,25 @@
     <div id="list"></div>
     <button onclick="window.location.href='admin_panel.html'" style="margin-top:20px; width:100%; padding:15px;">Orqaga</button>
 
-    <script>
-        let db = JSON.parse(localStorage.getItem('adminDB')) || [];
-        const list = document.getElementById('list');
-        list.innerHTML = db.map(item => `
-            <div class="card">
-                <img src="${item.img}">
-                <h3>${item.name}</h3>
-            </div>
-        `).join('');
-    </script>
+   <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyO_0Xgm0sz6j3-GGzpM_SKYXVCAUqo0go8l0irGq_8AN-lZAh3ImnnlGrY1Byrljvy8g/exec";
+
+    function loadCategories() {
+        fetch(API_URL) // Bu yerda doGet ishlaydi
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('list');
+                list.innerHTML = data.map(item => `
+                    <div class="card">
+                        <img src="${item.img || 'https://via.placeholder.com/60'}">
+                        <h3>${item.name}</h3>
+                    </div>
+                `).join('');
+            })
+            .catch(err => console.error("Xatolik:", err));
+    }
+    loadCategories(); // Sahifa ochilganda yuklaydi
+</script>
+
 </body>
 </html>
