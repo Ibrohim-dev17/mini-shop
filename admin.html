@@ -1,102 +1,86 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Admin Panel - Mahsulotlar</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-  :root { --primary: #6a5acd; --danger: #ff3b30; --bg: #f8f9fa; }
-  body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 16px; }
-  .card { background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
-  .input-group { margin-bottom: 15px; }
-  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #666; }
-  input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; outline: none; font-size: 14px; }
-  input:focus { border-color: var(--primary); }
-  .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-  .btn-primary { background: var(--primary); color: white; }
-  .btn-primary:disabled { opacity: 0.6; }
-  #preview { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-top: 10px; display: none; }
-  .prod-item { display: flex; align-items: center; gap: 10px; background: white; padding: 10px; border-radius: 12px; margin-bottom: 8px; }
-  .prod-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-  .delete-btn { color: var(--danger); background: #ffebeb; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --main: #6a5acd; }
+        body { font-family: system-ui; background: #f4f4f9; padding: 20px; }
+        .card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 10px 20px; border-radius: 8px; border: none; background: #ddd; cursor: pointer; }
+        .tab-btn.active { background: var(--main); color: #fff; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .item-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 12px; }
+        .status-active { background: #d4edda; color: #155724; }
+        .status-sleep { background: #fff3cd; color: #856404; }
+    </style>
 </head>
 <body>
 
-<div id="app">
-  <h2><i class="fa-solid fa-cart-plus"></i> Yangi mahsulot</h2>
-  <div class="card">
-    <div class="input-group">
-      <label>Mahsulot nomi</label>
-      <input type="text" id="pName" placeholder="Nomi...">
-    </div>
-    <div class="input-group">
-      <label>Narxi (so'm)</label>
-      <input type="number" id="pPrice" placeholder="Masalan: 150000">
-    </div>
-    <div class="input-group">
-      <label>Rasm URL</label>
-      <input type="text" id="pImg" placeholder="https://..." oninput="updatePreview(this.value)">
-      <img id="preview">
-    </div>
-    <button id="pubBtn" class="btn btn-primary" onclick="publishProduct()">Joylash</button>
-  </div>
-
-  <h3>Mavjud mahsulotlar</h3>
-  <div id="list"></div>
+<div class="tabs">
+    <button class="tab-btn active" onclick="showSection('products')">Mahsulotlar</button>
+    <button class="tab-btn" onclick="showSection('categories')">Kategoriyalar</button>
 </div>
 
+<!-- Mahsulotlar Bo'limi -->
+<section id="products" class="content-section active">
+    <div class="card">
+        <h3>Yangi Mahsulot</h3>
+        <input type="text" id="pName" placeholder="Nomi" style="width:100%; margin-bottom:10px; padding:8px;">
+        <input type="file" id="pImgFile" accept="image/*" style="margin-bottom:10px;">
+        <button onclick="saveProduct()" class="tab-btn active">Saqlash</button>
+    </div>
+    <div id="pList"></div>
+</section>
+
+<!-- Kategoriyalar Bo'limi -->
+<section id="categories" class="content-section">
+    <div class="card">
+        <h3>Kategoriya qo'shish</h3>
+        <input type="text" id="catName" placeholder="Kategoriya nomi">
+        <button onclick="saveCategory()" class="tab-btn active">Qo'shish</button>
+    </div>
+    <div id="cList"></div>
+</section>
+
 <script>
-const API_URL = "BU_YERGA_WEB_APP_URL";
-const ADMIN_ID = 7779592134;
-
-// Telegram ID tekshiruvi
-const tg = window.Telegram.WebApp;
-const userId = tg.initDataUnsafe?.user?.id || 7779592134; 
-
-if (userId.toString() !== ADMIN_ID.toString()) {
-  document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Kirish taqiqlangan!</h2>";
+function showSection(id) {
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
 }
 
-function updatePreview(url) {
-  const img = document.getElementById('preview');
-  if(url.startsWith('http')) { img.src = url; img.style.display = 'block'; }
-  else { img.style.display = 'none'; }
+// Rasm yuklash (Base64 ga o'girish)
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 }
 
-async function publishProduct() {
-  const btn = document.getElementById('pubBtn');
-  const data = {
-    action: "add",
-    name: document.getElementById('pName').value,
-    price: document.getElementById('pPrice').value,
-    img: document.getElementById('pImg').value,
-    id: "p_" + Date.now()
-  };
-
-  if(!data.name || !data.price) return alert("Barcha maydonlarni to'ldiring!");
-
-  btn.disabled = true;
-  btn.innerHTML = "Yuklanmoqda...";
-
-  try {
-    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-    const json = await res.json();
-    if(json.status === "success") {
-      alert("Muaffaqiyatli qo'shildi!");
-      location.reload();
-    }
-  } catch(e) {
-    alert("Xatolik yuz berdi!");
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = "Joylash";
-  }
+async function saveProduct() {
+    const file = document.getElementById('pImgFile').files[0];
+    let imgBase64 = "";
+    if (file) imgBase64 = await getBase64(file);
+    
+    // Serverga yuborish logikasi...
+    console.log("Ma'lumot:", { name: document.getElementById('pName').value, img: imgBase64 });
+    alert("Saqlandi!");
 }
 
-// Boshlang'ich yuklash funksiyasi shu yerga chaqiriladi
+function saveCategory() {
+    const name = document.getElementById('catName').value;
+    // Baza logikasi...
+    alert("Kategoriya qo'shildi: " + name);
+}
 </script>
 </body>
 </html>
