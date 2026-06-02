@@ -8,13 +8,16 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+<!-- DATA.JS ENG TEPADA BO'LISHI SHART -->
+<script src="data.js"></script>
+
 <style>
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Telegram ichida faqat kontent skrol bo'ladi */
+  overflow: hidden;
   font-family: system-ui, -apple-system, sans-serif;
   background: #f5f6fa;
   color: #111;
@@ -23,9 +26,8 @@ html, body {
 a { text-decoration: none; color: inherit; }
 * { box-sizing: border-box; }
 
-/* FAOQAT SHU DIV SKROL BO'LADI */
 .main-content {
-  height: calc(100vh - 65px); /* Menyu balandligi chegirildi */
+  height: calc(100vh - 65px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
@@ -61,7 +63,7 @@ a { text-decoration: none; color: inherit; }
   margin: 12px;
 }
 
-/* RASM BLOKI - KATTA VA CHIROYLI */
+/* RASM BLOKI */
 .image-box {
   background: white;
   border-radius: 24px;
@@ -76,13 +78,13 @@ a { text-decoration: none; color: inherit; }
 
 .image-box img {
   width: 100%;
-  max-width: 280px; /* Rasm katta va sifatli chiqishi uchun */
+  max-width: 280px;
   height: auto;
   max-height: 280px;
   object-fit: contain;
 }
 
-/* SHAFFOF YURAKCHA (Rasm burchagida) */
+/* YURAKCHA */
 .heart {
   position: absolute;
   top: 15px;
@@ -94,7 +96,7 @@ a { text-decoration: none; color: inherit; }
   justify-content: center;
   cursor: pointer;
   font-size: 22px;
-  color: #b0b0b5; /* Bosilmaganda och kulrang kontur */
+  color: #b0b0b5;
   z-index: 5;
   transition: transform 0.2s ease, color 0.2s ease;
 }
@@ -102,7 +104,7 @@ a { text-decoration: none; color: inherit; }
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
 
-/* MAHSULOT DETALLARI */
+/* DETAILS */
 .details-box {
   background: white;
   margin-top: 12px;
@@ -138,7 +140,7 @@ a { text-decoration: none; color: inherit; }
   margin-bottom: 20px;
 }
 
-/* COUNTER ZAMONAVIY USLUBDA */
+/* COUNTER */
 .counter {
   display: flex;
   align-items: center;
@@ -167,7 +169,7 @@ a { text-decoration: none; color: inherit; }
   font-weight: 700;
 }
 
-/* SAVATGA QO'SHISH TUGMASI */
+/* BUTTON */
 .add-btn {
   background: #6a5acd;
   color: white;
@@ -180,11 +182,9 @@ a { text-decoration: none; color: inherit; }
   transition: background 0.2s;
 }
 
-.add-btn:active {
-  background: #574bba;
-}
+.add-btn:active { background: #574bba; }
 
-/* TOAST BILDIRISHNOMA (Alert o'rniga zamonaviy xabar) */
+/* TOAST */
 .toast {
   position: fixed;
   top: -60px;
@@ -242,7 +242,6 @@ a { text-decoration: none; color: inherit; }
 <div id="toast" class="toast">Savatga qo‘shildi!</div>
 
 <div class="main-content">
-
   <div class="header">
     <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>
   </div>
@@ -258,7 +257,7 @@ a { text-decoration: none; color: inherit; }
     <div class="details-box">
       <div class="name" id="pName"></div>
       <div class="price" id="pPrice"></div>
-      
+
       <div class="desc-title">Mahsulot haqida</div>
       <div class="desc" id="pDesc"></div>
 
@@ -271,7 +270,6 @@ a { text-decoration: none; color: inherit; }
       <button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
     </div>
   </div>
-
 </div>
 
 <div class="bottom">
@@ -282,7 +280,6 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <script>
-// Telegram sozlamalari
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -295,38 +292,20 @@ if (window.Telegram && Telegram.WebApp) {
 const url = new URLSearchParams(window.location.search);
 const id = url.get("id");
 
-/* DATA (XATOLARI TUZATILDI: VERGULLAR QO'YILDI) */
-const allProducts = [
-  {id:"termos1", name:"Termos 1L", price:120000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"1 litr termos. 12 soat issiq saqlaydi. Sifatli zanglamas po'latdan yasalgan."},
-  {id:"termos2", name:"Termos 2L", price:150000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"2 litr katta termos. Oila va sayohat uchun eng zo‘r tanlov."},
-  {id:"termos3", name:"Sport Termos", price:110000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Sport uchun qulay va yengil ixcham termos."},
-  {id:"blender1", name:"Blender 3x1", price:220000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"3 ta funksiyali yuqori sifatli blender. Mevalar va muzlarni oson maydalaydi."},
-  {id:"blender2", name:"Mini Blender", price:160000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Mini blender. Har qanday sharoitda oshxona uchun juda qulay."},
-  {id:"blender3", name:"Professional Blender", price:390000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Professional va o'ta kuchli blender, og'ir ishlar uchun."},
-  {id:"qozon1", name:"Qozon 5L", price:180000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 litrli qalin quyma temir qozon. Ovqatlar mazali pishadi."},
-  {id:"qozon2", name:"Qozon 10L", price:260000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"10 litrli katta va baquvvat qozon, katta oilalar va marosimlar uchun."},
-  {id:"mikser1", name:"Mikser 5 Speed", price:150000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"5 xil tezlik rejimiga ega qulay oshxona mikseri."},
-  {id:"mikser2", name:"Mini Mikser", price:95000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Kichik va ixcham mikser. Hamyonbop va qulay variant."},
-  {id:"idish1", name:"Idishlar To‘plami", price:150000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Oshxona bezagi uchun maxsus sifatli idishlar komplekti."},
-  {id:"idish2", name:"Premium Idishlar", price:260000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Premium turkumidagi nafis va chidamli idishlar to'plami."}
-];
-
-/* PRODUCT TOPISH */
+/* MAHSULOTNI DATA.JS ICHIDAN QIDIRISH */
 const product = allProducts.find(p => String(p.id) === String(id));
 
-/* FAVORITES TEKSHIRISH VA YUKLASH */
+/* SEVIMLILARNI TEKSHIRISH */
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 const favBtn = document.getElementById("favBtn");
 const icon = favBtn.querySelector("i");
 
 if (product) {
-  // Ma'lumotlarni chiqarish
   document.getElementById("pName").innerText = product.name;
   document.getElementById("pPrice").innerText = product.price.toLocaleString() + " so'm";
   document.getElementById("pImg").src = product.img;
   document.getElementById("pDesc").innerText = product.desc;
 
-  // Yurakcha holati
   if (favs.includes(product.id)) {
     favBtn.classList.add("active");
     icon.className = "fa-solid fa-heart";
@@ -338,7 +317,7 @@ if (product) {
   document.getElementById("productBox").innerHTML = "<p style='text-align:center; padding:50px; color:#888;'>Mahsulot topilmadi</p>";
 }
 
-/* COUNTER LOGIC */
+/* COUNTER */
 let count = 1;
 function plus() {
   count++;
@@ -351,7 +330,7 @@ function minus() {
   }
 }
 
-/* SAVATGA QO'SHISH FUNKSIYASI */
+/* SAVATGA QO'SHISH */
 function addToCart() {
   if (!product) return;
 
@@ -371,14 +350,18 @@ function addToCart() {
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+  
+  // Pastki menyudagi badgelarni darhol yangilash (data.js funksiyasi)
+  if (typeof updateBottomBadges === 'function') {
+    updateBottomBadges();
+  }
 
-  // Zamonaviy Toast xabarni chiqarish
   const toast = document.getElementById("toast");
   toast.classList.add("show");
   setTimeout(() => { toast.classList.remove("show"); }, 2000);
 }
 
-/* SHAFFOF YURAKCHA TOGGLE FUNKSIYASI */
+/* YURAKCHA TOGGLE */
 function toggleFav(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -398,12 +381,11 @@ function toggleFav(e) {
   }
 
   localStorage.setItem("favs", JSON.stringify(favs));
+  
+  // Ma'lumot yangilanganini bildirish
   window.dispatchEvent(new Event('favsUpdated'));
 }
 </script>
-
-<script src="data.js"></script>
-
 
 </body>
 </html>
