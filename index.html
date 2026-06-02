@@ -353,7 +353,6 @@ img { max-width: 100%; }
   <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
 </div>
 
-
 <script>
 // Telegram WebApp yuklash
 if (window.Telegram && Telegram.WebApp) {
@@ -394,8 +393,7 @@ function renderProducts(productsList) {
     return;
   }
 
-  
-          productsList.forEach(p => {
+  productsList.forEach(p => {
     let isFav = favs.includes(p.id);
     box.innerHTML += `
     <div class="card">
@@ -410,11 +408,11 @@ function renderProducts(productsList) {
       <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
     </div>`;
   });
+}
 
 // Dastlabki tasodifiy 6 ta mahsulotni tanlab chiqarish
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
-
 
 /* SEVIMLILARGA QO'SHISH/O'CHIRISH */
 function toggleFav(id, el) {
@@ -429,9 +427,7 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  if (typeof updateBottomBadges === 'function') updateBottomBadges();
 }
-
 
 /* SAVATGA QO'SHISH FUNKSIYASI */
 function addToCart(e, id) {
@@ -441,30 +437,20 @@ function addToCart(e, id) {
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let existing = cart.find(item => item.id === id);
-
   if (existing) {
     existing.qty += 1;
   } else {
     cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
   }
-
   localStorage.setItem("cart", JSON.stringify(cart));
-
-  // Telegram pastki tugmasini yangilash
   updateTelegramMainButton();
 
-  if (typeof updateBottomBadges === 'function') {
-    updateBottomBadges();
-  }
-
-  // Toast bildirishnomasini ko'rsatish
   const toast = document.getElementById("toast");
   toast.classList.add("show");
   setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
-
-/* HAQIQIY MULTI-QIDIRUV TIZIMI (MAKSIMAL OPTIMIZATSIYA) */
+/* QIDIRUV */
 document.getElementById("searchInput").addEventListener("input", e => {
   let val = e.target.value.trim().toLowerCase();
   const bannerBlock = document.getElementById("bannerBlock");
@@ -472,48 +458,34 @@ document.getElementById("searchInput").addEventListener("input", e => {
   const sectionTitle = document.getElementById("sectionTitle");
 
   if (val === "") {
-    // Agar qidiruv oynasi bo'sh bo'lsa, eski holatga qaytaramiz
     bannerBlock.style.display = "block";
     categoriesBlock.style.display = "block";
     sectionTitle.innerText = "Ommabop mahsulotlar";
     renderProducts(initialProducts);
   } else {
-    // Agar foydalanuvchi qidirayotgan bo'lsa, banner va kategoriyalarni yashiramiz
     bannerBlock.style.display = "none";
     categoriesBlock.style.display = "none";
     sectionTitle.innerText = "Qidiruv natijalari";
-
-    // barcha mahsulotlar (allProducts) ichidan mos keladiganlarini qidiramiz
     let filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
     renderProducts(filtered);
   }
 });
 
-
-/* TELEGRAM MAIN BUTTON ORQALI SAVATGA TEZKOR O'TISH TIZIMI */
+/* TELEGRAM MAIN BUTTON */
 function updateTelegramMainButton() {
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-
     if (totalQty > 0) {
       Telegram.WebApp.MainButton.setText(`Savatni ko'rish (${totalQty} ta mahsulot)`);
       Telegram.WebApp.MainButton.show();
-      Telegram.WebApp.MainButton.onClick(function() {
-        window.location.href = "cart.html";
-      });
+      Telegram.WebApp.MainButton.onClick(() => window.location.href = "cart.html");
     } else {
       Telegram.WebApp.MainButton.hide();
     }
   }
 }
-
-// MainButton funksiyasini dastlab ishga tushiramiz
 updateTelegramMainButton();
-
-// Har marta local storage o'zgarganda (masalan boshqa funksiyalar chaqirilganda) MainButton ham yangilansin
-window.addEventListener('storage', updateTelegramMainButton);
-
 
 /* SLIDER KODI */
 const slider = document.getElementById("slider");
@@ -529,7 +501,6 @@ function updateDots() {
   let i = Math.round(slider.scrollLeft / width);
   i = i % dots.length;
   if (i < 0) i = 0;
-
   dots.forEach(d => d.classList.remove("active"));
   if(dots[i]) dots[i].classList.add("active");
 }
@@ -544,30 +515,14 @@ function autoSlide() {
   const cards = document.querySelectorAll(".banner-card");
   if(cards.length === 0) return;
   const width = cards[0].offsetWidth;
-
   slideIndex++;
   if (slideIndex >= cards.length) slideIndex = 0;
-
   slider.scrollTo({ left: slideIndex * width, behavior: "smooth" });
 }
 
 let autoSlideInterval = setInterval(autoSlide, 3000);
-
-slider.addEventListener("touchstart", () => {
-  userScrolling = true;
-  clearInterval(autoSlideInterval);
-}, { passive: true });
-
-slider.addEventListener("touchend", () => {
-  setTimeout(() => {
-    userScrolling = false;
-    clearInterval(autoSlideInterval);
-    autoSlideInterval = setInterval(autoSlide, 3000);
-  }, 2000);
-});
-
-slider.addEventListener("touchmove", e => { e.stopPropagation(); }, { passive: true });
-
 </script>
+
+
 </body>
 </html>
