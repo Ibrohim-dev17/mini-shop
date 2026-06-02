@@ -148,12 +148,12 @@ img { max-width: 100%; }
 .cat-card img { width: 50px; height: 50px; object-fit: contain; }
 .cat-card p { margin: 6px 0 0 0; font-size: 12px; font-weight: 500; }
 
-/* PRODUCTS */
+/* PRODUCTS - Yangi va toza versiyasi */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  grid-template-columns: repeat(2, 1fr); /* Har doim 2 ta ustun */
   gap: 12px;
-  padding-bottom: 20px;
+  padding: 12px;
 }
 
 .card {
@@ -164,52 +164,51 @@ img { max-width: 100%; }
   box-shadow: 0 4px 10px rgba(0,0,0,0.03);
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .card a {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   text-decoration: none;
   color: inherit;
+  flex-grow: 1;
 }
 
-.card img {
-  width: 100%;
-  height: 140px;
-  object-fit: contain;
-  margin-bottom: 10px;
+.card img { 
+  width: 100%; 
+  height: 120px; 
+  object-fit: contain; 
+  margin-bottom: 8px;
 }
 
-.card p {
-  font-size: 14px;
-  color: #333;
-  margin: 0 0 8px 0;
+.card p { 
+  margin: 0 0 8px 0; 
+  font-size: 14px; 
+  font-weight: 500; 
+  color: #333; 
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  height: 38px;
 }
 
-.price {
-  color: #6a5acd;
-  font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 10px;
-}
+.price { color: #6a5acd; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
 
 .add-to-cart-btn {
-  margin-top: auto;
   background: #f1f2f6;
   color: #6a5acd;
   border: none;
   width: 100%;
   padding: 10px;
   border-radius: 10px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  margin-top: auto;
 }
+.add-to-cart-btn:active { background: #6a5acd; color: white; }
+
 
 
 .heart {
@@ -411,10 +410,6 @@ function renderProducts(productsList) {
       <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
     </div>`;
   });
-
-
-  });
-}
 
 // Dastlabki tasodifiy 6 ta mahsulotni tanlab chiqarish
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
