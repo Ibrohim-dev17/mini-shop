@@ -8,7 +8,6 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<!-- DATA.JS TEPADA BO'LISHI SHART -->
 <script src="data.js"></script>
 
 <style>
@@ -322,7 +321,6 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <script>
-// Telegram WebApp yuklash
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -334,10 +332,9 @@ if (window.Telegram && Telegram.WebApp) {
 const listBox = document.getElementById("cartList");
 const totalBlock = document.getElementById("totalBlock");
 
-// MUAMMONING ASOSIY YECHIMI: Hodisani global darajada faqat bir marta bog'laymiz!
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
-  Telegram.WebApp.MainButton.offClick(openOrderModal); // Eski dublikatlarni o'chirish
-  Telegram.WebApp.MainButton.onClick(openOrderModal);  // Faqat 1 ta faol eshituvchi
+  Telegram.WebApp.MainButton.offClick(openOrderModal);
+  Telegram.WebApp.MainButton.onClick(openOrderModal);
 }
 
 /* SAVATNI EKRAINGA RENDERING QILISH */
@@ -387,10 +384,8 @@ function renderCart() {
   document.getElementById("totalItems").innerText = totalQty + " ta";
   document.getElementById("totalPrice").innerText = totalPrice.toLocaleString() + " so'm";
 
-  // MainButton matnini xatolarsiz real vaqtda yangilash
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
     Telegram.WebApp.MainButton.setText(`BUYURTMA BERISH (${totalPrice.toLocaleString()} so'm)`);
-    // Agar tugma yashirin bo'lsa, uni faqat bir marta ko'rsatamiz
     if (!Telegram.WebApp.MainButton.isVisible) {
       Telegram.WebApp.MainButton.show();
     }
@@ -399,18 +394,21 @@ function renderCart() {
   if (typeof updateBottomBadges === 'function') updateBottomBadges();
 }
 
-/* SANOQNI O'ZGARTIRISH */
+/* SANOQNI O'ZGARTIRISH (1 dan pastga tushmaydigan qilindi) */
 function changeQty(id, delta) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let item = cart.find(x => x.id === id);
 
   if (item) {
     item.qty += delta;
-    if (item.qty <= 0) {
-      cart = cart.filter(x => x.id !== id);
+    
+    // AGAR NIKOH/SANOQ 1 DAN PASTGA TUSHMOQCHI BO'LSA, UNI 1 DA QOTIRAMIZ
+    if (item.qty < 1) {
+      item.qty = 1;
     }
+    
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart(); // Savat va narxlar qayta chiziladi, lekin bosilish funksiyasi o'chib ketmaydi!
+    renderCart();
   }
 }
 
@@ -474,7 +472,6 @@ function sendOrder() {
   }
 }
 
-// Birinchi yuklash
 renderCart();
 </script>
 
