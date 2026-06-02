@@ -13,31 +13,50 @@ const allProducts = [
   {id:"idish2", category:"idishlar", name:"Premium Idishlar", price:260000, img:"https://i.imgur.com/3ZQ3Z5b.png", desc:"Premium turkumidagi nafis dizaynli, qirilishga chidamli va uzoq xizmat qiluvchi idishlar to'plami."}
 ];
 
+/* PASTDAGI BADGELARNI YANGILASH (MUKAMMAL VA XAVFSIZ VARIANT) */
 function updateBottomBadges() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const favs = JSON.parse(localStorage.getItem("favs")) || [];
-  
+
+  // 1. SAVAT BADGE
   const cartLink = document.querySelector('a[href="cart.html"]');
   if (cartLink) {
-    let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-    let oldBadge = cartLink.querySelector('.badge');
+    // Esli badgeni butunlay o'chirish
+    const oldBadge = cartLink.querySelector('.badge');
     if (oldBadge) oldBadge.remove();
+
+    let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    
+    // Faqat narsa bo'lsa yangi element yaratib qo'shamiz (innerHTML buzilmaydi)
     if (totalQty > 0) {
       cartLink.style.position = 'relative';
-      cartLink.innerHTML += `<span class="badge" style="position:absolute; top:4px; right:4px; background:#ff3b30; color:white; font-size:10px; font-weight:700; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; border:2px solid white;">${totalQty}</span>`;
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.style.cssText = "position:absolute; top:4px; right:4px; background:#ff3b30; color:white; font-size:10px; font-weight:700; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; border:2px solid white; z-index:10;";
+      badge.innerText = totalQty;
+      cartLink.appendChild(badge);
     }
   }
 
+  // 2. YURAKCHA (SEVIMLILAR) BADGE
   const favLink = document.querySelector('a[href="favorites.html"]');
   if (favLink) {
-    let oldBadge = favLink.querySelector('.badge');
+    // Eski badgeni butunlay o'chirish
+    const oldBadge = favLink.querySelector('.badge');
     if (oldBadge) oldBadge.remove();
-    if (favs.length > 0) {
+
+    // Faqat massivda haqiqatda element bo'lsa va soni 0 dan katta bo'lsa chiqadi
+    if (favs && favs.length > 0) {
       favLink.style.position = 'relative';
-      favLink.innerHTML += `<span class="badge" style="position:absolute; top:4px; right:4px; background:#ff3b30; color:white; font-size:10px; font-weight:700; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; border:2px solid white;">${favs.length}</span>`;
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.style.cssText = "position:absolute; top:4px; right:4px; background:#ff3b30; color:white; font-size:10px; font-weight:700; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; border:2px solid white; z-index:10;";
+      badge.innerText = favs.length;
+      favLink.appendChild(badge);
     }
   }
 }
 
+// Hodisalarni tinglash
 document.addEventListener("DOMContentLoaded", updateBottomBadges);
 window.addEventListener('favsUpdated', updateBottomBadges);
