@@ -301,7 +301,7 @@ function toggleFav(e, id, el){
 /* SAVATGA QO'SHISH FUNKSIYASI */
 function addToCart(e, id) {
   e.preventDefault();
-  e.stopPropagation(); 
+  e.stopPropagation(); // Karta havolasiga o'tib ketishni to'xtatadi
 
   let p = allProducts.find(x => x.id === id);
   if (!p) return;
@@ -318,9 +318,9 @@ function addToCart(e, id) {
   // 1. Avval ma'lumotni saqlaymiz
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  // 2. Keyin pastki paneldagi sonlarni laglarsiz darhol yangilaymiz
-  if (typeof updateBottomBadges === 'function') {
-    updateBottomBadges();
+  // 2. Keyin oynadagi funksiyani chaqiramiz (Lag butunlay yo'qoladi)
+  if (typeof window.updateBottomBadges === 'function') {
+    window.updateBottomBadges();
   }
 
   // Telegram pastki tugmasini yangilash
@@ -328,9 +328,12 @@ function addToCart(e, id) {
 
   // Toast bildirishnomasini ko'rsatish
   const toast = document.getElementById("toast");
-  toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("show"); }, 1500);
+  if (toast) {
+    toast.classList.add("show");
+    setTimeout(() => { toast.classList.remove("show"); }, 1500);
+  }
 }
+
 
 /* TELEGRAM TEZKOR MAIN BUTTON */
 function updateTelegramMainButton() {
