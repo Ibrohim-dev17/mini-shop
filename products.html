@@ -7,7 +7,6 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <script src="data.js"></script>
 
 <style>
@@ -16,7 +15,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Butun ekranning siljib ketishini qat'iy cheklaydi */
+  overflow: hidden; 
   font-family: system-ui, -apple-system, sans-serif;
   background: #f5f6fa;
   color: #111;
@@ -25,9 +24,8 @@ html, body {
 a { text-decoration: none; color: inherit; }
 * { box-sizing: border-box; }
 
-/* FAOQAT SHU QISM SKROL BO'LADI */
 .main-content {
-  height: calc(100vh - 65px); /* Ekran balandligidan yangi menyu joyini chegiradi */
+  height: calc(100vh - 65px); 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
@@ -58,7 +56,7 @@ a { text-decoration: none; color: inherit; }
 
 .header b {
   font-size: 18px;
-  text-transform: capitalize; /* Kategoriya nomini chiroyli bosh harfda chiqaradi */
+  text-transform: capitalize; 
 }
 
 /* PRODUCTS GRID */
@@ -82,7 +80,6 @@ a { text-decoration: none; color: inherit; }
   justify-content: space-between;
 }
 
-/* Karta o'zining active animatsiyasini tugmadan tashqari holatda saqlaydi */
 .card:active { transform: scale(0.98); }
 
 .card img {
@@ -99,7 +96,6 @@ a { text-decoration: none; color: inherit; }
   font-size: 14px;
   font-weight: 500;
   text-align: left;
-  /* Matn uzun bo'lsa chiroyli qisqartirish */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -133,7 +129,7 @@ a { text-decoration: none; color: inherit; }
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
 
-/* SAVATGA QO'SHISH ICHKI TUGMASI */
+/* SAVATGA QO'SHISH TUGMASI */
 .add-to-cart-btn {
   background: #f1f2f6;
   color: #6a5acd;
@@ -160,7 +156,7 @@ a { text-decoration: none; color: inherit; }
 }
 .toast.show { top: 20px; }
 
-/* PASTDAGI ICONLAR PANELI */
+/* PASTDAGI NAVIGATION PANEL */
 .bottom {
   position: fixed;
   bottom: 0;
@@ -202,18 +198,15 @@ a { text-decoration: none; color: inherit; }
 
 <body>
 
-<!-- Toast xabarnoma elementi -->
 <div id="toast" class="toast">Savatga qo‘shildi!</div>
 
 <div class="main-content">
-
   <div class="header">
     <a href="#" onclick="goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>
     <b id="title">Mahsulotlar</b>
   </div>
 
   <div class="products" id="productBox"></div>
-
 </div>
 
 <div class="bottom">
@@ -229,9 +222,7 @@ a { text-decoration: none; color: inherit; }
   </a>
 </div>
 
-
 <script>
-// Telegram sozlamalari
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -240,27 +231,25 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* URL PARAMS ORQALI KATEGORIYANI ANIQLASH */
+/* URL PARAMS */
 const urlParams = new URLSearchParams(window.location.search);
 const cat = urlParams.get("cat");
 const from = urlParams.get("from");
 
-// Qayerdan kelganiga qarab pastki menyuni aktivlashtirish
 if(from === "categories") {
   document.getElementById("navCat").classList.add("active");
 } else {
   document.getElementById("navHome").classList.add("active");
 }
 
-/* SEVIMLILAR (LOCAL STORAGE) */
+/* SEVIMLILAR INITIALIZATION */
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* TITLENI YANGILASH */
 if(cat){
   document.getElementById("title").innerText = cat;
 }
 
-/* MARKAZIY `allProducts` (data.js) RO'YXATIDAN FILTER QILISH */
+/* RENDERING PRODUCTS */
 const box = document.getElementById("productBox");
 const filteredProducts = allProducts.filter(p => p.category === cat);
 
@@ -312,8 +301,8 @@ function toggleFav(e, id, el){
 /* SAVATGA QO'SHISH FUNKSIYASI */
 function addToCart(e, id) {
   e.preventDefault();
-  e.stopPropagation(); // Karta havolasiga o'tib ketishni to'xtatadi
-  
+  e.stopPropagation(); 
+
   let p = allProducts.find(x => x.id === id);
   if (!p) return;
 
@@ -324,17 +313,18 @@ function addToCart(e, id) {
     existing.qty += 1;
   } else {
     cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
-  }updateBottomBadges(); // Raqamni darhol yangilash uchun
+  }
 
-
+  // 1. Avval ma'lumotni saqlaymiz
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  // Telegram pastki tugmasini yangilash
-  updateTelegramMainButton();
-
+  // 2. Keyin pastki paneldagi sonlarni laglarsiz darhol yangilaymiz
   if (typeof updateBottomBadges === 'function') {
     updateBottomBadges();
   }
+
+  // Telegram pastki tugmasini yangilash
+  updateTelegramMainButton();
 
   // Toast bildirishnomasini ko'rsatish
   const toast = document.getElementById("toast");
@@ -357,7 +347,6 @@ function updateTelegramMainButton() {
   }
 }
 
-// Telegram MainButton bosilganda savatga o'tish hodisasini bir marta sozlash
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
   Telegram.WebApp.MainButton.onClick(function() {
     window.location.href = "cart.html";
@@ -368,7 +357,6 @@ if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
 if (typeof updateBottomBadges === 'function') updateBottomBadges();
 updateTelegramMainButton();
 
-/* ORQAGA QAYTISH TIZIMI */
 function goBack(){
   if(from === "categories"){
     window.location.href = "categories.html";
