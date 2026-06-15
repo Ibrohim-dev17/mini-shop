@@ -3,63 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Panel</title>
+    <title>Admin Panel — Boshqaruv</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
         html, body {
             margin: 0; padding: 0; height: 100%; overflow: hidden;
-            font-family: 'Segoe UI', sans-serif; background: #f0f2f5;
+            font-family: system-ui, -apple-system, sans-serif; background: #f5f6fa;
         }
-        .app-container { height: 100vh; display: flex; flex-direction: column; padding: 20px; align-items: center; }
-        
-        /* ZAMONAVIY TUGMA STILI */
+        .app-container { 
+            height: 100vh; display: flex; flex-direction: column; padding: 20px; align-items: center; 
+            box-sizing: border-box;
+        }
+
+        h2 { color: #333; margin-bottom: 25px; font-weight: 700; }
+
+        /* ZAMONAVIY TUGMALAR STILI */
         .btn-modern {
-            width: 100%; max-width: 400px; padding: 20px; font-size: 18px; font-weight: 600;
+            width: 100%; max-width: 400px; padding: 18px; font-size: 16px; font-weight: 600;
             border: none; border-radius: 16px; cursor: pointer; color: white;
-            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .add-btn { background: linear-gradient(135deg, #6a11cb, #2575fc); cursor: not-allowed; opacity: 0.8; }
-        .list-btn { background: linear-gradient(135deg, #11998e, #38ef7d); }
         
+        /* Mahsulot qo'shish tugmasi (Asosiy ko'k gradient) */
+        .add-product-btn { background: linear-gradient(135deg, #6a11cb, #2575fc); }
+        
+        /* Kategoriya ro'yxati tugmasi (Yashil gradient) */
+        .list-btn { background: linear-gradient(135deg, #11998e, #38ef7d); }
+
         .btn-modern:active { transform: scale(0.97); }
 
-        #cat-list { width: 100%; max-width: 400px; flex-grow: 1; overflow-y: auto; margin-top: 10px; }
-        .cat-item { 
-            background: white; padding: 15px; margin-bottom: 10px; border-radius: 12px;
-            display: flex; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        /* DINAMIK RO'YXATLAR */
+        #cat-list { 
+            width: 100%; max-width: 400px; flex-grow: 1; overflow-y: auto; 
+            margin-top: 10px; padding-bottom: 20px;
         }
+        .cat-item { 
+            background: white; padding: 15px; margin-bottom: 10px; border-radius: 14px;
+            display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .cat-item img {
+            width: 45px; height: 45px; object-fit: cover; border-radius: 10px; background: #fafafa;
+        }
+        .cat-item span { font-weight: 600; color: #333; text-transform: capitalize; }
+        
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="app-container" id="cat-view">
-    <button class="btn-modern add-btn" onclick="window.location.href='AddCategory.html'">
-    + Kategoriya qo'shish
-</button>
+<div class="app-container">
+    <h2>🎛 Admin Panel</h2>
 
-    
-    <button class="btn-modern list-btn" onclick="toggleList()">📂 Kiritilgan kategoriyalar</button>
-    
+    <button class="btn-modern add-product-btn" onclick="window.location.href='add-product.html'">
+        <i class="fa-solid fa-plus"></i> + Yangi Mahsulot Joylash
+    </button>
+
+    <button class="btn-modern list-btn" onclick="toggleList()">
+        <i class="fa-solid fa-folder-open"></i> 📂 Kiritilgan Kategoriyalar
+    </button>
+
     <div id="cat-list" class="hidden"></div>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('adminDB')) || { "Misol Kategoriya": [] }; 
-
     function toggleList() {
         const listDiv = document.getElementById('cat-list');
         listDiv.classList.toggle('hidden');
-        renderCategories();
+        
+        // Agar ro'yxat ochilgan bo'lsa, ma'lumotni npoint-dan jonli yuklab oladi
+        if (!listDiv.classList.contains('hidden')) {
+            renderCategories();
+        }
     }
 
-    function renderCategories() {
+    async function renderCategories() {
         const list = document.getElementById('cat-list');
-        list.innerHTML = Object.keys(db).map(cat => `
-            <div class="cat-item">
-                <span style="font-weight:bold;">${cat}</span>
-            </div>
-        `).join('');
+        list.innerHTML = "<p style='text-align:center; color:#888;'>Yuklanmoqda...</p>";
+        
+        try {
+            // Siz ishlatgan npoint API manzili
+            const res = await fetch("https://api.npoint.io/1187b075e735a62911e8");
+            const data = await res.json();
+            
+            if (Array.isArray(data) && data.length > 0) {
+                list.innerHTML = data.map(item => `
+                    <div class="cat-item">
+                        <img src="${item.img || 'https://via.placeholder.com/45'}" alt="${item.name}">
+                        <span>${item.name}</span>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = "<p style='text-align:center; color:#888;'>Kategoriyalar topilmadi 😕</p>";
+            }
+        } catch (error) {
+            list.innerHTML = "<p style='text-align:center; color:red;'>Yuklashda xatolik yuz berdi.</p>";
+        }
     }
 </script>
 
