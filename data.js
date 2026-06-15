@@ -16,6 +16,8 @@ const allProducts = [
 function updateBottomBadges() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const favs = JSON.parse(localStorage.getItem("favs")) || [];
+  
+  // Havolalarni href atributi orqali qidiramiz
   const cartLink = document.querySelector('a[href="cart.html"]');
   const favLink = document.querySelector('a[href="favorites.html"]');
 
@@ -46,5 +48,9 @@ function updateBottomBadges() {
     }
   }
 }
+
+// Global oynaga ulab qo'yamiz, HTML skriptlar ichidan bemalol ko'rinishi uchun
+window.updateBottomBadges = updateBottomBadges;
+
 document.addEventListener("DOMContentLoaded", updateBottomBadges);
 window.addEventListener('favsUpdated', updateBottomBadges);
