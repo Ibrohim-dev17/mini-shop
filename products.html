@@ -249,30 +249,50 @@ if(cat){
   document.getElementById("title").innerText = cat;
 }
 
-/* RENDERING PRODUCTS */
 const box = document.getElementById("productBox");
-const filteredProducts = allProducts.filter(p => p.category === cat);
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-if(filteredProducts.length > 0){
-  filteredProducts.forEach(p => {
-    let isFav = favs.includes(p.id);
-    box.innerHTML += `
-    <div class="card">
-      <div class="heart ${isFav ? "active" : ""}" onclick="toggleFav(event,'${p.id}',this)">
-        <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-      </div>
-      <a href="product.html?id=${p.id}&cat=${cat}&from=${from || 'index'}">
-        <img src="${p.img}">
-        <p>${p.name}</p>
-        <div class="price">${p.price.toLocaleString()} so'm</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
-    </div>
-    `;
+// 1. Ma'lumotlarni serverdagi PHP API dan yuklab olamiz
+fetch('api.php?action=get_products')
+  .then(res => res.json())
+  .then(allProductsFromDB => {
+    
+    // Global o'zgaruvchiga tenglab qo'yamiz (Savatga qo'shish funksiyasi tanishi uchun)
+    window.allProducts = allProductsFromDB; 
+
+    // Kategoriya bo'yicha filterlaymiz
+    const filteredProducts = allProductsFromDB.filter(p => p.category_name === cat);
+
+    if(filteredProducts.length > 0){
+      box.innerHTML = ""; // Boxni tozalaymiz
+      filteredProducts.forEach(p => {
+        let isFav = favs.includes(p.id);
+        
+        // Narxni songa o'giramiz (baza decimal qaytargani uchun)
+        let formattedPrice = parseFloat(p.price).toLocaleString();
+
+        box.innerHTML += `
+        <div class="card">
+          <div class="heart ${isFav ? "active" : ""}" onclick="toggleFav(event,'${p.id}',this)">
+            <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+          </div>
+          <a href="product.html?id=${p.id}&cat=${cat}&from=${from || 'index'}">
+            <img src="${p.img_url}">
+            <p>${p.name}</p>
+            <div class="price">${formattedPrice} so'm</div>
+          </a>
+          <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
+        </div>
+        `;
+      });
+    } else {
+      box.innerHTML = "<p style='grid-column: 1/-1; padding:40px; text-align:center; color:#888;'>Ushbu kategoriyada mahsulotlar mavjud emas 😕</p>";
+    }
+  })
+  .catch(err => {
+    box.innerHTML = "<p style='grid-column: 1/-1; padding:40px; text-align:center; color:red;'>Ma'lumot yuklashda xatolik yuz berdi.</p>";
   });
-} else {
-  box.innerHTML = "<p style='grid-column: 1/-1; padding:40px; text-align:center; color:#888;'>Ushbu kategoriyada mahsulotlar mavjud emas 😕</p>";
-}
+
 
 /* ❤️ SEVIMLILAR FUNKSIYASI */
 function toggleFav(e, id, el){
