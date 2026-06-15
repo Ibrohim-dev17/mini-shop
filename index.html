@@ -456,6 +456,7 @@ function addToCart(e, id) {
   toast.classList.add("show");
   setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
+updateBottomBadges(); // Raqamni darhol yangilash uchun
 
 /* QIDIRUV */
 document.getElementById("searchInput").addEventListener("input", e => {
