@@ -164,11 +164,18 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <div class="bottom">
-  <a href="index.html"><i class="fa-solid fa-house"></i></a>
-  <a href="categories.html" class="active"><i class="fa-solid fa-list"></i></a>
-  <a href="cart.html"><i class="fa-solid fa-basket-shopping"></i></a>
-  <a href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+  <a href="index.html" id="navHome"><i class="fa-solid fa-house"></i></a>
+  <a href="categories.html" id="navCat"><i class="fa-solid fa-list"></i></a>
+  <a href="cart.html" id="navCart" style="position: relative;">
+    <i class="fa-solid fa-basket-shopping"></i>
+    <span id="cartBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+  </a>
+  <a href="favorites.html" id="navFav" style="position: relative;">
+    <i class="fa-solid fa-heart"></i>
+    <span id="favBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+  </a>
 </div>
+
 
 <script>
 // Telegram Mini App sozlamalari
