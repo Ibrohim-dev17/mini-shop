@@ -209,8 +209,6 @@ img { max-width: 100%; }
 }
 .add-to-cart-btn:active { background: #6a5acd; color: white; }
 
-
-
 .heart {
   position: absolute;
   top: 8px;
@@ -229,22 +227,6 @@ img { max-width: 100%; }
 
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
-
-/* SAVATGA QO'SHISH ICHKI TUGMASI */
-.add-to-cart-btn {
-  background: #f1f2f6;
-  color: #6a5acd;
-  border: none;
-  width: 100%;
-  padding: 8px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.2s;
-  cursor: pointer;
-  margin-top: auto;
-}
-.add-to-cart-btn:active { background: #6a5acd; color: white; }
 
 /* TOAST (BILDIRISHNOMA) */
 .toast {
@@ -347,15 +329,15 @@ img { max-width: 100%; }
 </div> 
 
 <div class="bottom">
-  <a href="index.html" id="navHome"><i class="fa-solid fa-house"></i></a>
+  <a href="index.html" id="navHome" class="active"><i class="fa-solid fa-house"></i></a>
   <a href="categories.html" id="navCat"><i class="fa-solid fa-list"></i></a>
   <a href="cart.html" id="navCart" style="position: relative;">
     <i class="fa-solid fa-basket-shopping"></i>
-    <span id="cartBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+    <span id="cartBadge" style="display: none; position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
   </a>
   <a href="favorites.html" id="navFav" style="position: relative;">
     <i class="fa-solid fa-heart"></i>
-    <span id="favBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+    <span id="favBadge" style="display: none; position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
   </a>
 </div>
 
@@ -380,6 +362,35 @@ const categories = [
 ];
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+/* QIZIL BELGILarni (BADGE) YANGILASH FUNKSIYASI */
+function updateBottomBadges() {
+  // Savat sonini hisoblash (umumiy mahsulotlar soni yoki turlari)
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  
+  let cartBadge = document.getElementById("cartBadge");
+  if (cartBadge) {
+    if (totalCartQty > 0) {
+      cartBadge.innerText = totalCartQty;
+      cartBadge.style.display = "flex";
+    } else {
+      cartBadge.style.display = "none";
+    }
+  }
+
+  // Sevimlilar sonini hisoblash
+  let currentFavs = JSON.parse(localStorage.getItem("favs")) || [];
+  let favBadge = document.getElementById("favBadge");
+  if (favBadge) {
+    if (currentFavs.length > 0) {
+      favBadge.innerText = currentFavs.length;
+      favBadge.style.display = "flex";
+    } else {
+      favBadge.style.display = "none";
+    }
+  }
+}
 
 /* KATEGORIYALARNI SAHIFAGA CHIQARISH */
 const catBox = document.getElementById("catList");
@@ -434,6 +445,9 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
+  
+  // Sevimlilar sonini darhol yangilash
+  updateBottomBadges();
 }
 
 /* SAVATGA QO'SHISH FUNKSIYASI */
@@ -450,13 +464,17 @@ function addToCart(e, id) {
     cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
   }
   localStorage.setItem("cart", JSON.stringify(cart));
+  
   updateTelegramMainButton();
+  updateBottomBadges(); // Savat sonini darhol yangilash
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
   setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
-updateBottomBadges(); // Raqamni darhol yangilash uchun
+
+// Sahifa ochilganda vaqtinchalik belgilar holatini tekshirib qo'yish
+updateBottomBadges();
 
 /* QIDIRUV */
 document.getElementById("searchInput").addEventListener("input", e => {
@@ -530,7 +548,6 @@ function autoSlide() {
 
 let autoSlideInterval = setInterval(autoSlide, 3000);
 </script>
-
 
 </body>
 </html>
