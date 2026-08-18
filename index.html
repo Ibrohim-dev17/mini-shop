@@ -218,7 +218,6 @@ img { max-width: 100%; }
   flex-direction: column;
 }
 
-/* Uzum market uslubidagi uzunroq rasm qutisi (3 / 4) */
 .card-img-box {
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -239,7 +238,6 @@ img { max-width: 100%; }
   object-fit: cover; 
 }
 
-/* Qutidan tashqaridagi matnlar va tugmalar uchun qism */
 .card-content {
   display: flex;
   flex-direction: column;
@@ -409,7 +407,7 @@ img { max-width: 100%; }
   margin-bottom: 2px;
 }
 .uzum-item-left span:last-child {
-  badgedisplay: block;
+  display: block;
   font-size: 15px;
   color: #111;
   font-weight: 500;
@@ -934,7 +932,7 @@ document.getElementById("searchInput").addEventListener("input", e => {
   }
 });
 
-/* TELEGRAM MAIN BUTTONNI YASHIRISH */
+/* TELEGRAM MAIN BUTTONni YASHIRISH */
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
   Telegram.WebApp.MainButton.hide();
 }
@@ -944,7 +942,7 @@ const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 const cardWidth = slider.querySelector(".banner-card").offsetWidth + 10;
 
-slider.addEventListener("scroll",` + `() => {
+slider.addEventListener("scroll", () => {
   let index = Math.round(slider.scrollLeft / cardWidth);
   dots.forEach((d, i) => {
     d.classList.toggle("active", i === index);
