@@ -779,12 +779,12 @@ function renderProducts(productsList) {
 
   if(productsList.length === 0) {
     box.innerHTML = `
-      <div style="grid-column: 1/-1; text-align:center; color:#888; padding:30px 20px; display:flex; flex-direction:column; align-items:center; gap:10px;">
-        <div style="width: 56px; height: 56px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
-          <i class="fa-solid fa-box-open" style="font-size: 26px; color: #888;"></i>
+      <div style="grid-column: 1/-1; text-align:center; padding:40px 20px; display:flex; flex-direction:column; align-items:center; gap:12px;">
+        <div style="width: 64px; height: 64px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+          <i class="fa-solid fa-magnifying-glass-minus" style="font-size: 24px; color: #6a5acd;"></i>
         </div>
-        <span style="font-size: 15px; font-weight: 600; color: #333;">Mahsulot topilmadi</span>
-        <span style="font-size: 13px; color: #888; max-width: 220px; line-height: 1.4;">Boshqa so'z bilan qidirib ko'ring yoki filtrni o'zgartiring</span>
+        <span style="font-size: 15px; font-weight: 600; color: #333;">Hech narsa topilmadi</span>
+        <span style="font-size: 13px; color: #888; max-width: 240px; line-height: 1.4;">Qidiruv so'zini o'zgartirib ko'ring yoki boshqa nom bilan izlang</span>
       </div>`;
     return;
   }
@@ -844,7 +844,7 @@ function toggleFav(id, el) {
     if (icon) icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges();
+  updateBottomBadges(); // Zudlik bilan yangilash
 }
 
 /* SAVATGA QO'SHISH */
@@ -866,7 +866,7 @@ function addToCart(e, id) {
     Telegram.WebApp.MainButton.hide();
   }
 
-  updateBottomBadges();
+  updateBottomBadges(); // Zudlik bilan yangilash
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
