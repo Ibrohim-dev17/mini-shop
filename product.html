@@ -7,7 +7,6 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <script src="data.js"></script>
 
 <style>
@@ -37,10 +36,10 @@ a { text-decoration: none; color: inherit; }
 .header {
   background: rgba(255,255,255,0.9);
   backdrop-filter: blur(10px);
-  padding: 14px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: space-between;
   border-bottom: 1px solid #eee;
   position: sticky;
   top: 0;
@@ -48,25 +47,32 @@ a { text-decoration: none; color: inherit; }
 }
 
 .back-btn {
-  background: #6a5acd;
-  color: white;
-  padding: 6px 14px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 500;
+  background: #f2f2f2;
+  color: #333;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
   cursor: pointer;
+  transition: background 0.2s;
 }
+.back-btn:active { background: #e0e0e0; }
 
 /* PRODUCT CONTAINER */
 .product-container {
-  position: relative;
   margin: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* RASM BLOKI */
+/* RASM BLOKI VA LIGHTBOX */
 .image-box {
   background: white;
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -74,13 +80,13 @@ a { text-decoration: none; color: inherit; }
   box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   position: relative;
   width: 100%;
+  aspect-ratio: 1 / 1;
+  cursor: zoom-in;
 }
 
 .image-box img {
   width: 100%;
-  max-width: 280px;
-  height: auto;
-  max-height: 280px;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -95,119 +101,335 @@ a { text-decoration: none; color: inherit; }
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 22px;
+  font-size: 20px;
   color: #b0b0b5;
   z-index: 5;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   transition: transform 0.2s ease, color 0.2s ease;
 }
-
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
 
-/* DETAILS */
+/* LIGHTBOX MODAL */
+.lightbox-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 4000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.lightbox-modal.open { display: flex; }
+.lightbox-content {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+}
+.lightbox-content img {
+  width: 100%;
+  height: auto;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* DETAILS CARD */
 .details-box {
   background: white;
-  margin-top: 12px;
-  border-radius: 24px;
+  border-radius: 20px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
 .name {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .price {
-  color: #6a5acd;
+  color: #111;
   font-weight: 700;
-  font-size: 20px;
-  margin-bottom: 15px;
+  font-size: 22px;
 }
 
-.desc-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: #333;
+.old-price {
+  font-size: 14px;
+  color: #888;
+  text-decoration: line-through;
+}
+
+/* REYTING */
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #555;
+}
+.stars { color: #ffb800; font-size: 14px; }
+
+/* PARAMETRLAR / ATRIBUTLAR (Rang, Brend va h.k.) */
+.attributes-section {
+  margin-bottom: 16px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+}
+.attr-group {
+  margin-bottom: 10px;
+}
+.attr-title {
+  font-size: 13px;
+  color: #888;
   margin-bottom: 6px;
+}
+.attr-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.attr-chip {
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #f5f6fa;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.attr-chip.selected {
+  background: #efeafb;
+  color: #6a5acd;
+  border-color: #6a5acd;
+}
+
+/* TAFSILOT (DESC) */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  margin: 16px 0 6px 0;
 }
 
 .desc {
   font-size: 14px;
-  color: #666;
+  color: #555;
   line-height: 1.5;
   margin-bottom: 20px;
 }
 
-/* COUNTER */
+/* COUNTER VA ACTIONS */
+.purchase-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
 .counter {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #f1f2f6;
-  padding: 6px;
-  border-radius: 16px;
-  width: 130px;
-  margin: 0 auto 20px auto;
+  padding: 4px;
+  border-radius: 14px;
+  width: 110px;
+  height: 46px;
+  flex-shrink: 0;
 }
 
 .counter button {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: white;
   color: #111;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
 }
 
 #counter {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
 }
 
-/* BUTTON */
 .add-btn {
-  background: #6a5acd;
-  color: white;
-  padding: 15px;
-  border-radius: 16px;
+  background: #efeafb;
+  color: #6a5acd;
   border: none;
-  width: 100%;
-  font-size: 16px;
+  height: 46px;
+  border-radius: 14px;
+  flex-grow: 1;
+  font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   transition: background 0.2s;
 }
+.add-btn:active { background: #6a5acd; color: white; }
 
-.add-btn:active { background: #574bba; }
+.buy-now-btn {
+  background: #6a5acd;
+  color: white;
+  border: none;
+  height: 46px;
+  border-radius: 14px;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+.buy-now-btn:active { opacity: 0.9; }
+
+/* SHARHLAR BO'LIMI (REVIEWS) */
+.reviews-section {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  margin-top: 12px;
+}
+
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.review-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+.review-item:last-child { border-bottom: none; }
+
+.review-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.review-author {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+}
+.review-date {
+  font-size: 11px;
+  color: #888;
+}
+.review-stars {
+  color: #ffb800;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+.review-text {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* SHARH YOZISH FORMASI */
+.add-review-box {
+  margin-top: 16px;
+  background: #f9f9fb;
+  padding: 14px;
+  border-radius: 14px;
+}
+.add-review-box input, .add-review-box textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 13px;
+  outline: none;
+  background: #fff;
+  margin-bottom: 8px;
+  font-family: inherit;
+}
+.review-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.anon-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+}
+.star-select {
+  display: flex;
+  gap: 4px;
+  color: #ddd;
+  cursor: pointer;
+  font-size: 16px;
+}
+.star-select i.selected { color: #ffb800; }
+
+.submit-review-btn {
+  background: #111;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
 /* TOAST */
 .toast {
-  position: fixed;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.85);
-  color: white;
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 2000;
+  position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
+  border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 2000;
   transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
 .toast.show { top: 20px; }
 
 /* BOTTOM NAV */
 .bottom {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   height: 65px;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(15px);
@@ -223,37 +445,37 @@ a { text-decoration: none; color: inherit; }
 
 .bottom a {
   color: #b0b0b5;
-  font-size: 22px;
-  transition: all 0.25s ease;
+  font-size: 20px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
+  width: 45px;
+  height: 45px;
+  border-radius: 14px;
+  position: relative;
 }
 
-.bottom a:active { transform: scale(0.9); }
-
-/* REYTING UCHUN USLUBLAR */
-.rating-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 15px;
-  cursor: pointer;
+.bottom a.active {
+  color: #6a5acd;
+  background: rgba(106, 90, 205, 0.08);
+  transform: translateY(-2px);
 }
-.stars {
-  color: #ffc107;
-  font-size: 16px;
-}
-.rating-text {
-  font-size: 14px;
-  color: #666;
-}
-.stars i { margin-right: 2px; }
+.bottom a:active { transform: scale(0.85); }
 
-
+.badge {
+  display: none;
+  position: absolute;
+  top: 4px; right: 4px;
+  background: #111111 !important;
+  color: #ffffff !important;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 17px; height: 17px;
+  align-items: center; justify-content: center;
+  border: 1px solid #fff;
+}
 </style>
 </head>
 
@@ -261,55 +483,123 @@ a { text-decoration: none; color: inherit; }
 
 <div id="toast" class="toast">Savatga qo‘shildi!</div>
 
+<!-- LIGHTBOX MODAL (RASMNI KATTA KO'RISH UCHUN) -->
+<div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
+  <div class="lightbox-content">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <img id="lightboxImg" src="">
+  </div>
+</div>
+
 <div class="main-content">
   <div class="header">
-    <div onclick="goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</div>
+    <div onclick="goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></div>
+    <div style="font-weight: 600; font-size: 15px;">Mahsulot tafsilotlari</div>
+    <div style="width: 38px;"></div>
   </div>
 
-  <div class="product-container" id="productBox">
-    <div class="image-box">
+  <div class="product-container">
+    <!-- RASM BLOKI -->
+    <div class="image-box" onclick="openLightbox()">
       <div class="heart" id="favBtn" onclick="toggleFav(event)">
         <i class="fa-regular fa-heart"></i>
       </div>
       <img id="pImg" src="">
     </div>
 
+    <!-- ASOSIY MA'LUMOTLAR -->
     <div class="details-box">
       <div class="name" id="pName"></div>
-      <div class="price" id="pPrice"></div>
-<div class="rating-container" onclick="handleRating()">
-  <div class="stars" id="pStars"></div>
-  <div class="rating-text" id="pReviews"></div>
-</div>
-
-
-      <div class="desc-title">Mahsulot haqida</div>
-      <div class="desc" id="pDesc"></div>
-
-      <div class="counter">
-        <button onclick="minus()">-</button>
-        <span id="counter">1</span>
-        <button onclick="plus()">+</button>
+      
+      <div class="price-row">
+        <span class="price" id="pPrice"></span>
+        <span class="old-price" id="pOldPrice"></span>
       </div>
 
-      <button class="add-btn" onclick="addToCart()">Savatga qo‘shish</button>
+      <div class="rating-container">
+        <div class="stars" id="pStars"></div>
+        <span id="pReviewsCount"></span>
+      </div>
+
+      <!-- DINAMIK PARAMETRLAR (Rang, Brend va h.k. - yoqib-o'chirish imkoniyati bilan) -->
+      <div class="attributes-section" id="attributesSection" style="display: none;">
+        <div id="attrContainer"></div>
+      </div>
+
+      <div class="section-title">Mahsulot haqida</div>
+      <div class="desc" id="pDesc"></div>
+
+      <!-- COUNTER VA SAVATGA QO'SHISH -->
+      <div class="purchase-box">
+        <div class="counter">
+          <button onclick="minus()">-</button>
+          <span id="counter">1</span>
+          <button onclick="plus()">+</button>
+        </div>
+        <button class="add-btn" onclick="addToCart()">
+          <i class="fa-solid fa-basket-shopping"></i> Savatga
+        </button>
+      </div>
+
+      <!-- BUYURTMA BERISH (TEZKOR) -->
+      <button class="buy-now-btn" onclick="buyNow()">Hozir sotib olish</button>
+    </div>
+
+    <!-- SHARHLAR VA IZOHLAR BO'LIMI -->
+    <div class="reviews-section">
+      <div class="reviews-header">
+        <div class="section-title" style="margin:0;">Sharhlar</div>
+        <span id="reviewCountBadge" style="font-size: 13px; color: #888; font-weight: 500;">0 ta</span>
+      </div>
+
+      <div id="reviewsList"></div>
+
+      <!-- SHARH YOZISH -->
+      <div class="add-review-box">
+        <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #333;">Sharh qoldirish</div>
+        <input type="text" id="reviewerName" placeholder="Ismingiz (agar anonim bo'lmasa)">
+        
+        <div class="review-options">
+          <label class="anon-label">
+            <input type="checkbox" id="isAnonymous" onchange="toggleAnonInput(this)" style="accent-color: #6a5acd;">
+            Anonim tarzda yozish
+          </label>
+          <div class="star-select" id="starSelect">
+            <i class="fa-solid fa-star selected" onclick="setRating(1)"></i>
+            <i class="fa-solid fa-star selected" onclick="setRating(2)"></i>
+            <i class="fa-solid fa-star selected" onclick="setRating(3)"></i>
+            <i class="fa-solid fa-star selected" onclick="setRating(4)"></i>
+            <i class="fa-solid fa-star selected" onclick="setRating(5)"></i>
+          </div>
+        </div>
+
+        <textarea id="reviewText" rows="3" placeholder="Mahsulot haqida fikringizni yozing..."></textarea>
+        <button class="submit-review-btn" onclick="submitReview()">Sharhni yuborish</button>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- PASTKI MENYU -->
 <div class="bottom">
-  <a href="index.html" id="navHome"><i class="fa-solid fa-house"></i></a>
-  <a href="categories.html" id="navCat"><i class="fa-solid fa-list"></i></a>
-  <a href="cart.html" id="navCart" style="position: relative;">
-    <i class="fa-solid fa-basket-shopping"></i>
-    <span id="cartBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
-  </a>
-  <a href="favorites.html" id="navFav" style="position: relative;">
+  <a href="favorites.html" id="navFav">
     <i class="fa-solid fa-heart"></i>
-    <span id="favBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+    <span id="favBadge" class="badge">0</span>
+  </a>
+  <a href="cart.html" id="navCart">
+    <i class="fa-solid fa-basket-shopping"></i>
+    <span id="cartBadge" class="badge">0</span>
+  </a>
+  <a href="index.html" id="navHome">
+    <i class="fa-solid fa-house"></i>
+  </a>
+  <a href="categories.html" id="navCat">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </a>
+  <a href="profile.html" id="navProfile">
+    <i class="fa-solid fa-user"></i>
   </a>
 </div>
-
 
 <script>
 if (window.Telegram && Telegram.WebApp) {
@@ -320,155 +610,271 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* URL PARAMS ORQALI IDENTIFIKATSIYA */
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 const cat = urlParams.get("cat");
 const from = urlParams.get("from");
 
-/* MAHSULOTNI DATA.JS ICHIDAN QIDIRISH */
 const product = allProducts.find(p => String(p.id) === String(id));
-
-/* SEVIMLILARNI TEKSHIRISH */
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 const favBtn = document.getElementById("favBtn");
 const icon = favBtn.querySelector("i");
 
+let selectedRating = 5;
+let currentSelectedAttributes = {};
+
 if (product) {
   document.getElementById("pName").innerText = product.name;
   document.getElementById("pPrice").innerText = product.price.toLocaleString() + " so'm";
+  document.getElementById("pOldPrice").innerText = Math.round(product.price * 1.35).toLocaleString() + " so'm";
   document.getElementById("pImg").src = product.img;
-  document.getElementById("pDesc").innerText = product.desc;
+  document.getElementById("pDesc").innerText = product.desc || "Sifatli va qulay oshxona buyumi.";
 
-  // REYTINGNI CHIZISH (YANGI QO'SHILGAN QISM)
-  const starsContainer = document.getElementById("pStars");
-  const fullStars = Math.round(product.rating);
-  starsContainer.innerHTML = Array(5).fill(0).map((_, i) => 
+  // Reytingni chiqarish
+  let ratingVal = product.rating || 4.8;
+  let reviewsCountVal = product.reviewsCount || 128;
+  let fullStars = Math.round(ratingVal);
+  document.getElementById("pStars").innerHTML = Array(5).fill(0).map((_, i) => 
     `<i class="${i < fullStars ? 'fa-solid' : 'fa-regular'} fa-star"></i>`
   ).join('');
-  document.getElementById("pReviews").innerText = `${product.rating} (${product.reviewsCount} ta sharh)`;
+  document.getElementById("pReviewsCount").innerText = `${ratingVal} (${reviewsCountVal} ta sharh)`;
+
+  // Atributlar (Rang, Brend va hokazo - data.js da bo'lsa yoki avtomatik generatsiya)
+  setupAttributes(product);
 
   if (favs.includes(product.id)) {
     favBtn.classList.add("active");
     icon.className = "fa-solid fa-heart";
-  } else {
-    favBtn.classList.remove("active");
-    icon.className = "fa-regular fa-heart";
   }
 }
 
+/* ATRIBUTLARNI BOSHQARISH (Rang, Brend va h.k.) */
+function setupAttributes(p) {
+  const attrSection = document.getElementById("attributesSection");
+  const attrContainer = document.getElementById("attrContainer");
+  
+  // Mahsulot obyektida ranglar yoki xususiyatlar bo'lsa yoki shartli qo'shamiz
+  let attributes = p.attributes || {
+    "Rang": ["Qora", "Kumush", "Qizil"],
+    "Brend": [p.brand || "KitchenLux"]
+  };
 
-/* COUNTER LOGIKASI */
+  if (Object.keys(attributes).length > 0) {
+    attrSection.style.display = "block";
+    attrContainer.innerHTML = "";
+    
+    for (let [key, values] of Object.entries(attributes)) {
+      currentSelectedAttributes[key] = values[0]; // birinchisini default tanlaymiz
+      
+      let html = `<div class="attr-group">
+        <div class="attr-title">${key}: <b style="color:#111;" id="selected_${key}">${values[0]}</b></div>
+        <div class="attr-values">`;
+      
+      values.forEach((val, idx) => {
+        html += `<div class="attr-chip ${idx === 0 ? 'selected' : ''}" onclick="selectAttr(this, '${key}', '${val}')">${val}</div>`;
+      });
+      
+      html += `</div></div>`;
+      attrContainer.innerHTML += html;
+    }
+  }
+}
+
+function selectAttr(el, key, val) {
+  currentSelectedAttributes[key] = val;
+  document.getElementById(`selected_${key}`).innerText = val;
+  let parent = el.parentElement;
+  parent.querySelectorAll('.attr-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+/* LIGHTBOX (KATTA RASM) */
+function openLightbox() {
+  if(!product) return;
+  document.getElementById("lightboxImg").src = product.img;
+  document.getElementById("lightboxModal").classList.add("open");
+}
+function closeLightbox() {
+  document.getElementById("lightboxModal").classList.remove("open");
+}
+
+/* COUNTER */
 let count = 1;
-function plus() {
-  count++;
-  document.getElementById("counter").innerText = count;
-}
-function minus() {
-  if (count > 1) {
-    count--;
-    document.getElementById("counter").innerText = count;
+function plus() { count++; document.getElementById("counter").innerText = count; }
+function minus() { if (count > 1) { count--; document.getElementById("counter").innerText = count; } }
+
+/* BADGELARNI YANGILASH */
+function updateBottomBadges() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  let cartBadge = document.getElementById("cartBadge");
+  if (cartBadge) {
+    cartBadge.innerText = totalCartQty;
+    cartBadge.style.display = totalCartQty > 0 ? "flex" : "none";
+  }
+
+  let currentFavs = JSON.parse(localStorage.getItem("favs")) || [];
+  let favBadge = document.getElementById("favBadge");
+  if (favBadge) {
+    favBadge.innerText = currentFavs.length;
+    favBadge.style.display = currentFavs.length > 0 ? "flex" : "none";
   }
 }
+document.addEventListener("DOMContentLoaded", updateBottomBadges);
+window.addEventListener("pageshow", updateBottomBadges);
+updateBottomBadges();
 
-/* SAVATGA QO'SHISH FUNKSIYASI */
+/* SAVATGA QO'SHISH */
 function addToCart() {
   if (!product) return;
-
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let existing = cart.find(item => item.id === product.id);
+  
+  // Tanlangan atributlar bilan unique identifikator hosil qilamiz
+  let attrString = Object.entries(currentSelectedAttributes).map(([k,v]) => `${k}: ${v}`).join(', ');
+  let cartItemId = `${product.id}_${attrString}`;
 
+  let existing = cart.find(item => item.cartItemId === cartItemId);
   if (existing) {
     existing.qty += count;
   } else {
     cart.push({
+      cartItemId: cartItemId,
       id: product.id,
-      name: product.name,
+      name: product.name + (attrString ? ` (${attrString})` : ''),
       price: product.price,
       img: product.img,
-      qty: count
+      qty: count,
+      attributes: currentSelectedAttributes
     });
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
+  updateBottomBadges();
 
-  // Pastki menyudagi qizil badge belgilarini va Telegram tugmasini yangilash
-  if (typeof updateBottomBadges === 'function') updateBottomBadges();
-  updateTelegramMainButton();
-
-  // Toast bildirishnomasini chiqarish
   const toast = document.getElementById("toast");
   toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("show"); }, 2000);
+  setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
-/* YURAKCHA TOGGLE (SEVIMLILAR) */
+/* HOZIR SOTIB OLISH (Savatga qo'shib darhol cart.html ga o'tish) */
+function buyNow() {
+  addToCart();
+  window.location.href = "cart.html";
+}
+
+/* YURAKCHA TOGGLE */
 function toggleFav(e) {
   e.preventDefault();
   e.stopPropagation();
   if (!product) return;
 
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  const pid = product.id;
-
-  if (favs.includes(pid)) {
-    favs = favs.filter(x => x !== pid);
+  if (favs.includes(product.id)) {
+    favs = favs.filter(x => x !== product.id);
     favBtn.classList.remove("active");
     icon.className = "fa-regular fa-heart";
   } else {
-    favs.push(pid);
+    favs.push(product.id);
     favBtn.classList.add("active");
     icon.className = "fa-solid fa-heart";
   }
-
   localStorage.setItem("favs", JSON.stringify(favs));
-
-  // Global badgelarni darhol yangilash
-  if (typeof updateBottomBadges === 'function') updateBottomBadges();
-  window.dispatchEvent(new Event('favsUpdated'));
+  updateBottomBadges();
 }
 
-/* TELEGRAM MAIN BUTTON INTEGRATSIYASI */
-function updateTelegramMainButton() {
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+/* SHARHLAR TIZIMI */
+function loadReviews() {
+  if (!product) return;
+  let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [
+    { name: "Jasurbek", text: "Mahsulot juda yoqdi, sifati a'lo darajada!", rating: 5, date: "12 Avgust, 2026" },
+    { name: "Anonim", text: "Tez yetkazib berishdi, rahmat.", rating: 4, date: "10 Avgust, 2026" }
+  ];
 
-    if (totalQty > 0) {
-      Telegram.WebApp.MainButton.setText(`Savatni ko'rish (${totalQty} ta mahsulot)`);
-      Telegram.WebApp.MainButton.show();
-      Telegram.WebApp.MainButton.onClick(function() {
-        window.location.href = "cart.html";
-      });
-    } else {
-      Telegram.WebApp.MainButton.hide();
-    }
+  const list = document.getElementById("reviewsList");
+  document.getElementById("reviewCountBadge").innerText = `${allReviews.length} ta`;
+  
+  list.innerHTML = "";
+  allReviews.forEach(r => {
+    let starsHtml = Array(5).fill(0).map((_, i) => `<i class="${i < r.rating ? 'fa-solid' : 'fa-regular'} fa-star"></i>`).join('');
+    list.innerHTML += `
+      <div class="review-item">
+        <div class="review-top">
+          <span class="review-author">${r.name}</span>
+          <span class="review-date">${r.date}</span>
+        </div>
+        <div class="review-stars">${starsHtml}</div>
+        <div class="review-text">${r.text}</div>
+      </div>`;
+  });
+}
+
+function toggleAnonInput(checkbox) {
+  const nameInput = document.getElementById("reviewerName");
+  if (checkbox.checked) {
+    nameInput.value = "Anonim";
+    nameInput.disabled = true;
+    nameInput.style.background = "#f0f0f0";
+  } else {
+    nameInput.value = "";
+    nameInput.disabled = false;
+    nameInput.style.background = "#fff";
   }
 }
 
-// Dastlab badgelar va Telegram tugmasini yuklash
-if (typeof updateBottomBadges === 'function') updateBottomBadges();
-updateTelegramMainButton();
+function setRating(val) {
+  selectedRating = val;
+  const stars = document.querySelectorAll("#starSelect i");
+  stars.forEach((s, idx) => {
+    if (idx < val) s.classList.add("selected");
+    else s.classList.remove("selected");
+  });
+}
 
-/* INTELLEKTUAL ORQAGA QAYTISH FUNKSIYASI */
+function submitReview() {
+  let name = document.getElementById("reviewerName").value.trim();
+  let text = document.getElementById("reviewText").value.trim();
+  let isAnon = document.getElementById("isAnonymous").checked;
+
+  if (isAnon) name = "Anonim";
+  if (!name || !text) {
+    alert("Iltimos, ismingiz va sharh matnini kiriting!");
+    return;
+  }
+
+  let newReview = {
+    name: name,
+    text: text,
+    rating: selectedRating,
+    date: new Date().toLocaleDateString('uz-UZ', { month: 'long', day: 'numeric', year: 'numeric' })
+  };
+
+  let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [];
+  allReviews.unshift(newReview);
+  localStorage.setItem(`reviews_${product.id}`, JSON.stringify(allReviews));
+
+  document.getElementById("reviewText").value = "";
+  if (!isAnon) document.getElementById("reviewerName").value = "";
+  
+  loadReviews();
+  
+  const toast = document.getElementById("toast");
+  toast.innerText = "Sharhingiz qo'shildi!";
+  toast.classList.add("show");
+  setTimeout(() => { toast.classList.remove("show"); toast.innerText = "Savatga qo‘shildi!"; }, 1500);
+}
+
+loadReviews();
+
+/* ORQAGA QAYTISH */
 function goBack() {
   if (from === "banner") {
     window.location.href = "index.html";
   } else if (from === "categories" || from === "index") {
-    window.location.href = `products.html?cat=${cat}&from=${from}`;
+    window.location.href = `products.html?cat=${cat || product.category}&from=${from}`;
   } else {
-    window.location.href = "index.html"; // Standart holatda bosh sahifaga
+    window.history.back();
   }
 }
-
-function handleRating() {
-  alert("Siz ushbu mahsulotni baholamoqchisiz!");
-}
-
-
 </script>
 
 </body>
 </html>
-
-
