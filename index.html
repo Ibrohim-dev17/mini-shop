@@ -201,7 +201,7 @@ img { max-width: 100%; }
   color: #333;
 }
 
-/* PRODUCTS GRID & CARDS (Katta rasm va tashqi qismlar) */
+/* PRODUCTS GRID & CARDS (Uzum market uslubidagi uzunroq rasm nisbati: 3 / 4 yoki 4 / 5) */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -218,10 +218,10 @@ img { max-width: 100%; }
   flex-direction: column;
 }
 
-/* Rasm to'liq va katta turishi uchun quti dizayni */
+/* Rasm qutisi: Uzum market kabi uzunroq (aspect-ratio: 3 / 4) qilib o'zgartirildi */
 .card-img-box {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   background: #fff;
   border-radius: 14px;
   display: flex;
@@ -236,7 +236,7 @@ img { max-width: 100%; }
 .card-img-box img { 
   width: 100%; 
   height: 100%; 
-  object-fit: cover; /* To'liq to'ldirib katta turishi uchun */
+  object-fit: cover; 
 }
 
 /* Qutidan tashqaridagi matnlar va tugmalar uchun qism */
@@ -768,7 +768,7 @@ categories.forEach(c => {
   </a>`;
 });
 
-/* MAHSULOTLARNI CHIQARISH (Rasm ichkarida, qolgan barcha ma'lumotlar tashqarida) */
+/* MAHSULOTLARNI CHIQARISH */
 const box = document.getElementById("productBox");
 function renderProducts(productsList) {
   currentFilteredProducts = productsList;
@@ -792,7 +792,7 @@ function renderProducts(productsList) {
 
     box.innerHTML += `
     <div class="card" data-id="${p.id}">
-      <!-- Rasm va yurakcha turgan quti -->
+      <!-- Uzum market uslubidagi uzunroq rasm qutisi -->
       <div class="card-img-box">
         <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
           <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
@@ -802,7 +802,7 @@ function renderProducts(productsList) {
         </a>
       </div>
 
-      <!-- Qutidan tashqarida turuvchi narx, desc, yulduz, komment va savat tugmasi -->
+      <!-- Qutidan tashqarida turuvchi ma'lumotlar -->
       <div class="card-content">
         <a href="product.html?id=${p.id}" class="card-link">
           <div class="price-box">
