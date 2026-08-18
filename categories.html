@@ -165,14 +165,14 @@ a { text-decoration: none; color: inherit; }
 
 <div class="bottom">
   <a href="index.html" id="navHome"><i class="fa-solid fa-house"></i></a>
-  <a href="categories.html" id="navCat"><i class="fa-solid fa-list"></i></a>
+  <a href="categories.html" id="navCat" class="active"><i class="fa-solid fa-list"></i></a>
   <a href="cart.html" id="navCart" style="position: relative;">
     <i class="fa-solid fa-basket-shopping"></i>
-    <span id="cartBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+    <span id="cartBadge" style="display: none; position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
   </a>
   <a href="favorites.html" id="navFav" style="position: relative;">
     <i class="fa-solid fa-heart"></i>
-    <span id="favBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+    <span id="favBadge" style="display: none; position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
   </a>
 </div>
 
@@ -184,6 +184,33 @@ if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.expand();
   if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
     Telegram.WebApp.disableVerticalSwipes();
+  }
+}
+
+/* QIZIL BELGILarni (BADGE) YANGILASH FUNKSIYASI */
+function updateBottomBadges() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  
+  let cartBadge = document.getElementById("cartBadge");
+  if (cartBadge) {
+    if (totalCartQty > 0) {
+      cartBadge.innerText = totalCartQty;
+      cartBadge.style.display = "flex";
+    } else {
+      cartBadge.style.display = "none";
+    }
+  }
+
+  let currentFavs = JSON.parse(localStorage.getItem("favs")) || [];
+  let favBadge = document.getElementById("favBadge");
+  if (favBadge) {
+    if (currentFavs.length > 0) {
+      favBadge.innerText = currentFavs.length;
+      favBadge.style.display = "flex";
+    } else {
+      favBadge.style.display = "none";
+    }
   }
 }
 
@@ -224,16 +251,13 @@ renderCategories(categoriesData);
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("input", function() {
   let text = searchInput.value.trim().toLowerCase();
-  
-  // Haqiqiy vaqtda massiv ichidan saralash
+
   let filteredCats = categoriesData.filter(c => c.name.toLowerCase().includes(text));
   renderCategories(filteredCats);
 });
 
-// Sahifa ochilganda pastki badgelarni yangilash (data.js dagi funksiya)
-if (typeof updateBottomBadges === 'function') {
-  updateBottomBadges();
-}
+// Sahifa ochilganda badgelarni yangilash
+updateBottomBadges();
 </script>
 
 </body>
