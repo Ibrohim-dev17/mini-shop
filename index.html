@@ -65,17 +65,10 @@ img { max-width: 100%; }
   font-size: 14px;
 }
 
-/* BANNER */
+/* BANNER - Kategoriyalar kabi chekkasi ko'rinib turadigan va silliq suriladigan */
 .banner {
-  margin: 12px;
-  overflow: hidden;
+  margin: 12px 0;
   position: relative;
-}
-
-.banner-wrapper {
-  overflow: hidden;
-  border-radius: 22px;
-  width: 100%;
 }
 
 .banner-slider {
@@ -84,6 +77,8 @@ img { max-width: 100%; }
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding: 0 12px;
   overscroll-behavior-x: contain;
 }
 
@@ -92,10 +87,11 @@ img { max-width: 100%; }
 }
 
 .banner-card {
-  flex: 0 0 100%;
+  flex: 0 0 85%; /* Keyingi banner chekkada ko'rinib turishi uchun */
   min-height: 170px;
   padding: 20px;
   color: #fff;
+  border-radius: 20px;
   scroll-snap-align: start;
 }
 
@@ -110,7 +106,7 @@ img { max-width: 100%; }
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .dot {
@@ -297,14 +293,14 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QORA RANGLI BADGE */
+/* QORA RANGLI BADGE (SAQLANGAN VA SAVAT UCHUN) */
 .badge {
   display: none;
   position: absolute;
   top: 4px;
   right: 4px;
   background: #111111;
-  color: white;
+  color: #ffffff;
   font-size: 10px;
   font-weight: 700;
   border-radius: 50%;
@@ -370,6 +366,7 @@ img { max-width: 100%; }
 
 <!-- YANGILANGAN PASTKI MENYU -->
 <div class="bottom">
+  <!-- Chapda: Sevimlilar va Savat (Qora badge bilan) -->
   <a href="favorites.html" id="navFav">
     <i class="fa-solid fa-heart"></i>
     <span id="favBadge" class="badge">0</span>
@@ -379,15 +376,15 @@ img { max-width: 100%; }
     <span id="cartBadge" class="badge">0</span>
   </a>
 
+  <!-- O'rtada: Asosiy (Uy) -->
   <a href="index.html" id="navHome" class="active">
     <i class="fa-solid fa-house"></i>
   </a>
 
-  <!-- categories.html ga o'tuvchi tugma -->
+  <!-- O'ngda: Qidiruv SVG iconi va categories.html ga o'tuvchi -->
   <a href="categories.html" id="navCat">
-    <i class="fa-solid fa-list"></i>
+    <i class="fa-solid fa-magnifying-glass"></i>
   </a>
-
   <a href="profile.html" id="navProfile">
     <i class="fa-solid fa-user"></i>
   </a>
@@ -414,7 +411,7 @@ const categories = [
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* BADGE (QORA RAQAMLAR)NI YANGILASH */
+/* BADGE (QORA RAQAMLAR)NI REAL VAQTDA YANGILASH */
 function updateBottomBadges() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -451,7 +448,7 @@ categories.forEach(c => {
   </a>`;
 });
 
-/* YULDUZLARNI HISOBLASH FUNKSIYASI */
+/* YULDUZLARNI HISOBLASH */
 function getStars(rating) {
   let r = Math.round(rating || 5);
   let stars = "";
@@ -494,7 +491,7 @@ function renderProducts(productsList) {
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
 
-/* SEVIMLILAR */
+/* SEVIMLIGARGA QO'SHISH/O'CHIRISH VA BADGENI DARHOL YANGILASH */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
@@ -507,10 +504,10 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges();
+  updateBottomBadges(); // Sevimlilar soni darhol yangilanadi
 }
 
-/* SAVATGA QO'SHISH */
+/* SAVATGA QO'SHISH VA BADGENI DARHOL YANGILASH */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -526,7 +523,7 @@ function addToCart(e, id) {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   updateTelegramMainButton();
-  updateBottomBadges();
+  updateBottomBadges(); // Savat soni darhol yangilanadi
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
@@ -572,7 +569,7 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* 5 SEKUNDDA CHEKSIZ (INFINITE) AVTO AYLANADIGAN SLIDER */
+/* 5 SEKUNDDA CHEKSIZ (INFINITE LOOP) AVTO AYLANADIGAN BANNER */
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 const cards = document.querySelectorAll(".banner-card");
@@ -586,15 +583,18 @@ function updateDots(index) {
 
 function autoSlide() {
   slideIndex = (slideIndex + 1) % cards.length;
-  slider.scrollTo({ left: slideIndex * slider.offsetWidth, behavior: "smooth" });
+  // Ssilka orqali o'lchamni hisoblab siljitish (karta kengligi + gap)
+  let scrollAmount = slideIndex * (cards[0].offsetWidth + 12);
+  slider.scrollTo({ left: scrollAmount, behavior: "smooth" });
   updateDots(slideIndex);
 }
 
 let autoSlideInterval = setInterval(autoSlide, 5000);
 
-// Qo'lda surilganda nuqtalarni o'z vaqtida moslash
+// Qo'lda surilganda nuqtalarni moslash va cheksiz qaytarish mantiqi
 slider.addEventListener("scroll", () => {
-  let index = Math.round(slider.scrollLeft / slider.offsetWidth);
+  let cardWidth = cards[0].offsetWidth + 12;
+  let index = Math.round(slider.scrollLeft / cardWidth);
   if (index >= 0 && index < cards.length && index !== slideIndex) {
     slideIndex = index;
     updateDots(slideIndex);
