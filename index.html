@@ -26,7 +26,7 @@ a { text-decoration: none; color: inherit; }
 * { box-sizing: border-box; }
 img { max-width: 100%; }
 
-/* MANA SHU DIV FAQAT SKROL BO'LADI */
+/* ASOSIY SKROL BO'LADIGAN QISM */
 .main-content {
   height: calc(100vh - 65px);
   overflow-y: auto;
@@ -65,7 +65,7 @@ img { max-width: 100%; }
   font-size: 14px;
 }
 
-/* BANNER - Kategoriyalar kabi chekkasi ko'rinib turadigan va silliq suriladigan */
+/* BANNER - Yonlari ozgina chiqib turadigan va silliq aylanadigan */
 .banner {
   margin: 12px 0;
   position: relative;
@@ -78,7 +78,7 @@ img { max-width: 100%; }
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   gap: 12px;
-  padding: 0 12px;
+  padding: 0 15px;
   overscroll-behavior-x: contain;
 }
 
@@ -87,12 +87,12 @@ img { max-width: 100%; }
 }
 
 .banner-card {
-  flex: 0 0 85%; /* Keyingi banner chekkada ko'rinib turishi uchun */
+  flex: 0 0 80%; /* 80% kenglik, qolgan 20% chekkada keyingisi ko'rinib turadi */
   min-height: 170px;
   padding: 20px;
   color: #fff;
   border-radius: 20px;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
 }
 
 .banner-card h2, .banner-card p { margin: 0; }
@@ -364,27 +364,30 @@ img { max-width: 100%; }
 
 </div> 
 
-<!-- YANGILANGAN PASTKI MENYU -->
+<!-- PASTKI MENYU -->
 <div class="bottom">
-  <!-- Chapda: Sevimlilar va Savat (Qora badge bilan) -->
+  <!-- Sevimlilar -->
   <a href="favorites.html" id="navFav">
     <i class="fa-solid fa-heart"></i>
     <span id="favBadge" class="badge">0</span>
   </a>
+  <!-- Savat -->
   <a href="cart.html" id="navCart">
     <i class="fa-solid fa-basket-shopping"></i>
     <span id="cartBadge" class="badge">0</span>
   </a>
 
-  <!-- O'rtada: Asosiy (Uy) -->
+  <!-- Asosiy (Uy) -->
   <a href="index.html" id="navHome" class="active">
     <i class="fa-solid fa-house"></i>
   </a>
 
-  <!-- O'ngda: Qidiruv SVG iconi va categories.html ga o'tuvchi -->
+  <!-- Qidiruv/Kategoriya (categories.html) -->
   <a href="categories.html" id="navCat">
     <i class="fa-solid fa-magnifying-glass"></i>
   </a>
+  
+  <!-- Profil -->
   <a href="profile.html" id="navProfile">
     <i class="fa-solid fa-user"></i>
   </a>
@@ -491,7 +494,7 @@ function renderProducts(productsList) {
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
 
-/* SEVIMLIGARGA QO'SHISH/O'CHIRISH VA BADGENI DARHOL YANGILASH */
+/* SEVIMLIGARGA QO'SHISH/O'CHIRISH */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
@@ -504,10 +507,10 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges(); // Sevimlilar soni darhol yangilanadi
+  updateBottomBadges();
 }
 
-/* SAVATGA QO'SHISH VA BADGENI DARHOL YANGILASH */
+/* SAVATGA QO'SHISH */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -523,7 +526,7 @@ function addToCart(e, id) {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   updateTelegramMainButton();
-  updateBottomBadges(); // Savat soni darhol yangilanadi
+  updateBottomBadges();
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
@@ -569,7 +572,7 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* 5 SEKUNDDA CHEKSIZ (INFINITE LOOP) AVTO AYLANADIGAN BANNER */
+/* 5 SEKUNDDA TINMAY O'NGGA AYLANADIGAN CHEKSIZ BANNER (1 -> 2 -> 3 -> 1...) */
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 const cards = document.querySelectorAll(".banner-card");
@@ -582,16 +585,19 @@ function updateDots(index) {
 }
 
 function autoSlide() {
-  slideIndex = (slideIndex + 1) % cards.length;
-  // Ssilka orqali o'lchamni hisoblab siljitish (karta kengligi + gap)
-  let scrollAmount = slideIndex * (cards[0].offsetWidth + 12);
-  slider.scrollTo({ left: scrollAmount, behavior: "smooth" });
+  slideIndex++;
+  if (slideIndex >= cards.length) {
+    slideIndex = 0; // Oxiriga yetsa yana boshidan (1-dan) boshlaydi
+  }
+  let cardWidth = cards[0].offsetWidth + 12; // Karta kengligi + gap
+  slider.scrollTo({ left: slideIndex * cardWidth, behavior: "smooth" });
   updateDots(slideIndex);
 }
 
+// Har 5 sekundda avtomatik o'ngga suriladi
 let autoSlideInterval = setInterval(autoSlide, 5000);
 
-// Qo'lda surilganda nuqtalarni moslash va cheksiz qaytarish mantiqi
+// Foydalanuvchi qo'lda sursa, nuqtalar moslashishi uchun
 slider.addEventListener("scroll", () => {
   let cardWidth = cards[0].offsetWidth + 12;
   let index = Math.round(slider.scrollLeft / cardWidth);
