@@ -71,7 +71,7 @@ img { max-width: 100%; }
   text-transform: capitalize; 
 }
 
-/* PRODUCTS GRID (Index.html bilan bir xil) */
+/* PRODUCTS GRID (Index.html bilan bir xil dizayn) */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -204,7 +204,7 @@ img { max-width: 100%; }
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
 
-/* TOAST (BILDIRISHNOMA) */
+/* TOAST */
 .toast {
   position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
@@ -373,16 +373,16 @@ function updateBottomBadges() {
 document.addEventListener("DOMContentLoaded", updateBottomBadges);
 window.addEventListener("pageshow", updateBottomBadges);
 
-// Ma'lumotlarni serverdan yoki data.js dan bir xil usulda qabul qilish
+// Index sahifasidagi kabi ommabof tovarlarni yuklash va moslashtirish
 fetch('api.php?action=get_products')
   .then(res => res.json())
   .then(allProductsFromDB => {
     window.allProducts = allProductsFromDB; 
 
-    // Kategoriya bo'yicha filterlash (ham category, ham category_name ni tekshiradi)
+    // Kategoriyani to'g'ri solishtirish (kichik harflarda, bo'shliqlarsiz)
     const filteredProducts = allProductsFromDB.filter(p => {
-      let pCat = (p.category_name || p.category || "").toLowerCase();
-      let searchCat = (cat || "").toLowerCase();
+      let pCat = String(p.category_id || p.category || p.category_name || "").trim().toLowerCase();
+      let searchCat = String(cat || "").trim().toLowerCase();
       return pCat === searchCat;
     });
 
