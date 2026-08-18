@@ -358,13 +358,13 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* 100% QORA DUMALOQ VA OQ/QORA RAQAM */
+/* QIZIL FON, OQ RAQAM (DUMALOQ) */
 .badge {
   display: none;
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #000000;
+  background: #ff3b30;
   color: #ffffff;
   font-size: 10px;
   font-weight: 700;
@@ -475,7 +475,7 @@ const categories = [
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* BADGE REAL VAQTDA YANGILASH (Qora fon, oq raqam) */
+/* BADGE'LARNI REAL VAQTDA YANGILASH (Qizil fon, oq raqam) */
 function updateBottomBadges() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -532,7 +532,7 @@ function renderProducts(productsList) {
     let oldPrice = Math.round(p.price * 1.35);
 
     box.innerHTML += `
-    <div class="card">
+    <div class="card" data-id="${p.id}">
       <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
         <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
       </div>
@@ -560,7 +560,7 @@ function renderProducts(productsList) {
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
 
-/* SEVIMLIGARGA QO'SHISH/O'CHIRISH (Darhol reallikda yangilanadi) */
+/* SEVIMLIGARGA QO'SHISH/O'CHIRISH (Darhol har bir kartada va pastda o'zgaradi) */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
@@ -573,10 +573,10 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges(); // Sahifani yangilamasdan darhol badgeni o'zgartiradi
+  updateBottomBadges(); // Pastdagi sevimlilar sonini darhol yangilash
 }
 
-/* SAVATGA QO'SHISH (Darhol reallikda yangilanadi) */
+/* SAVATGA QO'SHISH (Har safar bossa soni bittaga oshadi va darhol yangilanadi) */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -585,7 +585,7 @@ function addToCart(e, id) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let existing = cart.find(item => item.id === id);
   if (existing) {
-    existing.qty += 1;
+    existing.qty += 1; // Agar oldindan bo'lsa soni oshadi (masalan 1 tadan 2 ta)
   } else {
     cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
   }
@@ -595,7 +595,7 @@ function addToCart(e, id) {
     Telegram.WebApp.MainButton.hide();
   }
 
-  updateBottomBadges(); // Sahifani yangilamasdan darhol badgeni o'zgartiradi
+  updateBottomBadges(); // Pastdagi savat sonini darhol yangilash
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
