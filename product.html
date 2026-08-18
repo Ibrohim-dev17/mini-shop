@@ -192,7 +192,7 @@ a { text-decoration: none; color: inherit; }
 }
 .stars { color: #ffb800; font-size: 14px; }
 
-/* PARAMETRLAR / ATRIBUTLAR (Rang, Brend va h.k.) */
+/* PARAMETRLAR / ATRIBUTLAR (Rang, Brend, O'lcham, Material va h.k.) */
 .attributes-section {
   margin-bottom: 16px;
   border-top: 1px solid #f0f0f0;
@@ -332,6 +332,12 @@ a { text-decoration: none; color: inherit; }
   margin-bottom: 14px;
 }
 
+.reviews-container {
+  max-height: 280px; /* Sharhlar ko'payib ketsa kichraytirib scroll qiladigan qism */
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
 .review-item {
   padding: 12px 0;
   border-bottom: 1px solid #f5f5f5;
@@ -364,6 +370,19 @@ a { text-decoration: none; color: inherit; }
   line-height: 1.4;
 }
 
+.all-reviews-link {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  background: #f5f6fa;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6a5acd;
+  cursor: pointer;
+}
+
 /* SHARH YOZISH FORMASI */
 .add-review-box {
   margin-top: 16px;
@@ -371,7 +390,8 @@ a { text-decoration: none; color: inherit; }
   padding: 14px;
   border-radius: 14px;
 }
-.add-review-box input, .add-review-box textarea {
+
+.add-review-box textarea {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #e0e0e0;
@@ -379,31 +399,61 @@ a { text-decoration: none; color: inherit; }
   font-size: 13px;
   outline: none;
   background: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-family: inherit;
 }
-.review-options {
+
+.review-options-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
-.anon-label {
+
+/* TAKOMILLASHTIRILGAN YULDUZCHA TANLASH (HAR BIRI ALOHIDA BOSILADI) */
+.star-select {
+  display: flex;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #ddd;
+}
+.star-select i.active-star { color: #ffb800; }
+
+/* ZAMONAVIY SWITCH (ANONIM UCHUN) */
+.switch-container {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 13px;
   color: #555;
   cursor: pointer;
+  user-select: none;
 }
-.star-select {
-  display: flex;
-  gap: 4px;
-  color: #ddd;
-  cursor: pointer;
-  font-size: 16px;
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
 }
-.star-select i.selected { color: #ffb800; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider-switch {
+  position: absolute; cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .3s;
+  border-radius: 20px;
+}
+.slider-switch:before {
+  position: absolute; content: "";
+  height: 16px; width: 16px;
+  left: 2px; bottom: 2px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+input:checked + .slider-switch { background-color: #6a5acd; }
+input:checked + .slider-switch:before { transform: translateX(16px); }
 
 .submit-review-btn {
   background: #111;
@@ -521,7 +571,7 @@ a { text-decoration: none; color: inherit; }
         <span id="pReviewsCount"></span>
       </div>
 
-      <!-- DINAMIK PARAMETRLAR (Rang, Brend va h.k. - yoqib-o'chirish imkoniyati bilan) -->
+      <!-- KENGAYTIRILGAN PARAMETRLAR (Rang, Brend, O'lcham, Material va h.k.) -->
       <div class="attributes-section" id="attributesSection" style="display: none;">
         <div id="attrContainer"></div>
       </div>
@@ -541,7 +591,7 @@ a { text-decoration: none; color: inherit; }
         </button>
       </div>
 
-      <!-- BUYURTMA BERISH (TEZKOR) -->
+      <!-- HOZIR SOTIB OLISH (CART.HTML GA O'TISH) -->
       <button class="buy-now-btn" onclick="buyNow()">Hozir sotib olish</button>
     </div>
 
@@ -552,28 +602,40 @@ a { text-decoration: none; color: inherit; }
         <span id="reviewCountBadge" style="font-size: 13px; color: #888; font-weight: 500;">0 ta</span>
       </div>
 
-      <div id="reviewsList"></div>
+      <!-- SHARHLAR KICHRAYTIRILGAN SCROLL BO'LIMI -->
+      <div class="reviews-container" id="reviewsContainer">
+        <div id="reviewsList"></div>
+      </div>
+      
+      <!-- BARCHA SHARHLARNI KO'RISH TUGMASI (Agar ko'p bo'lsa chiqadi) -->
+      <div id="allReviewsBtnWrapper"></div>
 
       <!-- SHARH YOZISH -->
       <div class="add-review-box">
         <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #333;">Sharh qoldirish</div>
-        <input type="text" id="reviewerName" placeholder="Ismingiz (agar anonim bo'lmasa)">
         
-        <div class="review-options">
-          <label class="anon-label">
-            <input type="checkbox" id="isAnonymous" onchange="toggleAnonInput(this)" style="accent-color: #6a5acd;">
-            Anonim tarzda yozish
-          </label>
+        <textarea id="reviewText" rows="3" placeholder="Mahsulot haqida fikringizni yozing..."></textarea>
+        
+        <div class="review-options-row">
+          <!-- OSON YULDUZCHA TANLASH -->
           <div class="star-select" id="starSelect">
-            <i class="fa-solid fa-star selected" onclick="setRating(1)"></i>
-            <i class="fa-solid fa-star selected" onclick="setRating(2)"></i>
-            <i class="fa-solid fa-star selected" onclick="setRating(3)"></i>
-            <i class="fa-solid fa-star selected" onclick="setRating(4)"></i>
-            <i class="fa-solid fa-star selected" onclick="setRating(5)"></i>
+            <i class="fa-solid fa-star active-star" onclick="setRating(1)"></i>
+            <i class="fa-solid fa-star active-star" onclick="setRating(2)"></i>
+            <i class="fa-solid fa-star active-star" onclick="setRating(3)"></i>
+            <i class="fa-solid fa-star active-star" onclick="setRating(4)"></i>
+            <i class="fa-solid fa-star active-star" onclick="setRating(5)"></i>
           </div>
+
+          <!-- BOSHQACHA JOYLASHTIRILGAN ANONIM SWITCH -->
+          <label class="switch-container">
+            <span>Anonim</span>
+            <div class="switch">
+              <input type="checkbox" id="isAnonymous" checked>
+              <span class="slider-switch"></span>
+            </div>
+          </label>
         </div>
 
-        <textarea id="reviewText" rows="3" placeholder="Mahsulot haqida fikringizni yozing..."></textarea>
         <button class="submit-review-btn" onclick="submitReview()">Sharhni yuborish</button>
       </div>
     </div>
@@ -602,11 +664,17 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <script>
+let userName = "Foydalanuvchi";
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
   if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
     Telegram.WebApp.disableVerticalSwipes();
+  }
+  // Telegram foydalanuvchi nomini avtomatik olish
+  if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+    let tgUser = Telegram.WebApp.initDataUnsafe.user;
+    userName = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
   }
 }
 
@@ -630,7 +698,6 @@ if (product) {
   document.getElementById("pImg").src = product.img;
   document.getElementById("pDesc").innerText = product.desc || "Sifatli va qulay oshxona buyumi.";
 
-  // Reytingni chiqarish
   let ratingVal = product.rating || 4.8;
   let reviewsCountVal = product.reviewsCount || 128;
   let fullStars = Math.round(ratingVal);
@@ -639,7 +706,6 @@ if (product) {
   ).join('');
   document.getElementById("pReviewsCount").innerText = `${ratingVal} (${reviewsCountVal} ta sharh)`;
 
-  // Atributlar (Rang, Brend va hokazo - data.js da bo'lsa yoki avtomatik generatsiya)
   setupAttributes(product);
 
   if (favs.includes(product.id)) {
@@ -648,15 +714,16 @@ if (product) {
   }
 }
 
-/* ATRIBUTLARNI BOSHQARISH (Rang, Brend va h.k.) */
+/* KENGAYTIRILGAN PARAMETRLAR (Rang, Brend, O'lcham, Material va h.k.) */
 function setupAttributes(p) {
   const attrSection = document.getElementById("attributesSection");
   const attrContainer = document.getElementById("attrContainer");
   
-  // Mahsulot obyektida ranglar yoki xususiyatlar bo'lsa yoki shartli qo'shamiz
   let attributes = p.attributes || {
-    "Rang": ["Qora", "Kumush", "Qizil"],
-    "Brend": [p.brand || "KitchenLux"]
+    "Rang": ["Qora", "Kumush", "Qizil", "Oq"],
+    "Brend": [p.brand || "KitchenLux", "Tefal", "Delimano"],
+    "O'lcham": ["Standard", "Katta", "Kichik"],
+    "Material": ["Zanglamaydigan po'lat", "Alyuminiy", "Plastik"]
   };
 
   if (Object.keys(attributes).length > 0) {
@@ -664,7 +731,7 @@ function setupAttributes(p) {
     attrContainer.innerHTML = "";
     
     for (let [key, values] of Object.entries(attributes)) {
-      currentSelectedAttributes[key] = values[0]; // birinchisini default tanlaymiz
+      currentSelectedAttributes[key] = values[0]; 
       
       let html = `<div class="attr-group">
         <div class="attr-title">${key}: <b style="color:#111;" id="selected_${key}">${values[0]}</b></div>
@@ -729,7 +796,6 @@ function addToCart() {
   if (!product) return;
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   
-  // Tanlangan atributlar bilan unique identifikator hosil qilamiz
   let attrString = Object.entries(currentSelectedAttributes).map(([k,v]) => `${k}: ${v}`).join(', ');
   let cartItemId = `${product.id}_${attrString}`;
 
@@ -756,7 +822,7 @@ function addToCart() {
   setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
-/* HOZIR SOTIB OLISH (Savatga qo'shib darhol cart.html ga o'tish) */
+/* HOZIR SOTIB OLISH (SAVATGA QO'SHIB TO'G'RIDAN-TO'G'RI CART.HTML GA O'TISH) */
 function buyNow() {
   addToCart();
   window.location.href = "cart.html";
@@ -786,10 +852,14 @@ function loadReviews() {
   if (!product) return;
   let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [
     { name: "Jasurbek", text: "Mahsulot juda yoqdi, sifati a'lo darajada!", rating: 5, date: "12 Avgust, 2026" },
-    { name: "Anonim", text: "Tez yetkazib berishdi, rahmat.", rating: 4, date: "10 Avgust, 2026" }
+    { name: "Anonim", text: "Tez yetkazib berishdi, rahmat.", rating: 4, date: "10 Avgust, 2026" },
+    { name: "Sardor", text: "Narxiga nisbatan juda yaxshi ekan.", rating: 5, date: "8 Avgust, 2026" }
   ];
 
   const list = document.getElementById("reviewsList");
+  const container = document.getElementById("reviewsContainer");
+  const btnWrapper = document.getElementById("allReviewsBtnWrapper");
+  
   document.getElementById("reviewCountBadge").innerText = `${allReviews.length} ta`;
   
   list.innerHTML = "";
@@ -805,43 +875,52 @@ function loadReviews() {
         <div class="review-text">${r.text}</div>
       </div>`;
   });
-}
 
-function toggleAnonInput(checkbox) {
-  const nameInput = document.getElementById("reviewerName");
-  if (checkbox.checked) {
-    nameInput.value = "Anonim";
-    nameInput.disabled = true;
-    nameInput.style.background = "#f0f0f0";
+  // Agar sharhlar ko'p bo'lsa (masalan 2 tadan ko'p), konteynerni kichraytirib scroll qilamiz va "Barcha sharhlarni o'qish" tugmasini chiqaramiz
+  if (allReviews.length > 2) {
+    container.style.maxHeight = "200px";
+    btnWrapper.innerHTML = `<div class="all-reviews-link" onclick="expandReviews()">Barcha sharhlarni o'qish (${allReviews.length} ta)</div>`;
   } else {
-    nameInput.value = "";
-    nameInput.disabled = false;
-    nameInput.style.background = "#fff";
+    container.style.maxHeight = "none";
+    btnWrapper.innerHTML = "";
   }
 }
 
+function expandReviews() {
+  const container = document.getElementById("reviewsContainer");
+  container.style.maxHeight = "none";
+  document.getElementById("allReviewsBtnWrapper").innerHTML = "";
+}
+
+/* ANIQ VA OSON YULDUZCHA TANLASH */
 function setRating(val) {
   selectedRating = val;
   const stars = document.querySelectorAll("#starSelect i");
   stars.forEach((s, idx) => {
-    if (idx < val) s.classList.add("selected");
-    else s.classList.remove("selected");
+    if (idx < val) {
+      s.classList.add("active-star");
+      s.className = "fa-solid fa-star active-star";
+    } else {
+      s.classList.remove("active-star");
+      s.className = "fa-regular fa-star";
+    }
   });
 }
 
 function submitReview() {
-  let name = document.getElementById("reviewerName").value.trim();
   let text = document.getElementById("reviewText").value.trim();
   let isAnon = document.getElementById("isAnonymous").checked;
 
-  if (isAnon) name = "Anonim";
-  if (!name || !text) {
-    alert("Iltimos, ismingiz va sharh matnini kiriting!");
+  if (!text) {
+    alert("Iltimos, sharh matnini kiriting!");
     return;
   }
 
+  // Ism avtomatik belgilanadi: agar anonim yoniq bo'lsa "Anonim", aks holda Telegramdagi foydalanuvchi ismi
+  let authorName = isAnon ? "Anonim" : userName;
+
   let newReview = {
-    name: name,
+    name: authorName,
     text: text,
     rating: selectedRating,
     date: new Date().toLocaleDateString('uz-UZ', { month: 'long', day: 'numeric', year: 'numeric' })
@@ -852,12 +931,13 @@ function submitReview() {
   localStorage.setItem(`reviews_${product.id}`, JSON.stringify(allReviews));
 
   document.getElementById("reviewText").value = "";
-  if (!isAnon) document.getElementById("reviewerName").value = "";
+  setRating(5);
+  document.getElementById("isAnonymous").checked = true;
   
   loadReviews();
   
   const toast = document.getElementById("toast");
-  toast.innerText = "Sharhingiz qo'shildi!";
+  toast.innerText = "Sharhingiz muvaffaqiyatli qo'shildi!";
   toast.classList.add("show");
   setTimeout(() => { toast.classList.remove("show"); toast.innerText = "Savatga qo‘shildi!"; }, 1500);
 }
