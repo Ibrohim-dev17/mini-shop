@@ -830,11 +830,11 @@ function toggleFav(id, el) {
   if (favs.includes(id)) {
     favs = favs.filter(x => x !== id);
     el.classList.remove("active");
-    icon.className = "fa-regular fa-heart";
+    if (icon) icon.className = "fa-regular fa-heart";
   } else {
     favs.push(id);
     el.classList.add("active");
-    icon.className = "fa-solid fa-heart";
+    if (icon) icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
   updateBottomBadges();
