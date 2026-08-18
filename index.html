@@ -179,7 +179,7 @@ img { max-width: 100%; }
   color: #333;
 }
 
-/* PRODUCTS GRID & CARDS (Uzum Style) */
+/* PRODUCTS GRID & CARDS */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -205,7 +205,6 @@ img { max-width: 100%; }
   flex-grow: 1;
 }
 
-/* Rasmlar paneli to'liq sig'ishi va qirqilib qolmasligi uchun */
 .card-img-box {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -225,7 +224,6 @@ img { max-width: 100%; }
   object-fit: contain; 
 }
 
-/* Narx va chegirma */
 .price-box {
   display: flex;
   align-items: baseline;
@@ -245,7 +243,6 @@ img { max-width: 100%; }
   text-decoration: line-through;
 }
 
-/* Mahsulot nomi / tavsifi (faqat qisqacha ko'rinadi) */
 .product-desc {
   font-size: 12px;
   color: #333;
@@ -257,7 +254,6 @@ img { max-width: 100%; }
   line-height: 1.3;
 }
 
-/* Yulduzcha va sharhlar soni */
 .product-rating {
   font-size: 11px;
   color: #555;
@@ -271,7 +267,6 @@ img { max-width: 100%; }
   color: #ffb800;
 }
 
-/* Savatga / Ertaga tugmasi doim eng pastda */
 .add-to-cart-btn {
   background: #efeafb;
   color: #6a5acd;
@@ -309,7 +304,8 @@ img { max-width: 100%; }
 }
 
 .heart:active { transform: scale(1.2); }
-.heart.active { color: #ff3b30; }
+/* Qizil emas, qora rangda faol yurakcha */
+.heart.active { color: #000000; }
 
 /* TOAST */
 .toast {
@@ -520,7 +516,7 @@ categories.forEach(c => {
   </a>`;
 });
 
-/* MAHSULOTLARNI CHIQARISH (Uzum uslubida) */
+/* MAHSULOTLARNI CHIQARISH */
 const box = document.getElementById("productBox");
 function renderProducts(productsList) {
   box.innerHTML = "";
@@ -533,7 +529,7 @@ function renderProducts(productsList) {
     let isFav = favs.includes(p.id);
     let ratingValue = p.rating || 4.8;
     let reviewsCount = p.reviewsCount || 128;
-    let oldPrice = Math.round(p.price * 1.35); // Eski narx namunasi
+    let oldPrice = Math.round(p.price * 1.35);
 
     box.innerHTML += `
     <div class="card">
@@ -551,11 +547,11 @@ function renderProducts(productsList) {
         <div class="product-desc">${p.name} - ${p.desc || "Sifatli va qulay mahsulot"}</div>
         <div class="product-rating">
           <i class="fa-solid fa-star"></i> <span>${ratingValue}</span> 
-          <span style="color:#aaa;">(${reviewsCount})</span>
+          <span style="color:#aaa;"><i class="fa-regular fa-comment" style="margin-left: 4px;"></i> ${reviewsCount}</span>
         </div>
       </a>
       <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">
-        <i class="fa-solid fa-basket-shopping" style="font-size: 14px;"></i> Ertaga
+        <i class="fa-solid fa-basket-shopping" style="font-size: 14px;"></i> Savatga
       </button>
     </div>`;
   });
@@ -595,7 +591,11 @@ function addToCart(e, id) {
   }
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  updateTelegramMainButton();
+  // Telegram asosiy tugmasini yashiramiz (uzun ko'k tugma chiqmasligi uchun)
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+    Telegram.WebApp.MainButton.hide();
+  }
+
   updateBottomBadges();
 
   const toast = document.getElementById("toast");
@@ -626,21 +626,10 @@ document.getElementById("searchInput").addEventListener("input", e => {
   }
 });
 
-/* TELEGRAM MAIN BUTTON */
-function updateTelegramMainButton() {
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || localStorage.getItem("cart") || [];
-    let totalQty = JSON.parse(localStorage.getItem("cart") || "[]").reduce((sum, item) => sum + item.qty, 0);
-    if (totalQty > 0) {
-      Telegram.WebApp.MainButton.setText(`Savatni ko'rish (${totalQty} ta mahsulot)`);
-      Telegram.WebApp.MainButton.show();
-      Telegram.WebApp.MainButton.onClick(() => window.location.href = "cart.html");
-    } else {
-      Telegram.WebApp.MainButton.hide();
-    }
-  }
+/* TELEGRAM MAIN BUTTONNI BUTUNLAY O'CHIRISH (Yashirish) */
+if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
+  Telegram.WebApp.MainButton.hide();
 }
-updateTelegramMainButton();
 
 /* BANNER SLIDER */
 const slider = document.getElementById("slider");
