@@ -304,8 +304,8 @@ img { max-width: 100%; }
 }
 
 .heart:active { transform: scale(1.2); }
-/* Qizil emas, qora rangda faol yurakcha */
-.heart.active { color: #000000; }
+/* Yurak bosilganda qizil rangda bo'lishi */
+.heart.active { color: #ff3b30; }
 
 /* TOAST */
 .toast {
@@ -358,14 +358,14 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QORA RANGLI BADGE */
+/* QIZIL DUMALOQ VA ICHIDAGI QORA RAQAM */
 .badge {
   display: none;
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #000000;
-  color: #ffffff;
+  background: #ff3b30;
+  color: #000000;
   font-size: 10px;
   font-weight: 700;
   border-radius: 50%;
@@ -475,7 +475,7 @@ const categories = [
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* BADGE REAL VAQTDA YANGILASH */
+/* BADGE REAL VAQTDA YANGILASH (Qizil fon, qora raqam) */
 function updateBottomBadges() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -560,7 +560,7 @@ function renderProducts(productsList) {
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
 
-/* SEVIMLIGARGA QO'SHISH/O'CHIRISH */
+/* SEVIMLIGARGA QO'SHISH/O'CHIRISH (Darhol yangilanadi) */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
@@ -573,10 +573,10 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges();
+  updateBottomBadges(); // Darhol badgeni yangilaydi
 }
 
-/* SAVATGA QO'SHISH */
+/* SAVATGA QO'SHISH (Darhol yangilanadi) */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -591,12 +591,11 @@ function addToCart(e, id) {
   }
   localStorage.setItem("cart", JSON.stringify(cart));
 
-  // Telegram asosiy tugmasini yashiramiz (uzun ko'k tugma chiqmasligi uchun)
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
     Telegram.WebApp.MainButton.hide();
   }
 
-  updateBottomBadges();
+  updateBottomBadges(); // Darhol badgeni yangilaydi
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
@@ -626,7 +625,7 @@ document.getElementById("searchInput").addEventListener("input", e => {
   }
 });
 
-/* TELEGRAM MAIN BUTTONNI BUTUNLAY O'CHIRISH (Yashirish) */
+/* TELEGRAM MAIN BUTTONNI YASHIRISH */
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
   Telegram.WebApp.MainButton.hide();
 }
