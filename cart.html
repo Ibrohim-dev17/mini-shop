@@ -32,7 +32,7 @@ a { text-decoration: none; color: inherit; }
 .history-trigger-btn { color: #6a5acd; font-size: 13px; font-weight: 600; cursor: pointer; background: rgba(106, 90, 205, 0.1); padding: 6px 12px; border-radius: 50px; }
 .clear-cart-btn { color: #ff3b30; font-size: 13px; font-weight: 600; cursor: pointer; }
 
-/* TOP BAR (HAMMASINI TANLASH VA O'CHIRISH) */
+/* TOP BAR */
 .cart-controls-bar {
   background: white; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
   border-bottom: 1px solid #f0f0f0; font-size: 14px; font-weight: 600;
@@ -66,7 +66,6 @@ a { text-decoration: none; color: inherit; }
 
 .cart-item-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f5f5f5; padding-top: 10px; }
 
-/* COUNTER VA YURAK */
 .item-counter { display: flex; align-items: center; background: #f1f2f6; padding: 4px; border-radius: 12px; }
 .item-counter button { width: 32px; height: 32px; border: none; border-radius: 9px; background: white; font-weight: 600; font-size: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); cursor: pointer; }
 .item-counter span { font-size: 14px; font-weight: 700; min-width: 24px; text-align: center; }
@@ -74,13 +73,24 @@ a { text-decoration: none; color: inherit; }
 .item-fav-btn { font-size: 20px; color: #b0b0b5; cursor: pointer; background: #f9f9fb; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: color 0.2s; }
 .item-fav-btn.active { color: #ff3b30; }
 
-/* BUYURTMANGIZ BLOKI (UZUM STYLE) */
+/* ORDER SUMMARY */
 .order-summary-card {
   background: white; border-radius: 20px; padding: 16px; margin: 0 12px 12px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 .order-summary-title { font-size: 17px; font-weight: 700; margin-bottom: 12px; color: #111; }
 .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 8px; color: #555; }
 .summary-row.total-bold { font-size: 16px; font-weight: 700; color: #111; border-top: 1px solid #eee; padding-top: 10px; margin-top: 8px; }
+
+/* RECOMMENDATIONS SECTION (TAVSIYA ETAMIZ) */
+.recommendations-section { padding: 4px 12px 20px 12px; }
+.recommendations-title { font-size: 17px; font-weight: 700; margin-bottom: 12px; color: #111; }
+.recommendations-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.rec-card { background: white; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02); cursor: pointer; }
+.rec-card img { width: 100%; height: 110px; object-fit: contain; background: #fafafa; border-radius: 10px; margin-bottom: 8px; }
+.rec-card h5 { font-size: 13px; font-weight: 600; color: #333; margin: 0 0 6px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rec-card-bottom { display: flex; align-items: center; justify-content: space-between; }
+.rec-card .price { font-size: 14px; font-weight: 700; color: #111; }
+.rec-add-btn { background: rgba(106, 90, 205, 0.1); color: #6a5acd; border: none; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
 
 /* STICKY PANEL */
 .checkout-sticky-panel {
@@ -114,6 +124,12 @@ a { text-decoration: none; color: inherit; }
 .address-row input { flex: 1; }
 .map-select-btn { background: rgba(106, 90, 205, 0.1); color: #6a5acd; border: none; padding: 12px 14px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap; }
 
+/* MAP MODAL (GOOGLE MAPS IFRAME) */
+.map-modal-content { background: white; width: 100%; height: 80vh; border-radius: 24px 24px 0 0; padding: 16px; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s ease; }
+.modal.open-map .map-modal-content { transform: translateY(0); }
+.map-container { flex: 1; width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid #ddd; margin-bottom: 12px; position: relative; }
+.map-container iframe { width: 100%; height: 100%; border: 0; }
+
 /* TELEFON VA TASDIQLASH KODI BLOKI */
 .phone-auth-box {
   background: #f8f9fc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 16px; margin-bottom: 16px;
@@ -124,8 +140,8 @@ a { text-decoration: none; color: inherit; }
 
 .code-verify-container { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #cbd5e1; }
 .code-verify-container.show { display: block; }
-.code-inputs-row { display: flex; gap: 8px; margin-top: 6px; justify-content: center; }
-.code-inputs-row input { width: 42px; height: 48px; text-align: center; font-size: 20px; font-weight: 700; border-radius: 10px; border: 1px solid #cbd5e1; outline: none; background: #fff; }
+.code-inputs-row { display: flex; gap: 6px; margin-top: 6px; justify-content: center; }
+.code-inputs-row input { width: 38px; height: 44px; text-align: center; font-size: 18px; font-weight: 700; border-radius: 10px; border: 1px solid #cbd5e1; outline: none; background: #fff; }
 .verify-code-btn { background: #34c759; color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%; margin-top: 10px; cursor: pointer; }
 
 .submit-btn { background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; }
@@ -163,7 +179,7 @@ a { text-decoration: none; color: inherit; }
     </div>
   </div>
 
-  <!-- BOSHQAARISH PANELI (HAMMASINI TANLASH) -->
+  <!-- BOSHQAARISH PANELI -->
   <div class="cart-controls-bar" id="cartControlsBar" style="display: none;">
     <div class="select-all-wrapper" onclick="toggleSelectAll()">
       <div class="custom-checkbox" id="selectAllCheckbox"><i class="fa-solid fa-check"></i></div>
@@ -186,6 +202,12 @@ a { text-decoration: none; color: inherit; }
       <span>Jami to'lov</span>
       <span id="summaryTotalPrice">0 so'm</span>
     </div>
+  </div>
+
+  <!-- TAVSIYA ETAMIZ (RANDOM PRODUCTS) -->
+  <div class="recommendations-section" id="recommendationsSection" style="display: none;">
+    <div class="recommendations-title">Tavsiya etamiz</div>
+    <div class="recommendations-grid" id="recommendationsGrid"></div>
   </div>
 
   <!-- STICKY RASMIYLASHTIRISH PANELİ -->
@@ -215,11 +237,11 @@ a { text-decoration: none; color: inherit; }
       <label>Yetkazib berish manzili</label>
       <div class="address-row">
         <input type="text" id="custAddress" placeholder="Ko'cha, uy raqami yoki xaritadan tanlang">
-        <button type="button" class="map-select-btn" onclick="selectNamanganLocation()"><i class="fa-solid fa-map-location-dot"></i> Namangan</button>
+        <button type="button" class="map-select-btn" onclick="openMapModal()"><i class="fa-solid fa-map-location-dot"></i> Xarita</button>
       </div>
     </div>
 
-    <!-- TELEFON RAQAM VA TASDIQLASH KODI -->
+    <!-- TELEFON RAQAM VA 6 XONALI KOD -->
     <div class="phone-auth-box">
       <label style="font-size: 13px; font-weight: 600; color: #444; display: block; margin-bottom: 4px;">Telefon raqam</label>
       <div class="phone-row-flex">
@@ -242,6 +264,20 @@ a { text-decoration: none; color: inherit; }
     </div>
 
     <button class="submit-btn" id="submitBtn" onclick="sendOrder()" disabled>Buyurtmani yakunlash</button>
+  </div>
+</div>
+
+<!-- GOOGLE MAPS KICHIK OYNA MODALI -->
+<div class="modal" id="mapModal">
+  <div class="map-modal-content">
+    <div class="modal-title">
+      <span>Namangan shahridan manzilni tanlang</span>
+      <i class="fa-solid fa-xmark close-modal" onclick="closeMapModal()"></i>
+    </div>
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96572.63690656094!2d71.59765875!3d40.9982607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38bb4b5a31a90c1f%3A0x6799042b5c00e121!2sNamangan%2C%20Uzbekistan!5e0!3m2!1sen!2s!4v1650000000000!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    <button class="submit-btn" onclick="confirmMapLocation()">Shu manzilni tanlash</button>
   </div>
 </div>
 
@@ -290,6 +326,8 @@ const listBox = document.getElementById("cartList");
 const stickyPanel = document.getElementById("stickyPanel");
 const orderSummaryCard = document.getElementById("orderSummaryCard");
 const cartControlsBar = document.getElementById("cartControlsBar");
+const recommendationsSection = document.getElementById("recommendationsSection");
+const recommendationsGrid = document.getElementById("recommendationsGrid");
 
 function getCart() {
   return JSON.parse(localStorage.getItem("cart")) || [];
@@ -311,15 +349,18 @@ function renderCart() {
     stickyPanel.style.display = "none";
     orderSummaryCard.style.display = "none";
     listBox.innerHTML = `
-      <div style="text-align:center; padding:70px 20px; color:#888;">
-        <i class="fa-solid fa-basket-shopping" style="font-size: 55px; margin-bottom:15px; color:#ccc;"></i>
-        <p style="font-size:16px; font-weight:600; margin:0 0 5px 0;">Savatingiz bo'sh</p>
-        <p style="font-size:13px; color:#888; margin:0 0 15px 0;">O'zingizga kerakli mahsulotlarni qo'shing</p>
-        <a href="index.html" style="display:inline-block; background:#6a5acd; color:white; padding:10px 24px; border-radius:50px; font-size:14px; font-weight:600;">Xarid qilishga o'tish</a>
+      <div style="text-align:center; padding:40px 20px 20px 20px; color:#888;">
+        <i class="fa-solid fa-basket-shopping" style="font-size: 50px; margin-bottom:12px; color:#ccc;"></i>
+        <p style="font-size:16px; font-weight:600; margin:0 0 4px 0;">Savatingiz bo'sh</p>
+        <p style="font-size:13px; color:#888; margin:0 0 12px 0;">O'zingizga kerakli mahsulotlarni tanlang</p>
       </div>`;
+    
+    // Savat bo'shaganda products dan random tavsiyalar chiqarish
+    renderRecommendations();
     return;
   }
 
+  recommendationsSection.style.display = "none";
   cartControlsBar.style.display = "flex";
   stickyPanel.style.display = "flex";
   orderSummaryCard.style.display = "block";
@@ -390,6 +431,52 @@ function renderCart() {
 
   document.getElementById("stickyTotalPrice").innerText = totalSelectedDiscountPrice.toLocaleString() + " so'm";
   document.getElementById("stickyItemCount").innerText = `${totalSelectedQty} ta tovar`;
+}
+
+function renderRecommendations() {
+  if (typeof products === "undefined" || !products || products.length === 0) {
+    recommendationsSection.style.display = "none";
+    return;
+  }
+
+  // products massivini aralashtirib random qilish va 4 tasini olish
+  let shuffled = [...products].sort(() => 0.5 - Math.random()).slice(0, 4);
+  recommendationsGrid.innerHTML = "";
+
+  shuffled.forEach(p => {
+    recommendationsGrid.innerHTML += `
+      <div class="rec-card" onclick="window.location.href='product.html?id=${p.id}'">
+        <div>
+          <img src="${p.img || (p.images && p.images[0]) || ''}" alt="">
+          <h5>${p.name}</h5>
+        </div>
+        <div class="rec-card-bottom">
+          <span class="price">${(p.price || 0).toLocaleString()} so'm</span>
+          <button class="rec-add-btn" onclick="event.stopPropagation(); addToCartFromRec('${p.id}')"><i class="fa-solid fa-plus"></i></button>
+        </div>
+      </div>`;
+  });
+  recommendationsSection.style.display = "block";
+}
+
+function addToCartFromRec(id) {
+  let p = products.find(x => x.id == id);
+  if (!p) return;
+  let cart = getCart();
+  let existing = cart.find(x => x.id == id);
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    cart.push({
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      img: p.img || (p.images && p.images[0]) || '',
+      qty: 1,
+      selected: true
+    });
+  }
+  saveCart(cart);
 }
 
 function toggleItemCheck(index) {
@@ -472,6 +559,25 @@ function openOrderModal() {
 }
 function closeOrderModal() { document.getElementById("orderModal").classList.remove("open"); }
 
+function openMapModal() {
+  document.getElementById("mapModal").classList.add("open-map");
+}
+function closeMapModal() {
+  document.getElementById("mapModal").classList.remove("open-map");
+}
+function confirmMapLocation() {
+  const namanganLocations = [
+    "Namangan shahar, Markaziy bozor hududi",
+    "Namangan shahar, A.Navoiy ko'chasi, 15-uy",
+    "Namangan shahar, Chorsu maydoni",
+    "Namangan shahar, Sardoba dahasi, 4-uy",
+    "Namangan shahar, Davlatobod tumani, Yoshlar ko'chasi"
+  ];
+  let chosen = namanganLocations[Math.floor(Math.random() * namanganLocations.length)];
+  document.getElementById("custAddress").value = chosen;
+  closeMapModal();
+}
+
 function openHistoryModal() {
   const historyListContent = document.getElementById("historyListContent");
   let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
@@ -492,18 +598,6 @@ function openHistoryModal() {
   document.getElementById("historyModal").classList.add("open");
 }
 function closeHistoryModal() { document.getElementById("historyModal").classList.remove("open"); }
-
-function selectNamanganLocation() {
-  const locations = [
-    "Namangan shahar, Markaziy bozor",
-    "Namangan shahar, A.Navoiy ko'chasi",
-    "Namangan shahar, Do'stlik MFY",
-    "Namangan shahar, Sardoba dahasi",
-    "Namangan shahar, Chorsu maydoni"
-  ];
-  let randomLoc = locations[Math.floor(Math.random() * locations.length)];
-  document.getElementById("custAddress").value = randomLoc;
-}
 
 /* TELEFON RAQAM VA 6 XONALI KOD MANTIQI */
 const phoneInput = document.getElementById("custPhone");
@@ -594,12 +688,14 @@ function verifySmsCode() {
   }
 }
 
-/* BUYURTMANI YUBORISH */
+/* BUYURTMANI YUBORISH (QAYTA BOSILISHNING OLDINI OLISH BILAN) */
 function sendOrder() {
+  const submitBtn = document.getElementById("submitBtn");
+  if (submitBtn.disabled && submitBtn.innerText === "Yuborilmoqda...") return;
+
   const name = document.getElementById("custName").value.trim();
   const address = document.getElementById("custAddress").value.trim();
   const phone = phoneInput.value.trim();
-  const submitBtn = document.getElementById("submitBtn");
 
   if (!name || !address || !phone) {
     alert("Iltimos, barcha maydonlarni to'ldiring!");
@@ -664,15 +760,25 @@ function sendOrder() {
         parse_mode: "HTML"
       })
     }).finally(() => {
-      // Sotib yuborilgan tovarlarni savatdan o'chirish va savatga qaytish
+      // Sotib yuborilgan tovarlarni savatdan butunlay o'chirish
       let remainingCart = cart.filter(item => item.selected === false);
       saveCart(remainingCart);
 
       closeOrderModal();
       alert("Buyurtmangiz muvaffaqiyatli yakunlandi!");
       
-      // Sahifani tozalab savat ko'rinishiga qaytarish
-      window.location.href = "cart.html";
+      // Savatning o'zida qolish va formani qayta tiklash
+      submitBtn.innerText = "Buyurtmani yakunlash";
+      submitBtn.disabled = true;
+      isPhoneVerified = false;
+      phoneInput.value = "+998 ";
+      phoneInput.disabled = false;
+      document.getElementById("sendCodeBtn").style.display = "block";
+      document.getElementById("codeVerifyContainer").classList.remove("show");
+      document.querySelectorAll("#codeInputsRow input").forEach(i => i.value = "");
+      document.getElementById("custAddress").value = "";
+      
+      renderCart();
     });
   }).catch(() => {
     alert("Xatolik yuz berdi!");
