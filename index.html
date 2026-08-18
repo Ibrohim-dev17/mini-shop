@@ -65,10 +65,15 @@ img { max-width: 100%; }
   font-size: 14px;
 }
 
-/* BANNER - Yonlari ozgina chiqib turadigan va silliq aylanadigan */
+/* BANNER - Uzum Market uslubida chekkalari ko'rinib turadigan va tinmay o'ngga aylanadigan */
 .banner {
   margin: 12px 0;
   position: relative;
+}
+
+.banner-wrapper {
+  overflow: hidden;
+  width: 100%;
 }
 
 .banner-slider {
@@ -87,7 +92,7 @@ img { max-width: 100%; }
 }
 
 .banner-card {
-  flex: 0 0 80%; /* 80% kenglik, qolgan 20% chekkada keyingisi ko'rinib turadi */
+  flex: 0 0 82%; /* Kenglik 82%, chekkasida keyingi banner ko'rinib turadi */
   min-height: 170px;
   padding: 20px;
   color: #fff;
@@ -366,28 +371,24 @@ img { max-width: 100%; }
 
 <!-- PASTKI MENYU -->
 <div class="bottom">
-  <!-- Sevimlilar -->
   <a href="favorites.html" id="navFav">
     <i class="fa-solid fa-heart"></i>
     <span id="favBadge" class="badge">0</span>
   </a>
-  <!-- Savat -->
   <a href="cart.html" id="navCart">
     <i class="fa-solid fa-basket-shopping"></i>
     <span id="cartBadge" class="badge">0</span>
   </a>
 
-  <!-- Asosiy (Uy) -->
   <a href="index.html" id="navHome" class="active">
     <i class="fa-solid fa-house"></i>
   </a>
 
-  <!-- Qidiruv/Kategoriya (categories.html) -->
+  <!-- categories.html ga o'tuvchi qidiruv/kategoriya iconi -->
   <a href="categories.html" id="navCat">
     <i class="fa-solid fa-magnifying-glass"></i>
   </a>
   
-  <!-- Profil -->
   <a href="profile.html" id="navProfile">
     <i class="fa-solid fa-user"></i>
   </a>
@@ -572,38 +573,57 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* 5 SEKUNDDA TINMAY O'NGGA AYLANADIGAN CHEKSIZ BANNER (1 -> 2 -> 3 -> 1...) */
+/* UZUM MARKET USLUBIDAGI UZLUKSIZ (INFINITE) BANNER SLIDER */
 const slider = document.getElementById("slider");
+const originalCards = document.querySelectorAll(".banner-card");
 const dots = document.querySelectorAll(".dot");
-const cards = document.querySelectorAll(".banner-card");
+
+// 1-chi bannerni oxiriga nusxalab qo'shamiz (Uzum kabi sakramasdan silliq aylanishi uchun)
+const firstClone = originalCards[0].cloneNode(true);
+slider.appendChild(firstClone);
+
+const allCards = document.querySelectorAll(".banner-card");
 let slideIndex = 0;
 
 function updateDots(index) {
+  let dotIndex = index % originalCards.length;
   dots.forEach((d, i) => {
-    d.classList.toggle("active", i === index);
+    d.classList.toggle("active", i === dotIndex);
   });
 }
 
 function autoSlide() {
   slideIndex++;
-  if (slideIndex >= cards.length) {
-    slideIndex = 0; // Oxiriga yetsa yana boshidan (1-dan) boshlaydi
+  let cardWidth = originalCards[0].offsetWidth + 12; // Karta kengligi + gap
+  
+  slider.scrollTo({
+    left: slideIndex * cardWidth,
+    behavior: "smooth"
+  });
+
+  // Agar nusxalangan oxirgi elementga yetib borsa
+  if (slideIndex >= originalCards.length) {
+    updateDots(slideIndex);
+    setTimeout(() => {
+      slider.style.scrollBehavior = "auto"; // Animatsiyani to'xtatib boshiga sakratamiz (ko'z ilg'amaydi)
+      slider.scrollLeft = 0;
+      slideIndex = 0;
+      slider.style.scrollBehavior = "smooth"; // Animatsiyani qaytaramiz
+    }, 400); // Silliq o'tish vaqtini kutish
+  } else {
+    updateDots(slideIndex);
   }
-  let cardWidth = cards[0].offsetWidth + 12; // Karta kengligi + gap
-  slider.scrollTo({ left: slideIndex * cardWidth, behavior: "smooth" });
-  updateDots(slideIndex);
 }
 
 // Har 5 sekundda avtomatik o'ngga suriladi
 let autoSlideInterval = setInterval(autoSlide, 5000);
 
-// Foydalanuvchi qo'lda sursa, nuqtalar moslashishi uchun
+// Foydalanuvchi qo'lda sursa, nuqtalar to'g'ri ishlashi uchun
 slider.addEventListener("scroll", () => {
-  let cardWidth = cards[0].offsetWidth + 12;
+  let cardWidth = originalCards[0].offsetWidth + 12;
   let index = Math.round(slider.scrollLeft / cardWidth);
-  if (index >= 0 && index < cards.length && index !== slideIndex) {
-    slideIndex = index;
-    updateDots(slideIndex);
+  if (index >= 0 && index <= originalCards.length) {
+    updateDots(index);
   }
 });
 </script>
