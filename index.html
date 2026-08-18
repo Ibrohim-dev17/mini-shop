@@ -84,7 +84,6 @@ img { max-width: 100%; }
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x !important;
   overscroll-behavior-x: contain;
 }
 
@@ -98,7 +97,6 @@ img { max-width: 100%; }
   padding: 20px;
   color: #fff;
   scroll-snap-align: start;
-  touch-action: pan-x !important;
 }
 
 .banner-card h2, .banner-card p { margin: 0; }
@@ -134,6 +132,9 @@ img { max-width: 100%; }
   overflow-x: auto;
   gap: 12px;
   padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 .cat-list::-webkit-scrollbar { display: none; }
 
@@ -144,6 +145,7 @@ img { max-width: 100%; }
   border-radius: 14px;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  scroll-snap-align: start;
 }
 .cat-card img { width: 50px; height: 50px; object-fit: contain; }
 .cat-card p { margin: 6px 0 0 0; font-size: 12px; font-weight: 500; }
@@ -193,7 +195,6 @@ img { max-width: 100%; }
   height: 38px;
 }
 
-/* Mahsulot haqida qisqacha ma'lumot va yulduzcha */
 .product-desc {
   font-size: 11px;
   color: #777;
@@ -254,7 +255,7 @@ img { max-width: 100%; }
 }
 .toast.show { top: 20px; }
 
-/* PASTDAGI MENYU (NAVIGATION BAR) */
+/* PASTDAGI MENYU */
 .bottom {
   position: fixed;
   bottom: 0;
@@ -296,7 +297,7 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QORA RANGLI BADGE (SONLAR UCHUN) */
+/* QORA RANGLI BADGE */
 .badge {
   display: none;
   position: absolute;
@@ -369,7 +370,6 @@ img { max-width: 100%; }
 
 <!-- YANGILANGAN PASTKI MENYU -->
 <div class="bottom">
-  <!-- Chapda: Sevimlilar va Savat -->
   <a href="favorites.html" id="navFav">
     <i class="fa-solid fa-heart"></i>
     <span id="favBadge" class="badge">0</span>
@@ -379,15 +379,15 @@ img { max-width: 100%; }
     <span id="cartBadge" class="badge">0</span>
   </a>
 
-  <!-- O'rtada: Asosiy (Uy) -->
   <a href="index.html" id="navHome" class="active">
     <i class="fa-solid fa-house"></i>
   </a>
 
-  <!-- O'ngda: Qidiruv va Profil -->
-  <a href="search.html" id="navSearch">
-    <i class="fa-solid fa-magnifying-glass"></i>
+  <!-- categories.html ga o'tuvchi tugma -->
+  <a href="categories.html" id="navCat">
+    <i class="fa-solid fa-list"></i>
   </a>
+
   <a href="profile.html" id="navProfile">
     <i class="fa-solid fa-user"></i>
   </a>
@@ -451,6 +451,16 @@ categories.forEach(c => {
   </a>`;
 });
 
+/* YULDUZLARNI HISOBLASH FUNKSIYASI */
+function getStars(rating) {
+  let r = Math.round(rating || 5);
+  let stars = "";
+  for(let i = 1; i <= 5; i++) {
+    stars += i <= r ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
+  }
+  return stars;
+}
+
 /* MAHSULOTLARNI CHIQARISH */
 const box = document.getElementById("productBox");
 function renderProducts(productsList) {
@@ -462,7 +472,7 @@ function renderProducts(productsList) {
 
   productsList.forEach(p => {
     let isFav = favs.includes(p.id);
-    let ratingStars = "★".repeat(Math.round(p.rating || 5)) + "☆".repeat(5 - Math.round(p.rating || 5));
+    let ratingValue = p.rating || 5;
     
     box.innerHTML += `
     <div class="card">
@@ -473,7 +483,7 @@ function renderProducts(productsList) {
         <img src="${p.img}">
         <p>${p.name}</p>
         <div class="product-desc">${p.desc || "Qisqacha ma'lumot mavjud emas"}</div>
-        <div class="product-rating">${ratingStars} <span style="color:#aaa; font-size:10px;">(${p.rating || 5})</span></div>
+        <div class="product-rating">${getStars(ratingValue)} <span style="color:#aaa; font-size:10px;">(${ratingValue})</span></div>
         <div class="price">${p.price.toLocaleString()} so'm</div>
       </a>
       <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
@@ -562,40 +572,34 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* SLIDER KODI */
+/* 5 SEKUNDDA CHEKSIZ (INFINITE) AVTO AYLANADIGAN SLIDER */
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
+const cards = document.querySelectorAll(".banner-card");
 let slideIndex = 0;
-let userScrolling = false;
-let scrollTimeout;
 
-function updateDots() {
-  const cards = document.querySelectorAll(".banner-card");
-  if(cards.length === 0) return;
-  const width = cards[0].offsetWidth;
-  let i = Math.round(slider.scrollLeft / width);
-  i = i % dots.length;
-  if (i < 0) i = 0;
-  dots.forEach(d => d.classList.remove("active"));
-  if(dots[i]) dots[i].classList.add("active");
+function updateDots(index) {
+  dots.forEach((d, i) => {
+    d.classList.toggle("active", i === index);
+  });
 }
-
-slider.addEventListener("scroll", () => {
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(updateDots, 50);
-});
 
 function autoSlide() {
-  if (userScrolling) return;
-  const cards = document.querySelectorAll(".banner-card");
-  if(cards.length === 0) return;
-  const width = cards[0].offsetWidth;
-  slideIndex++;
-  if (slideIndex >= cards.length) slideIndex = 0;
-  slider.scrollTo({ left: slideIndex * width, behavior: "smooth" });
+  slideIndex = (slideIndex + 1) % cards.length;
+  slider.scrollTo({ left: slideIndex * slider.offsetWidth, behavior: "smooth" });
+  updateDots(slideIndex);
 }
 
-let autoSlideInterval = setInterval(autoSlide, 3000);
+let autoSlideInterval = setInterval(autoSlide, 5000);
+
+// Qo'lda surilganda nuqtalarni o'z vaqtida moslash
+slider.addEventListener("scroll", () => {
+  let index = Math.round(slider.scrollLeft / slider.offsetWidth);
+  if (index >= 0 && index < cards.length && index !== slideIndex) {
+    slideIndex = index;
+    updateDots(slideIndex);
+  }
+});
 </script>
 
 </body>
