@@ -65,7 +65,7 @@ img { max-width: 100%; }
   font-size: 14px;
 }
 
-/* BANNER - Odatiy qo'lda suriladigan holat */
+/* BANNER */
 .banner {
   margin: 8px 0;
   width: 100%;
@@ -146,15 +146,38 @@ img { max-width: 100%; }
 .cat-card {
   min-width: 85px;
   flex: 0 0 auto;
-  background: #fff;
-  padding: 8px;
-  border-radius: 12px;
+  background: transparent;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
   scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.cat-card img { width: 45px; height: 45px; object-fit: contain; }
-.cat-card p { margin: 4px 0 0 0; font-size: 11px; font-weight: 500; }
+
+.cat-img-box {
+  width: 65px;
+  height: 65px;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  padding: 8px;
+}
+
+.cat-card img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+}
+
+.cat-card p { 
+  margin: 6px 0 0 0; 
+  font-size: 12px; 
+  font-weight: 500; 
+  color: #333;
+}
 
 /* PRODUCTS */
 .grid {
@@ -303,7 +326,7 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QORA RANGLI BADGE (Savat va Sevimlilar uchun) */
+/* QORA RANGLI BADGE */
 .badge {
   display: none;
   position: absolute;
@@ -393,7 +416,7 @@ img { max-width: 100%; }
   <a href="categories.html" id="navCat">
     <i class="fa-solid fa-magnifying-glass"></i>
   </a>
-  
+
   <a href="profile.html" id="navProfile">
     <i class="fa-solid fa-user"></i>
   </a>
@@ -450,12 +473,14 @@ function updateBottomBadges() {
 // Sahifa yuklanganda badgelarni tekshirish
 document.addEventListener("DOMContentLoaded", updateBottomBadges);
 
-/* KATEGORIYALARNI CHIQARISH */
+/* KATEGORIYALARNI CHIQARISH (Rasm alohida katakda, nomi tagida) */
 const catBox = document.getElementById("catList");
 categories.forEach(c => {
   catBox.innerHTML += `
   <a href="products.html?cat=${c.id}&from=index" class="cat-card">
-    <img src="${c.img}">
+    <div class="cat-img-box">
+      <img src="${c.img}">
+    </div>
     <p>${c.name}</p>
   </a>`;
 });
@@ -482,7 +507,7 @@ function renderProducts(productsList) {
   productsList.forEach(p => {
     let isFav = favs.includes(p.id);
     let ratingValue = p.rating || 5;
-    
+
     box.innerHTML += `
     <div class="card">
       <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
@@ -516,8 +541,7 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  
-  // DARHOL BADGENI YANGILASH
+
   updateBottomBadges();
 }
 
@@ -537,7 +561,7 @@ function addToCart(e, id) {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   updateTelegramMainButton();
-  updateBottomBadges(); // DARHOL BADGENI YANGILASH
+  updateBottomBadges();
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
@@ -583,7 +607,7 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* ODDIY QO'LDA SURILADIGAN BANNER UCHUN NUQTALARNI BOSHQARISH */
+/* BANNER SLIDER */
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 const cardWidth = slider.querySelector(".banner-card").offsetWidth + 10;
