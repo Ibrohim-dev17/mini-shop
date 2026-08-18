@@ -71,7 +71,7 @@ img { max-width: 100%; }
   text-transform: capitalize; 
 }
 
-/* PRODUCTS GRID (Index.html bilan bir xil dizayn) */
+/* PRODUCTS GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -327,7 +327,7 @@ if (window.Telegram && Telegram.WebApp) {
 }
 
 const urlParams = new URLSearchParams(window.location.search);
-const cat = urlParams.get("cat");
+const cat = urlParams.get("cat") || "";
 const from = urlParams.get("from");
 
 if(from === "categories") {
@@ -339,7 +339,8 @@ if(from === "categories") {
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
 if(cat){
-  document.getElementById("title").innerText = cat;
+  // Baş harfini katta qilib sarlavhaga chiqarish
+  document.getElementById("title").innerText = cat.charAt(0).toUpperCase() + cat.slice(1);
 }
 
 const box = document.getElementById("productBox");
@@ -373,16 +374,16 @@ function updateBottomBadges() {
 document.addEventListener("DOMContentLoaded", updateBottomBadges);
 window.addEventListener("pageshow", updateBottomBadges);
 
-// Index sahifasidagi kabi ommabof tovarlarni yuklash va moslashtirish
+// Serverdan mahsulotlarni olib kelish va to'g'ri filtrlash
 fetch('api.php?action=get_products')
   .then(res => res.json())
   .then(allProductsFromDB => {
     window.allProducts = allProductsFromDB; 
 
-    // Kategoriyani to'g'ri solishtirish (kichik harflarda, bo'shliqlarsiz)
+    // Kategoriya bo'yicha aniq moslashtirib filterlash
     const filteredProducts = allProductsFromDB.filter(p => {
-      let pCat = String(p.category_id || p.category || p.category_name || "").trim().toLowerCase();
-      let searchCat = String(cat || "").trim().toLowerCase();
+      let pCat = String(p.category || p.category_name || p.category_id || "").trim().toLowerCase();
+      let searchCat = String(cat).trim().toLowerCase();
       return pCat === searchCat;
     });
 
