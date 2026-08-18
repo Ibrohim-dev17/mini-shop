@@ -78,8 +78,9 @@ img { max-width: 100%; }
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   gap: 10px;
-  padding: 0 12px;
+  padding: 0 15px;
   overscroll-behavior-x: contain;
+  scrollbar-width: none;
 }
 
 .banner-slider::-webkit-scrollbar {
@@ -87,8 +88,8 @@ img { max-width: 100%; }
 }
 
 .banner-card {
-  flex: 0 0 88%; /* Ingichkaroq razmer, ikki yonida boshqa bannerlar qisman ko'rinadi */
-  min-height: 130px; /* Uzum kabi ixcham balandlik */
+  flex: 0 0 85%; /* Uzum kabi ingichkaroq razmer, ikki yonida boshqa bannerlar qisman ko'rinadi */
+  min-height: 120px; /* Ixcham balandlik, pastdagi qismlar yuqoriroqqa suriladi */
   padding: 16px;
   color: #fff;
   border-radius: 16px;
@@ -96,11 +97,12 @@ img { max-width: 100%; }
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .banner-card h2, .banner-card p { margin: 0; }
-.banner-card h2 { margin-bottom: 8px; font-size: 18px; }
-.banner-card p { font-size: 13px; opacity: 0.9; }
+.banner-card h2 { margin-bottom: 6px; font-size: 17px; }
+.banner-card p { font-size: 12px; opacity: 0.9; }
 
 .banner1 { background: linear-gradient(135deg,#ff6b6b,#ff8e53); }
 .banner2 { background: linear-gradient(135deg,#4facfe,#00f2fe); }
@@ -124,8 +126,8 @@ img { max-width: 100%; }
 .dot.active { background: #6a5acd; }
 
 /* CATEGORY */
-.section { padding: 8px 12px; }
-.section h3 { margin: 0 0 10px 0; font-size: 15px; font-weight: 700; }
+.section { padding: 6px 12px; }
+.section h3 { margin: 0 0 8px 0; font-size: 15px; font-weight: 700; }
 
 .cat-list {
   display: flex;
@@ -450,7 +452,7 @@ categories.forEach(c => {
   </a>`;
 });
 
-/* YULDUZLARni HISOBLASH */
+/* YULDUZLARNI HISOBLASH */
 function getStars(rating) {
   let r = Math.round(rating || 5);
   let stars = "";
@@ -571,58 +573,63 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* UZUM MARKET USLUBIDAGI CHEKSIZ (CIRCULAR) BANNER SLIDER */
+/* IKKI TOMONGA CHEKSIZ (CIRCULAR) BANNER SLIDER MANTIQI */
 const slider = document.getElementById("slider");
 const originalCards = Array.from(document.querySelectorAll(".banner-card"));
 const dots = document.querySelectorAll(".dot");
 
-// Barcha kartalarni oxiriga nusxalab qo'shamiz (Cheksiz aylanish va qo'lda istalgancha surish uchun)
-originalCards.forEach(card => {
-  slider.appendChild(card.cloneNode(true));
-});
+// 3 ta bannerni bir nechta marta ko'paytirib, ham chapga, ham o'ngga cheksiz surish imkonini yaratamiz
+for (let i = 0; i < 2; i++) {
+  originalCards.forEach(card => {
+    slider.appendChild(card.cloneNode(true));
+  });
+}
 
-let slideIndex = 0;
+const cardWidth = originalCards[0].offsetWidth + 10; // Karta kengligi + gap
+slider.scrollLeft = cardWidth * 3; // Boshlanishini o'rtaga qo'yamiz
+let slideIndex = 3;
 
 function updateDots(index) {
-  let dotIndex = index % originalCards.length;
+  let activeIndex = (index - 3) % 3;
+  if (activeIndex < 0) activeIndex += 3;
   dots.forEach((d, i) => {
-    d.classList.toggle("active", i === dotIndex);
+    d.classList.toggle("active", i === activeIndex);
   });
 }
 
 function autoSlide() {
   slideIndex++;
-  let cardWidth = originalCards[0].offsetWidth + 10; // Karta kengligi + gap
-  
-  slider.scrollTo({
-    left: slideIndex * cardWidth,
-    behavior: "smooth"
-  });
+  slider.scrollTo({ left: slideIndex * cardWidth, behavior: "smooth" });
 
-  // Agar nusxalangan qismning oxiriga yetsa, silliq boshiga qaytamiz
-  if (slideIndex >= originalCards.length) {
-    updateDots(slideIndex);
+  if (slideIndex >= 6) {
     setTimeout(() => {
       slider.style.scrollBehavior = "auto";
-      slider.scrollLeft = 0;
-      slideIndex = 0;
+      slider.scrollLeft = cardWidth * 3;
+      slideIndex = 3;
       slider.style.scrollBehavior = "smooth";
-    }, 400);
-  } else {
-    updateDots(slideIndex);
+    }, 500);
   }
+  updateDots(slideIndex);
 }
 
-// Har 5 sekundda avtomatik o'ngga suriladi
+// Har 5 sekundda o'zi o'ngga siljiydi
 let autoSlideInterval = setInterval(autoSlide, 5000);
 
-// Foydalanuvchi qo'lda surganida nuqtalarni to'g'ri ko'rsatish
+// Qo'lda chapga yoki o'ngga surilganda cheksiz aylanishini ta'minlash
 slider.addEventListener("scroll", () => {
-  let cardWidth = originalCards[0].offsetWidth + 10;
-  let index = Math.round(slider.scrollLeft / cardWidth);
-  if (index >= 0) {
-    updateDots(index);
+  let scrollPos = slider.scrollLeft;
+  if (scrollPos < cardWidth) {
+    slider.style.scrollBehavior = "auto";
+    slider.scrollLeft = cardWidth * 4;
+    slider.style.scrollBehavior = "smooth";
+    slideIndex = 4;
+  } else if (scrollPos > cardWidth * 5) {
+    slider.style.scrollBehavior = "auto";
+    slider.scrollLeft = cardWidth * 2;
+    slider.style.scrollBehavior = "smooth";
+    slideIndex = 2;
   }
+  updateDots(Math.round(slider.scrollLeft / cardWidth));
 });
 </script>
 
