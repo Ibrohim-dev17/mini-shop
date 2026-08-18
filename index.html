@@ -34,7 +34,7 @@ img { max-width: 100%; }
   overscroll-behavior-y: contain;
 }
 
-/* HEADER: Dastlab filtr tugma yo'q, faqat qidiruv */
+/* HEADER: Qidiruv chapda, filtr tugmasi faqat qidirganda o'ngda chiqadi */
 .header {
   display: flex;
   align-items: center;
@@ -66,7 +66,7 @@ img { max-width: 100%; }
 
 /* FILTR TUGMASI (Faqat qidiruv qilinganda chiqadi) */
 .filter-btn {
-  display: none; /* Aslida yopiq, qidiruvda ochiladi */
+  display: none;
   background: #f2f2f2;
   border: none;
   width: 38px;
@@ -201,22 +201,49 @@ img { max-width: 100%; }
   color: #333;
 }
 
-/* PRODUCTS GRID & CARDS */
+/* PRODUCTS GRID & CARDS (Katta rasm va tashqi qismlar) */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 12px;
   padding: 0 12px 12px 12px;
 }
 
 .card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 8px;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
   position: relative;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
   display: flex;
   flex-direction: column;
+}
+
+/* Rasm to'liq va katta turishi uchun quti dizayni */
+.card-img-box {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 8px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.card-img-box img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; /* To'liq to'ldirib katta turishi uchun */
+}
+
+/* Qutidan tashqaridagi matnlar va tugmalar uchun qism */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .card-link {
@@ -224,26 +251,6 @@ img { max-width: 100%; }
   flex-direction: column;
   text-decoration: none;
   color: inherit;
-  flex-grow: 1;
-}
-
-.card-img-box {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: #f8f9fa;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-bottom: 6px;
-  position: relative;
-}
-
-.card-img-box img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: contain; 
 }
 
 .price-box {
@@ -309,8 +316,8 @@ img { max-width: 100%; }
 
 .heart {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   width: 28px;
   height: 28px;
   display: flex;
@@ -320,7 +327,7 @@ img { max-width: 100%; }
   font-size: 16px;
   color: #b0b0b5;
   z-index: 2;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   transition: transform 0.2s ease, color 0.2s ease;
 }
@@ -337,7 +344,7 @@ img { max-width: 100%; }
 }
 .toast.show { top: 20px; }
 
-/* UZUM MARKET USLUBIDAGI FILTR DIZAYNI (SCREENSHOTDAGIDEK) */
+/* UZUM MARKET USLUBIDAGI FILTR MODAL OYNASI */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -761,13 +768,12 @@ categories.forEach(c => {
   </a>`;
 });
 
-/* MAHSULOTLARNI CHIQARISH */
+/* MAHSULOTLARNI CHIQARISH (Rasm ichkarida, qolgan barcha ma'lumotlar tashqarida) */
 const box = document.getElementById("productBox");
 function renderProducts(productsList) {
   currentFilteredProducts = productsList;
   box.innerHTML = "";
   
-  // Tugmadagi tovarlar sonini yangilash
   let btnCount = document.getElementById("showProductsCountBtn");
   if(btnCount) {
     btnCount.innerText = `Ko'rsatish ${productsList.length} ta tovar`;
@@ -786,26 +792,33 @@ function renderProducts(productsList) {
 
     box.innerHTML += `
     <div class="card" data-id="${p.id}">
-      <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
-        <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-      </div>
-      <a href="product.html?id=${p.id}" class="card-link">
-        <div class="card-img-box">
+      <!-- Rasm va yurakcha turgan quti -->
+      <div class="card-img-box">
+        <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
+          <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+        </div>
+        <a href="product.html?id=${p.id}" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
           <img src="${p.img}">
-        </div>
-        <div class="price-box">
-          <span class="price">${p.price.toLocaleString()} so'm</span>
-          <span class="old-price">${oldPrice.toLocaleString()}</span>
-        </div>
-        <div class="product-desc">${p.name} - ${p.desc || "Sifatli va qulay mahsulot"}</div>
-        <div class="product-rating">
-          <i class="fa-solid fa-star"></i> <span>${ratingValue}</span> 
-          <span style="color:#aaa;"><i class="fa-regular fa-comment" style="margin-left: 4px;"></i> ${reviewsCount}</span>
-        </div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">
-        <i class="fa-solid fa-basket-shopping" style="font-size: 14px;"></i> Savatga
-      </button>
+        </a>
+      </div>
+
+      <!-- Qutidan tashqarida turuvchi narx, desc, yulduz, komment va savat tugmasi -->
+      <div class="card-content">
+        <a href="product.html?id=${p.id}" class="card-link">
+          <div class="price-box">
+            <span class="price">${p.price.toLocaleString()} so'm</span>
+            <span class="old-price">${oldPrice.toLocaleString()}</span>
+          </div>
+          <div class="product-desc">${p.name} - ${p.desc || "Sifatli va qulay mahsulot"}</div>
+          <div class="product-rating">
+            <i class="fa-solid fa-star"></i> <span>${ratingValue}</span> 
+            <span style="color:#aaa;"><i class="fa-regular fa-comment" style="margin-left: 4px;"></i> ${reviewsCount}</span>
+          </div>
+        </a>
+        <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">
+          <i class="fa-solid fa-basket-shopping" style="font-size: 14px;"></i> Savatga
+        </button>
+      </div>
     </div>`;
   });
 }
@@ -862,7 +875,6 @@ function toggleFilterModal(open) {
   const modal = document.getElementById("filterModal");
   if (open) {
     modal.classList.add("open");
-    // Modal ochilganda hozirgi elementlar sonini yangilash
     let btnCount = document.getElementById("showProductsCountBtn");
     if(btnCount) {
       btnCount.innerText = `Ko'rsatish ${currentFilteredProducts.length} ta tovar`;
@@ -888,7 +900,7 @@ function applyFilters() {
     result = result.filter(p => p.price <= Number(maxPrice));
   }
   if (checkDiscount) {
-    result = result.filter(p => p.oldPrice || p.price < 200000); // Misol shart
+    result = result.filter(p => p.oldPrice || p.price < 200000);
   }
   if (checkOriginal) {
     result = result.filter(p => p.original);
@@ -898,7 +910,7 @@ function applyFilters() {
   toggleFilterModal(false);
 }
 
-/* QIDIRUV (Qidirilgandagina filtr tugmasi chiqadi) */
+/* QIDIRUV */
 document.getElementById("searchInput").addEventListener("input", e => {
   let val = e.target.value.trim().toLowerCase();
   const bannerBlock = document.getElementById("bannerBlock");
@@ -910,13 +922,13 @@ document.getElementById("searchInput").addEventListener("input", e => {
     bannerBlock.style.display = "block";
     categoriesBlock.style.display = "block";
     sectionTitle.innerText = "Ommabop mahsulotlar";
-    filterBtn.classList.remove("show"); // Qidiruv bo'sh bo'lsa filtr tugmasi yashirinadi
+    filterBtn.classList.remove("show");
     renderProducts(initialProducts);
   } else {
     bannerBlock.style.display = "none";
     categoriesBlock.style.display = "none";
     sectionTitle.innerText = "Qidiruv natijalari";
-    filterBtn.classList.add("show"); // Qidirilganda filtr tugmasi paydo bo'ladi
+    filterBtn.classList.add("show");
     let filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
     renderProducts(filtered);
   }
