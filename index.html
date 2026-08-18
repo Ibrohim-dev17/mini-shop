@@ -752,7 +752,6 @@ function updateBottomBadges() {
   }
 }
 
-// Har safar sahifa yuklanganda va oynaga qaytganda darhol ishga tushadi
 document.addEventListener("DOMContentLoaded", updateBottomBadges);
 window.addEventListener("pageshow", updateBottomBadges);
 
@@ -789,7 +788,7 @@ function renderProducts(productsList) {
             <line x1="8" y1="11" x2="14" y2="11"></line>
           </svg>
         </div>
-        <span style="font-size: 15px; font-weight: 600; color: #333;">Mahsulot topilmadi 🤷‍♂️</span>
+        <span style="font-size: 15px; font-weight: 600; color: #333;">Mahsulot topilmadi</span>
         <span style="font-size: 13px; color: #888; max-width: 240px; line-height: 1.4;">Boshqa so'z bilan qidirib ko'ring yoki filtrni tozalang</span>
       </div>`;
     return;
@@ -803,7 +802,6 @@ function renderProducts(productsList) {
 
     box.innerHTML += `
     <div class="card" data-id="${p.id}">
-      <!-- Uzum market uslubidagi uzunroq rasm qutisi -->
       <div class="card-img-box">
         <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
           <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
@@ -813,7 +811,6 @@ function renderProducts(productsList) {
         </a>
       </div>
 
-      <!-- Qutidan tashqarida turuvchi ma'lumotlar -->
       <div class="card-content">
         <a href="product.html?id=${p.id}" class="card-link">
           <div class="price-box">
@@ -850,10 +847,10 @@ function toggleFav(id, el) {
     if (icon) icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges(); // Darhol yangilash
+  updateBottomBadges();
 }
 
-/* SAVATGA QO'SHISH */
+/* SAVATGA QO'SHISH (Soni o'zgarishi muammosi to'liq hal qilindi) */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -872,11 +869,11 @@ function addToCart(e, id) {
     Telegram.WebApp.MainButton.hide();
   }
 
-  updateBottomBadges(); // Darhol yangilash
+  updateBottomBadges();
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("close"); toast.classList.remove("show"); }, 1500);
+  setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
 updateBottomBadges();
@@ -899,7 +896,7 @@ function toggleFilterModal(open) {
 function applyFilters() {
   const minPrice = document.getElementById("priceMin").value;
   const maxPrice = document.getElementById("priceMax").value;
-  const checkDiscount = document.getElementById("checkDiscount").label || document.getElementById("checkDiscount").checked;
+  const checkDiscount = document.getElementById("checkDiscount").checked;
   const checkOriginal = document.getElementById("checkOriginal").checked;
 
   let result = [...currentFilteredProducts];
@@ -943,7 +940,7 @@ document.getElementById("searchInput").addEventListener("input", e => {
     let filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
     renderProducts(filtered);
   }
-});
+} );
 
 /* TELEGRAM MAIN BUTTONni YASHIRISH */
 if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
