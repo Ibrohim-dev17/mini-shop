@@ -201,7 +201,7 @@ img { max-width: 100%; }
   color: #333;
 }
 
-/* PRODUCTS GRID & CARDS (Uzum market uslubidagi uzunroq rasm nisbati: 3 / 4 yoki 4 / 5) */
+/* PRODUCTS GRID & CARDS */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -218,7 +218,7 @@ img { max-width: 100%; }
   flex-direction: column;
 }
 
-/* Rasm qutisi: Uzum market kabi uzunroq (aspect-ratio: 3 / 4) qilib o'zgartirildi */
+/* Uzum market uslubidagi uzunroq rasm qutisi (3 / 4) */
 .card-img-box {
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -409,7 +409,7 @@ img { max-width: 100%; }
   margin-bottom: 2px;
 }
 .uzum-item-left span:last-child {
-  display: block;
+  badgedisplay: block;
   font-size: 15px;
   color: #111;
   font-weight: 500;
@@ -533,13 +533,13 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QIZIL FON, OQ RAQAM (DUMALOQ) */
+/* QORA FON, OQ RAQAM (DUMALOQ) */
 .badge {
   display: none;
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #ff3b30 !important;
+  background: #111111 !important;
   color: #ffffff !important;
   font-size: 10px;
   font-weight: 700;
@@ -870,7 +870,7 @@ function addToCart(e, id) {
 
 updateBottomBadges();
 
-/* FILTR MODALNI OCHISH / YOPISH */
+/* FILTR MODALni OCHISH / YOPISH */
 function toggleFilterModal(open) {
   const modal = document.getElementById("filterModal");
   if (open) {
@@ -944,7 +944,7 @@ const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 const cardWidth = slider.querySelector(".banner-card").offsetWidth + 10;
 
-slider.addEventListener("scroll", () => {
+slider.addEventListener("scroll",` + `() => {
   let index = Math.round(slider.scrollLeft / cardWidth);
   dots.forEach((d, i) => {
     d.classList.toggle("active", i === index);
