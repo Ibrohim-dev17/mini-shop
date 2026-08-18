@@ -61,9 +61,7 @@ a { text-decoration: none; color: inherit; }
 .item-details { flex: 1; min-width: 0; }
 .item-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
 .item-price { color: #111; font-weight: 700; font-size: 16px; }
-.item-old-price { font-size: 12px; color: #888; text-decoration: line-through; }
 .item-name { font-size: 14px; font-weight: 600; color: #333; margin: 0 0 4px 0; line-height: 1.3; }
-.item-desc-small { font-size: 11px; color: #777; margin-bottom: 4px; }
 .item-unit-price { font-size: 12px; color: #555; }
 
 .cart-item-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f5f5f5; padding-top: 10px; }
@@ -107,10 +105,14 @@ a { text-decoration: none; color: inherit; }
 /* INPUTS */
 .input-group { margin-bottom: 14px; }
 .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #444; }
-.input-group input, .input-group textarea {
+.input-group input, .input-group textarea, .input-group select {
   width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; outline: none; font-size: 14px; font-family: inherit; background: #fafafa;
 }
-.input-group input:focus, .input-group textarea:focus { border-color: #6a5acd; background: #fff; }
+.input-group input:focus, .input-group textarea:focus, .input-group select:focus { border-color: #6a5acd; background: #fff; }
+
+.address-row { display: flex; gap: 8px; align-items: center; }
+.address-row input { flex: 1; }
+.map-select-btn { background: rgba(106, 90, 205, 0.1); color: #6a5acd; border: none; padding: 12px 14px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap; }
 
 /* TELEFON VA TASDIQLASH KODI BLOKI */
 .phone-auth-box {
@@ -122,9 +124,9 @@ a { text-decoration: none; color: inherit; }
 
 .code-verify-container { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #cbd5e1; }
 .code-verify-container.show { display: block; }
-.code-inputs-row { display: flex; gap: 8px; margin-top: 6px; }
-.code-inputs-row input { flex: 1; text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px; }
-.verify-code-btn { background: #34c759; color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%; margin-top: 8px; cursor: pointer; }
+.code-inputs-row { display: flex; gap: 8px; margin-top: 6px; justify-content: center; }
+.code-inputs-row input { width: 42px; height: 48px; text-align: center; font-size: 20px; font-weight: 700; border-radius: 10px; border: 1px solid #cbd5e1; outline: none; background: #fff; }
+.verify-code-btn { background: #34c759; color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%; margin-top: 10px; cursor: pointer; }
 
 .submit-btn { background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; }
 .submit-btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
@@ -180,10 +182,6 @@ a { text-decoration: none; color: inherit; }
       <span id="summaryItemCount">0 tovar</span>
       <span id="summaryItemsPrice">0 so'm</span>
     </div>
-    <div class="summary-row" style="color: #28a745;">
-      <span>Chegirmalar</span>
-      <span id="summaryDiscount">-0 so'm</span>
-    </div>
     <div class="summary-row total-bold">
       <span>Jami to'lov</span>
       <span id="summaryTotalPrice">0 so'm</span>
@@ -210,26 +208,34 @@ a { text-decoration: none; color: inherit; }
     
     <div class="input-group">
       <label>Ism va familiyangiz</label>
-      <input type="text" id="custName" placeholder="Masalan: Ali Valiyev">
+      <input type="text" id="custName" placeholder="Ism va familiyangizni kiriting">
     </div>
 
     <div class="input-group">
-      <label>Yetkazib berish manzili (Lokatsiya)</label>
-      <textarea id="custAddress" rows="2" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
+      <label>Yetkazib berish manzili</label>
+      <div class="address-row">
+        <input type="text" id="custAddress" placeholder="Ko'cha, uy raqami yoki xaritadan tanlang">
+        <button type="button" class="map-select-btn" onclick="selectNamanganLocation()"><i class="fa-solid fa-map-location-dot"></i> Namangan</button>
+      </div>
     </div>
 
     <!-- TELEFON RAQAM VA TASDIQLASH KODI -->
     <div class="phone-auth-box">
       <label style="font-size: 13px; font-weight: 600; color: #444; display: block; margin-bottom: 4px;">Telefon raqam</label>
       <div class="phone-row-flex">
-        <input type="tel" id="custPhone" placeholder="+998 90 123 45 67">
+        <input type="tel" id="custPhone" value="+998 " placeholder="+998 90 123 45 67">
         <button type="button" class="code-send-btn" id="sendCodeBtn" onclick="sendVerificationCode()">Kod yuborish</button>
       </div>
 
       <div class="code-verify-container" id="codeVerifyContainer">
-        <label style="font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Telegramdan borgan 4 xonali kodni kiriting:</label>
-        <div class="code-inputs-row">
-          <input type="text" id="verificationCodeInput" maxlength="4" placeholder="• • • •">
+        <label style="font-size: 12px; color: #666; display: block; margin-bottom: 6px; text-align: center;">Telegramdan borgan 6 xonali kodni kiriting:</label>
+        <div class="code-inputs-row" id="codeInputsRow">
+          <input type="tel" maxlength="1" pattern="[0-9]*" inputmode="numeric" oninput="handleCodeInput(this, 0)" onkeydown="handleCodeKeyDown(event, 0)">
+          <input type="tel" maxlength="1" pattern="[0-9]*" inputmode="numeric" oninput="handleCodeInput(this, 1)" onkeydown="handleCodeKeyDown(event, 1)">
+          <input type="tel" maxlength="1" pattern="[0-9]*" inputmode="numeric" oninput="handleCodeInput(this, 2)" onkeydown="handleCodeKeyDown(event, 2)">
+          <input type="tel" maxlength="1" pattern="[0-9]*" inputmode="numeric" oninput="handleCodeInput(this, 3)" onkeydown="handleCodeKeyDown(event, 3)">
+          <input type="tel" maxlength="1" pattern="[0-9]*" inputmode="numeric" oninput="handleCodeInput(this, 4)" onkeydown="handleCodeKeyDown(event, 4)">
+          <input type="tel" maxlength="1" pattern="[0-9]*" inputmode="numeric" oninput="handleCodeInput(this, 5)" onkeydown="handleCodeKeyDown(event, 5)">
         </div>
         <button type="button" class="verify-code-btn" onclick="verifySmsCode()">Tasdiqlash</button>
       </div>
@@ -268,7 +274,6 @@ a { text-decoration: none; color: inherit; }
 <script>
 let isTelegramApp = false;
 let userTgId = "7779592134"; 
-let userNameTg = "Foydalanuvchi";
 let generatedSmsCode = "";
 let isPhoneVerified = false;
 
@@ -278,12 +283,8 @@ if (window.Telegram && Telegram.WebApp) {
   isTelegramApp = true;
   if(Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
     userTgId = Telegram.WebApp.initDataUnsafe.user.id;
-    let tgUser = Telegram.WebApp.initDataUnsafe.user;
-    userNameTg = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
   }
 }
-
-document.getElementById("custName").value = userNameTg;
 
 const listBox = document.getElementById("cartList");
 const stickyPanel = document.getElementById("stickyPanel");
@@ -340,25 +341,19 @@ function renderCart() {
   }
 
   let totalSelectedQty = 0;
-  let totalSelectedOriginalPrice = 0;
   let totalSelectedDiscountPrice = 0;
-  let selectedCountItems = 0;
 
   cart.forEach((item, index) => {
     let isSelected = item.selected !== false;
     if (isSelected) {
       totalSelectedQty += (item.qty || 1);
       let itemPrice = item.price || 0;
-      let origPrice = Math.round(itemPrice * 1.35);
-      totalSelectedOriginalPrice += (origPrice * (item.qty || 1));
       totalSelectedDiscountPrice += (itemPrice * (item.qty || 1));
-      selectedCountItems++;
     }
 
     let favs = JSON.parse(localStorage.getItem("favs")) || [];
     let isFav = favs.includes(item.id);
     let itemPrice = item.price || 0;
-    let origPrice = Math.round(itemPrice * 1.35);
 
     listBox.innerHTML += `
       <div class="cart-item ${isSelected ? 'selected-item' : ''}">
@@ -369,10 +364,8 @@ function renderCart() {
           <img src="${item.img}" onclick="window.location.href='product.html?id=${item.id}'">
           <div class="item-details">
             <h4 class="item-name">${item.name}</h4>
-            <div class="item-desc-small">Yetkazib berish: Ertaga</div>
             <div class="item-price-row">
               <span class="item-price">${itemPrice.toLocaleString()} so'm</span>
-              <span class="item-old-price">${origPrice.toLocaleString()} so'm</span>
             </div>
             <div class="item-unit-price">${itemPrice.toLocaleString()} so'm/dona</div>
           </div>
@@ -392,9 +385,7 @@ function renderCart() {
 
   document.getElementById("cartCountTitleTop").innerText = `${totalSelectedQty} ta tovar tanlandi`;
   document.getElementById("summaryItemCount").innerText = `${totalSelectedQty} tovar`;
-  document.getElementById("summaryItemsPrice").innerText = totalSelectedOriginalPrice.toLocaleString() + " so'm";
-  let discountAmount = totalSelectedOriginalPrice - totalSelectedDiscountPrice;
-  document.getElementById("summaryDiscount").innerText = `- ${discountAmount.toLocaleString()} so'm`;
+  document.getElementById("summaryItemsPrice").innerText = totalSelectedDiscountPrice.toLocaleString() + " so'm";
   document.getElementById("summaryTotalPrice").innerText = totalSelectedDiscountPrice.toLocaleString() + " so'm";
 
   document.getElementById("stickyTotalPrice").innerText = totalSelectedDiscountPrice.toLocaleString() + " so'm";
@@ -502,16 +493,39 @@ function openHistoryModal() {
 }
 function closeHistoryModal() { document.getElementById("historyModal").classList.remove("open"); }
 
+function selectNamanganLocation() {
+  const locations = [
+    "Namangan shahar, Markaziy bozor",
+    "Namangan shahar, A.Navoiy ko'chasi",
+    "Namangan shahar, Do'stlik MFY",
+    "Namangan shahar, Sardoba dahasi",
+    "Namangan shahar, Chorsu maydoni"
+  ];
+  let randomLoc = locations[Math.floor(Math.random() * locations.length)];
+  document.getElementById("custAddress").value = randomLoc;
+}
 
-/* TELEGRAM ORQALI TASDIQLASH KODINI YUBORISH MANTIQI */
+/* TELEFON RAQAM VA 6 XONALI KOD MANTIQI */
+const phoneInput = document.getElementById("custPhone");
+phoneInput.addEventListener("focus", function() {
+  if (!phoneInput.value.startsWith("+998")) {
+    phoneInput.value = "+998 ";
+  }
+});
+phoneInput.addEventListener("input", function(e) {
+  if (!phoneInput.value.startsWith("+998")) {
+    phoneInput.value = "+998 ";
+  }
+});
+
 function sendVerificationCode() {
-  let phone = document.getElementById("custPhone").value.trim();
-  if (!phone || phone.length < 7) {
+  let phone = phoneInput.value.trim();
+  if (phone.length < 13) {
     alert("Iltimos, to'g'ri telefon raqam kiriting!");
     return;
   }
 
-  generatedSmsCode = Math.floor(1000 + Math.random() * 9000).toString();
+  generatedSmsCode = Math.floor(100000 + Math.random() * 900000).toString();
   
   const BOT_TOKEN = "8715142645:AAHpYkJ3HapkOD0V8efCIppiOpMkRp3ihO0";
   let smsText = `🔐 <b>Tasdiqlash kodi</b>\n\nSizning buyurtma berish uchun tasdiqlash kodingiz: <b>${generatedSmsCode}</b>\nUshbu kodni hech kimga bermang!`;
@@ -520,14 +534,13 @@ function sendVerificationCode() {
   sendBtn.innerText = "Yuborilmoqda...";
   sendBtn.disabled = true;
 
-  // Foydalanuvchining Telegram chat ID'siga bot orqali kod yuboramiz
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: userTgId, text: smsText, parse_mode: "HTML" })
   }).then(res => res.json()).then(data => {
     if (data.ok) {
-      alert("Telegram profilingizga tasdiqlash kodi yuborildi!");
+      alert("Telegram profilingizga 6 xonali tasdiqlash kodi yuborildi!");
       document.getElementById("codeVerifyContainer").classList.add("show");
       sendBtn.innerText = "Qayta yuborish";
       sendBtn.disabled = false;
@@ -543,13 +556,37 @@ function sendVerificationCode() {
   });
 }
 
+function handleCodeInput(input, index) {
+  let val = input.value;
+  if (val.length === 1) {
+    let inputs = document.getElementById("codeInputsRow").getElementsByTagName("input");
+    if (index < 5) {
+      inputs[index + 1].focus();
+    }
+  }
+}
+
+function handleCodeKeyDown(event, index) {
+  if (event.key === "Backspace") {
+    let inputs = document.getElementById("codeInputsRow").getElementsByTagName("input");
+    if (inputs[index].value === "" && index > 0) {
+      inputs[index - 1].focus();
+    }
+  }
+}
+
 function verifySmsCode() {
-  let enteredCode = document.getElementById("verificationCodeInput").value.trim();
+  let inputs = document.getElementById("codeInputsRow").getElementsByTagName("input");
+  let enteredCode = "";
+  for (let i = 0; i < inputs.length; i++) {
+    enteredCode += inputs[i].value;
+  }
+
   if (enteredCode === generatedSmsCode) {
     isPhoneVerified = true;
     alert("Telefon raqamingiz muvaffaqiyatli tasdiqlandi!");
     document.getElementById("codeVerifyContainer").style.display = "none";
-    document.getElementById("custPhone").disabled = true;
+    phoneInput.disabled = true;
     document.getElementById("sendCodeBtn").style.display = "none";
     document.getElementById("submitBtn").disabled = false;
   } else {
@@ -561,7 +598,7 @@ function verifySmsCode() {
 function sendOrder() {
   const name = document.getElementById("custName").value.trim();
   const address = document.getElementById("custAddress").value.trim();
-  const phone = document.getElementById("custPhone").value.trim();
+  const phone = phoneInput.value.trim();
   const submitBtn = document.getElementById("submitBtn");
 
   if (!name || !address || !phone) {
@@ -608,25 +645,34 @@ function sendOrder() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: "7779592134", text: message, parse_mode: "HTML" })
   }).then(() => {
-    // 2. Xaridorning o'ziga yuborish
+    // 2. Xaridorning o'ziga nima buyurtma qilgani haqida xabar yuborish
+    let userMsg = `🎉 <b>Buyurtmangiz muvaffaqiyatli rasmiylashtirildi!</b>\n\n`;
+    userMsg += `🆔 <b>Buyurtma ID:</b> #${orderId}\n`;
+    userMsg += `📍 <b>Yetkazish manzili:</b> ${address}\n\n`;
+    userMsg += `📦 <b>Siz buyurtma qilgan tovarlar:</b>\n`;
+    selectedItems.forEach((item, index) => {
+      userMsg += `${index + 1}. ${item.name} — ${item.qty} ta (${((item.price || 0) * (item.qty || 1)).toLocaleString()} so'm)\n`;
+    });
+    userMsg += `\n💰 <b>Jami to'lov:</b> ${totalPrice.toLocaleString()} so'm\n\nTez orada operatorlarimiz siz bilan bog'lanishadi!`;
+
     fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: userTgId,
-        text: `🎉 <b>Buyurtmangiz qabul qilindi!</b>\n\n<b>ID:</b> #${orderId}\n<b>Jami:</b> ${totalPrice.toLocaleString()} so'm\n\nTez orada operatorlarimiz siz bilan bog'lanishadi.`,
+        text: userMsg,
         parse_mode: "HTML"
       })
     }).finally(() => {
-      // Qolgan savatdagi mahsulotlarni yangilash (tanlanganlari o'chadi, qolganlari qoladi)
+      // Sotib yuborilgan tovarlarni savatdan o'chirish va savatga qaytish
       let remainingCart = cart.filter(item => item.selected === false);
       saveCart(remainingCart);
 
       closeOrderModal();
-      alert("Buyurtmangiz muvaffaqiyatli yuborildi!");
-      if (isTelegramApp && Telegram.WebApp.close) {
-        Telegram.WebApp.close();
-      }
+      alert("Buyurtmangiz muvaffaqiyatli yakunlandi!");
+      
+      // Sahifani tozalab savat ko'rinishiga qaytarish
+      window.location.href = "cart.html";
     });
   }).catch(() => {
     alert("Xatolik yuz berdi!");
