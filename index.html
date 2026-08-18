@@ -65,7 +65,7 @@ img { max-width: 100%; }
   font-size: 14px;
 }
 
-/* BANNER - Uzum Market uslubi: Ingichkaroq va ikki yonida chekkalari ko'rinib turadi */
+/* BANNER - Odatiy qo'lda suriladigan holat */
 .banner {
   margin: 8px 0;
   width: 100%;
@@ -303,7 +303,7 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QORA RANGLI QOMADLI BADGE (Savat va Sevimlilar uchun) */
+/* QORA RANGLI BADGE (Savat va Sevimlilar uchun) */
 .badge {
   display: none;
   position: absolute;
@@ -420,7 +420,7 @@ const categories = [
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* BADGE (QORA RAQAMLAR)NI REAL VAQTDA YANGILASH */
+/* BADGE (QORA RAQAMLAR)NI REAL VAQTDA YANGILASH FUNKSIYASI */
 function updateBottomBadges() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -447,7 +447,7 @@ function updateBottomBadges() {
   }
 }
 
-// Sahifa yuklanganda darhol badge'larni tekshirib qo'yamiz
+// Sahifa yuklanganda badgelarni tekshirish
 document.addEventListener("DOMContentLoaded", updateBottomBadges);
 
 /* KATEGORIYALARNI CHIQARISH */
@@ -460,7 +460,7 @@ categories.forEach(c => {
   </a>`;
 });
 
-/* YULDUZLARNI HISOBLASH */
+/* YULDUZLARni HISOBLASH */
 function getStars(rating) {
   let r = Math.round(rating || 5);
   let stars = "";
@@ -517,7 +517,7 @@ function toggleFav(id, el) {
   }
   localStorage.setItem("favs", JSON.stringify(favs));
   
-  // DARDHOL BADGELARNI YANGILAYMIZ
+  // DARHOL BADGENI YANGILASH
   updateBottomBadges();
 }
 
@@ -537,7 +537,7 @@ function addToCart(e, id) {
   localStorage.setItem("cart", JSON.stringify(cart));
 
   updateTelegramMainButton();
-  updateBottomBadges();
+  updateBottomBadges(); // DARHOL BADGENI YANGILASH
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
@@ -583,61 +583,17 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* UZUM MARKET USLUBIDAGI BANNER SLIDER MANTIQI */
+/* ODDIY QO'LDA SURILADIGAN BANNER UCHUN NUQTALARNI BOSHQARISH */
 const slider = document.getElementById("slider");
-const originalCards = Array.from(document.querySelectorAll(".banner-card"));
 const dots = document.querySelectorAll(".dot");
-
-originalCards.forEach(card => slider.appendChild(card.cloneNode(true)));
-originalCards.forEach(card => slider.appendChild(card.cloneNode(true)));
-
-let slideIndex = 0;
-let autoSlideInterval;
-
-function updateDots(index) {
-  let activeIndex = index % originalCards.length;
-  dots.forEach((d, i) => {
-    d.classList.toggle("active", i === activeIndex);
-  });
-}
-
-function startAutoSlide() {
-  clearInterval(autoSlideInterval);
-  autoSlideInterval = setInterval(() => {
-    slideIndex++;
-    let cardWidth = originalCards[0].offsetWidth + 10;
-    
-    slider.scrollTo({
-      left: slideIndex * cardWidth,
-      behavior: "smooth"
-    });
-
-    if (slideIndex >= originalCards.length * 2 - 1) {
-      setTimeout(() => {
-        slider.style.scrollBehavior = "auto";
-        slider.scrollLeft = 0;
-        slideIndex = 0;
-        slider.style.scrollBehavior = "smooth";
-      }, 500);
-    }
-    updateDots(slideIndex);
-  }, 5000);
-}
+const cardWidth = slider.querySelector(".banner-card").offsetWidth + 10;
 
 slider.addEventListener("scroll", () => {
-  clearInterval(autoSlideInterval);
-  startAutoSlide();
-
-  let cardWidth = originalCards[0].offsetWidth + 10;
   let index = Math.round(slider.scrollLeft / cardWidth);
-  
-  if (index >= 0 && index < originalCards.length * 2) {
-    updateDots(index);
-    slideIndex = index;
-  }
+  dots.forEach((d, i) => {
+    d.classList.toggle("active", i === index);
+  });
 });
-
-startAutoSlide();
 </script>
 
 </body>
