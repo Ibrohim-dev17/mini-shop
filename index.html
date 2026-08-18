@@ -573,64 +573,65 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* IKKI TOMONGA CHEKSIZ (CIRCULAR) BANNER SLIDER MANTIQI */
+/* UZUM MARKET USLUBIDAGI MUKAMMAL BANNER SLIDER MANTIQI */
 const slider = document.getElementById("slider");
 const originalCards = Array.from(document.querySelectorAll(".banner-card"));
 const dots = document.querySelectorAll(".dot");
 
-// 3 ta bannerni bir nechta marta ko'paytirib, ham chapga, ham o'ngga cheksiz surish imkonini yaratamiz
-for (let i = 0; i < 2; i++) {
-  originalCards.forEach(card => {
-    slider.appendChild(card.cloneNode(true));
-  });
-}
+// Kartalarni silliq aylanish uchun klonlab ko'paytiramiz
+originalCards.forEach(card => slider.appendChild(card.cloneNode(true)));
+originalCards.forEach(card => slider.appendChild(card.cloneNode(true)));
 
-const cardWidth = originalCards[0].offsetWidth + 10; // Karta kengligi + gap
-slider.scrollLeft = cardWidth * 3; // Boshlanishini o'rtaga qo'yamiz
-let slideIndex = 3;
+let slideIndex = 0;
+let autoSlideInterval;
 
 function updateDots(index) {
-  let activeIndex = (index - 3) % 3;
-  if (activeIndex < 0) activeIndex += 3;
+  let activeIndex = index % originalCards.length;
   dots.forEach((d, i) => {
     d.classList.toggle("active", i === activeIndex);
   });
 }
 
-function autoSlide() {
-  slideIndex++;
-  slider.scrollTo({ left: slideIndex * cardWidth, behavior: "smooth" });
+function startAutoSlide() {
+  clearInterval(autoSlideInterval);
+  autoSlideInterval = setInterval(() => {
+    slideIndex++;
+    let cardWidth = originalCards[0].offsetWidth + 10;
+    
+    slider.scrollTo({
+      left: slideIndex * cardWidth,
+      behavior: "smooth"
+    });
 
-  if (slideIndex >= 6) {
-    setTimeout(() => {
-      slider.style.scrollBehavior = "auto";
-      slider.scrollLeft = cardWidth * 3;
-      slideIndex = 3;
-      slider.style.scrollBehavior = "smooth";
-    }, 500);
-  }
-  updateDots(slideIndex);
+    // Oxirgi nusxaga yetganda silliq boshiga qaytish (Hech narsa sezilmaydi)
+    if (slideIndex >= originalCards.length * 2 - 1) {
+      setTimeout(() => {
+        slider.style.scrollBehavior = "auto";
+        slider.scrollLeft = 0;
+        slideIndex = 0;
+        slider.style.scrollBehavior = "smooth";
+      }, 500);
+    }
+    updateDots(slideIndex);
+  }, 5000);
 }
 
-// Har 5 sekundda o'zi o'ngga siljiydi
-let autoSlideInterval = setInterval(autoSlide, 5000);
-
-// Qo'lda chapga yoki o'ngga surilganda cheksiz aylanishini ta'minlash
+// Qo'lda surilganda taymerni noldan boshlash va pozitsiyani sozlash
 slider.addEventListener("scroll", () => {
-  let scrollPos = slider.scrollLeft;
-  if (scrollPos < cardWidth) {
-    slider.style.scrollBehavior = "auto";
-    slider.scrollLeft = cardWidth * 4;
-    slider.style.scrollBehavior = "smooth";
-    slideIndex = 4;
-  } else if (scrollPos > cardWidth * 5) {
-    slider.style.scrollBehavior = "auto";
-    slider.scrollLeft = cardWidth * 2;
-    slider.style.scrollBehavior = "smooth";
-    slideIndex = 2;
+  clearInterval(autoSlideInterval);
+  startAutoSlide();
+
+  let cardWidth = originalCards[0].offsetWidth + 10;
+  let index = Math.round(slider.scrollLeft / cardWidth);
+  
+  if (index >= 0 && index < originalCards.length * 2) {
+    updateDots(index);
+    slideIndex = index;
   }
-  updateDots(Math.round(slider.scrollLeft / cardWidth));
 });
+
+// Ishga tushirish
+startAutoSlide();
 </script>
 
 </body>
