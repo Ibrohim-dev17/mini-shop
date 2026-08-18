@@ -17,7 +17,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Butun ekran skrol bo'lishini qat'iy taqiqlaydi */
+  overflow: hidden;
   font-family: system-ui, -apple-system, sans-serif;
   background: #f5f6fa;
 }
@@ -26,12 +26,13 @@ a { text-decoration: none; color: inherit; }
 * { box-sizing: border-box; }
 img { max-width: 100%; }
 
-/* MANA SHU DIV FAOQAT SKROL BO'LADI */
+/* MANA SHU DIV FAQAT SKROL BO'LADI */
 .main-content {
-  height: calc(100vh - 65px); /* Ekran balandligidan pastki menyu (65px) joyini olib tashlaydi */
-  overflow-y: auto; /* Faqat shu div ichi tepaga-pastga skrol bo'ladi */
-  -webkit-overflow-scrolling: touch; /* iPhone'larda skrol silliq ishlashi uchun */
-  overscroll-behavior-y: contain; /* Rezinka bo'lib uzilib ketishni yo'qotadi */
+  height: calc(100vh - 80px); 
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  padding-bottom: 20px;
 }
 
 /* HEADER */
@@ -84,7 +85,7 @@ img { max-width: 100%; }
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x !important; /* Faqat yonga surishga ruxsat */
+  touch-action: pan-x !important;
   overscroll-behavior-x: contain;
 }
 
@@ -148,10 +149,10 @@ img { max-width: 100%; }
 .cat-card img { width: 50px; height: 50px; object-fit: contain; }
 .cat-card p { margin: 6px 0 0 0; font-size: 12px; font-weight: 500; }
 
-/* PRODUCTS - Yangi va toza versiyasi */
+/* PRODUCTS */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Har doim 2 ta ustun */
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   padding: 12px;
 }
@@ -228,7 +229,7 @@ img { max-width: 100%; }
 .heart:active { transform: scale(1.2); }
 .heart.active { color: #ff3b30; }
 
-/* TOAST (BILDIRISHNOMA) */
+/* TOAST */
 .toast {
   position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
@@ -237,43 +238,84 @@ img { max-width: 100%; }
 }
 .toast.show { top: 20px; }
 
-/* PASTDAGI ICONLAR PANELI */
-.bottom {
+/* YANGILANGAN PASTDAGI FLOATING DOCK PANELI */
+.bottom-container {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 65px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.bottom {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
-  z-index: 1000;
-  padding: 0 10px;
+  border-radius: 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  padding: 0 12px;
+  position: relative;
 }
 
 .bottom a {
-  color: #b0b0b5;
-  font-size: 22px;
+  color: #8e8e93;
+  font-size: 20px;
   transition: all 0.25s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  position: relative;
 }
 
-.bottom a.active {
+/* O'RTADAGI ASOSIY QAVARIQ TUGMA (HOME) */
+.bottom a.home-btn {
+  background: #1c1c1e;
+  color: #ffffff;
+  width: 55px;
+  height: 55px;
+  margin-top: -25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border: 4px solid #f5f6fa;
+}
+
+.bottom a.active:not(.home-btn) {
   color: #6a5acd;
   background: rgba(106, 90, 205, 0.08);
 }
 
-.bottom a:active { transform: scale(0.9); }
+.bottom a:active { transform: scale(0.92); }
+
+/* QORA BADGE DIZAYNI */
+.badge-count {
+  display: none;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #000000;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #fff;
+}
 </style>
 
 </head>
@@ -328,22 +370,32 @@ img { max-width: 100%; }
 
 </div> 
 
-<div class="bottom">
-  <a href="index.html" id="navHome" class="active"><i class="fa-solid fa-house"></i></a>
-  <a href="categories.html" id="navCat"><i class="fa-solid fa-list"></i></a>
-  <a href="cart.html" id="navCart" style="position: relative;">
-    <i class="fa-solid fa-basket-shopping"></i>
-    <span id="cartBadge" style="display: none; position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
-  </a>
-  <a href="favorites.html" id="navFav" style="position: relative;">
-    <i class="fa-solid fa-heart"></i>
-    <span id="favBadge" style="display: none; position: absolute; top: 8px; right: 8px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
-  </a>
+<!-- YANGILANGAN PASTKI MENYU -->
+<div class="bottom-container">
+  <div class="bottom">
+    <a href="favorites.html" id="navFav">
+      <i class="fa-regular fa-heart"></i>
+      <span id="favBadge" class="badge-count">0</span>
+    </a>
+    <a href="cart.html" id="navCart">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span id="cartBadge" class="badge-count">0</span>
+    </a>
+    
+    <a href="index.html" id="navHome" class="home-btn active">
+      <i class="fa-solid fa-house"></i>
+    </a>
+    
+    <a href="categories.html" id="navCat">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </a>
+    <a href="profile.html" id="navProfile">
+      <i class="fa-regular fa-user"></i>
+    </a>
+  </div>
 </div>
 
-
 <script>
-// Telegram WebApp yuklash
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -352,7 +404,6 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* KATEGORIYALAR RO'YXATI */
 const categories = [
   {id:"termos", name:"Termos", img:"https://i.imgur.com/3ZQ3Z5b.png"},
   {id:"blender", name:"Blender", img:"https://i.imgur.com/3ZQ3Z5b.png"},
@@ -363,12 +414,10 @@ const categories = [
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* QIZIL BELGILarni (BADGE) YANGILASH FUNKSIYASI */
 function updateBottomBadges() {
-  // Savat sonini hisoblash (umumiy mahsulotlar soni yoki turlari)
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-  
+
   let cartBadge = document.getElementById("cartBadge");
   if (cartBadge) {
     if (totalCartQty > 0) {
@@ -379,7 +428,6 @@ function updateBottomBadges() {
     }
   }
 
-  // Sevimlilar sonini hisoblash
   let currentFavs = JSON.parse(localStorage.getItem("favs")) || [];
   let favBadge = document.getElementById("favBadge");
   if (favBadge) {
@@ -392,7 +440,6 @@ function updateBottomBadges() {
   }
 }
 
-/* KATEGORIYALARNI SAHIFAGA CHIQARISH */
 const catBox = document.getElementById("catList");
 categories.forEach(c => {
   catBox.innerHTML += `
@@ -402,7 +449,6 @@ categories.forEach(c => {
   </a>`;
 });
 
-/* MAHSULOTLARNI SAHIFAGA CHIQARISH FUNKSIYASI */
 const box = document.getElementById("productBox");
 function renderProducts(productsList) {
   box.innerHTML = "";
@@ -428,11 +474,9 @@ function renderProducts(productsList) {
   });
 }
 
-// Dastlabki tasodifiy 6 ta mahsulotni tanlab chiqarish
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
 
-/* SEVIMLILARGA QO'SHISH/O'CHIRISH */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
@@ -445,12 +489,9 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  
-  // Sevimlilar sonini darhol yangilash
   updateBottomBadges();
 }
 
-/* SAVATGA QO'SHISH FUNKSIYASI */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -464,19 +505,17 @@ function addToCart(e, id) {
     cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
   }
   localStorage.setItem("cart", JSON.stringify(cart));
-  
+
   updateTelegramMainButton();
-  updateBottomBadges(); // Savat sonini darhol yangilash
+  updateBottomBadges();
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
   setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
-// Sahifa ochilganda vaqtinchalik belgilar holatini tekshirib qo'yish
 updateBottomBadges();
 
-/* QIDIRUV */
 document.getElementById("searchInput").addEventListener("input", e => {
   let val = e.target.value.trim().toLowerCase();
   const bannerBlock = document.getElementById("bannerBlock");
@@ -497,7 +536,6 @@ document.getElementById("searchInput").addEventListener("input", e => {
   }
 });
 
-/* TELEGRAM MAIN BUTTON */
 function updateTelegramMainButton() {
   if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -513,7 +551,6 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* SLIDER KODI */
 const slider = document.getElementById("slider");
 const dots = document.querySelectorAll(".dot");
 let slideIndex = 0;
