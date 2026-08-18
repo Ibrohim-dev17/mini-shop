@@ -182,15 +182,32 @@ img { max-width: 100%; }
 }
 
 .card p { 
-  margin: 0 0 8px 0; 
+  margin: 0 0 4px 0; 
   font-size: 14px; 
-  font-weight: 500; 
+  font-weight: 600; 
   color: #333; 
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   height: 38px;
+}
+
+/* Mahsulot haqida qisqacha ma'lumot va yulduzcha */
+.product-desc {
+  font-size: 11px;
+  color: #777;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-rating {
+  font-size: 11px;
+  color: #ffb800;
+  margin-bottom: 6px;
 }
 
 .price { color: #6a5acd; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
@@ -237,7 +254,7 @@ img { max-width: 100%; }
 }
 .toast.show { top: 20px; }
 
-/* PASTDAGI YANGILANGAN MENYU (NAVIGATION BAR) */
+/* PASTDAGI MENYU (NAVIGATION BAR) */
 .bottom {
   position: fixed;
   bottom: 0;
@@ -285,7 +302,7 @@ img { max-width: 100%; }
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #111111; /* Qora rang */
+  background: #111111;
   color: white;
   font-size: 10px;
   font-weight: 700;
@@ -445,6 +462,8 @@ function renderProducts(productsList) {
 
   productsList.forEach(p => {
     let isFav = favs.includes(p.id);
+    let ratingStars = "★".repeat(Math.round(p.rating || 5)) + "☆".repeat(5 - Math.round(p.rating || 5));
+    
     box.innerHTML += `
     <div class="card">
       <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
@@ -453,6 +472,8 @@ function renderProducts(productsList) {
       <a href="product.html?id=${p.id}">
         <img src="${p.img}">
         <p>${p.name}</p>
+        <div class="product-desc">${p.desc || "Qisqacha ma'lumot mavjud emas"}</div>
+        <div class="product-rating">${ratingStars} <span style="color:#aaa; font-size:10px;">(${p.rating || 5})</span></div>
         <div class="price">${p.price.toLocaleString()} so'm</div>
       </a>
       <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
