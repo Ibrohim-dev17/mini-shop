@@ -3,588 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-
 <title>Kitchen Market</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
 <script src="data.js"></script>
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f6fa;
-}
-
+:root { --primary: #6a5acd; --bg: #f5f6fa; }
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); }
 a { text-decoration: none; color: inherit; }
 * { box-sizing: border-box; }
-img { max-width: 100%; }
 
-/* MANA SHU DIV FAQAT SKROL BO'LADI */
-.main-content {
-  height: calc(100vh - 80px); 
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-  padding-bottom: 20px;
-}
+.main-content { height: calc(100vh - 80px); overflow-y: auto; padding-bottom: 20px; }
 
-/* HEADER */
-.header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid #eee;
-}
+/* HEADER & GRID */
+.header { display: flex; align-items: center; gap: 12px; padding: 12px; background: #fff; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #eee; }
+.search { flex: 1; display: flex; align-items: center; background: #f2f2f2; padding: 8px 12px; border-radius: 20px; gap: 8px; }
+.search input { border: none; outline: none; background: transparent; width: 100%; font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
+.card { background: #fff; border-radius: 16px; padding: 12px; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.card img { width: 100%; height: 120px; object-fit: contain; margin-bottom: 8px; }
+.card p { font-size: 13px; font-weight: 500; height: 35px; overflow: hidden; margin: 5px 0; }
+.price { color: var(--primary); font-weight: 800; font-size: 14px; }
+.add-to-cart-btn { background: #f1f2f6; color: var(--primary); border: none; width: 100%; padding: 10px; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; }
 
-.search {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  background: #f2f2f2;
-  padding: 8px 12px;
-  border-radius: 20px;
-  gap: 8px;
-}
+/* FLOATING DOCK DOCK */
+.bottom-container { position: fixed; bottom: 20px; left: 15px; right: 15px; display: flex; justify-content: center; z-index: 1000; }
+.bottom { background: #ffffff; width: 100%; max-width: 420px; display: flex; justify-content: space-around; align-items: center; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 10px 5px; border: 1px solid rgba(0,0,0,0.05); }
+.bottom a { color: #8e8e93; font-size: 20px; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; position: relative; transition: 0.3s; }
+.bottom a.home-btn { background: #000; color: #fff; width: 55px; height: 55px; margin-top: -30px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
-.search input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
-  font-size: 14px;
-}
+/* QORA BADGE */
+.badge-count { display: none; position: absolute; top: -2px; right: -2px; background: #000; color: #fff; font-size: 9px; font-weight: 800; border-radius: 50%; width: 17px; height: 17px; align-items: center; justify-content: center; border: 2px solid #fff; }
 
-/* BANNER */
-.banner {
-  margin: 12px;
-  overflow: hidden;
-  position: relative;
-}
-
-.banner-wrapper {
-  overflow: hidden;
-  border-radius: 22px;
-  width: 100%;
-}
-
-.banner-slider {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x !important;
-  overscroll-behavior-x: contain;
-}
-
-.banner-slider::-webkit-scrollbar {
-  display: none;
-}
-
-.banner-card {
-  flex: 0 0 100%;
-  min-height: 170px;
-  padding: 20px;
-  color: #fff;
-  scroll-snap-align: start;
-  touch-action: pan-x !important;
-}
-
-.banner-card h2, .banner-card p { margin: 0; }
-.banner-card h2 { margin-bottom: 15px; }
-
-.banner1 { background: linear-gradient(135deg,#ff6b6b,#ff8e53); }
-.banner2 { background: linear-gradient(135deg,#4facfe,#00f2fe); }
-.banner3 { background: linear-gradient(135deg,#43e97b,#38f9d7); }
-
-.dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ccc;
-  transition: background 0.3s ease;
-}
-
-.dot.active { background: #6a5acd; }
-
-/* CATEGORY */
-.section { padding: 12px; }
-.section h3 { margin: 0 0 12px 0; font-size: 16px; font-weight: 700; }
-
-.cat-list {
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
-  padding-bottom: 8px;
-}
-.cat-list::-webkit-scrollbar { display: none; }
-
-.cat-card {
-  min-width: 90px;
-  background: #fff;
-  padding: 10px;
-  border-radius: 14px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
-.cat-card img { width: 50px; height: 50px; object-fit: contain; }
-.cat-card p { margin: 6px 0 0 0; font-size: 12px; font-weight: 500; }
-
-/* PRODUCTS */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 12px;
-}
-
-.card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 12px;
-  position: relative;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-  display: flex;
-  flex-direction: column;
-}
-
-.card a {
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  color: inherit;
-  flex-grow: 1;
-}
-
-.card img { 
-  width: 100%; 
-  height: 120px; 
-  object-fit: contain; 
-  margin-bottom: 8px;
-}
-
-.card p { 
-  margin: 0 0 8px 0; 
-  font-size: 14px; 
-  font-weight: 500; 
-  color: #333; 
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 38px;
-}
-
-.price { color: #6a5acd; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
-
-.add-to-cart-btn {
-  background: #f1f2f6;
-  color: #6a5acd;
-  border: none;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: auto;
-}
-.add-to-cart-btn:active { background: #6a5acd; color: white; }
-
-.heart {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 18px;
-  color: #b0b0b5;
-  z-index: 2;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.heart:active { transform: scale(1.2); }
-.heart.active { color: #ff3b30; }
-
-/* TOAST */
-.toast {
-  position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
-  border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 2000;
-  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.toast.show { top: 20px; }
-
-/* YANGILANGAN PASTDAGI FLOATING DOCK PANELI */
-.bottom-container {
-  position: fixed;
-  bottom: 15px;
-  left: 15px;
-  right: 15px;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  z-index: 1000;
-  pointer-events: none;
-}
-
-.bottom {
-  pointer-events: auto;
-  width: 100%;
-  max-width: 400px;
-  background: #ffffff;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-radius: 35px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.03);
-  padding: 0 12px;
-  position: relative;
-}
-
-.bottom a {
-  color: #8e8e93;
-  font-size: 20px;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  position: relative;
-}
-
-/* O'RTADAGI ASOSIY QAVARIQ TUGMA (HOME) */
-.bottom a.home-btn {
-  background: #1c1c1e;
-  color: #ffffff;
-  width: 55px;
-  height: 55px;
-  margin-top: -25px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  border: 4px solid #f5f6fa;
-}
-
-.bottom a.active:not(.home-btn) {
-  color: #6a5acd;
-  background: rgba(106, 90, 205, 0.08);
-}
-
-.bottom a:active { transform: scale(0.92); }
-
-/* QORA BADGE DIZAYNI */
-.badge-count {
-  display: none;
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: #000000;
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px solid #fff;
-}
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #000; color: #fff; padding: 12px 25px; border-radius: 30px; z-index: 9999; transition: 0.4s; }
+.toast.show { transform: translateX(-50%) translateY(0); }
 </style>
-
 </head>
 
 <body>
 
-<div id="toast" class="toast">Savatga qo‘shildi!</div>
+<div id="toast" class="toast">Qo'shildi!</div>
 
 <div class="main-content">
-
   <div class="header">
-    <i class="fa-solid fa-bars" style="font-size: 18px; color: #555;"></i>
-    <div class="search">
-      <i class="fa-solid fa-magnifying-glass" style="color: #888;"></i>
-      <input id="searchInput" placeholder="Qidirish...">
-    </div>
+    <div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="searchInput" placeholder="Qidirish..."></div>
   </div>
-
-  <div class="banner" id="bannerBlock">
-    <div class="banner-wrapper">
-      <div class="banner-slider" id="slider">
-        <a href="product.html?id=termos1&from=banner" class="banner-card banner1">
-          <h2>🔥 Premium Termos</h2>
-          <p>Issiq va sovuq ichimliklar uchun</p>
-        </a>
-        <a href="product.html?id=blender1&from=banner" class="banner-card banner2">
-          <h2>⚡ Blender Aksiyasi</h2>
-          <p>Kitchen uchun eng yaxshi tanlov</p>
-        </a>
-        <a href="product.html?id=qozon1&from=banner" class="banner-card banner3">
-          <h2>🍲 Qozonlar</h2>
-          <p>Chegirmali narxlarda</p>
-        </a>
-      </div>
-    </div>
-    <div class="dots">
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </div>
-  </div>
-
-  <div class="section" id="categoriesBlock">
-    <h3>Kategoriyalar</h3>
-    <div class="cat-list" id="catList"></div>
-  </div>
-
-  <div class="section">
-    <h3 id="sectionTitle">Ommabop mahsulotlar</h3>
-    <div class="grid" id="productBox"></div>
-  </div>
-
+  <div class="grid" id="productBox"></div>
 </div> 
 
-<!-- YANGILANGAN PASTKI MENYU -->
 <div class="bottom-container">
   <div class="bottom">
-    <a href="favorites.html" id="navFav">
-      <i class="fa-regular fa-heart"></i>
-      <span id="favBadge" class="badge-count">0</span>
-    </a>
-    <a href="cart.html" id="navCart">
-      <i class="fa-solid fa-bag-shopping"></i>
-      <span id="cartBadge" class="badge-count">0</span>
-    </a>
-    
-    <a href="index.html" id="navHome" class="home-btn active">
-      <i class="fa-solid fa-house"></i>
-    </a>
-    
-    <a href="categories.html" id="navCat">
-      <i class="fa-solid fa-magnifying-glass"></i>
-    </a>
-    <a href="profile.html" id="navProfile">
-      <i class="fa-regular fa-user"></i>
-    </a>
+    <a href="favorites.html" id="navFav"><i class="fa-regular fa-bookmark"></i><span id="favBadge" class="badge-count">0</span></a>
+    <a href="cart.html" id="navCart"><i class="fa-solid fa-cart-shopping"></i><span id="cartBadge" class="badge-count">0</span></a>
+    <a href="index.html" id="navHome" class="home-btn"><i class="fa-solid fa-house"></i></a>
+    <a href="categories.html" id="navCat"><i class="fa-solid fa-layer-group"></i></a>
+    <a href="profile.html" id="navProfile"><i class="fa-regular fa-user"></i></a>
   </div>
 </div>
 
 <script>
-if (window.Telegram && Telegram.WebApp) {
-  Telegram.WebApp.ready();
-  Telegram.WebApp.expand();
-  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
-    Telegram.WebApp.disableVerticalSwipes();
-  }
+// Savatni yangilash mexanizmi
+function updateUI() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const favs = JSON.parse(localStorage.getItem("favs")) || [];
+  
+  const cartBadge = document.getElementById("cartBadge");
+  const favBadge = document.getElementById("favBadge");
+
+  const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+  
+  cartBadge.innerText = totalQty;
+  cartBadge.style.display = totalQty > 0 ? "flex" : "none";
+  
+  favBadge.innerText = favs.length;
+  favBadge.style.display = favs.length > 0 ? "flex" : "none";
 }
 
-const categories = [
-  {id:"termos", name:"Termos", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-  {id:"blender", name:"Blender", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-  {id:"qozon", name:"Qozon", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-  {id:"mikser", name:"Mikser", img:"https://i.imgur.com/3ZQ3Z5b.png"},
-  {id:"idishlar", name:"Idishlar", img:"https://i.imgur.com/3ZQ3Z5b.png"}
-];
-
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
-
-function updateBottomBadges() {
+function addToCart(id) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-
-  let cartBadge = document.getElementById("cartBadge");
-  if (cartBadge) {
-    if (totalCartQty > 0) {
-      cartBadge.innerText = totalCartQty;
-      cartBadge.style.display = "flex";
-    } else {
-      cartBadge.style.display = "none";
-    }
-  }
-
-  let currentFavs = JSON.parse(localStorage.getItem("favs")) || [];
-  let favBadge = document.getElementById("favBadge");
-  if (favBadge) {
-    if (currentFavs.length > 0) {
-      favBadge.innerText = currentFavs.length;
-      favBadge.style.display = "flex";
-    } else {
-      favBadge.style.display = "none";
-    }
-  }
-}
-
-const catBox = document.getElementById("catList");
-categories.forEach(c => {
-  catBox.innerHTML += `
-  <a href="products.html?cat=${c.id}&from=index" class="cat-card">
-    <img src="${c.img}">
-    <p>${c.name}</p>
-  </a>`;
-});
-
-const box = document.getElementById("productBox");
-function renderProducts(productsList) {
-  box.innerHTML = "";
-  if(productsList.length === 0) {
-    box.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#888; padding:20px;">Hech narsa topilmadi 😕</p>`;
-    return;
-  }
-
-  productsList.forEach(p => {
-    let isFav = favs.includes(p.id);
-    box.innerHTML += `
-    <div class="card">
-      <div class="heart ${isFav ? 'active' : ''}" onclick="toggleFav('${p.id}', this)">
-        <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-      </div>
-      <a href="product.html?id=${p.id}">
-        <img src="${p.img}">
-        <p>${p.name}</p>
-        <div class="price">${p.price.toLocaleString()} so'm</div>
-      </a>
-      <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Savatga qo'shish</button>
-    </div>`;
-  });
-}
-
-let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
-renderProducts(initialProducts);
-
-function toggleFav(id, el) {
-  let icon = el.querySelector("i");
-  if (favs.includes(id)) {
-    favs = favs.filter(x => x !== id);
-    el.classList.remove("active");
-    icon.className = "fa-regular fa-heart";
-  } else {
-    favs.push(id);
-    el.classList.add("active");
-    icon.className = "fa-solid fa-heart";
-  }
-  localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges();
-}
-
-function addToCart(e, id) {
-  e.preventDefault();
   let p = allProducts.find(x => x.id === id);
-  if (!p) return;
-
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let existing = cart.find(item => item.id === id);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
-  }
+  
+  if (existing) existing.qty += 1;
+  else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+  
   localStorage.setItem("cart", JSON.stringify(cart));
-
-  updateTelegramMainButton();
-  updateBottomBadges();
-
+  updateUI();
+  
   const toast = document.getElementById("toast");
   toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("show"); }, 1500);
+  setTimeout(() => toast.classList.remove("show"), 1500);
 }
 
-updateBottomBadges();
-
-document.getElementById("searchInput").addEventListener("input", e => {
-  let val = e.target.value.trim().toLowerCase();
-  const bannerBlock = document.getElementById("bannerBlock");
-  const categoriesBlock = document.getElementById("categoriesBlock");
-  const sectionTitle = document.getElementById("sectionTitle");
-
-  if (val === "") {
-    bannerBlock.style.display = "block";
-    categoriesBlock.style.display = "block";
-    sectionTitle.innerText = "Ommabop mahsulotlar";
-    renderProducts(initialProducts);
-  } else {
-    bannerBlock.style.display = "none";
-    categoriesBlock.style.display = "none";
-    sectionTitle.innerText = "Qidiruv natijalari";
-    let filtered = allProducts.filter(p => p.name.toLowerCase().includes(val));
-    renderProducts(filtered);
-  }
-});
-
-function updateTelegramMainButton() {
-  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.MainButton) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-    if (totalQty > 0) {
-      Telegram.WebApp.MainButton.setText(`Savatni ko'rish (${totalQty} ta mahsulot)`);
-      Telegram.WebApp.MainButton.show();
-      Telegram.WebApp.MainButton.onClick(() => window.location.href = "cart.html");
-    } else {
-      Telegram.WebApp.MainButton.hide();
-    }
-  }
-}
-updateTelegramMainButton();
-
-const slider = document.getElementById("slider");
-const dots = document.querySelectorAll(".dot");
-let slideIndex = 0;
-let userScrolling = false;
-let scrollTimeout;
-
-function updateDots() {
-  const cards = document.querySelectorAll(".banner-card");
-  if(cards.length === 0) return;
-  const width = cards[0].offsetWidth;
-  let i = Math.round(slider.scrollLeft / width);
-  i = i % dots.length;
-  if (i < 0) i = 0;
-  dots.forEach(d => d.classList.remove("active"));
-  if(dots[i]) dots[i].classList.add("active");
+function render() {
+  const box = document.getElementById("productBox");
+  box.innerHTML = allProducts.map(p => `
+    <div class="card">
+      <img src="${p.img}">
+      <p>${p.name}</p>
+      <div class="price">${p.price.toLocaleString()} so'm</div>
+      <button class="add-to-cart-btn" onclick="addToCart('${p.id}')">Savatga</button>
+    </div>
+  `).join('');
 }
 
-slider.addEventListener("scroll", () => {
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(updateDots, 50);
-});
-
-function autoSlide() {
-  if (userScrolling) return;
-  const cards = document.querySelectorAll(".banner-card");
-  if(cards.length === 0) return;
-  const width = cards[0].offsetWidth;
-  slideIndex++;
-  if (slideIndex >= cards.length) slideIndex = 0;
-  slider.scrollTo({ left: slideIndex * width, behavior: "smooth" });
-}
-
-let autoSlideInterval = setInterval(autoSlide, 3000);
+render();
+updateUI();
 </script>
-
 </body>
 </html>
