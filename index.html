@@ -34,17 +34,16 @@ img { max-width: 100%; }
   overscroll-behavior-y: contain;
 }
 
-/* HEADER */
+/* HEADER (O'ta qator chiziq olib tashlandi, pastki chegara yo'q) */
 .header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 10px 12px;
   background: #fff;
   position: sticky;
   top: 0;
   z-index: 10;
-  border-bottom: 1px solid #eee;
 }
 
 .search {
@@ -63,6 +62,26 @@ img { max-width: 100%; }
   background: transparent;
   width: 100%;
   font-size: 14px;
+}
+
+/* FILTR TUGMASI (Qidiruvning o'ng tomonida) */
+.filter-btn {
+  background: #f2f2f2;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.filter-btn:active {
+  background: #e0e0e0;
 }
 
 /* BANNER */
@@ -304,7 +323,6 @@ img { max-width: 100%; }
 }
 
 .heart:active { transform: scale(1.2); }
-/* Yurakcha bosilganda qizil bo'lishi */
 .heart.active { color: #ff3b30; }
 
 /* TOAST */
@@ -315,6 +333,54 @@ img { max-width: 100%; }
   transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .toast.show { top: 20px; }
+
+/* FILTR MODAL Oyna (Bottom Sheet) */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 3000;
+  display: none;
+  align-items: flex-end;
+}
+.modal-overlay.open {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  width: 100%;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.modal-header h3 { margin: 0; font-size: 17px; }
+.close-modal {
+  background: none; border: none; font-size: 20px; color: #888; cursor: pointer;
+}
+.filter-group {
+  margin-bottom: 15px;
+}
+.filter-group label {
+  display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px;
+}
+.filter-group select, .filter-group input {
+  width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; outline: none; font-size: 14px; background: #fafafa;
+}
+.apply-filter-btn {
+  background: #6a5acd; color: white; border: none; width: 100%; padding: 12px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px;
+}
 
 /* PASTDAGI MENYU */
 .bottom {
@@ -358,7 +424,7 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QIZIL FON, OQ RAQAM (DUMALOQ) - Kesh muammosini oldini olish uchun unique style versiyasi */
+/* QIZIL FON, OQ RAQAM (DUMALOQ) */
 .badge {
   display: none;
   position: absolute;
@@ -384,14 +450,54 @@ img { max-width: 100%; }
 
 <div id="toast" class="toast">Savatga qo‘shildi!</div>
 
+<!-- FILTR MODAL OYNASI -->
+<div class="modal-overlay" id="filterModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Mahsulotlarni filtrlash</h3>
+      <button class="close-modal" onclick="toggleFilterModal(false)"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    
+    <div class="filter-group">
+      <label>Saralash (Narx bo'yicha)</label>
+      <select id="sortPrice">
+        <option value="">Standart</option>
+        <option value="asc">Arzonroqdan boshlab</option>
+        <option value="desc">Qimmatroqdan boshlab</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Rang bo'yicha</label>
+      <select id="filterColor">
+        <option value="">Barcha ranglar</option>
+        <option value="qora">Qora</option>
+        <option value="oq">Oq</option>
+        <option value="kumush">Kumush / Metall</option>
+        <option value="qizil">Qizil</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Maksimal narx (so'm)</label>
+      <input type="number" id="maxPriceInput" placeholder="Masalan: 500000">
+    </div>
+
+    <button class="apply-filter-btn" onclick="applyFilters()">Filterni qo'llash</button>
+  </div>
+</div>
+
 <div class="main-content">
 
+  <!-- HEADER: O'ta qizil/chiziq olib tashlandi, qidiruv chapda, filtr tugmasi o'ngda -->
   <div class="header">
-    <i class="fa-solid fa-bars" style="font-size: 18px; color: #555;"></i>
     <div class="search">
       <i class="fa-solid fa-magnifying-glass" style="color: #888;"></i>
-      <input id="searchInput" placeholder="Mahsulot va toifalarni qidirish...">
+      <input id="searchInput" placeholder="Mahsulotlarni qidirish...">
     </div>
+    <button class="filter-btn" onclick="toggleFilterModal(true)">
+      <i class="fa-solid fa-sliders"></i>
+    </button>
   </div>
 
   <div class="banner" id="bannerBlock">
@@ -475,7 +581,7 @@ const categories = [
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* BADGE'LARNI REAL VAQTDA YANGILASH (Qizil fon, oq raqam) */
+/* BADGE'LARNI REAL VAQTDA YANGILASH */
 function updateBottomBadges() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -560,7 +666,7 @@ function renderProducts(productsList) {
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
 
-/* SEVIMLIGARGA QO'SHISH/O'CHIRISH (Darhol har bir kartada va pastda o'zgaradi) */
+/* SEVIMLILARGA QO'SHISH/O'CHIRISH */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
@@ -573,10 +679,10 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges(); // Pastdagi sevimlilar sonini darhol yangilash
+  updateBottomBadges();
 }
 
-/* SAVATGA QO'SHISH (Har safar bossa soni bittaga oshadi va darhol yangilanadi) */
+/* SAVATGA QO'SHISH */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -585,7 +691,7 @@ function addToCart(e, id) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let existing = cart.find(item => item.id === id);
   if (existing) {
-    existing.qty += 1; // Agar oldindan bo'lsa soni oshadi (masalan 1 tadan 2 ta)
+    existing.qty += 1;
   } else {
     cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
   }
@@ -595,7 +701,7 @@ function addToCart(e, id) {
     Telegram.WebApp.MainButton.hide();
   }
 
-  updateBottomBadges(); // Pastdagi savat sonini darhol yangilash
+  updateBottomBadges();
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
@@ -603,6 +709,53 @@ function addToCart(e, id) {
 }
 
 updateBottomBadges();
+
+/* FILTR MODALNI OCHISH / YOPISH */
+function toggleFilterModal(open) {
+  const modal = document.getElementById("filterModal");
+  if (open) {
+    modal.classList.add("open");
+  } else {
+    modal.classList.remove("open");
+  }
+}
+
+/* FILTRLARNI QO'LLASH */
+function applyFilters() {
+  const sortPrice = document.getElementById("sortPrice").value;
+  const filterColor = document.getElementById("filterColor").value.toLowerCase();
+  const maxPrice = document.getElementById("maxPriceInput").value;
+
+  const bannerBlock = document.getElementById("bannerBlock");
+  const categoriesBlock = document.getElementById("categoriesBlock");
+  const sectionTitle = document.getElementById("sectionTitle");
+
+  bannerBlock.style.display = "none";
+  categoriesBlock.style.display = "none";
+  sectionTitle.innerText = "Filtrlangan natijalar";
+
+  let result = [...allProducts];
+
+  // Rang bo'yicha filter (agar data.js da color xususiyati bo'lsa)
+  if (filterColor) {
+    result = result.filter(p => (p.color && p.color.toLowerCase() === filterColor) || p.name.toLowerCase().includes(filterColor));
+  }
+
+  // Narx bo'yicha filter
+  if (maxPrice) {
+    result = result.filter(p => p.price <= Number(maxPrice));
+  }
+
+  // Saralash (Sort)
+  if (sortPrice === "asc") {
+    result.sort((a, b) => a.price - b.price);
+  } else if (sortPrice === "desc") {
+    result.sort((a, b) => b.price - a.price);
+  }
+
+  renderProducts(result);
+  toggleFilterModal(false);
+}
 
 /* QIDIRUV */
 document.getElementById("searchInput").addEventListener("input", e => {
