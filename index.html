@@ -88,8 +88,8 @@ img { max-width: 100%; }
 }
 
 .banner-card {
-  flex: 0 0 85%; /* Uzum kabi ingichkaroq razmer, ikki yonida boshqa bannerlar qisman ko'rinadi */
-  min-height: 120px; /* Ixcham balandlik, pastdagi qismlar yuqoriroqqa suriladi */
+  flex: 0 0 85%;
+  min-height: 120px;
   padding: 16px;
   color: #fff;
   border-radius: 16px;
@@ -134,14 +134,18 @@ img { max-width: 100%; }
   overflow-x: auto;
   gap: 10px;
   padding-bottom: 4px;
+  padding-left: 2px;
+  padding-right: 2px;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 .cat-list::-webkit-scrollbar { display: none; }
 
 .cat-card {
   min-width: 85px;
+  flex: 0 0 auto;
   background: #fff;
   padding: 8px;
   border-radius: 12px;
@@ -299,22 +303,23 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QORA RANGLI BADGE (SAQLANGAN VA SAVAT UCHUN) */
+/* QORA RANGLI QOMADLI BADGE (Savat va Sevimlilar uchun) */
 .badge {
   display: none;
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #111111;
+  background: #000000;
   color: #ffffff;
   font-size: 10px;
   font-weight: 700;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border: 1px solid #fff;
 }
 </style>
 
@@ -442,6 +447,9 @@ function updateBottomBadges() {
   }
 }
 
+// Sahifa yuklanganda darhol badge'larni tekshirib qo'yamiz
+document.addEventListener("DOMContentLoaded", updateBottomBadges);
+
 /* KATEGORIYALARNI CHIQARISH */
 const catBox = document.getElementById("catList");
 categories.forEach(c => {
@@ -508,6 +516,8 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
+  
+  // DARDHOL BADGELARNI YANGILAYMIZ
   updateBottomBadges();
 }
 
@@ -573,12 +583,11 @@ function updateTelegramMainButton() {
 }
 updateTelegramMainButton();
 
-/* UZUM MARKET USLUBIDAGI MUKAMMAL BANNER SLIDER MANTIQI */
+/* UZUM MARKET USLUBIDAGI BANNER SLIDER MANTIQI */
 const slider = document.getElementById("slider");
 const originalCards = Array.from(document.querySelectorAll(".banner-card"));
 const dots = document.querySelectorAll(".dot");
 
-// Kartalarni silliq aylanish uchun klonlab ko'paytiramiz
 originalCards.forEach(card => slider.appendChild(card.cloneNode(true)));
 originalCards.forEach(card => slider.appendChild(card.cloneNode(true)));
 
@@ -603,7 +612,6 @@ function startAutoSlide() {
       behavior: "smooth"
     });
 
-    // Oxirgi nusxaga yetganda silliq boshiga qaytish (Hech narsa sezilmaydi)
     if (slideIndex >= originalCards.length * 2 - 1) {
       setTimeout(() => {
         slider.style.scrollBehavior = "auto";
@@ -616,7 +624,6 @@ function startAutoSlide() {
   }, 5000);
 }
 
-// Qo'lda surilganda taymerni noldan boshlash va pozitsiyani sozlash
 slider.addEventListener("scroll", () => {
   clearInterval(autoSlideInterval);
   startAutoSlide();
@@ -630,7 +637,6 @@ slider.addEventListener("scroll", () => {
   }
 });
 
-// Ishga tushirish
 startAutoSlide();
 </script>
 
