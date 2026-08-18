@@ -19,48 +19,79 @@ a { text-decoration: none; color: inherit; }
 
 .main-content {
   height: calc(100vh - 65px); overflow-y: auto; -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain; padding-bottom: 110px;
+  overscroll-behavior-y: contain; padding-bottom: 120px;
 }
 
 /* HEADER */
 .header {
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 14px;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 14px 16px;
   display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10;
 }
 .header b { font-size: 18px; }
-.header-right { display: flex; align-items: center; gap: 15px; }
-.history-trigger-btn { color: #6a5acd; font-size: 14px; font-weight: 600; cursor: pointer; background: rgba(106, 90, 205, 0.1); padding: 6px 12px; border-radius: 50px; }
-.clear-cart-btn { color: #ff3b30; font-size: 14px; font-weight: 500; cursor: pointer; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.history-trigger-btn { color: #6a5acd; font-size: 13px; font-weight: 600; cursor: pointer; background: rgba(106, 90, 205, 0.1); padding: 6px 12px; border-radius: 50px; }
+.clear-cart-btn { color: #ff3b30; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+/* TOP BAR (HAMMASINI TANLASH VA O'CHIRISH) */
+.cart-controls-bar {
+  background: white; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0; font-size: 14px; font-weight: 600;
+}
+.select-all-wrapper { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.delete-selected-btn { color: #ff3b30; cursor: pointer; font-size: 13px; display: none; }
+.delete-selected-btn.show { display: inline-block; }
+
+/* CUSTOM CHECKBOX */
+.custom-checkbox {
+  width: 20px; height: 20px; border: 2px solid #ccc; border-radius: 6px; display: inline-flex;
+  align-items: center; justify-content: center; cursor: pointer; background: white; transition: all 0.2s; flex-shrink: 0;
+}
+.custom-checkbox.checked { background: #6a5acd; border-color: #6a5acd; color: white; font-size: 12px; }
 
 /* CART LIST */
-.cart-list { padding: 12px; }
+.cart-list { padding: 12px; display: flex; flex-direction: column; gap: 12px; }
 .cart-item {
-  background: white; border-radius: 18px; padding: 14px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); position: relative;
+  background: white; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03); position: relative; border: 1px solid transparent; transition: border-color 0.2s;
 }
-.cart-item img { width: 65px; height: 65px; object-fit: contain; background: #fafafa; border-radius: 12px; }
+.cart-item.selected-item { border-color: rgba(106, 90, 205, 0.2); }
+
+.cart-item-top { display: flex; align-items: flex-start; gap: 12px; }
+.cart-item img { width: 75px; height: 75px; object-fit: contain; background: #fafafa; border-radius: 12px; flex-shrink: 0; cursor: pointer; }
 .item-details { flex: 1; min-width: 0; }
-.item-name { font-size: 15px; font-weight: 600; margin: 0 0 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.item-price { color: #6a5acd; font-weight: 700; font-size: 14px; }
+.item-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.item-price { color: #111; font-weight: 700; font-size: 16px; }
+.item-old-price { font-size: 12px; color: #888; text-decoration: line-through; }
+.item-name { font-size: 14px; font-weight: 600; color: #333; margin: 0 0 4px 0; line-height: 1.3; }
+.item-desc-small { font-size: 11px; color: #777; margin-bottom: 4px; }
+.item-unit-price { font-size: 12px; color: #555; }
 
-/* ACTIONS */
-.item-actions { display: flex; align-items: center; gap: 14px; }
-.delete-item-btn {
-  color: #ff3b30; font-size: 16px; cursor: pointer; padding: 6px; background: rgba(255, 59, 48, 0.08); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+.cart-item-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f5f5f5; padding-top: 10px; }
+
+/* COUNTER VA YURAK */
+.item-counter { display: flex; align-items: center; background: #f1f2f6; padding: 4px; border-radius: 12px; }
+.item-counter button { width: 32px; height: 32px; border: none; border-radius: 9px; background: white; font-weight: 600; font-size: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); cursor: pointer; }
+.item-counter span { font-size: 14px; font-weight: 700; min-width: 24px; text-align: center; }
+
+.item-fav-btn { font-size: 20px; color: #b0b0b5; cursor: pointer; background: #f9f9fb; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: color 0.2s; }
+.item-fav-btn.active { color: #ff3b30; }
+
+/* BUYURTMANGIZ BLOKI (UZUM STYLE) */
+.order-summary-card {
+  background: white; border-radius: 20px; padding: 16px; margin: 0 12px 12px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
-.delete-item-btn:active { transform: scale(0.85); }
-
-.item-counter { display: flex; align-items: center; gap: 10px; background: #f1f2f6; padding: 4px; border-radius: 12px; }
-.item-counter button { width: 28px; height: 28px; border: none; border-radius: 8px; background: white; font-weight: 600; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-.item-counter span { font-size: 14px; font-weight: 700; min-width: 16px; text-align: center; }
+.order-summary-title { font-size: 17px; font-weight: 700; margin-bottom: 12px; color: #111; }
+.summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 8px; color: #555; }
+.summary-row.total-bold { font-size: 16px; font-weight: 700; color: #111; border-top: 1px solid #eee; padding-top: 10px; margin-top: 8px; }
 
 /* STICKY PANEL */
 .checkout-sticky-panel {
-  position: fixed; bottom: 80px; left: 12px; right: 12px; background: white; border-radius: 20px; padding: 14px 20px;
-  display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -4px 24px rgba(0,0,0,0.08); z-index: 999;
+  position: fixed; bottom: 65px; left: 0; right: 0; background: white; border-radius: 24px 24px 0 0; padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -4px 24px rgba(0,0,0,0.08); z-index: 999; border-top: 1px solid #eee;
 }
-.checkout-info .label { font-size: 12px; color: #777; display: block; margin-bottom: 2px; }
-.checkout-info .price { font-size: 18px; font-weight: 800; color: #111; }
-.checkout-action-btn { background: #6a5acd; color: white; border: none; padding: 12px 24px; border-radius: 14px; font-size: 15px; font-weight: 700; box-shadow: 0 4px 12px rgba(106, 90, 205, 0.2); }
+.checkout-info .price { font-size: 20px; font-weight: 800; color: #111; display: block; }
+.checkout-info .sub-text { font-size: 12px; color: #666; display: block; margin-top: 2px; }
+.checkout-action-btn { background: #6a5acd; color: white; border: none; padding: 14px 24px; border-radius: 16px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 12px rgba(106, 90, 205, 0.25); cursor: pointer; }
 .checkout-action-btn:active { background: #574bba; }
 
 /* MODALS */
@@ -68,29 +99,34 @@ a { text-decoration: none; color: inherit; }
   position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: flex-end; z-index: 2000; visibility: hidden; opacity: 0; transition: all 0.3s ease;
 }
 .modal.open { visibility: visible; opacity: 1; }
-.modal-content { background: white; width: 100%; border-radius: 24px 24px 0 0; padding: 22px; transform: translateY(100%); transition: transform 0.3s ease; max-height: 80vh; overflow-y: auto; }
+.modal-content { background: white; width: 100%; border-radius: 24px 24px 0 0; padding: 22px; transform: translateY(100%); transition: transform 0.3s ease; max-height: 85vh; overflow-y: auto; }
 .modal.open .modal-content { transform: translateY(0); }
 .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
 .close-modal { color: #999; font-size: 20px; cursor: pointer; }
 
 /* INPUTS */
-.input-group { margin-bottom: 12px; }
-.input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #444; }
+.input-group { margin-bottom: 14px; }
+.input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #444; }
 .input-group input, .input-group textarea {
   width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 12px; outline: none; font-size: 14px; font-family: inherit; background: #fafafa;
 }
 .input-group input:focus, .input-group textarea:focus { border-color: #6a5acd; background: #fff; }
 
-/* TELEFON TUGMASI USLUBLARI */
-.phone-verification-box {
-  background: #f0efff; border: 1px dashed #6a5acd; padding: 12px; border-radius: 14px; text-align: center; margin-bottom: 15px;
+/* TELEFON VA TASDIQLASH KODI BLOKI */
+.phone-auth-box {
+  background: #f8f9fc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 16px; margin-bottom: 16px;
 }
-.phone-btn {
-  background: #24a1de; color: white; border: none; width: 100%; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 3px 10px rgba(36, 161, 222, 0.2);
-}
-.phone-btn.verified { background: #34c759; box-shadow: 0 3px 10px rgba(52, 199, 89, 0.2); cursor: not-allowed; }
+.phone-row-flex { display: flex; gap: 8px; margin-top: 6px; }
+.phone-row-flex input { flex: 1; }
+.code-send-btn { background: #6a5acd; color: white; border: none; padding: 0 14px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap; }
 
-.submit-btn { background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px; }
+.code-verify-container { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #cbd5e1; }
+.code-verify-container.show { display: block; }
+.code-inputs-row { display: flex; gap: 8px; margin-top: 6px; }
+.code-inputs-row input { flex: 1; text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 4px; }
+.verify-code-btn { background: #34c759; color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 14px; width: 100%; margin-top: 8px; cursor: pointer; }
+
+.submit-btn { background: #6a5acd; color: white; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; }
 .submit-btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
 
 /* HISTORY CARD */
@@ -105,8 +141,12 @@ a { text-decoration: none; color: inherit; }
   position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
   display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(0, 0, 0, 0.04); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03); z-index: 1000; padding: 0 10px;
 }
-.bottom a { color: #b0b0b5; font-size: 22px; transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 16px; }
+.bottom a { color: #b0b0b5; font-size: 22px; transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 16px; position: relative; }
 .bottom a.active { color: #6a5acd; background: rgba(106, 90, 205, 0.08); }
+.badge {
+  display: none; position: absolute; top: 6px; right: 6px; background: #ff3b30; color: white;
+  font-size: 10px; font-weight: bold; border-radius: 50%; width: 17px; height: 17px; align-items: center; justify-content: center; border: 1px solid #fff;
+}
 </style>
 </head>
 
@@ -121,147 +161,324 @@ a { text-decoration: none; color: inherit; }
     </div>
   </div>
 
+  <!-- BOSHQAARISH PANELI (HAMMASINI TANLASH) -->
+  <div class="cart-controls-bar" id="cartControlsBar" style="display: none;">
+    <div class="select-all-wrapper" onclick="toggleSelectAll()">
+      <div class="custom-checkbox" id="selectAllCheckbox"><i class="fa-solid fa-check"></i></div>
+      <span id="cartCountTitleTop">0 ta tovar savatda</span>
+    </div>
+    <span class="delete-selected-btn" id="deleteSelectedBtn" onclick="deleteSelectedItems()">Tanlanganlarni o'chirish</span>
+  </div>
+
+  <!-- SAVAT MAHSULOTLARI -->
   <div class="cart-list" id="cartList"></div>
 
+  <!-- BUYURTMANGIZ HISOBOT BLOKi -->
+  <div class="order-summary-card" id="orderSummaryCard" style="display: none;">
+    <div class="order-summary-title">Buyurtmangiz</div>
+    <div class="summary-row">
+      <span id="summaryItemCount">0 tovar</span>
+      <span id="summaryItemsPrice">0 so'm</span>
+    </div>
+    <div class="summary-row" style="color: #28a745;">
+      <span>Chegirmalar</span>
+      <span id="summaryDiscount">-0 so'm</span>
+    </div>
+    <div class="summary-row total-bold">
+      <span>Jami to'lov</span>
+      <span id="summaryTotalPrice">0 so'm</span>
+    </div>
+  </div>
+
+  <!-- STICKY RASMIYLASHTIRISH PANELİ -->
   <div id="stickyPanel" class="checkout-sticky-panel" style="display: none;">
     <div class="checkout-info">
-      <span class="label" id="totalItemsText">Jami 0 ta mahsulot</span>
-      <span class="price" id="totalPriceText">0 so'm</span>
+      <span class="price" id="stickyTotalPrice">0 so'm</span>
+      <span class="sub-text" id="stickyItemCount">0 ta tovar</span>
     </div>
-    <button class="checkout-action-btn" onclick="openOrderModal()">Buyurtma berish</button>
+    <button class="checkout-action-btn" onclick="openOrderModal()">Rasmiylashtirish</button>
   </div>
 </div>
 
+<!-- BUYURTMA BERISH MODALI -->
 <div class="modal" id="orderModal">
   <div class="modal-content">
     <div class="modal-title">
-      <span>Ma'lumotlarni kiriting</span>
+      <span>Buyurtmani rasmiylashtirish</span>
       <i class="fa-solid fa-xmark close-modal" onclick="closeOrderModal()"></i>
     </div>
+    
     <div class="input-group">
-      <label>Ismingiz</label>
+      <label>Ism va familiyangiz</label>
       <input type="text" id="custName" placeholder="Masalan: Ali Valiyev">
     </div>
+
     <div class="input-group">
-      <label>Yetkazib berish manzili</label>
-      <textarea id="custAddress" rows="3" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
+      <label>Yetkazib berish manzili (Lokatsiya)</label>
+      <textarea id="custAddress" rows="2" placeholder="Viloyat, tuman, ko'cha, uy raqami..."></textarea>
     </div>
 
-    <div class="phone-verification-box">
-      <p style="font-size:12px; color:#444; margin: 0 0 10px 0; font-weight:600;">
-        <i class="fa-solid fa-shield-halved" style="color:#6a5acd;"></i> Xavfsizlik: Telefon raqamingizni tasdiqlang
-      </p>
-      <button type="button" class="phone-btn" id="phoneAuthBtn" onclick="requestTelegramContact()">
-        <i class="fa-solid fa-phone"></i> Telegram raqamni ulashish
-      </button>
+    <!-- TELEFON RAQAM VA TASDIQLASH KODI -->
+    <div class="phone-auth-box">
+      <label style="font-size: 13px; font-weight: 600; color: #444; display: block; margin-bottom: 4px;">Telefon raqam</label>
+      <div class="phone-row-flex">
+        <input type="tel" id="custPhone" placeholder="+998 90 123 45 67">
+        <button type="button" class="code-send-btn" id="sendCodeBtn" onclick="sendVerificationCode()">Kod yuborish</button>
+      </div>
+
+      <div class="code-verify-container" id="codeVerifyContainer">
+        <label style="font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Telegramdan borgan 4 xonali kodni kiriting:</label>
+        <div class="code-inputs-row">
+          <input type="text" id="verificationCodeInput" maxlength="4" placeholder="• • • •">
+        </div>
+        <button type="button" class="verify-code-btn" onclick="verifySmsCode()">Tasdiqlash</button>
+      </div>
     </div>
 
     <button class="submit-btn" id="submitBtn" onclick="sendOrder()" disabled>Buyurtmani yakunlash</button>
   </div>
 </div>
 
+<!-- TARIX MODALI -->
 <div class="modal" id="historyModal">
   <div class="modal-content">
     <div class="modal-title">
-      <span><i class="fa-solid fa-clock-rotate-left"></i> Buyurtmalaringiz tarixi</span>
+      <span><i class="fa-solid fa-clock-rotate-left"></i> Buyurtmalar tarixi</span>
       <i class="fa-solid fa-xmark close-modal" onclick="closeHistoryModal()"></i>
     </div>
     <div class="history-list" id="historyListContent"></div>
   </div>
 </div>
 
+<!-- PASTKI MENYU -->
 <div class="bottom">
   <a href="index.html" id="navHome"><i class="fa-solid fa-house"></i></a>
-  <a href="categories.html" id="navCat"><i class="fa-solid fa-list"></i></a>
-  <a href="cart.html" id="navCart" style="position: relative;">
+  <a href="categories.html" id="navCat"><i class="fa-solid fa-magnifying-glass"></i></a>
+  <a href="cart.html" id="navCart" class="active">
     <i class="fa-solid fa-basket-shopping"></i>
-    <span id="cartBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+    <span id="cartBadge" class="badge">0</span>
   </a>
-  <a href="favorites.html" id="navFav" style="position: relative;">
+  <a href="favorites.html" id="navFav">
     <i class="fa-solid fa-heart"></i>
-    <span id="favBadge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center;">0</span>
+    <span id="favBadge" class="badge">0</span>
   </a>
+  <a href="profile.html" id="navProfile"><i class="fa-solid fa-user"></i></a>
 </div>
-
 
 <script>
 let isTelegramApp = false;
 let userTgId = "7779592134"; 
-let verifiedPhoneNumber = ""; // Tasdiqlangan raqam shu yerga tushadi
+let userNameTg = "Foydalanuvchi";
+let generatedSmsCode = "";
+let isPhoneVerified = false;
 
-if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) {
-  isTelegramApp = true;
+if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
+  isTelegramApp = true;
   if(Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
     userTgId = Telegram.WebApp.initDataUnsafe.user.id;
+    let tgUser = Telegram.WebApp.initDataUnsafe.user;
+    userNameTg = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
   }
 }
 
+document.getElementById("custName").value = userNameTg;
+
 const listBox = document.getElementById("cartList");
 const stickyPanel = document.getElementById("stickyPanel");
+const orderSummaryCard = document.getElementById("orderSummaryCard");
+const cartControlsBar = document.getElementById("cartControlsBar");
+
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
 
 function renderCart() {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let cart = getCart();
   listBox.innerHTML = "";
 
+  updateBottomBadges();
+
   if (cart.length === 0) {
-    listBox.innerHTML = `
-      <div style="text-align:center; padding:80px 20px; color:#888;">
-        <i class="fa-solid fa-basket-shopping" style="font-size: 50px; margin-bottom:15px; color:#ccc;"></i>
-        <p style="font-size:16px; margin:0;">Savatingiz hozircha bo'sh</p>
-        <a href="index.html" style="display:inline-block; margin-top:15px; background:#6a5acd; color:white; padding:8px 20px; border-radius:50px; font-size:14px;">Xarid qilish</a>
-      </div>`;
+    cartControlsBar.style.display = "none";
     stickyPanel.style.display = "none";
+    orderSummaryCard.style.display = "none";
+    listBox.innerHTML = `
+      <div style="text-align:center; padding:70px 20px; color:#888;">
+        <i class="fa-solid fa-basket-shopping" style="font-size: 55px; margin-bottom:15px; color:#ccc;"></i>
+        <p style="font-size:16px; font-weight:600; margin:0 0 5px 0;">Savatingiz bo'sh</p>
+        <p style="font-size:13px; color:#888; margin:0 0 15px 0;">O'zingizga kerakli mahsulotlarni qo'shing</p>
+        <a href="index.html" style="display:inline-block; background:#6a5acd; color:white; padding:10px 24px; border-radius:50px; font-size:14px; font-weight:600;">Xarid qilishga o'tish</a>
+      </div>`;
     return;
   }
 
+  cartControlsBar.style.display = "flex";
   stickyPanel.style.display = "flex";
-  let totalQty = 0; let totalPrice = 0;
+  orderSummaryCard.style.display = "block";
 
-  cart.forEach(item => {
-    totalQty += item.qty; totalPrice += (item.price * item.qty);
+  let allChecked = cart.every(item => item.selected !== false);
+  let selectAllCheckbox = document.getElementById("selectAllCheckbox");
+  if (allChecked) {
+    selectAllCheckbox.classList.add("checked");
+  } else {
+    selectAllCheckbox.classList.remove("checked");
+  }
+
+  let anySelected = cart.some(item => item.selected !== false);
+  let deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
+  if (anySelected) {
+    deleteSelectedBtn.classList.add("show");
+  } else {
+    deleteSelectedBtn.classList.remove("show");
+  }
+
+  let totalSelectedQty = 0;
+  let totalSelectedOriginalPrice = 0;
+  let totalSelectedDiscountPrice = 0;
+  let selectedCountItems = 0;
+
+  cart.forEach((item, index) => {
+    let isSelected = item.selected !== false;
+    if (isSelected) {
+      totalSelectedQty += (item.qty || 1);
+      let itemPrice = item.price || 0;
+      let origPrice = Math.round(itemPrice * 1.35);
+      totalSelectedOriginalPrice += (origPrice * (item.qty || 1));
+      totalSelectedDiscountPrice += (itemPrice * (item.qty || 1));
+      selectedCountItems++;
+    }
+
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    let isFav = favs.includes(item.id);
+    let itemPrice = item.price || 0;
+    let origPrice = Math.round(itemPrice * 1.35);
+
     listBox.innerHTML += `
-      <div class="cart-item">
-        <img src="${item.img}">
-        <div class="item-details">
-          <h4 class="item-name">${item.name}</h4>
-          <div class="item-price">${item.price.toLocaleString()} so'm</div>
+      <div class="cart-item ${isSelected ? 'selected-item' : ''}">
+        <div class="cart-item-top">
+          <div class="custom-checkbox ${isSelected ? 'checked' : ''}" onclick="toggleItemCheck(${index})">
+            ${isSelected ? '<i class="fa-solid fa-check"></i>' : ''}
+          </div>
+          <img src="${item.img}" onclick="window.location.href='product.html?id=${item.id}'">
+          <div class="item-details">
+            <h4 class="item-name">${item.name}</h4>
+            <div class="item-desc-small">Yetkazib berish: Ertaga</div>
+            <div class="item-price-row">
+              <span class="item-price">${itemPrice.toLocaleString()} so'm</span>
+              <span class="item-old-price">${origPrice.toLocaleString()} so'm</span>
+            </div>
+            <div class="item-unit-price">${itemPrice.toLocaleString()} so'm/dona</div>
+          </div>
         </div>
-        <div class="item-actions">
-          <i class="fa-solid fa-trash-can delete-item-btn" onclick="removeItem('${item.id}')"></i>
+        <div class="cart-item-bottom">
           <div class="item-counter">
-            <button onclick="changeQty('${item.id}', -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="changeQty('${item.id}', 1)">+</button>
+            <button onclick="changeQty(${index}, -1)">-</button>
+            <span>${item.qty || 1}</span>
+            <button onclick="changeQty(${index}, 1)">+</button>
+          </div>
+          <div class="item-fav-btn ${isFav ? 'active' : ''}" onclick="toggleItemFav('${item.id}')">
+            <i class="fa-solid fa-heart"></i>
           </div>
         </div>
       </div>`;
   });
 
-  document.getElementById("totalItemsText").innerText = `Jami ${totalQty} ta mahsulot`;
-  document.getElementById("totalPriceText").innerText = totalPrice.toLocaleString() + " so'm";
+  document.getElementById("cartCountTitleTop").innerText = `${totalSelectedQty} ta tovar tanlandi`;
+  document.getElementById("summaryItemCount").innerText = `${totalSelectedQty} tovar`;
+  document.getElementById("summaryItemsPrice").innerText = totalSelectedOriginalPrice.toLocaleString() + " so'm";
+  let discountAmount = totalSelectedOriginalPrice - totalSelectedDiscountPrice;
+  document.getElementById("summaryDiscount").innerText = `- ${discountAmount.toLocaleString()} so'm`;
+  document.getElementById("summaryTotalPrice").innerText = totalSelectedDiscountPrice.toLocaleString() + " so'm";
+
+  document.getElementById("stickyTotalPrice").innerText = totalSelectedDiscountPrice.toLocaleString() + " so'm";
+  document.getElementById("stickyItemCount").innerText = `${totalSelectedQty} ta tovar`;
 }
 
-function changeQty(id, delta) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let item = cart.find(x => x.id === id);
-  if (item) {
-    item.qty += delta; if (item.qty < 1) item.qty = 1;
-    localStorage.setItem("cart", JSON.stringify(cart)); renderCart();
+function toggleItemCheck(index) {
+  let cart = getCart();
+  if (cart[index].selected === undefined) {
+    cart[index].selected = false;
+  } else {
+    cart[index].selected = !cart[index].selected;
+  }
+  saveCart(cart);
+}
+
+function toggleSelectAll() {
+  let cart = getCart();
+  let allChecked = cart.every(item => item.selected !== false);
+  cart.forEach(item => {
+    item.selected = !allChecked;
+  });
+  saveCart(cart);
+}
+
+function deleteSelectedItems() {
+  if (confirm("Tanlangan mahsulotlarni savatdan o'chirmoqchimisiz?")) {
+    let cart = getCart();
+    cart = cart.filter(item => item.selected === false);
+    saveCart(cart);
   }
 }
 
-function removeItem(id) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart = cart.filter(x => x.id !== id); localStorage.setItem("cart", JSON.stringify(cart)); renderCart();
+function changeQty(index, delta) {
+  let cart = getCart();
+  cart[index].qty = (cart[index].qty || 1) + delta;
+  if (cart[index].qty < 1) cart[index].qty = 1;
+  saveCart(cart);
 }
 
 function clearCart() {
-  if (confirm("Savatingizni bo'shatmoqchimisiz?")) { localStorage.removeItem("cart"); renderCart(); }
+  if (confirm("Savatingizni butunlay bo'shatmoqchimisiz?")) {
+    localStorage.removeItem("cart");
+    renderCart();
+  }
 }
 
-function openOrderModal() { document.getElementById("orderModal").classList.add("open"); }
+function toggleItemFav(id) {
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  if (favs.includes(id)) {
+    favs = favs.filter(x => x !== id);
+  } else {
+    favs.push(id);
+  }
+  localStorage.setItem("favs", JSON.stringify(favs));
+  renderCart();
+}
+
+function updateBottomBadges() {
+  let cart = getCart();
+  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  let cartBadge = document.getElementById("cartBadge");
+  if (cartBadge) {
+    cartBadge.innerText = totalCartQty;
+    cartBadge.style.display = totalCartQty > 0 ? "flex" : "none";
+  }
+
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  let favBadge = document.getElementById("favBadge");
+  if (favBadge) {
+    favBadge.innerText = favs.length;
+    favBadge.style.display = favs.length > 0 ? "flex" : "none";
+  }
+}
+
+function openOrderModal() {
+  let cart = getCart();
+  let selectedItems = cart.filter(item => item.selected !== false);
+  if (selectedItems.length === 0) {
+    alert("Iltimos, buyurtma berish uchun kamida bitta mahsulotni tanlang!");
+    return;
+  }
+  document.getElementById("orderModal").classList.add("open");
+}
 function closeOrderModal() { document.getElementById("orderModal").classList.remove("open"); }
 
 function openHistoryModal() {
@@ -286,109 +503,131 @@ function openHistoryModal() {
 function closeHistoryModal() { document.getElementById("historyModal").classList.remove("open"); }
 
 
-/* TELEGRAMDAN RAQAMNI SO'RASH MANTIQI */
-function requestTelegramContact() {
-  if (isTelegramApp && Telegram.WebApp.requestContact) {
-    Telegram.WebApp.requestContact(function(callbackData) {
-      if (callbackData && callbackData.status === 'sent') {
-        // Raqam muvaffaqiyatli ulashildi. Telegram xavfsizlik yuzasidan raqam matnini to'g'ridan to'g'ri Mini App'ga bermasligi mumkin,
-        // lekin u botga shifrlangan maxsus xabar (contact) yuboradi. 
-        // Biz xaridorni aldolmasligi uchun jarayonni tasdiqlaymiz.
-        
-        verifiedPhoneNumber = "Telegram orqali tasdiqlandi ✅";
-        
-        const btn = document.getElementById("phoneAuthBtn");
-        btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Raqam tasdiqlandi`;
-        btn.classList.add("verified");
-        btn.onclick = null; // Qayta bosilmaydigan qilish
-        
-        // "Buyurtmani yakunlash" tugmasini faollashtiramiz
-        document.getElementById("submitBtn").disabled = false;
-      } else {
-        alert("Xavfsizlik uchun telefon raqamingizni tasdiqlashingiz shart!");
-      }
-    });
-  } else {
-    // Agar dasturchi brauzerda test qilayotgan bo'lsa (Fallback)
-    let mockPhone = prompt("Telegram raqamingizni kiriting (Faqat test rejimida ko'rinadi):");
-    if(mockPhone && mockPhone.trim().length > 5) {
-      verifiedPhoneNumber = mockPhone.trim();
-      const btn = document.getElementById("phoneAuthBtn");
-      btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Raqam tasdiqlandi`;
-      btn.classList.add("verified");
-      document.getElementById("submitBtn").disabled = false;
-    }
+/* TELEGRAM ORQALI TASDIQLASH KODINI YUBORISH MANTIQI */
+function sendVerificationCode() {
+  let phone = document.getElementById("custPhone").value.trim();
+  if (!phone || phone.length < 7) {
+    alert("Iltimos, to'g'ri telefon raqam kiriting!");
+    return;
   }
+
+  generatedSmsCode = Math.floor(1000 + Math.random() * 9000).toString();
+  
+  const BOT_TOKEN = "8715142645:AAHpYkJ3HapkOD0V8efCIppiOpMkRp3ihO0";
+  let smsText = `🔐 <b>Tasdiqlash kodi</b>\n\nSizning buyurtma berish uchun tasdiqlash kodingiz: <b>${generatedSmsCode}</b>\nUshbu kodni hech kimga bermang!`;
+
+  const sendBtn = document.getElementById("sendCodeBtn");
+  sendBtn.innerText = "Yuborilmoqda...";
+  sendBtn.disabled = true;
+
+  // Foydalanuvchining Telegram chat ID'siga bot orqali kod yuboramiz
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: userTgId, text: smsText, parse_mode: "HTML" })
+  }).then(res => res.json()).then(data => {
+    if (data.ok) {
+      alert("Telegram profilingizga tasdiqlash kodi yuborildi!");
+      document.getElementById("codeVerifyContainer").classList.add("show");
+      sendBtn.innerText = "Qayta yuborish";
+      sendBtn.disabled = false;
+    } else {
+      alert("Xatolik! Botga start bosganingizga ishonch hosil qiling.");
+      sendBtn.innerText = "Kod yuborish";
+      sendBtn.disabled = false;
+    }
+  }).catch(() => {
+    alert("Tarmoqda xatolik yuz berdi!");
+    sendBtn.innerText = "Kod yuborish";
+    sendBtn.disabled = false;
+  });
 }
 
+function verifySmsCode() {
+  let enteredCode = document.getElementById("verificationCodeInput").value.trim();
+  if (enteredCode === generatedSmsCode) {
+    isPhoneVerified = true;
+    alert("Telefon raqamingiz muvaffaqiyatli tasdiqlandi!");
+    document.getElementById("codeVerifyContainer").style.display = "none";
+    document.getElementById("custPhone").disabled = true;
+    document.getElementById("sendCodeBtn").style.display = "none";
+    document.getElementById("submitBtn").disabled = false;
+  } else {
+    alert("Kiritilgan kod noto'g'ri! Qaytadan urinib ko'ring.");
+  }
+}
 
 /* BUYURTMANI YUBORISH */
 function sendOrder() {
   const name = document.getElementById("custName").value.trim();
   const address = document.getElementById("custAddress").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
   const submitBtn = document.getElementById("submitBtn");
 
-  if (!name || !address) {
-    alert("Iltimos, ismingiz va manzilingizni to'liq kiriting!");
+  if (!name || !address || !phone) {
+    alert("Iltimos, barcha maydonlarni to'ldiring!");
     return;
   }
-  if (!verifiedPhoneNumber) {
-    alert("Iltimos, avval telefon raqamingizni tasdiqlang!");
+  if (!isPhoneVerified) {
+    alert("Iltimos, telefon raqamingizni tasdiqlang!");
     return;
   }
 
   submitBtn.disabled = true;
   submitBtn.innerText = "Yuborilmoqda...";
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  let cart = getCart();
+  let selectedItems = cart.filter(item => item.selected !== false);
+  let totalPrice = selectedItems.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
+  let totalQty = selectedItems.reduce((sum, item) => sum + (item.qty || 1), 0);
+  
   let orderId = Math.floor(1000 + Math.random() * 9000);
   let orderDate = new Date().toLocaleDateString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
 
   // Tarixga saqlash
   let history = JSON.parse(localStorage.getItem("orderHistory")) || [];
-  history.push({ id: orderId, date: orderDate, items: cart, total: totalPrice });
+  history.push({ id: orderId, date: orderDate, items: selectedItems, total: totalPrice });
   localStorage.setItem("orderHistory", JSON.stringify(history));
 
-  // Admin / Guruh uchun xabar matni
+  // Admin uchun xabar
   let message = `🛒 <b>YANGI BUYURTMA (ID: #${orderId})</b>\n\n`;
   message += `👤 <b>Mijoz:</b> ${name}\n`;
-  message += `📞 <b>Tel:</b> ${verifiedPhoneNumber}\n`;
+  message += `📞 <b>Tel:</b> ${phone}\n`;
   message += `📍 <b>Manzil:</b> ${address}\n\n`;
-  message += `📦 <b>Mahsulotlar:</b>\n`;
-  cart.forEach((item, index) => {
-    message += `${index + 1}. ${item.name} - <b>${item.qty} ta</b> (${(item.price * item.qty).toLocaleString()} so'm)\n`;
+  message += `📦 <b>Mahsulotlar (${totalQty} ta):</b>\n`;
+  selectedItems.forEach((item, index) => {
+    message += `${index + 1}. ${item.name} - <b>${item.qty} ta</b> (${((item.price || 0) * (item.qty || 1)).toLocaleString()} so'm)\n`;
   });
   message += `\n💰 <b>Jami summa:</b> ${totalPrice.toLocaleString()} so'm`;
 
   const BOT_TOKEN = "8715142645:AAHpYkJ3HapkOD0V8efCIppiOpMkRp3ihO0";
 
-  // 1-Bosqich: Adminga ma'lumotlarni yuborish
+  // 1. Adminga yuborish
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: "7779592134", text: message, parse_mode: "HTML" })
   }).then(() => {
-    
-    // 2-Bosqich: Xaridorning o'ziga botda tabrik xabari yuborish
+    // 2. Xaridorning o'ziga yuborish
     fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: userTgId,
-        text: `🎉 <b>Buyurtmangiz muvaffaqiyatli qabul qilindi!</b>\n\n<b>ID:</b> #${orderId}\n<b>Jami:</b> ${totalPrice.toLocaleString()} so'm\n\nTez orada siz bilan bog'lanamiz.`,
+        text: `🎉 <b>Buyurtmangiz qabul qilindi!</b>\n\n<b>ID:</b> #${orderId}\n<b>Jami:</b> ${totalPrice.toLocaleString()} so'm\n\nTez orada operatorlarimiz siz bilan bog'lanishadi.`,
         parse_mode: "HTML"
       })
     }).finally(() => {
-      localStorage.removeItem("cart");
+      // Qolgan savatdagi mahsulotlarni yangilash (tanlanganlari o'chadi, qolganlari qoladi)
+      let remainingCart = cart.filter(item => item.selected === false);
+      saveCart(remainingCart);
+
       closeOrderModal();
-      renderCart();
       alert("Buyurtmangiz muvaffaqiyatli yuborildi!");
       if (isTelegramApp && Telegram.WebApp.close) {
         Telegram.WebApp.close();
       }
     });
-
   }).catch(() => {
     alert("Xatolik yuz berdi!");
     submitBtn.disabled = false;
