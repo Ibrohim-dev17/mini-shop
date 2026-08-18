@@ -304,7 +304,7 @@ img { max-width: 100%; }
 }
 
 .heart:active { transform: scale(1.2); }
-/* Yurak bosilganda qizil rangda bo'lishi */
+/* Yurakcha bosilganda qizil bo'lishi */
 .heart.active { color: #ff3b30; }
 
 /* TOAST */
@@ -358,14 +358,14 @@ img { max-width: 100%; }
   transform: scale(0.85); 
 }
 
-/* QIZIL DUMALOQ VA ICHIDAGI QORA RAQAM */
+/* 100% QORA DUMALOQ VA OQ/QORA RAQAM */
 .badge {
   display: none;
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #ff3b30;
-  color: #000000;
+  background: #000000;
+  color: #ffffff;
   font-size: 10px;
   font-weight: 700;
   border-radius: 50%;
@@ -475,7 +475,7 @@ const categories = [
 
 let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-/* BADGE REAL VAQTDA YANGILASH (Qizil fon, qora raqam) */
+/* BADGE REAL VAQTDA YANGILASH (Qora fon, oq raqam) */
 function updateBottomBadges() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -560,7 +560,7 @@ function renderProducts(productsList) {
 let initialProducts = [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
 renderProducts(initialProducts);
 
-/* SEVIMLIGARGA QO'SHISH/O'CHIRISH (Darhol yangilanadi) */
+/* SEVIMLIGARGA QO'SHISH/O'CHIRISH (Darhol reallikda yangilanadi) */
 function toggleFav(id, el) {
   let icon = el.querySelector("i");
   if (favs.includes(id)) {
@@ -573,10 +573,10 @@ function toggleFav(id, el) {
     icon.className = "fa-solid fa-heart";
   }
   localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges(); // Darhol badgeni yangilaydi
+  updateBottomBadges(); // Sahifani yangilamasdan darhol badgeni o'zgartiradi
 }
 
-/* SAVATGA QO'SHISH (Darhol yangilanadi) */
+/* SAVATGA QO'SHISH (Darhol reallikda yangilanadi) */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -595,7 +595,7 @@ function addToCart(e, id) {
     Telegram.WebApp.MainButton.hide();
   }
 
-  updateBottomBadges(); // Darhol badgeni yangilaydi
+  updateBottomBadges(); // Sahifani yangilamasdan darhol badgeni o'zgartiradi
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
