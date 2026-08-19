@@ -1,1 +1,2 @@
-const API_URL = "https://online-shop-jxes.onrender.com";//
+
+const API_URL = "http://localhost:3000";
