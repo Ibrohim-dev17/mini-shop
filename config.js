@@ -1,1 +1,1 @@
-const API_URL = "https://kitchen-market-backend-xxxx.onrender.com"; // O'zingizning Render havolangizni yozasiz
+const API_URL = "https://online-shop-jxes.onrender.com";//
