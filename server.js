@@ -9,12 +9,12 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// MongoDB ulanishi
-mongoose.connect('mongodb+srv://ibrohimnabixonov17_db_user:yil20070618@cluster0.a0uh9x2.mongodb.net/kitchen_market?retryWrites=true&w=majority', {
+mongoose.connect('mongodb://127.0.0.1:27017/kitchen_market', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('MongoDB ulandi ✅'))
   .catch(err => console.log('Xatolik:', err));
+
 
 // --- SCHEMALAR ---
 const categorySchema = new mongoose.Schema({
