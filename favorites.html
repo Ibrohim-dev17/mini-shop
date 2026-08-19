@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -67,7 +68,7 @@ img { max-width: 100%; }
   color: #111;
 }
 
-/* PRODUCTS GRID & CARDS (Index bilan bir xil) */
+/* PRODUCTS GRID & CARDS */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -197,6 +198,15 @@ img { max-width: 100%; }
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* TOAST XABARNOMA */
+.toast {
+  position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
+  border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 2000;
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast.show { top: 20px; }
+
 /* BO'SH HOLAT */
 .empty-box {
   grid-column: 1 / -1;
@@ -209,7 +219,7 @@ img { max-width: 100%; }
   color: #888;
 }
 
-/* PASTKI MENYU (Index bilan 100% birxil) */
+/* PASTKI MENYU */
 .bottom {
   position: fixed;
   bottom: 0;
@@ -272,6 +282,8 @@ img { max-width: 100%; }
 </head>
 
 <body>
+
+<div id="toast" class="toast">Savatga qo‘shildi!</div>
 
 <div class="main-content">
   <!-- HEADER -->
@@ -394,7 +406,7 @@ function renderFavorites() {
             <span style="color:#aaa;"><i class="fa-regular fa-comment" style="margin-left: 4px;"></i> ${reviewsCount}</span>
           </div>
         </a>
-        <button class="add-to-cart-btn" onclick="addToCartAndRedirect('${p.id}')">
+        <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">
           <i class="fa-solid fa-basket-shopping" style="font-size: 14px;"></i> Savatga
         </button>
       </div>
@@ -404,7 +416,7 @@ function renderFavorites() {
   updateBottomBadges();
 }
 
-/* SEVIMLILARDAN O'CHIRISH */
+/* SEVIMLILARDAN O'CHIRISH VA BADGENI DARHOL YANGILASH */
 function removeFav(id) {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   favs = favs.filter(x => x !== id);
@@ -412,8 +424,9 @@ function removeFav(id) {
   renderFavorites();
 }
 
-/* SAVATGA QO'SHIB CART.HTML GA O'TISH */
-function addToCartAndRedirect(id) {
+/* SAVATGA QO'SHISH (SAHifadan chiqib ketmaydi, badge va toast ishlaydi) */
+function addToCart(e, id) {
+  e.preventDefault();
   let p = allProducts.find(x => x.id === id);
   if (!p) return;
 
@@ -428,8 +441,13 @@ function addToCartAndRedirect(id) {
   
   localStorage.setItem("cart", JSON.stringify(cart));
   
-  // Darhol savat sahifasiga o'tkazish
-  window.location.href = "cart.html";
+  // Qora badge sonini darhol yangilash
+  updateBottomBadges();
+
+  // Toast xabarnomani chiqarish
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+  setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
 renderFavorites();
