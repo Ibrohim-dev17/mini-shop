@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB ulanishi
-mongoose.connect('mongodb://localhost:27017/bilimgo_shop', {
+mongoose.connect('mongodb://localhost:27017/Online Shop', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('MongoDB ulandi ✅'))
