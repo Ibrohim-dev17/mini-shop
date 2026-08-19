@@ -322,7 +322,7 @@ img { max-width: 100%; }
 </div>
 
 <script>
-// Telegram WebApp yuklash
+// Telegram WebApp yuklanishi
 if (window.Telegram && Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
@@ -331,42 +331,42 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* BADGE'LARNI DARHOL VA ANIQ YANGILASH FUNKSIYASI */
+// Badge'larni to'g'ridan-to'g'ri yangilaydigan eng tezkor funksiya
 function updateBottomBadges() {
-  // Savat miqdorini hisoblash
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const totalCartQty = cart.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
 
-  let cartBadge = document.getElementById("cartBadge");
+  const cartBadge = document.getElementById("cartBadge");
   if (cartBadge) {
     if (totalCartQty > 0) {
       cartBadge.innerText = totalCartQty;
-      cartBadge.style.setProperty('display', 'flex', 'important');
+      cartBadge.style.display = 'flex';
     } else {
-      cartBadge.style.setProperty('display', 'none', 'important');
+      cartBadge.style.display = 'none';
     }
   }
 
-  // Sevimlilar miqdorini hisoblash
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  let favBadge = document.getElementById("favBadge");
+  const favs = JSON.parse(localStorage.getItem("favs")) || [];
+  const favBadge = document.getElementById("favBadge");
   if (favBadge) {
     if (favs.length > 0) {
       favBadge.innerText = favs.length;
-      favBadge.style.setProperty('display', 'flex', 'important');
+      favBadge.style.display = 'flex';
     } else {
-      favBadge.style.setProperty('display', 'none', 'important');
+      favBadge.style.display = 'none';
     }
   }
 }
 
-/* SEVIMLI MAHSULOTLARNI CHIQARISH */
+// Sevimlilarni chiqarish
 function renderFavorites() {
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  let box = document.getElementById("favProductBox");
+  const favs = JSON.parse(localStorage.getItem("favs")) || [];
+  const box = document.getElementById("favProductBox");
+  
+  if (!box) return;
   box.innerHTML = "";
 
-  let favProducts = allProducts.filter(p => favs.includes(p.id));
+  const favProducts = (typeof allProducts !== 'undefined' ? allProducts : []).filter(p => favs.includes(p.id));
 
   if (favProducts.length === 0) {
     box.innerHTML = `
@@ -379,19 +379,20 @@ function renderFavorites() {
     return;
   }
 
+  let htmlContent = "";
   favProducts.forEach(p => {
     let ratingValue = p.rating || 4.8;
     let reviewsCount = p.reviewsCount || 128;
     let oldPrice = Math.round(p.price * 1.35);
 
-    box.innerHTML += `
-    <div class="card" data-id="${p.id}">
+    htmlContent += `
+    <div class="card" data-card-id="${p.id}">
       <div class="card-img-box">
         <div class="heart" onclick="removeFav('${p.id}')">
           <i class="fa-solid fa-heart"></i>
         </div>
         <a href="product.html?id=${p.id}" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
-          <img src="${p.img}">
+          <img src="${p.img}" loading="lazy">
         </a>
       </div>
 
@@ -414,58 +415,64 @@ function renderFavorites() {
     </div>`;
   });
 
+  box.innerHTML = htmlContent;
   updateBottomBadges();
 }
 
-/* YURAKCHANI BOSIB O'CHIRISH (DOM ELEMENTINI TO'G'RIDAN-TO'G'RI O'CHIRISH) */
+// Yurakni bosganda o'chirish
 function removeFav(id) {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   favs = favs.filter(x => x !== id);
   localStorage.setItem("favs", JSON.stringify(favs));
   
-  // Sahifani noldan qayta chizmasdan, faqat o'sha karta elementini darhol o'chiramiz
-  let cardElement = document.querySelector(`.card[data-id="${id}"]`);
-  if (cardElement) {
-    cardElement.remove();
+  // Darhol DOM'dan o'chirish
+  const card = document.querySelector(`[data-card-id="${id}"]`);
+  if (card) {
+    card.remove();
   }
 
-  // Agar ro'yxat oxirigacha tozalanib bo'lsa, bo'sh holatni chiqarish uchun
+  updateBottomBadges();
+
+  // Agar hamma narsa o'chib ketsa bo'sh holatni chiqarish
   if (favs.length === 0) {
     renderFavorites();
-  } else {
-    updateBottomBadges();
   }
 }
 
-/* SAVATGA QO'SHISH VA BADGENI DARHOL YANGILASH */
+// Savatga qo'shish
 function addToCart(e, id) {
-  e.preventDefault();
-  let p = allProducts.find(x => x.id === id);
+  if (e) e.preventDefault();
+  
+  const p = (typeof allProducts !== 'undefined' ? allProducts : []).find(x => x.id === id);
   if (!p) return;
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let existing = cart.find(item => item.id === id);
   
   if (existing) {
-    existing.qty += 1;
+    existing.qty = (Number(existing.qty) || 1) + 1;
   } else {
     cart.push({ id: p.id, name: p.name, price: p.price, img: p.img, qty: 1 });
   }
   
   localStorage.setItem("cart", JSON.stringify(cart));
   
-  // Qora badge sonini darhol yangilash
+  // Savat badge'ini darhol yangilash
   updateBottomBadges();
 
-  // Toast xabarnomani chiqarish
+  // Toast xabarnoma
   const toast = document.getElementById("toast");
-  toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("show"); }, 1500);
+  if (toast) {
+    toast.classList.add("show");
+    setTimeout(() => { toast.classList.remove("show"); }, 1500);
+  }
 }
 
-// Sahifa yuklanganda ishga tushirish
-renderFavorites();
-updateBottomBadges();
+// Sahifa to'liq yuklangach ishga tushadi
+window.addEventListener('DOMContentLoaded', () => {
+  renderFavorites();
+  updateBottomBadges();
+});
 </script>
 
 </body>
