@@ -7,71 +7,186 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="config.js"></script>
 <style>
-  body { font-family: system-ui, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
-  h1 { text-align: center; color: #6a5acd; margin-bottom: 25px; }
-  .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-  .card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  h2 { font-size: 18px; margin-top: 0; color: #111; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; }
-  input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-  button { background: #6a5acd; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-  button:active { opacity: 0.8; }
-  .btn-danger { background: #e74c3c; }
-  .list-item { display: flex; align-items: center; justify-content: space-between; background: #f9f9fb; padding: 10px; border-radius: 8px; margin-bottom: 8px; }
-  .list-item img { width: 45px; height: 45px; object-fit: cover; border-radius: 6px; }
-  .actions { display: flex; gap: 6px; }
+  :root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --danger: #ef4444;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --border: #e2e8f0;
+  }
+
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 25px; color: var(--text); }
+  .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 25px; }
+  
+  header { display: flex; justify-content: space-between; align-items: center; background: var(--card-bg); padding: 20px 25px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+  header h1 { font-size: 22px; margin: 0; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+  
+  .card { background: var(--card-bg); padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 12px; }
+  .card-header h2 { font-size: 18px; margin: 0; color: var(--text); }
+
+  button { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+  button:hover { background: var(--primary-hover); }
+  .btn-danger { background: var(--danger); }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-secondary { background: #64748b; }
+
+  /* Modal oyna dizayni */
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 1000; padding: 15px; box-sizing: border-box; }
+  .modal.active { display: flex; }
+  .modal-content { background: white; padding: 30px; border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); animation: modalOpen 0.3s ease; }
+  
+  @keyframes modalOpen {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .form-group { margin-bottom: 15px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #475569; }
+  input, select, textarea { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.2s; }
+  input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+
+  .list-grid { display: grid; gap: 12px; }
+  .list-item { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); }
+  .list-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; }
+  .item-info { display: flex; align-items: center; gap: 15px; }
+  .actions { display: flex; gap: 8px; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1><i class="fa-solid fa-lock"></i> Admin Panel</h1>
+  <header>
+    <h1><i class="fa-solid fa-gauge-high"></i> BilimGo Admin Panel</h1>
+    <a href="index.html" target="_blank" style="text-decoration: none;"><button class="btn-secondary"><i class="fa-solid fa-store"></i> Saytga o'tish</button></a>
+  </header>
 
-  <!-- 1. KATEGORIYA QO'SHISH -->
+  <!-- 1. KATEGORIYALAR -->
   <div class="card">
-    <h2>Kategoriyalar boshqaruvi</h2>
-    <input type="text" id="catName" placeholder="Kategoriya nomi (masalan: Oshxona)">
-    <input type="file" id="catImgFile" accept="image/*" onchange="convertImg(this, 'catImgBase64')">
-    <input type="hidden" id="catImgBase64">
-    <button onclick="saveCategory()">Kategoriya qo'shish</button>
-    <div id="categoriesList" style="margin-top: 15px;"></div>
+    <div class="card-header">
+      <h2>Kategoriyalar</h2>
+      <button onclick="openModal('categoryModal')"><i class="fa-solid fa-plus"></i> Kategoriya qo'shish</button>
+    </div>
+    <div id="categoriesList" class="list-grid"></div>
   </div>
 
-  <!-- 2. BANNER QO'SHISH -->
+  <!-- 2. BANNERLAR -->
   <div class="card">
-    <h2>Reklama Bannerlari</h2>
-    <input type="file" id="bannerImgFile" accept="image/*" onchange="convertImg(this, 'bannerImgBase64')">
-    <input type="hidden" id="bannerImgBase64">
-    <input type="text" id="bannerLink" placeholder="Havola (ixtiyoriy, masalan: products.html?cat=oshxona)">
-    <button onclick="saveBanner()">Banner qo'shish</button>
-    <div id="bannersList" style="margin-top: 15px;"></div>
+    <div class="card-header">
+      <h2>Reklama Bannerlari</h2>
+      <button onclick="openModal('bannerModal')"><i class="fa-solid fa-plus"></i> Banner qo'shish</button>
+    </div>
+    <div id="bannersList" class="list-grid"></div>
   </div>
 
-  <!-- 3. MAHSULOT QO'SHISH / TAHRIRLASH -->
+  <!-- 3. MAHSULOTLAR -->
   <div class="card">
-    <h2 id="productFormTitle">Yangi mahsulot qo'shish</h2>
+    <div class="card-header">
+      <h2>Mahsulotlar</h2>
+      <button onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Mahsulot qo'shish</button>
+    </div>
+    <div id="productsList" class="list-grid"></div>
+  </div>
+</div>
+
+<!-- MODAL: KATEGoriya QO'SHISH -->
+<div id="categoryModal" class="modal">
+  <div class="modal-content">
+    <h2 style="margin-top:0">Yangi kategoriya</h2>
+    <div class="form-group">
+      <label>Kategoriya nomi</label>
+      <input type="text" id="catName" placeholder="Masalan: Elektronika">
+    </div>
+    <div class="form-group">
+      <label>Rasm yuklash</label>
+      <input type="file" accept="image/*" onchange="convertImg(this, 'catImgBase64')">
+      <input type="hidden" id="catImgBase64">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+      <button class="btn-secondary" onclick="closeModal('categoryModal')">Bekor qilish</button>
+      <button onclick="saveCategory()">Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: BANNER QO'SHISH -->
+<div id="bannerModal" class="modal">
+  <div class="modal-content">
+    <h2 style="margin-top:0">Yangi banner</h2>
+    <div class="form-group">
+      <label>Banner rasmi</label>
+      <input type="file" accept="image/*" onchange="convertImg(this, 'bannerImgBase64')">
+      <input type="hidden" id="bannerImgBase64">
+    </div>
+    <div class="form-group">
+      <label>Havola (ixtiyoriy)</label>
+      <input type="text" id="bannerLink" placeholder="Masalan: products.html">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+      <button class="btn-secondary" onclick="closeModal('bannerModal')">Bekor qilish</button>
+      <button onclick="saveBanner()">Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MAHSULOT QO'SHISH / TAHRIRLASH -->
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <h2 id="productModalTitle" style="margin-top:0">Yangi mahsulot qo'shish</h2>
     <input type="hidden" id="editingProductId">
-    <select id="prodCategory"><option value="">Kategoriyani tanlang</option></select>
-    <input type="text" id="prodName" placeholder="Mahsulot nomi">
-    <input type="number" id="prodPrice" placeholder="Narxi (so'm)">
-    <input type="number" id="prodOldPrice" placeholder="Eski narxi (aksiya uchun, ixtiyoriy)">
-    <input type="text" id="prodBrand" placeholder="Brendi (masalan: KitchenLux)">
-    <textarea id="prodDesc" rows="2" placeholder="Qisqacha tavsif..."></textarea>
-    <textarea id="prodFullDesc" rows="3" placeholder="To'liq ma'lumot (Mamlakat, material, kafolat...)"></textarea>
     
-    <label style="font-size: 13px; font-weight: 600; color: #666;">Atributlar (Ranglar, o'lchamlar vergul bilan):</label>
-    <input type="text" id="prodColors" placeholder="Ranglar (masalan: Qora, Oq, Qizil)">
-    <input type="text" id="prodSizes" placeholder="O'lchamlar (masalan: Standard, Katta)">
-
-    <input type="file" id="prodImgFile" accept="image/*" onchange="convertImg(this, 'prodImgBase64')">
-    <input type="hidden" id="prodImgBase64">
+    <div class="form-group">
+      <label>Kategoriya</label>
+      <select id="prodCategory"><option value="">Kategoriyani tanlang</option></select>
+    </div>
+    <div class="form-group">
+      <label>Mahsulot nomi</label>
+      <input type="text" id="prodName" placeholder="Mahsulot nomi">
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div class="form-group">
+        <label>Narxi (so'm)</label>
+        <input type="number" id="prodPrice" placeholder="150000">
+      </div>
+      <div class="form-group">
+        <label>Eski narxi (aksiya uchun)</label>
+        <input type="number" id="prodOldPrice" placeholder="200000">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Brendi</label>
+      <input type="text" id="prodBrand" placeholder="Brend nomi">
+    </div>
+    <div class="form-group">
+      <label>Qisqacha tavsif</label>
+      <textarea id="prodDesc" rows="2" placeholder="Qisqacha ma'lumot..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>To'liq ma'lumot</label>
+      <textarea id="prodFullDesc" rows="3" placeholder="Material, o'lcham, xususiyatlar..."></textarea>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div class="form-group">
+        <label>Ranglar (vergul bilan)</label>
+        <input type="text" id="prodColors" placeholder="Qora, Oq, Ko'k">
+      </div>
+      <div class="form-group">
+        <label>O'lchamlar (vergul bilan)</label>
+        <input type="text" id="prodSizes" placeholder="S, M, L">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Mahsulot rasmi</label>
+      <input type="file" accept="image/*" onchange="convertImg(this, 'prodImgBase64')">
+      <input type="hidden" id="prodImgBase64">
+    </div>
     
-    <button onclick="saveProduct()" id="saveProductBtn">Mahsulotni saqlash</button>
-  </div>
-
-  <!-- MAHSULOTLAR RO'YXATI -->
-  <div class="card">
-    <h2>Mavjud mahsulotlar</h2>
-    <div id="productsList"></div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+      <button class="btn-secondary" onclick="closeModal('productModal')">Bekor qilish</button>
+      <button onclick="saveProduct()" id="saveProductBtn">Saqlash</button>
+    </div>
   </div>
 </div>
 
@@ -80,7 +195,40 @@ let categories = [];
 let products = [];
 let banners = [];
 
-// Rasmni Base64 ga o'tkazish
+function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+
+function openProductModal(product = null) {
+  if (product) {
+    document.getElementById("productModalTitle").innerText = "Mahsulotni tahrirlash";
+    document.getElementById("editingProductId").value = product._id;
+    document.getElementById("prodCategory").value = product.category;
+    document.getElementById("prodName").value = product.name;
+    document.getElementById("prodPrice").value = product.price;
+    document.getElementById("prodOldPrice").value = product.oldPrice || "";
+    document.getElementById("prodBrand").value = product.brand || "";
+    document.getElementById("prodDesc").value = product.desc || "";
+    document.getElementById("prodFullDesc").value = product.fullDesc || "";
+    document.getElementById("prodColors").value = product.attributes?.Rang ? product.attributes.Rang.join(', ') : "";
+    document.getElementById("prodSizes").value = product.attributes?.['O\'lcham'] ? product.attributes['O\'lcham'].join(', ') : "";
+    document.getElementById("prodImgBase64").value = product.img;
+  } else {
+    document.getElementById("productModalTitle").innerText = "Yangi mahsulot qo'shish";
+    document.getElementById("editingProductId").value = "";
+    document.getElementById("prodCategory").value = "";
+    document.getElementById("prodName").value = "";
+    document.getElementById("prodPrice").value = "";
+    document.getElementById("prodOldPrice").value = "";
+    document.getElementById("prodBrand").value = "";
+    document.getElementById("prodDesc").value = "";
+    document.getElementById("prodFullDesc").value = "";
+    document.getElementById("prodColors").value = "";
+    document.getElementById("prodSizes").value = "";
+    document.getElementById("prodImgBase64").value = "";
+  }
+  openModal('productModal');
+}
+
 function convertImg(input, targetId) {
   if (input.files && input.files[0]) {
     let reader = new FileReader();
@@ -89,7 +237,6 @@ function convertImg(input, targetId) {
   }
 }
 
-// Barcha ma'lumotlarni serverdan tortib kelish
 async function loadData() {
   try {
     let [catRes, banRes, prodRes] = await Promise.all([
@@ -106,24 +253,23 @@ async function loadData() {
     renderProducts();
     updateCategorySelect();
   } catch (err) {
-    console.error("Ma'lumotlarni yuklashda xatolik:", err);
+    console.error("Xatolik:", err);
   }
 }
 
-// --- KATEGORIYA FUNKSIYALARI ---
 async function saveCategory() {
   let name = document.getElementById("catName").value;
   let img = document.getElementById("catImgBase64").value;
-  if (!name || !img) { alert("Nom va rasmni kiriting!"); return; }
+  if (!name || !img) { alert("Barcha maydonlarni to'ldiring!"); return; }
 
   let res = await fetch(`${API_URL}/api/categories`, {
     method: 'POST', headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ name, img })
   });
   categories = await res.json();
+  closeModal('categoryModal');
   document.getElementById("catName").value = "";
   document.getElementById("catImgBase64").value = "";
-  document.getElementById("catImgFile").value = "";
   renderCategories();
   updateCategorySelect();
 }
@@ -140,30 +286,29 @@ async function deleteCategory(id) {
 function renderCategories() {
   document.getElementById("categoriesList").innerHTML = categories.map(c => `
     <div class="list-item">
-      <div style="display:flex; align-items:center; gap:10px;"><img src="${c.img}"> <b>${c.name}</b></div>
-      <button class="btn-danger" onclick="deleteCategory('${c._id}')">O'chirish</button>
+      <div class="item-info"><img src="${c.img}"> <b>${c.name}</b></div>
+      <button class="btn-danger" onclick="deleteCategory('${c._id}')"><i class="fa-solid fa-trash"></i> O'chirish</button>
     </div>
   `).join('');
 }
 
 function updateCategorySelect() {
-  let select = document.getElementById("prodCategory");
-  select.innerHTML = `<option value="">Kategoriyani tanlang</option>` + categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+  document.getElementById("prodCategory").innerHTML = `<option value="">Kategoriyani tanlang</option>` + 
+    categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
 }
 
-// --- BANNER FUNKSIYALARI ---
 async function saveBanner() {
   let img = document.getElementById("bannerImgBase64").value;
   let link = document.getElementById("bannerLink").value;
-  if (!img) { alert("Banner rasmini tanlang!"); return; }
+  if (!img) { alert("Rasmni tanlang!"); return; }
 
   let res = await fetch(`${API_URL}/api/banners`, {
     method: 'POST', headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ img, link })
   });
   banners = await res.json();
+  closeModal('bannerModal');
   document.getElementById("bannerImgBase64").value = "";
-  document.getElementById("bannerImgFile").value = "";
   document.getElementById("bannerLink").value = "";
   renderBanners();
 }
@@ -177,13 +322,12 @@ async function deleteBanner(id) {
 function renderBanners() {
   document.getElementById("bannersList").innerHTML = banners.map(b => `
     <div class="list-item">
-      <img src="${b.img}"> <span>${b.link || 'Havola yoq'}</span>
-      <button class="btn-danger" onclick="deleteBanner('${b._id}')">O'chirish</button>
+      <div class="item-info"><img src="${b.img}"> <span style="color:#64748b; font-size:13px;">${b.link || 'Havola yoq'}</span></div>
+      <button class="btn-danger" onclick="deleteBanner('${b._id}')"><i class="fa-solid fa-trash"></i> O'chirish</button>
     </div>
   `).join('');
 }
 
-// --- MAHSULOT FUNKSIYALARI ---
 async function saveProduct() {
   let id = document.getElementById("editingProductId").value;
   let category = document.getElementById("prodCategory").value;
@@ -214,48 +358,8 @@ async function saveProduct() {
     body: JSON.stringify(prodData)
   });
   products = await res.json();
-  resetProductForm();
+  closeModal('productModal');
   renderProducts();
-}
-
-function editProduct(id) {
-  let p = products.find(item => item._id === id);
-  if(!p) return;
-
-  document.getElementById("editingProductId").value = p._id;
-  document.getElementById("prodCategory").value = p.category;
-  document.getElementById("prodName").value = p.name;
-  document.getElementById("prodPrice").value = p.price;
-  document.getElementById("prodOldPrice").value = p.oldPrice || "";
-  document.getElementById("prodBrand").value = p.brand || "";
-  document.getElementById("prodDesc").value = p.desc || "";
-  document.getElementById("prodFullDesc").value = p.fullDesc || "";
-  
-  if(p.attributes) {
-    document.getElementById("prodColors").value = p.attributes.Rang ? p.attributes.Rang.join(', ') : "";
-    document.getElementById("prodSizes").value = p.attributes.O'lcham ? p.attributes.O'lcham.join(', ') : "";
-  }
-
-  document.getElementById("productFormTitle").innerText = "Mahsulotni tahrirlash";
-  document.getElementById("saveProductBtn").innerText = "O'zgarishlarni saqlash";
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function resetProductForm() {
-  document.getElementById("editingProductId").value = "";
-  document.getElementById("prodCategory").value = "";
-  document.getElementById("prodName").value = "";
-  document.getElementById("prodPrice").value = "";
-  document.getElementById("prodOldPrice").value = "";
-  document.getElementById("prodBrand").value = "";
-  document.getElementById("prodDesc").value = "";
-  document.getElementById("prodFullDesc").value = "";
-  document.getElementById("prodColors").value = "";
-  document.getElementById("prodSizes").value = "";
-  document.getElementById("prodImgBase64").value = "";
-  document.getElementById("prodImgFile").value = "";
-  document.getElementById("productFormTitle").innerText = "Yangi mahsulot qo'shish";
-  document.getElementById("saveProductBtn").innerText = "Mahsulotni saqlash";
 }
 
 async function deleteProduct(id) {
@@ -269,13 +373,13 @@ async function deleteProduct(id) {
 function renderProducts() {
   document.getElementById("productsList").innerHTML = products.map(p => `
     <div class="list-item">
-      <div style="display:flex; align-items:center; gap:10px;">
+      <div class="item-info">
         <img src="${p.img}">
-        <div><b>${p.name}</b><br><small>${p.category} | ${p.price.toLocaleString()} so'm</small></div>
+        <div><b>${p.name}</b><br><small style="color:#64748b">${p.category} • ${p.price.toLocaleString()} so'm</small></div>
       </div>
       <div class="actions">
-        <button onclick="editProduct('${p._id}')" style="background:#3498db;">Tahrirlash</button>
-        <button class="btn-danger" onclick="deleteProduct('${p._id}')">O'chirish</button>
+        <button style="background:#3b82f6;" onclick='openProductModal(${JSON.stringify(p)})'><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-danger" onclick="deleteProduct('${p._id}')"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
   `).join('');
