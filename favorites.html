@@ -417,15 +417,24 @@ function renderFavorites() {
   updateBottomBadges();
 }
 
-/* YURAKCHANI BOSIB O'CHIRISH VA BADGENI DARHOL YANGILASH */
+/* YURAKCHANI BOSIB O'CHIRISH (DOM ELEMENTINI TO'G'RIDAN-TO'G'RI O'CHIRISH) */
 function removeFav(id) {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   favs = favs.filter(x => x !== id);
   localStorage.setItem("favs", JSON.stringify(favs));
   
-  // Ekranni qayta chizish va badge'larni darhol yangilash
-  renderFavorites();
-  updateBottomBadges();
+  // Sahifani noldan qayta chizmasdan, faqat o'sha karta elementini darhol o'chiramiz
+  let cardElement = document.querySelector(`.card[data-id="${id}"]`);
+  if (cardElement) {
+    cardElement.remove();
+  }
+
+  // Agar ro'yxat oxirigacha tozalanib bo'lsa, bo'sh holatni chiqarish uchun
+  if (favs.length === 0) {
+    renderFavorites();
+  } else {
+    updateBottomBadges();
+  }
 }
 
 /* SAVATGA QO'SHISH VA BADGENI DARHOL YANGILASH */
