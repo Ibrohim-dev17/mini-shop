@@ -7,7 +7,8 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="data.js"></script>
+<!-- CONFIG.JS VA SERVERGA ULANISH UCHUN -->
+<script src="config.js"></script>
 
 <style>
 html, body {
@@ -290,7 +291,9 @@ img { max-width: 100%; }
     <b id="title">Mahsulotlar</b>
   </div>
 
-  <div class="grid" id="productBox"></div>
+  <div class="grid" id="productBox">
+    <div style="grid-column: 1/-1; text-align:center; padding:40px; color:#888;">Yuklanmoqda...</div>
+  </div>
 </div>
 
 <!-- PASTKI MENYU -->
@@ -343,6 +346,7 @@ if(cat){
 }
 
 const box = document.getElementById("productBox");
+let allProducts = [];
 
 function updateBottomBadges() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -370,12 +374,19 @@ function updateBottomBadges() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", updateBottomBadges);
-window.addEventListener("pageshow", updateBottomBadges);
+// Serverdan mahsulotlarni yuklab olish funksiyasi
+async function loadProductsFromServer() {
+  try {
+    let response = await fetch(`${API_URL}/api/products`);
+    allProducts = await response.json();
+    renderProducts();
+  } catch (error) {
+    console.error("Serverdan mahsulotlarni olishda xatolik:", error);
+    box.innerHTML = "<p style='grid-column: 1/-1; padding:40px; text-align:center; color:red;'>Server bilan ulanishda xatolik yuz berdi.</p>";
+  }
+}
 
-// `data.js` dagi `allProducts` massividan foydalanib xuddi indexdagidek dizaynda chiqaramiz
-if (typeof allProducts !== 'undefined') {
-  // Kategoriyani moslab filtrlash (ID yoki nom bo'yicha)
+function renderProducts() {
   const filteredProducts = allProducts.filter(p => {
     let pCat = String(p.category || p.category_id || "").trim().toLowerCase();
     let searchCat = String(cat).trim().toLowerCase();
@@ -433,9 +444,14 @@ if (typeof allProducts !== 'undefined') {
         <span style="font-size: 13px; color: #888; max-width: 240px; line-height: 1.4;">Ushbu kategoriyada hozircha mahsulotlar mavjud emas</span>
       </div>`;
   }
-} else {
-  box.innerHTML = "<p style='grid-column: 1/-1; padding:40px; text-align:center; color:red;'>Ma'lumot topilmadi (data.js ulanmagan).</p>";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateBottomBadges();
+  loadProductsFromServer();
+});
+
+window.addEventListener("pageshow", updateBottomBadges);
 
 function toggleFav(id, el){
   let icon = el.querySelector("i");
