@@ -8,8 +8,9 @@ app.use(express.json({ limit: '15mb' })); // Katta rasmlar (Base64) uchun limit
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // MongoDB ulanishi
-mongoose.connect('mongodb://localhost:27017/Online Shop', {
+mongoose.connect('mongodb+srv://ibrohimnabixonov17_db_user:yil20070618@cluster0.a0uh9x2.mongodb.net/kitchen_market?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('MongoDB ulandi ✅'))
