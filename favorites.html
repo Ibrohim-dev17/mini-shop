@@ -7,86 +7,44 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <script src="data.js"></script>
 
 <style>
-html, body {
-  margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f6fa; color: #111;
-}
-a { text-decoration: none; color: inherit; }
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; background: #f5f6fa; }
 * { box-sizing: border-box; }
 
-.main-content {
-  height: calc(100vh - 65px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-  padding-bottom: 30px;
-}
+.main-content { height: calc(100vh - 65px); overflow-y: auto; padding-bottom: 20px; }
 
 /* HEADER */
-.header {
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
-  padding: 14px; display: flex; align-items: center; gap: 15px;
-  border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10;
-}
-.back-btn { background: #6a5acd; color: white; padding: 6px 14px; border-radius: 50px; font-size: 13px; font-weight: 500; }
-.header b { font-size: 18px; }
+.header { background: white; padding: 15px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #eee; }
+.back-btn { background: #6a5acd; color: white; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
 
-/* GRID */
-.products { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
-.card { background: white; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02); position: relative; }
-.card img { width: 100%; height: 110px; object-fit: contain; background: #fafafa; border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
-.card h5 { font-size: 13px; font-weight: 600; color: #333; margin: 0 0 6px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
-.card-bottom { display: flex; flex-direction: column; gap: 8px; }
-.price { font-size: 14px; font-weight: 700; color: #111; }
+/* GRID - Index bilan bir xil */
+.products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
+.product-card { background: white; border-radius: 20px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; }
+.product-card img { width: 100%; height: 140px; object-fit: contain; border-radius: 16px; margin-bottom: 8px; }
+.product-name { font-size: 14px; font-weight: 600; color: #333; margin: 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.product-price { font-size: 15px; font-weight: 800; color: #111; margin: 4px 0; }
+.add-btn { background: #6a5acd; color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 600; font-size: 13px; margin-top: auto; cursor: pointer; }
 
-/* SEVIMLILAR YURAKCHASI */
-.heart {
-  position: absolute; top: 12px; right: 12px; width: 32px; height: 32px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 18px; color: #ff3b30; z-index: 2;
-  background: #fff; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
+/* HEART */
+.fav-icon { position: absolute; top: 12px; right: 12px; font-size: 18px; color: #ff3b30; background: white; padding: 8px; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-/* SAVATGA QO'SHISH TUGMASI */
-.add-to-cart-btn {
-  background: rgba(106, 90, 205, 0.1); color: #6a5acd; border: none; width: 100%;
-  padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s; text-align: center;
-}
-.add-to-cart-btn:active { background: #6a5acd; color: white; }
-
-.empty-favs { text-align: center; padding: 60px 20px; color: #888; grid-column: span 2; }
-.empty-favs i { font-size: 50px; color: #ccc; margin-bottom: 12px; }
-.empty-favs p { font-size: 15px; font-weight: 600; margin: 0; }
-
-/* BOTTOM NAV */
-.bottom {
-  position: fixed; bottom: 0; left: 0; right: 0; height: 65px;
-  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px); display: flex; justify-content: space-around;
-  align-items: center; border-top: 1px solid rgba(0, 0, 0, 0.04); z-index: 1000; padding: 0 10px;
-}
-.bottom a { color: #b0b0b5; font-size: 22px; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 16px; position: relative; }
-.bottom a.active { color: #6a5acd; background: rgba(106, 90, 205, 0.08); }
-.badge {
-  display: none; position: absolute; top: 6px; right: 6px; background: #ff3b30; color: white;
-  font-size: 10px; font-weight: bold; border-radius: 50%; width: 17px; height: 17px; align-items: center; justify-content: center; border: 1px solid #fff;
-}
+/* BOTTOM NAV - Index bilan bir xil */
+.bottom { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 1000; }
+.bottom a { color: #b0b0b5; font-size: 22px; position: relative; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
+.bottom a.active { color: #6a5acd; }
+.badge { position: absolute; top: 5px; right: 5px; background: #ff3b30; color: white; font-size: 10px; font-weight: bold; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
 
 <div class="main-content">
   <div class="header">
-    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Orqaga</a>
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
     <b>Sevimlilar</b>
   </div>
-  <div class="products" id="favBox"></div>
+  <div class="products-grid" id="favBox"></div>
 </div>
 
 <div class="bottom">
@@ -94,113 +52,71 @@ a { text-decoration: none; color: inherit; }
   <a href="categories.html" id="navCat"><i class="fa-solid fa-magnifying-glass"></i></a>
   <a href="cart.html" id="navCart">
     <i class="fa-solid fa-basket-shopping"></i>
-    <span id="cartBadge" class="badge">0</span>
+    <span id="cartBadge" class="badge" style="display:none;">0</span>
   </a>
   <a href="favorites.html" id="navFav" class="active">
     <i class="fa-solid fa-heart"></i>
-    <span id="favBadge" class="badge">0</span>
+    <span id="favBadge" class="badge" style="display:none;">0</span>
   </a>
 </div>
 
 <script>
-if (window.Telegram && Telegram.WebApp) {
-  Telegram.WebApp.ready(); Telegram.WebApp.expand();
-  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') Telegram.WebApp.disableVerticalSwipes();
+// Badgelarni yangilash
+function updateBadges() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    
+    let cBadge = document.getElementById("cartBadge");
+    let fBadge = document.getElementById("favBadge");
+    
+    if(cart.length > 0) { cBadge.style.display = "flex"; cBadge.innerText = cart.reduce((a,b) => a + (b.qty || 1), 0); }
+    if(favs.length > 0) { fBadge.style.display = "flex"; fBadge.innerText = favs.length; }
 }
 
-const box = document.getElementById("favBox");
-
-function renderFavorites() {
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  box.innerHTML = "";
-
-  // allProducts o'rniga ba'zi hollarda 'products' deb nomlanishi mumkin, shuni xavfsiz текshiramiz
-  let productList = typeof allProducts !== 'undefined' ? allProducts : (typeof products !== 'undefined' ? products : []);
-  let favProducts = productList.filter(p => favs.includes(p.id));
-
-  updateBottomBadges();
-
-  if (favProducts.length === 0) {
-    box.innerHTML = `
-      <div class="empty-favs">
-        <i class="fa-solid fa-heart-crack"></i>
-        <p>Sevimlilar ro'yxati bo'sh</p>
-      </div>`;
-    return;
-  }
-
-  favProducts.forEach(p => {
-    let imgSrc = p.img || (p.images && p.images[0]) || '';
-    let pPrice = p.price || 0;
-    box.innerHTML += `
-    <div class="card">
-      <div class="heart" onclick="removeFav('${p.id}')">
-        <i class="fa-solid fa-heart"></i>
-      </div>
-      <div>
-        <img src="${imgSrc}" onclick="window.location.href='product.html?id=${p.id}'">
-        <h5 onclick="window.location.href='product.html?id=${p.id}'">${p.name}</h5>
-      </div>
-      <div class="card-bottom">
-        <div class="price">${pPrice.toLocaleString()} so'm</div>
-        <button class="add-to-cart-btn" onclick="addToCartAndRedirect('${p.id}')">Savatga qo'shish</button>
-      </div>
-    </div>`;
-  });
+function renderFavs() {
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    let box = document.getElementById("favBox");
+    box.innerHTML = "";
+    
+    let favProducts = allProducts.filter(p => favs.includes(p.id));
+    
+    if(favProducts.length === 0) {
+        box.innerHTML = `<p style="grid-column: span 2; text-align: center; color: #888; margin-top: 50px;">Sevimlilar ro'yxati bo'sh</p>`;
+    } else {
+        favProducts.forEach(p => {
+            box.innerHTML += `
+            <div class="product-card">
+                <div class="fav-icon" onclick="removeFav('${p.id}')"><i class="fa-solid fa-heart"></i></div>
+                <img src="${p.img}" onclick="window.location.href='product.html?id=${p.id}'">
+                <div class="product-name" onclick="window.location.href='product.html?id=${p.id}'">${p.name}</div>
+                <div class="product-price">${p.price.toLocaleString()} so'm</div>
+                <button class="add-btn" onclick="addToCart('${p.id}')">Savatga qo'shish</button>
+            </div>`;
+        });
+    }
+    updateBadges();
 }
 
 function removeFav(id) {
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  favs = favs.filter(x => x !== id);
-  localStorage.setItem("favs", JSON.stringify(favs));
-  renderFavorites();
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    favs = favs.filter(x => x !== id);
+    localStorage.setItem("favs", JSON.stringify(favs));
+    renderFavs();
 }
 
-function addToCartAndRedirect(id) {
-  let productList = typeof allProducts !== 'undefined' ? allProducts : (typeof products !== 'undefined' ? products : []);
-  let p = productList.find(x => x.id === id);
-  if (!p) return;
-
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let existing = cart.find(item => item.id === id);
-
-  if (existing) {
-    existing.qty = (existing.qty || 1) + 1;
-  } else {
-    cart.push({ 
-      id: p.id, 
-      name: p.name, 
-      price: p.price, 
-      img: p.img || (p.images && p.images[0]) || '', 
-      qty: 1,
-      selected: true 
-    });
-  }
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  
-  // Darhol savat sahifasiga o'tkazish
-  window.location.href = "cart.html";
+function addToCart(id) {
+    let p = allProducts.find(x => x.id === id);
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let existing = cart.find(i => i.id === id);
+    
+    if(existing) existing.qty += 1;
+    else cart.push({id: p.id, name: p.name, price: p.price, img: p.img, qty: 1, selected: true});
+    
+    localStorage.setItem("cart", JSON.stringify(cart));
+    window.location.href = "cart.html"; // To'g'ridan to'g'ri savatga o'tish
 }
 
-function updateBottomBadges() {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-  let cartBadge = document.getElementById("cartBadge");
-  if (cartBadge) {
-    cartBadge.innerText = totalCartQty;
-    cartBadge.style.display = totalCartQty > 0 ? "flex" : "none";
-  }
-
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  let favBadge = document.getElementById("favBadge");
-  if (favBadge) {
-    favBadge.innerText = favs.length;
-    favBadge.style.display = favs.length > 0 ? "flex" : "none";
-  }
-}
-
-renderFavorites();
+renderFavs();
 </script>
 </body>
 </html>
