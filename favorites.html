@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -332,8 +331,9 @@ if (window.Telegram && Telegram.WebApp) {
   }
 }
 
-/* BADGE'LARNI YANGILASH */
+/* BADGE'LARNI DARHOL VA ANIQ YANGILASH FUNKSIYASI */
 function updateBottomBadges() {
+  // Savat miqdorini hisoblash
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
 
@@ -341,25 +341,26 @@ function updateBottomBadges() {
   if (cartBadge) {
     if (totalCartQty > 0) {
       cartBadge.innerText = totalCartQty;
-      cartBadge.style.display = "flex";
+      cartBadge.style.setProperty('display', 'flex', 'important');
     } else {
-      cartBadge.style.display = "none";
+      cartBadge.style.setProperty('display', 'none', 'important');
     }
   }
 
+  // Sevimlilar miqdorini hisoblash
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   let favBadge = document.getElementById("favBadge");
   if (favBadge) {
     if (favs.length > 0) {
       favBadge.innerText = favs.length;
-      favBadge.style.display = "flex";
+      favBadge.style.setProperty('display', 'flex', 'important');
     } else {
-      favBadge.style.display = "none";
+      favBadge.style.setProperty('display', 'none', 'important');
     }
   }
 }
 
-/* SEVIMLI MAHSULOTLARNI INDEX DIZAYNIDA CHIQARISH */
+/* SEVIMLI MAHSULOTLARNI CHIQARISH */
 function renderFavorites() {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   let box = document.getElementById("favProductBox");
@@ -416,15 +417,18 @@ function renderFavorites() {
   updateBottomBadges();
 }
 
-/* SEVIMLILARDAN O'CHIRISH VA BADGENI DARHOL YANGILASH */
+/* YURAKCHANI BOSIB O'CHIRISH VA BADGENI DARHOL YANGILASH */
 function removeFav(id) {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   favs = favs.filter(x => x !== id);
   localStorage.setItem("favs", JSON.stringify(favs));
+  
+  // Ekranni qayta chizish va badge'larni darhol yangilash
   renderFavorites();
+  updateBottomBadges();
 }
 
-/* SAVATGA QO'SHISH (SAHifadan chiqib ketmaydi, badge va toast ishlaydi) */
+/* SAVATGA QO'SHISH VA BADGENI DARHOL YANGILASH */
 function addToCart(e, id) {
   e.preventDefault();
   let p = allProducts.find(x => x.id === id);
@@ -450,7 +454,9 @@ function addToCart(e, id) {
   setTimeout(() => { toast.classList.remove("show"); }, 1500);
 }
 
+// Sahifa yuklanganda ishga tushirish
 renderFavorites();
+updateBottomBadges();
 </script>
 
 </body>
