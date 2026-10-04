@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bannerlarni boshqarish</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f5f7; padding: 16px; color: #1f2026; margin: 0; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .back-link { font-size: 14px; color: #7000ff; text-decoration: none; font-weight: bold; }
+        h2 { font-size: 18px; margin: 0; }
+        .card { background: #fff; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e5eb; gap: 10px; }
+        .card img { width: 80px; height: 40px; object-fit: cover; border-radius: 6px; }
+        .info { flex-grow: 1; font-weight: bold; font-size: 14px; }
+        .btn-delete { background: #ff3b30; color: #fff; padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="admin.html" class="back-link">‹ Orqaga</a>
+        <h2>Bannerlar</h2>
+        <div></div>
+    </div>
+
+    <div id="bannerList">Yuklanmoqda...</div>
+
+    <script>
+        async function loadBanners() {
+            let res = await fetch('/api/banners');
+            let banners = await res.json();
+            let container = document.getElementById('bannerList');
+            
+            if (banners.length === 0) {
+                container.innerHTML = '<p style="color:#8b8e99; text-align:center;">Bannerlar mavjud emas</p>';
+                return;
+            }
+
+            container.innerHTML = banners.map(b => `
+                <div class="card">
+                    <img src="${b.img}" alt="banner">
+                    <div class="info">${b.title || 'Sarlavhasiz'}</div>
+                    <a href="/delete-banner?id=${b.id}" class="btn-delete">O'chirish</a>
+                </div>
+            `).join('');
+        }
+
+        loadBanners();
+    </script>
+</body>
+</html>
+
