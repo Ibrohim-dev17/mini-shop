@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategoriya mahsulotlari</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f5f7; padding: 16px; color: #1f2026; margin: 0; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .back-link { font-size: 14px; color: #7000ff; text-decoration: none; font-weight: bold; }
+        h2 { font-size: 18px; margin: 0; }
+        .card { background: #fff; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e5eb; gap: 10px; }
+        .card img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; }
+        .info { flex-grow: 1; }
+        .info strong { font-size: 14px; display: block; }
+        .info small { color: #8b8e99; }
+        .actions { display: flex; gap: 8px; }
+        .btn { padding: 8px; border: none; border-radius: 8px; cursor: pointer; color: #fff; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-edit { background: #007aff; }
+        .btn-delete { background: #ff3b30; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="admin-all-categories.html" class="back-link">‹ Kategoriyalar</a>
+        <h2 id="catTitle">Mahsulotlar</h2>
+        <div></div>
+    </div>
+
+    <div id="productList">Yuklanmoqda...</div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const catId = urlParams.get('cat_id');
+
+        async function loadProducts() {
+            let res = await fetch(`/api/products?cat_id=${catId}`);
+            let data = await res.json();
+            
+            document.getElementById('catTitle').innerText = data.category_name;
+            let container = document.getElementById('productList');
+            
+            if (data.products.length === 0) {
+                container.innerHTML = '<p style="color:#8b8e99; text-align:center;">Bu kategoriyada mahsulotlar yo\'q</p>';
+                return;
+            }
+
+            container.innerHTML = data.products.map(p => `
+                <div class="card">
+                    <img src="${p.img}" alt="img">
+                    <div class="info">
+                        <strong>${p.name}</strong>
+                        <small>${p.price}</small>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-edit" onclick="editProduct(${p.id}, '${p.name}', '${p.price}')">✏️</button>
+                        <a href="/delete-product?id=${p.id}&cat_id=${catId}" class="btn btn-delete">🗑️</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editProduct(id, oldName, oldPrice) {
+            let name = prompt("Mahsulot nomini o'zgartirish:", oldName);
+            let price = prompt("Mahsulot narxini o'zgartirish:", oldPrice);
+            if (name && price) {
+                window.location.href = `/edit-product?id=${id}&cat_id=${catId}&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}`;
+            }
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>
+
