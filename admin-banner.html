@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yangi banner qo'shish</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f5f7; padding: 16px; color: #1f2026; margin: 0; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .back-link { font-size: 14px; color: #7000ff; text-decoration: none; font-weight: bold; }
+        h2 { font-size: 18px; margin: 0; }
+        form { background: #fff; padding: 16px; border-radius: 12px; border: 1px solid #e2e5eb; }
+        label { font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 6px; }
+        input { width: 100%; padding: 10px; border: 1px solid #e2e5eb; border-radius: 8px; box-sizing: border-box; margin-bottom: 14px; font-size: 14px; }
+        .btn-submit { background: #7000ff; color: #fff; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 15px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="admin.html" class="back-link">‹ Orqaga</a>
+        <h2>Banner qo'shish</h2>
+        <div></div>
+    </div>
+
+    <form action="/add-banner" method="POST" enctype="multipart/form-data">
+        <label>Banner sarlavhasi</label>
+        <input type="text" name="title" placeholder="Masalan: Aksiya 50%">
+
+        <label>Banner rasmini galereyadan tanlash</label>
+        <input type="file" name="image" accept="image/*" required>
+
+        <button class="btn-submit" type="submit">Bannerli saqlash</button>
+    </form>
+</body>
+</html>
