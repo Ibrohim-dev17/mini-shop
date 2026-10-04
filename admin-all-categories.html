@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcha kategoriyalar</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f5f7; padding: 16px; color: #1f2026; margin: 0; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .back-link { font-size: 14px; color: #7000ff; text-decoration: none; font-weight: bold; }
+        h2, h3 { font-size: 18px; margin: 0 0 10px 0; }
+        .card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e5eb; }
+        .card a.title { text-decoration: none; color: #1f2026; font-weight: bold; font-size: 15px; flex-grow: 1; }
+        .actions { display: flex; gap: 8px; align-items: center; }
+        .btn { padding: 8px; border: none; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; }
+        .btn-edit { background: #007aff; }
+        .btn-delete { background: #ff3b30; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        .btn-submit { background: #7000ff; color: #fff; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        form { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e5eb; }
+        input { width: 100%; padding: 10px; border: 1px solid #e2e5eb; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="admin.html" class="back-link">‹ Orqaga</a>
+        <h2>Kategoriyalar</h2>
+        <div></div>
+    </div>
+
+    <!-- Yangi kategoriya qo'shish -->
+    <form action="/add-category" method="POST">
+        <h3>Yangi kategoriya qo'shish</h3>
+        <input type="text" name="name" placeholder="Kategoriya nomi..." required>
+        <button class="btn-submit" type="submit">Qo'shish</button>
+    </form>
+
+    <h3>Mavjud kategoriyalar</h3>
+    <div id="categoryList">Yuklanmoqda...</div>
+
+    <script>
+        async function loadCategories() {
+            let res = await fetch('/api/categories');
+            let categories = await res.json();
+            let container = document.getElementById('categoryList');
+            
+            if (categories.length === 0) {
+                container.innerHTML = '<p style="color:#8b8e99; text-align:center;">Kategoriyalar mavjud emas</p>';
+                return;
+            }
+
+            container.innerHTML = categories.map(c => `
+                <div class="card">
+                    <a class="title" href="admin-product.html?cat_id=${c.id}">${c.name} ›</a>
+                    <div class="actions">
+                        <button class="btn btn-edit" onclick="editCategory(${c.id}, '${c.name}')">✏️</button>
+                        <a href="/delete-category?id=${c.id}" class="btn-delete" style="padding: 8px; background: #ff3b30; color: #fff;">🗑️</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editCategory(id, oldName) {
+            let newName = prompt("Kategoriya nomini o'zgartirish:", oldName);
+            if (newName && newName !== oldName) {
+                window.location.href = `/edit-category?id=${id}&name=${encodeURIComponent(newName)}`;
+            }
+        }
+
+        loadCategories();
+    </script>
+</body>
+</html>
