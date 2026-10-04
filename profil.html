@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Profil - Uzum Market</title>
+    <style>
+        :root {
+            --primary: #7000ff;
+            --primary-bg: #eef0ff;
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #1f2026;
+            --muted: #8b8e99;
+            --border: #e2e5eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        .header-title {
+            background: #ffffff;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .profile-card {
+            background: var(--card);
+            margin: 16px;
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-bg);
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-info h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .profile-info p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .menu-list {
+            background: var(--card);
+            margin: 0 16px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .menu-item {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #808080;
+            font-size: 10px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            width: 20%;
+            position: relative;
+        }
+
+        .nav-icon-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: #808080;
+            stroke-width: 1.8;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-item.active svg {
+            stroke: var(--primary);
+            fill: var(--primary-bg);
+            transform: scale(1.05);
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+            background: #000000;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 17px;
+            height: 17px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .badge-count.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">Profil</div>
+
+    <div class="profile-card">
+        <div class="profile-avatar">U</div>
+        <div class="profile-info">
+            <h3>Foydalanuvchi</h3>
+            <p>+998 90 123 45 67</p>
+        </div>
+    </div>
+
+    <div class="menu-list">
+        <a href="#" class="menu-item">Mening buyurtmalarim <span>›</span></a>
+        <a href="heart.html" class="menu-item">Saralanganlar <span>›</span></a>
+        <a href="#" class="menu-item">Yetkazib berish punktlari <span>›</span></a>
+        <a href="#" class="menu-item">Sozlamalar <span>›</span></a>
+        <a href="#" class="menu-item" style="color: #ff3b30;">Chiqish</a>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <span>Bosh sahifa</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+            </div>
+            <span>Katalog</span>
+        </a>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <div class="badge-count" id="favBadge">0</div>
+            </div>
+            <span>Saralanganlar</span>
+        </a>
+        <a href="cart.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <div class="badge-count" id="cartBadge">0</div>
+            </div>
+            <span>Savatcha</span>
+        </a>
+        <a href="profil.html" class="nav-item active">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script>
+        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+
+        function updateBadges() {
+            const favBadge = document.getElementById('favBadge');
+            const cartBadge = document.getElementById('cartBadge');
+            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
+            if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
+        }
+
+        updateBadges();
+    </script>
+</body>
+</html>
