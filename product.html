@@ -1,1315 +1,306 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Mahsulot tafsilotlari</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mahsulot - Uzum Market</title>
+    <style>
+        :root {
+            --primary: #7000ff;
+            --primary-bg: #eef0ff;
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #1f2026;
+            --muted: #8b8e99;
+            --border: #e2e5eb;
+            --discount-bg: #f1e5ff;
+            --discount-text: #7000ff;
+        }
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<script src="config.js"></script>
-<script src="data.js"></script>
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
 
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f6fa;
-  color: #111;
-}
+        .header-title {
+            background: #ffffff;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-a { text-decoration: none; color: inherit; }
-* { box-sizing: border-box; }
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text);
+        }
 
-.main-content {
-  height: calc(100vh - 65px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-  padding-bottom: 30px;
-}
+        .product-detail-container {
+            background: var(--card);
+            margin: 12px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
 
-/* HEADER */
-.header {
-  background: rgba(255,255,255,0.9);
-  backdrop-filter: blur(10px);
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #eee;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
+        .product-img-large {
+            width: 100%;
+            height: 320px;
+            background: #f8f9fa;
+            position: relative;
+        }
 
-.back-btn {
-  background: #f2f2f2;
-  color: #333;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.back-btn:active { background: #e0e0e0; }
+        .product-img-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-/* PRODUCT CONTAINER */
-.product-container {
-  margin: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+        .detail-info {
+            padding: 16px;
+        }
 
-/* RASM BLOKI VA LIGHTBOX */
-.image-box {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  cursor: zoom-in;
-}
+        .detail-title {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
 
-.image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+        .detail-price-box {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
 
-/* YURAKCHA */
-.heart {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 20px;
-  color: #b0b0b5;
-  z-index: 5;
-  background: rgba(255,255,255,0.8);
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-.heart:active { transform: scale(1.2); }
-.heart.active { color: #ff3b30; }
+        .detail-main-price {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text);
+        }
 
-/* LIGHTBOX MODAL */
-.lightbox-modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.9);
-  z-index: 4000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.lightbox-modal.open { display: flex; }
-.lightbox-content {
-  position: relative;
-  max-width: 100%;
-  max-height: 100%;
-}
-.lightbox-content img {
-  width: 100%;
-  height: auto;
-  max-height: 85vh;
-  object-fit: contain;
-  border-radius: 12px;
-}
-.lightbox-close {
-  position: absolute;
-  top: -40px;
-  right: 0;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-}
+        .detail-old-price {
+            font-size: 14px;
+            color: var(--muted);
+            text-decoration: line-through;
+        }
 
-/* DETAILS CARD */
-.details-box {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-}
+        .add-to-cart-main {
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
 
-.name {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-  line-height: 1.3;
-}
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
 
-.price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 12px;
-}
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #808080;
+            font-size: 10px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            width: 20%;
+            position: relative;
+        }
 
-.price {
-  color: #111;
-  font-weight: 700;
-  font-size: 22px;
-}
+        .nav-icon-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.old-price {
-  font-size: 14px;
-  color: #888;
-  text-decoration: line-through;
-}
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: #808080;
+            stroke-width: 1.8;
+            transition: all 0.2s ease;
+        }
 
-/* REYTING */
-.rating-container {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  color: #555;
-}
-.stars { color: #ffb800; font-size: 14px; }
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
 
-/* PARAMETRLAR / ATRIBUTLAR */
-.attributes-section {
-  margin-bottom: 16px;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 12px;
-}
-.attr-group {
-  margin-bottom: 10px;
-}
-.attr-title {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 6px;
-}
-.attr-values {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.attr-chip {
-  padding: 6px 12px;
-  border-radius: 10px;
-  background: #f5f6fa;
-  font-size: 13px;
-  font-weight: 500;
-  color: #333;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-.attr-chip.selected {
-  background: #efeafb;
-  color: #6a5acd;
-  border-color: #6a5acd;
-}
+        .nav-item.active svg {
+            stroke: var(--primary);
+            fill: var(--primary-bg);
+            transform: scale(1.05);
+        }
 
-/* TOVAR HAQIDA (YAGONA UZUN MATN, QISQARTIRILGAN VA YOYILADIGAN) */
-.section-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: #111;
-  margin: 16px 0 6px 0;
-}
+        .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+            background: #000000;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 17px;
+            height: 17px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
 
-.desc-container {
-  font-size: 14px;
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 8px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* Dastlab 3 qator ko'rsatiladi */
-  -webkit-box-orient: vertical;
-  white-space: pre-line;
-}
-.desc-container.expanded {
-  display: block;
-}
-
-.read-more-btn {
-  background: none;
-  border: none;
-  color: #6a5acd;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 4px 0;
-  margin-bottom: 16px;
-  display: inline-block;
-}
-
-/* COUNTER VA ACTIONS */
-.purchase-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.counter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #f1f2f6;
-  padding: 4px;
-  border-radius: 14px;
-  width: 110px;
-  height: 46px;
-  flex-shrink: 0;
-}
-
-.counter button {
-  width: 38px;
-  height: 38px;
-  border: none;
-  border-radius: 10px;
-  background: white;
-  color: #111;
-  font-size: 16px;
-  font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  cursor: pointer;
-}
-
-#counter {
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.add-btn {
-  background: #efeafb;
-  color: #6a5acd;
-  border: none;
-  height: 46px;
-  border-radius: 14px;
-  flex-grow: 1;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: background 0.2s;
-}
-.add-btn:active { background: #6a5acd; color: white; }
-
-.buy-now-btn {
-  background: #6a5acd;
-  color: white;
-  border: none;
-  height: 46px;
-  border-radius: 14px;
-  width: 100%;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.2s;
-}
-.buy-now-btn:active { opacity: 0.9; }
-
-/* SHARHLAR BO'LIMI */
-.reviews-section {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-  margin-top: 12px;
-}
-
-.reviews-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.single-review-preview {
-  background: #f9f9fb;
-  border-radius: 14px;
-  padding: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.single-review-preview:active { background: #f0f0f5; }
-
-.review-card {
-  background: #f9f9fb;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
-  position: relative;
-}
-
-.review-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-.review-author {
-  font-weight: 600;
-  font-size: 13px;
-  color: #333;
-}
-.review-date {
-  font-size: 11px;
-  color: #888;
-}
-.review-stars {
-  color: #ffb800;
-  font-size: 11px;
-  margin-bottom: 8px;
-}
-
-.review-part {
-  font-size: 13px;
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
-.review-part b { color: #111; }
-.review-part.pros b { color: #2ecc71; }
-.review-part.cons b { color: #e74c3c; }
-
-/* RASMLAR (YONMA-YON, 3tagacha) */
-.review-images {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-.review-img-thumb {
-  width: 65px;
-  height: 65px;
-  border-radius: 8px;
-  object-fit: cover;
-  cursor: pointer;
-  border: 1px solid #e0e0e0;
-}
-
-/* SOTUVCHI JAVOBI */
-.seller-reply {
-  background: #efeafb;
-  border-left: 3px solid #6a5acd;
-  padding: 8px 10px;
-  border-radius: 0 8px 8px 0;
-  margin-top: 10px;
-  font-size: 12px;
-  color: #333;
-}
-.seller-reply b { color: #6a5acd; display: block; margin-bottom: 2px; }
-
-/* TAHRIRLASH / O'CHIRISH TUGMALARI */
-.review-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  font-size: 12px;
-}
-.review-actions span {
-  cursor: pointer;
-  font-weight: 600;
-}
-.edit-action { color: #3498db; }
-.delete-action { color: #e74c3c; }
-
-.all-reviews-link {
-  display: block;
-  text-align: center;
-  padding: 12px;
-  margin-top: 10px;
-  background: #f5f6fa;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #6a5acd;
-  cursor: pointer;
-}
-
-/* BARCHA SHARHLAR MODAL OYNASI */
-.all-reviews-modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: #f5f6fa;
-  z-index: 3000;
-  display: none;
-  flex-direction: column;
-}
-.all-reviews-modal.open { display: flex; }
-.modal-header {
-  background: white;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #eee;
-}
-.modal-body {
-  padding: 16px;
-  overflow-y: auto;
-  flex-grow: 1;
-}
-
-/* SHARH YOZISH FORMASI */
-.add-review-box {
-  margin-top: 16px;
-  background: #f9f9fb;
-  padding: 14px;
-  border-radius: 14px;
-}
-.add-review-box input, .add-review-box textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 13px;
-  outline: none;
-  background: #fff;
-  margin-bottom: 8px;
-  font-family: inherit;
-}
-
-/* YULDUZCHALARNI MUSTAQIL TANLASH (INTERFAOL) */
-.star-select-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-.star-select-title {
-  font-size: 13px;
-  color: #555;
-  font-weight: 500;
-}
-.star-interactive-group {
-  display: flex;
-  gap: 8px;
-}
-.star-btn {
-  font-size: 22px;
-  color: #b0b0b5;
-  cursor: pointer;
-  transition: transform 0.15s ease, color 0.15s ease;
-}
-.star-btn:active {
-  transform: scale(1.3);
-}
-.star-btn.active {
-  color: #ffb800;
-}
-
-/* ISMNI YASHIRISH (ANONIM) SWITCH */
-.anon-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding: 4px 0;
-}
-.anon-title {
-  font-size: 13px;
-  color: #555;
-  font-weight: 500;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 38px;
-  height: 22px;
-}
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider-switch {
-  position: absolute; cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc;
-  transition: .3s;
-  border-radius: 20px;
-}
-.slider-switch:before {
-  position: absolute; content: "";
-  height: 18px; width: 18px;
-  left: 2px; bottom: 2px;
-  background-color: white;
-  transition: .3s;
-  border-radius: 50%;
-}
-input:checked + .slider-switch { background-color: #6a5acd; }
-input:checked + .slider-switch:before { transform: translateX(16px); }
-
-/* RASM YUKLASH VA PREVIEW */
-.file-upload-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.file-upload-btn {
-  background: #eef2f7;
-  color: #333;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.preview-thumbs {
-  display: flex;
-  gap: 6px;
-}
-.preview-thumb-item {
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-}
-
-.submit-review-btn {
-  background: #111;
-  color: white;
-  border: none;
-  width: 100%;
-  padding: 11px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* TOAST */
-.toast {
-  position: fixed; top: -60px; left: 50%; transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.85); color: white; padding: 10px 24px;
-  border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 5000;
-  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.toast.show { top: 20px; }
-
-/* BOTTOM NAV */
-.bottom {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: 65px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
-  z-index: 1000;
-  padding: 0 10px;
-}
-
-.bottom a {
-  color: #b0b0b5;
-  font-size: 20px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  border-radius: 14px;
-  position: relative;
-}
-
-.bottom a.active {
-  color: #6a5acd;
-  background: rgba(106, 90, 205, 0.08);
-  transform: translateY(-2px);
-}
-.bottom a:active { transform: scale(0.85); }
-
-.badge {
-  display: none;
-  position: absolute;
-  top: 4px; right: 4px;
-  background: #111111 !important;
-  color: #ffffff !important;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 50%;
-  width: 17px; height: 17px;
-  align-items: center; justify-content: center;
-  border: 1px solid #fff;
-}
-</style>
+        .badge-count.show {
+            display: flex !important;
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="toast" class="toast">Savatga qo‘shildi!</div>
-
-<!-- LIGHTBOX MODAL (RASMNI KATTA KO'RISH) -->
-<div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox()">
-  <div class="lightbox-content">
-    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-    <img id="lightboxImg" src="">
-  </div>
-</div>
-
-<!-- BARCHA SHARHLAR OYNASI (YANGI OYNA) -->
-<div class="all-reviews-modal" id="allReviewsModal">
-  <div class="modal-header">
-    <div onclick="closeAllReviewsModal()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></div>
-    <div style="font-weight: 600; font-size: 15px;">Barcha sharhlar</div>
-    <div style="width: 38px;"></div>
-  </div>
-  <div class="modal-body" id="modalReviewsList">
-    <!-- Barcha sharhlar shu yerga tushadi -->
-  </div>
-</div>
-
-<div class="main-content">
-  <div class="header">
-    <div onclick="goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></div>
-    <div style="font-weight: 600; font-size: 15px;">Mahsulot tafsilotlari</div>
-    <div style="width: 38px;"></div>
-  </div>
-
-  <div class="product-container">
-    <!-- RASM BLOKI -->
-    <div class="image-box" onclick="openLightboxMain()">
-      <div class="heart" id="favBtn" onclick="toggleFav(event)">
-        <i class="fa-regular fa-heart"></i>
-      </div>
-      <img id="pImg" src="">
+    <div class="header-title">
+        <button class="back-btn" onclick="history.back()">‹</button>
+        Mahsulot tavsiloti
     </div>
 
-    <!-- ASOSIY MA'LUMOTLAR -->
-    <div class="details-box">
-      <div class="name" id="pName"></div>
-      
-      <div class="price-row">
-        <span class="price" id="pPrice"></span>
-        <span class="old-price" id="pOldPrice"></span>
-      </div>
-
-      <div class="rating-container">
-        <div class="stars" id="pStars"></div>
-        <span id="pReviewsCount"></span>
-      </div>
-
-      <!-- PARAMETRLAR (Rang, O'lcham va h.k.) -->
-      <div class="attributes-section" id="attributesSection" style="display: none;">
-        <div id="attrContainer"></div>
-      </div>
-
-      <!-- MAHSULOT HAQIDA (ALOHIDA JADVALSIZ, YAGONA UZUN MATN SIFATIDA) -->
-      <div class="section-title">Mahsulot haqida</div>
-      <div class="desc-container" id="pDesc"></div>
-      <button class="read-more-btn" id="readMoreBtn" onclick="toggleReadMore()">Hammasini ko'rish</button>
-
-      <!-- COUNTER VA SAVATGA QO'SHISH -->
-      <div class="purchase-box">
-        <div class="counter">
-          <button onclick="minus()">-</button>
-          <span id="counter">1</span>
-          <button onclick="plus()">+</button>
-        </div>
-        <button class="add-btn" onclick="addToCart()">
-          <i class="fa-solid fa-basket-shopping"></i> Savatga
-        </button>
-      </div>
-
-      <button class="buy-now-btn" onclick="buyNow()">Hozir sotib olish</button>
-    </div>
-
-    <!-- SHARHLAR BO'LIMI -->
-    <div class="reviews-section">
-      <div class="reviews-header">
-        <div class="section-title" style="margin:0;">Sharhlar</div>
-        <span id="reviewCountBadge" style="font-size: 13px; color: #888; font-weight: 500;">0 ta</span>
-      </div>
-
-      <!-- BASHARHI (ASOSIY SAHIFADA FAqat 1 TA KO'RSATILADI) -->
-      <div id="previewReviewContainer"></div>
-
-      <!-- BARCHA SHARHLARNI O'QISH TUGMASI -->
-      <div id="allReviewsBtnWrapper"></div>
-
-      <!-- SHARH YOZISH FORMASI -->
-      <div class="add-review-box">
-        <div style="font-size: 13px; font-weight: 600; margin-bottom: 12px; color: #333;" id="formTitle">Sharh qoldirish</div>
-        
-        <input type="text" id="revPros" placeholder="Afzalliklari (masalan: Sifati zo'r)">
-        <input type="text" id="revCons" placeholder="Kamchiliklari (masalan: Yo'q)">
-        <textarea id="revComment" rows="2" placeholder="Umumiy izohingiz..."></textarea>
-        
-        <!-- YULDUZCHALARNI MUSTAQIL TANLASH (HAR BIRI BOSILADI) -->
-        <div class="star-select-row">
-          <span class="star-select-title">Baho bering:</span>
-          <div class="star-interactive-group" id="starSelect">
-            <i class="fa-solid fa-star star-btn active" onclick="toggleStar(1)"></i>
-            <i class="fa-solid fa-star star-btn active" onclick="toggleStar(2)"></i>
-            <i class="fa-solid fa-star star-btn active" onclick="toggleStar(3)"></i>
-            <i class="fa-solid fa-star star-btn active" onclick="toggleStar(4)"></i>
-            <i class="fa-solid fa-star star-btn active" onclick="toggleStar(5)"></i>
-          </div>
-        </div>
-
-        <!-- ISMNI YASHIRISH (DOIM OFF / O'CHIQ TURADI) -->
-        <div class="anon-row">
-          <span class="anon-title">Ismni yashirish</span>
-          <label class="switch">
-            <input type="checkbox" id="isAnonymous"> <!-- unchecked (o'chiq) -->
-            <span class="slider-switch"></span>
-          </label>
-        </div>
-
-        <!-- RASM YUKLASH (3 tagacha) -->
-        <div class="file-upload-row">
-          <label class="file-upload-btn">
-            <i class="fa-solid fa-camera"></i> Rasm qo'shish (3tagacha)
-            <input type="file" id="imageInput" accept="image/*" multiple style="display:none;" onchange="handleImages(this)">
-          </label>
-          <div class="preview-thumbs" id="previewThumbs"></div>
-        </div>
-
-        <button class="submit-review-btn" id="submitReviewBtn" onclick="submitReview()">Sharhni yuborish</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PASTKI MENYU -->
-<div class="bottom">
-  <a href="favorites.html" id="navFav">
-    <i class="fa-solid fa-heart"></i>
-    <span id="favBadge" class="badge">0</span>
-  </a>
-  <a href="cart.html" id="navCart">
-    <i class="fa-solid fa-basket-shopping"></i>
-    <span id="cartBadge" class="badge">0</span>
-  </a>
-  <a href="index.html" id="navHome">
-    <i class="fa-solid fa-house"></i>
-  </a>
-  <a href="categories.html" id="navCat">
-    <i class="fa-solid fa-magnifying-glass"></i>
-  </a>
-  <a href="profile.html" id="navProfile">
-    <i class="fa-solid fa-user"></i>
-  </a>
-</div>
-
-<script>
-let userName = "Foydalanuvchi";
-if (window.Telegram && Telegram.WebApp) {
-  Telegram.WebApp.ready();
-  Telegram.WebApp.expand();
-  if (typeof Telegram.WebApp.disableVerticalSwipes === 'function') {
-    Telegram.WebApp.disableVerticalSwipes();
-  }
-  if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
-    let tgUser = Telegram.WebApp.initDataUnsafe.user;
-    userName = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
-  }
-}
-
-const urlParams = new URLSearchParams(window.location.search);
-const id = urlParams.get("id");
-const cat = urlParams.get("cat");
-const from = urlParams.get("from");
-
-const product = allProducts.find(p => String(p.id) === String(id));
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
-const favBtn = document.getElementById("favBtn");
-const icon = favBtn.querySelector("i");
-
-// Yulduzchalar holatini saqlash (barchasi yoqilgan)
-let starStates = [true, true, true, true, true]; 
-let currentSelectedAttributes = {};
-let uploadedImages = []; 
-let editingIndex = null; 
-
-if (product) {
-  document.getElementById("pName").innerText = product.name;
-  document.getElementById("pPrice").innerText = product.price.toLocaleString() + " so'm";
-  document.getElementById("pOldPrice").innerText = Math.round(product.price * 1.35).toLocaleString() + " so'm";
-  document.getElementById("pImg").src = product.img;
-  
-  /* UZUN MAHSULOT HAQIDA MATNI (MAMLAKAT VA BARCHA SPETSIFIKATSIYALAR BIRGA) */
-  let fullDescriptionText = product.fullDesc || 
-    `${product.desc || "Sifatli va qulay mahsulot."}\n\nIshlab chiqaruvchi mamlakat: Turkiya.\nBrend: ${product.brand || "KitchenLux"}.\nMaterial: Yuqori sifatli zanglamaydigan po'lat.\nKafolat muddati: 12 oy.\nTuri: Professional oshxona anjomi.\n\nUshbu mahsulot chidamliligi va pishiqligi bilan ajralib turadi. Kundalik foydalanish va sovg'a qilish uchun juda mos keladi. Barcha xalqaro xavfsizlik standartlariga javob beradi.`;
-  
-  document.getElementById("pDesc").innerText = fullDescriptionText;
-  
-  setupAttributes(product);
-
-  let ratingVal = product.rating || 4.8;
-  let reviewsCountVal = product.reviewsCount || 128;
-  let fullStars = Math.round(ratingVal);
-  document.getElementById("pStars").innerHTML = Array(5).fill(0).map((_, i) => 
-    `<i class="${i < fullStars ? 'fa-solid' : 'fa-regular'} fa-star"></i>`
-  ).join('');
-  document.getElementById("pReviewsCount").innerText = `${ratingVal} (${reviewsCountVal} ta sharh)`;
-
-  if (favs.includes(product.id)) {
-    favBtn.classList.add("active");
-    icon.className = "fa-solid fa-heart";
-  }
-}
-
-/* "HAMMASINI KO'RISH" TUGMASI (MAHSULOT HAQIDA MATNINI UZAYTIRADI/QISQARTIRADI) */
-function toggleReadMore() {
-  const desc = document.getElementById("pDesc");
-  const btn = document.getElementById("readMoreBtn");
-  
-  desc.classList.toggle("expanded");
-  if (desc.classList.contains("expanded")) {
-    btn.innerText = "Yashirish";
-  } else {
-    btn.innerText = "Hammasini ko'rish";
-  }
-}
-
-/* ATRIBUTLAR */
-function setupAttributes(p) {
-  const attrSection = document.getElementById("attributesSection");
-  const attrContainer = document.getElementById("attrContainer");
-  
-  let attributes = p.attributes || {
-    "Rang": ["Qora", "Kumush", "Qizil"],
-    "O'lcham": ["Standard", "Katta"]
-  };
-
-  if (Object.keys(attributes).length > 0) {
-    attrSection.style.display = "block";
-    attrContainer.innerHTML = "";
-    
-    for (let [key, values] of Object.entries(attributes)) {
-      currentSelectedAttributes[key] = values[0]; 
-      
-      let html = `<div class="attr-group">
-        <div class="attr-title">${key}: <b style="color:#111;" id="selected_${key}">${values[0]}</b></div>
-        <div class="attr-values">`;
-      
-      values.forEach((val, idx) => {
-        html += `<div class="attr-chip ${idx === 0 ? 'selected' : ''}" onclick="selectAttr(this, '${key}', '${val}')">${val}</div>`;
-      });
-      
-      html += `</div></div>`;
-      attrContainer.innerHTML += html;
-    }
-  }
-}
-
-function selectAttr(el, key, val) {
-  currentSelectedAttributes[key] = val;
-  document.getElementById(`selected_${key}`).innerText = val;
-  let parent = el.parentElement;
-  parent.querySelectorAll('.attr-chip').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-/* LIGHTBOX */
-function openLightboxMain() {
-  if(!product) return;
-  document.getElementById("lightboxImg").src = product.img;
-  document.getElementById("lightboxModal").classList.add("open");
-}
-function openLightbox(imgSrc) {
-  document.getElementById("lightboxImg").src = imgSrc;
-  document.getElementById("lightboxModal").classList.add("open");
-}
-function closeLightbox() {
-  document.getElementById("lightboxModal").classList.remove("open");
-}
-
-/* COUNTER */
-let count = 1;
-function plus() { count++; document.getElementById("counter").innerText = count; }
-function minus() { if (count > 1) { count--; document.getElementById("counter").innerText = count; } }
-
-function updateBottomBadges() {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let totalCartQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-  let cartBadge = document.getElementById("cartBadge");
-  if (cartBadge) {
-    cartBadge.innerText = totalCartQty;
-    cartBadge.style.display = totalCartQty > 0 ? "flex" : "none";
-  }
-
-  let currentFavs = JSON.parse(localStorage.getItem("favs")) || [];
-  let favBadge = document.getElementById("favBadge");
-  if (favBadge) {
-    favBadge.innerText = currentFavs.length;
-    favBadge.style.display = currentFavs.length > 0 ? "flex" : "none";
-  }
-}
-document.addEventListener("DOMContentLoaded", updateBottomBadges);
-window.addEventListener("pageshow", updateBottomBadges);
-updateBottomBadges();
-
-function addToCart() {
-  if (!product) return;
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let attrString = Object.entries(currentSelectedAttributes).map(([k,v]) => `${k}: ${v}`).join(', ');
-  let cartItemId = `${product.id}_${attrString}`;
-
-  let existing = cart.find(item => item.cartItemId === cartItemId);
-  if (existing) {
-    existing.qty += count;
-  } else {
-    cart.push({
-      cartItemId: cartItemId,
-      id: product.id,
-      name: product.name + (attrString ? ` (${attrString})` : ''),
-      price: product.price,
-      img: product.img,
-      qty: count,
-      attributes: currentSelectedAttributes
-    });
-  }
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateBottomBadges();
-
-  const toast = document.getElementById("toast");
-  toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("show"); }, 1500);
-}
-
-function buyNow() {
-  addToCart();
-  window.location.href = "cart.html";
-}
-
-function toggleFav(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  if (!product) return;
-
-  if (favs.includes(product.id)) {
-    favs = favs.filter(x => x !== product.id);
-    favBtn.classList.remove("active");
-    icon.className = "fa-regular fa-heart";
-  } else {
-    favs.push(product.id);
-    favBtn.classList.add("active");
-    icon.className = "fa-solid fa-heart";
-  }
-  localStorage.setItem("favs", JSON.stringify(favs));
-  updateBottomBadges();
-}
-
-/* RASMLARNI YUKLASH (3TAGACHA CHEKLASH) */
-function handleImages(input) {
-  if (input.files) {
-    let files = Array.from(input.files);
-    if (uploadedImages.length + files.length > 3) {
-      alert("Ko'pi bilan 3 ta rasm yuklash mumkin!");
-      return;
-    }
-    
-    files.forEach(file => {
-      let reader = new FileReader();
-      reader.onload = function(e) {
-        uploadedImages.push(e.target.result);
-        renderPreviewThumbs();
-      }
-      reader.readAsDataURL(file);
-    });
-  }
-}
-
-function renderPreviewThumbs() {
-  const container = document.getElementById("previewThumbs");
-  container.innerHTML = "";
-  uploadedImages.forEach((img, idx) => {
-    container.innerHTML += `<img src="${img}" class="preview-thumb-item" onclick="removeUploadedImg(${idx})">`;
-  });
-}
-
-function removeUploadedImg(idx) {
-  uploadedImages.splice(idx, 1);
-  renderPreviewThumbs();
-}
-
-/* YULDUZCHALARNI HAR BIRINI ALOHIDA TOGGLE QILISH (YURAKCHA KABI) */
-function toggleStar(index) {
-  let starIdx = index - 1; // 0-indexed
-  starStates[starIdx] = !starStates[starIdx];
-  
-  const starBtns = document.querySelectorAll("#starSelect .star-btn");
-  if (starStates[starIdx]) {
-    starBtns[starIdx].className = "fa-solid fa-star star-btn active";
-  } else {
-    starBtns[starIdx].className = "fa-regular fa-star star-btn";
-  }
-}
-
-function getCalculatedRating() {
-  let activeCount = starStates.filter(s => s === true).length;
-  return activeCount === 0 ? 1 : activeCount; 
-}
-
-/* SHARHLARNI YUKLASH VA DISPLAY QILISH */
-function loadReviews() {
-  if (!product) return;
-  let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [
-    { 
-      name: "Jasurbek", 
-      pros: "Chiroyli dizayn, juda qulay", 
-      cons: "Yo'q", 
-      comment: "Mahsulot juda yoqdi, sifati a'lo darajada!", 
-      rating: 5, 
-      date: "12 Avgust, 2026",
-      images: [],
-      sellerReply: "Xaridingiz uchun rahmat! Sizga yaxshi xizmat ko'rsatganimizdan mamnunmiz." 
-    },
-    { 
-      name: "Sardor", 
-      pros: "Tez yetkazib berish", 
-      cons: "Qadoqlash biroz ezilgan", 
-      comment: "Narxiga nisbatan yaxshi.", 
-      rating: 4, 
-      date: "10 Avgust, 2026",
-      images: [],
-      sellerReply: "" 
-    }
-  ];
-
-  document.getElementById("reviewCountBadge").innerText = `${allReviews.length} ta`;
-
-  const previewContainer = document.getElementById("previewReviewContainer");
-  const btnWrapper = document.getElementById("allReviewsBtnWrapper");
-
-  if (allReviews.length > 0) {
-    let r = allReviews[0]; // Asosiy sahifada FAQAT 1 TA SHARH
-    previewContainer.innerHTML = renderSingleReviewHTML(r, 0, true);
-  } else {
-    previewContainer.innerHTML = `<div style="font-size:13px; color:#888; text-align:center; padding:10px;">Hozircha sharhlar yo'q. Birinchi bo'lib yozing!</div>`;
-  }
-
-  if (allReviews.length > 1) {
-    btnWrapper.innerHTML = `<div class="all-reviews-link" onclick="openAllReviewsModal()">Barcha sharhlarni o'qish (${allReviews.length} ta) <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i></div>`;
-  } else {
-    btnWrapper.innerHTML = "";
-  }
-}
-
-function renderSingleReviewHTML(r, index, isPreview = false) {
-  let starsHtml = Array(5).fill(0).map((_, i) => `<i class="${i < r.rating ? 'fa-solid' : 'fa-regular'} fa-star"></i>`).join('');
-  
-  let imgsHtml = "";
-  if (r.images && r.images.length > 0) {
-    imgsHtml = `<div class="review-images">`;
-    r.images.forEach(img => {
-      imgsHtml += `<img src="${img}" class="review-img-thumb" onclick="openLightbox('${img}')">`;
-    });
-    imgsHtml += `</div>`;
-  }
-
-  let sellerHtml = "";
-  if (r.sellerReply) {
-    sellerHtml = `<div class="seller-reply"><b>Sotuvchi javobi:</b> ${r.sellerReply}</div>`;
-  }
-
-  let actionsHtml = `<div class="review-actions">
-    <span class="edit-action" onclick="editReview(${index})">Tahrirlash</span>
-    <span class="delete-action" onclick="deleteReview(${index})">O'chirish</span>
-  </div>`;
-
-  let content = `
-    <div class="review-card" style="margin-bottom:0;">
-      <div class="review-top">
-        <span class="review-author">${r.name}</span>
-        <span class="review-date">${r.date}</span>
-      </div>
-      <div class="review-stars">${starsHtml}</div>
-      <div class="review-part pros"><b>Afzalliklari:</b> ${r.pros}</div>
-      <div class="review-part cons"><b>Kamchiliklari:</b> ${r.cons}</div>
-      <div class="review-part"><b>Izoh:</b> ${r.comment}</div>
-      ${imgsHtml}
-      ${sellerHtml}
-      ${actionsHtml}
-    </div>
-  `;
-
-  if (isPreview) {
-    return `<div class="single-review-preview" onclick="openAllReviewsModal()">${content}</div>`;
-  }
-  return content;
-}
-
-function openAllReviewsModal() {
-  let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [];
-  const modalList = document.getElementById("modalReviewsList");
-  modalList.innerHTML = "";
-  
-  allReviews.forEach((r, idx) => {
-    modalList.innerHTML += renderSingleReviewHTML(r, idx, false);
-  });
-
-  document.getElementById("allReviewsModal").classList.add("open");
-}
-
-function closeAllReviewsModal() {
-  document.getElementById("allReviewsModal").classList.remove("open");
-}
-
-/* SHARH YUBORISH */
-function submitReview() {
-  let pros = document.getElementById("revPros").value.trim();
-  let cons = document.getElementById("revCons").value.trim();
-  let comment = document.getElementById("revComment").value.trim();
-  let hideName = document.getElementById("isAnonymous").checked; // Ismni yashirish yoqilganmi?
-
-  if (!pros || !comment) {
-    alert("Iltimos, afzalliklari va izoh maydonlarini to'ldiring!");
-    return;
-  }
-
-  let authorName = hideName ? "Anonim" : userName;
-  let finalRating = getCalculatedRating();
-  let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [];
-
-  if (editingIndex !== null) {
-    // Tahrirlash
-    allReviews[editingIndex].pros = pros;
-    allReviews[editingIndex].cons = cons;
-    allReviews[editingIndex].comment = comment;
-    allReviews[editingIndex].rating = finalRating;
-    allReviews[editingIndex].name = authorName;
-    if(uploadedImages.length > 0) {
-      allReviews[editingIndex].images = uploadedImages;
-    }
-    editingIndex = null;
-    document.getElementById("submitReviewBtn").innerText = "Sharhni yuborish";
-    document.getElementById("formTitle").innerText = "Sharh qoldirish";
-  } else {
-    // Yangi qo'shish
-    let newReview = {
-      name: authorName,
-      pros: pros,
-      cons: cons || "Yo'q",
-      comment: comment,
-      rating: finalRating,
-      date: new Date().toLocaleDateString('uz-UZ', { month: 'long', day: 'numeric', year: 'numeric' }),
-      images: [...uploadedImages],
-      sellerReply: ""
-    };
-    allReviews.unshift(newReview);
-  }
-
-  localStorage.setItem(`reviews_${product.id}`, JSON.stringify(allReviews));
-
-  // Formani qayta tiklash
-  document.getElementById("revPros").value = "";
-  document.getElementById("revCons").value = "";
-  document.getElementById("revComment").value = "";
-  uploadedImages = [];
-  renderPreviewThumbs();
-  
-  // Yulduzchalarni va switch-ni dastlabki (default) holatga qaytarish
-  starStates = [true, true, true, true, true];
-  document.querySelectorAll("#starSelect .star-btn").forEach(s => s.className = "fa-solid fa-star star-btn active");
-  document.getElementById("isAnonymous").checked = false; // Doim o'chiq holatga qaytadi
-
-  loadReviews();
-  if(document.getElementById("allReviewsModal").classList.contains("open")) {
-    openAllReviewsModal();
-  }
-
-  const toast = document.getElementById("toast");
-  toast.innerText = "Sharhingiz saqlandi!";
-  toast.classList.add("show");
-  setTimeout(() => { toast.classList.remove("show"); toast.innerText = "Savatga qo‘shildi!"; }, 1500);
-}
-
-function editReview(index) {
-  let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [];
-  let r = allReviews[index];
-
-  document.getElementById("revPros").value = r.pros;
-  document.getElementById("revCons").value = r.cons;
-  document.getElementById("revComment").value = r.comment;
-
-  // Yulduzlarni moslash
-  starStates = Array(5).fill(false);
-  for(let i=0; i<r.rating; i++) starStates[i] = true;
-  const starBtns = document.querySelectorAll("#starSelect .star-btn");
-  starBtns.forEach((btn, idx) => {
-    btn.className = starStates[idx] ? "fa-solid fa-star star-btn active" : "fa-regular fa-star star-btn";
-  });
-
-  // Ismni yashirish holatini o'rnatish
-  document.getElementById("isAnonymous").checked = (r.name === "Anonim");
-
-  uploadedImages = r.images || [];
-  renderPreviewThumbs();
-
-  editingIndex = index;
-  document.getElementById("submitReviewBtn").innerText = "O'zgarishlarni saqlash";
-  document.getElementById("formTitle").innerText = "Sharhni tahrirlash";
-
-  closeAllReviewsModal();
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-}
-
-function deleteReview(index) {
-  if (confirm("Haqiqatan ham bu sharhni o'chirmoqchimisiz?")) {
-    let allReviews = JSON.parse(localStorage.getItem(`reviews_${product.id}`)) || [];
-    allReviews.splice(index, 1);
-    localStorage.setItem(`reviews_${product.id}`, JSON.stringify(allReviews));
-    
-    loadReviews();
-    if(document.getElementById("allReviewsModal").classList.contains("open")) {
-      openAllReviewsModal();
-    }
-  }
-}
-
-loadReviews();
-
-/* ORQAGA QAYTISH */
-function goBack() {
-  if (from === "banner") {
-    window.location.href = "index.html";
-  } else if (from === "categories" || from === "index") {
-    window.location.href = `products.html?cat=${cat || product.category}&from=${from}`;
-  } else {
-    window.history.back();
-  }
-}
-</script>
-
+    <div id="productContent"></div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <span>Bosh sahifa</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+            </div>
+            <span>Katalog</span>
+        </a>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <div class="badge-count" id="favBadge">0</div>
+            </div>
+            <span>Saralanganlar</span>
+        </a>
+        <a href="cart.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <div class="badge-count" id="cartBadge">0</div>
+            </div>
+            <span>Savatcha</span>
+        </a>
+        <a href="profil.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script>
+        const PRODUCTS = [
+            { id: 1, name: "Kir yuvish kukuni Persil Professional Color, 10 kg", price: "196 220 so'm", oldPrice: "309 990 so'm", discount: "↓ 37%", img: "https://picsum.photos/300/300?random=20" },
+            { id: 2, name: "Inozitol 1000 mg, vazn yo'qotish uchun", price: "141 300 so'm", oldPrice: "320 000 so'm", discount: "↓ 56%", img: "https://picsum.photos/300/300?random=21" },
+            { id: 3, name: "Samsung 55 Smart TV 4K Ultra HD", price: "5 400 000 so'm", oldPrice: "6 900 000 so'm", discount: "↓ 21%", img: "https://picsum.photos/300/300?random=22" },
+            { id: 4, name: "iPhone 15 Pro Max 256GB Natural Titanium", price: "16 200 000 so'm", oldPrice: "18 500 000 so'm", discount: "↓ 12%", img: "https://picsum.photos/300/300?random=23" },
+            { id: 5, name: "Bosch SilentMixx Professional Blender", price: "850 000 so'm", oldPrice: "1 200 000 so'm", discount: "↓ 29%", img: "https://picsum.photos/300/300?random=24" },
+            { id: 6, name: "Tefal Express Steam Bug'li Dazmol", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", img: "https://picsum.photos/300/300?random=25" },
+            { id: 7, name: "Xiaomi Redmi Note 13 Pro 8/256GB", price: "3 100 000 so'm", oldPrice: "4 000 000 so'm", discount: "↓ 22%", img: "https://picsum.photos/300/300?random=26" },
+            { id: 8, name: "Sony WH-1000XM5 Shovqinsiz Quloqchin", price: "4 200 000 so'm", oldPrice: "5 100 000 so'm", discount: "↓ 17%", img: "https://picsum.photos/300/300?random=27" },
+            { id: 9, name: "Apple MacBook Air 13 M2 8/256GB", price: "12 800 000 so'm", oldPrice: "15 000 000 so'm", discount: "↓ 14%", img: "https://picsum.photos/300/300?random=28" },
+            { id: 10, name: "Dyson V15 Detect Simsiz Changyutgich", price: "8 900 000 so'm", oldPrice: "11 000 000 so'm", discount: "↓ 19%", img: "https://picsum.photos/300/300?random=29" }
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id')) || 1;
+        const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+
+        function renderDetail() {
+            const container = document.getElementById('productContent');
+            container.innerHTML = `
+                <div class="product-detail-container">
+                    <div class="product-img-large">
+                        <img src="${product.img}" alt="${product.name}">
+                    </div>
+                    <div class="detail-info">
+                        <h1 class="detail-title">${product.name}</h1>
+                        <div class="detail-price-box">
+                            <span class="detail-main-price">${product.price}</span>
+                            <span class="detail-old-price">${product.oldPrice}</span>
+                        </div>
+                        <button class="add-to-cart-main" onclick="addToCart()">Savatga qo'shish</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+
+        function addToCart() {
+            cart.push(product);
+            localStorage.setItem('cart_products', JSON.stringify(cart));
+            updateBadges();
+            alert("Mahsulot savatchaga qo'shildi!");
+        }
+
+        function updateBadges() {
+            const favBadge = document.getElementById('favBadge');
+            const cartBadge = document.getElementById('cartBadge');
+            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
+            if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
+        }
+
+        renderDetail();
+        updateBadges();
+    </script>
 </body>
 </html>
+
