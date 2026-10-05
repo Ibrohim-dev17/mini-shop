@@ -2,71 +2,317 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcha kategoriyalar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kategoriyalarni Boshqarish - Admin</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; background: #f4f5f7; padding: 16px; color: #1f2026; margin: 0; }
-        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .back-link { font-size: 14px; color: #7000ff; text-decoration: none; font-weight: bold; }
-        h2, h3 { font-size: 18px; margin: 0 0 10px 0; }
-        .card { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e5eb; }
-        .card a.title { text-decoration: none; color: #1f2026; font-weight: bold; font-size: 15px; flex-grow: 1; }
-        .actions { display: flex; gap: 8px; align-items: center; }
-        .btn { padding: 8px; border: none; border-radius: 8px; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; }
-        .btn-edit { background: #007aff; }
-        .btn-delete { background: #ff3b30; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
-        .btn-submit { background: #7000ff; color: #fff; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        form { background: #fff; padding: 14px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e5eb; }
-        input { width: 100%; padding: 10px; border: 1px solid #e2e5eb; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; font-size: 14px; }
+        :root {
+            --primary: #7000ff;
+            --primary-bg: #eef0ff;
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #1f2026;
+            --muted: #8b8e99;
+            --border: #e2e5eb;
+            --success: #00c853;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .categories-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .cat-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .cat-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #eee;
+            border: 1px solid var(--border);
+        }
+
+        .cat-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        .edit-btn {
+            background: var(--primary-bg);
+            color: var(--primary);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .edit-btn:active {
+            transform: scale(0.9);
+        }
+
+        .edit-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* MODAL WINDOW FOR EDITING */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card);
+            width: 100%;
+            max-width: 360px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .modal h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .modal input:focus {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-cancel {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <a href="admin.html" class="back-link">‹ Orqaga</a>
-        <h2>Kategoriyalar</h2>
-        <div></div>
+        <a href="admin.html" class="back-btn">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </a>
+        <h1>Kategoriyalar</h1>
+        <div style="width: 40px;"></div>
     </div>
 
-    <!-- Yangi kategoriya qo'shish -->
-    <form action="/add-category" method="POST">
-        <h3>Yangi kategoriya qo'shish</h3>
-        <input type="text" name="name" placeholder="Kategoriya nomi..." required>
-        <button class="btn-submit" type="submit">Qo'shish</button>
-    </form>
+    <div class="categories-list" id="adminCategoriesList">
+        <!-- Kategoriyalar dinamik chiqadi -->
+    </div>
 
-    <h3>Mavjud kategoriyalar</h3>
-    <div id="categoryList">Yuklanmoqda...</div>
+    <!-- Tahrirlash Modali -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h3>Kategoriya nomini o'zgartirish</h3>
+            <input type="text" id="catNameInput" placeholder="Yangi nomni kiriting...">
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" onclick="closeModal()">Bekor qilish</button>
+                <button class="modal-btn btn-save" onclick="saveCategoryName()">Saqlash</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        async function loadCategories() {
-            let res = await fetch('/api/categories');
-            let categories = await res.json();
-            let container = document.getElementById('categoryList');
-            
-            if (categories.length === 0) {
-                container.innerHTML = '<p style="color:#8b8e99; text-align:center;">Kategoriyalar mavjud emas</p>';
-                return;
-            }
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+        }
 
-            container.innerHTML = categories.map(c => `
-                <div class="card">
-                    <a class="title" href="admin-product.html?cat_id=${c.id}">${c.name} ›</a>
-                    <div class="actions">
-                        <button class="btn btn-edit" onclick="editCategory(${c.id}, '${c.name}')">✏️</button>
-                        <a href="/delete-category?id=${c.id}" class="btn-delete" style="padding: 8px; background: #ff3b30; color: #fff;">🗑️</a>
+        // Asosiy boshlang'ich kategoriyalar (agar localStorage bo'sh bo'lsa)
+        const DEFAULT_CATEGORIES = [
+            { id: 1, name: "Televizor", img: "https://picsum.photos/100/100?random=10" },
+            { id: 2, name: "Telefon", img: "https://picsum.photos/100/100?random=11" },
+            { id: 3, name: "Blender", img: "https://picsum.photos/100/100?random=12" },
+            { id: 4, name: "Dazmol", img: "https://picsum.photos/100/100?random=13" },
+            { id: 5, name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
+        ];
+
+        let categories = JSON.parse(localStorage.getItem('market_categories')) || DEFAULT_CATEGORIES;
+        let currentEditId = null;
+
+        function renderCategories() {
+            const listEl = document.getElementById('adminCategoriesList');
+            listEl.innerHTML = categories.map(cat => `
+                <div class="category-card">
+                    <div class="cat-info">
+                        <img src="${cat.img}" alt="${cat.name}" class="cat-img">
+                        <span class="cat-name">${cat.name}</span>
                     </div>
+                    <button class="edit-btn" onclick="openEditModal(${cat.id})" title="Nomini o'zgartirish">
+                        <!-- Qalamcha SVG iconi -->
+                        <svg viewBox="0 0 24 24">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </button>
                 </div>
             `).join('');
         }
 
-        function editCategory(id, oldName) {
-            let newName = prompt("Kategoriya nomini o'zgartirish:", oldName);
-            if (newName && newName !== oldName) {
-                window.location.href = `/edit-category?id=${id}&name=${encodeURIComponent(newName)}`;
+        function openEditModal(id) {
+            currentEditId = id;
+            const cat = categories.find(c => c.id === id);
+            if (cat) {
+                document.getElementById('catNameInput').value = cat.name;
+                document.getElementById('editModal').classList.add('active');
+                document.getElementById('catNameInput').focus();
             }
         }
 
-        loadCategories();
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('active');
+            currentEditId = null;
+        }
+
+        function saveCategoryName() {
+            const newName = document.getElementById('catNameInput').value.trim();
+            if (!newName) {
+                alert("Kategoriya nomi bo'sh bo'lishi mumkin emas!");
+                return;
+            }
+
+            categories = categories.map(cat => {
+                if (cat.id === currentEditId) {
+                    return { ...cat, name: newName };
+                }
+                return cat;
+            });
+
+            // LocalStorage ga saqlash (bu orqali categories.html va boshqa sahifalar o'zgarishni oladi)
+            localStorage.setItem('market_categories', JSON.stringify(categories));
+
+            renderCategories();
+            closeModal();
+        }
+
+        renderCategories();
     </script>
 </body>
 </html>
