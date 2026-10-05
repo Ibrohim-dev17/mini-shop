@@ -37,6 +37,7 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
+            margin-top: 10px;
         }
 
         .back-btn {
@@ -299,10 +300,20 @@
                 return cat;
             });
 
+            // LocalStorage ga yozamiz
             localStorage.setItem('market_categories', JSON.stringify(categories));
+
             renderCategories();
             closeModal();
         }
+
+        // Boshqa oynada o'zgarsa, bu yerda ham avtomatik yangilanishi uchun
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'market_categories') {
+                categories = JSON.parse(e.newValue) || DEFAULT_CATEGORIES;
+                renderCategories();
+            }
+        });
 
         renderCategories();
     </script>
