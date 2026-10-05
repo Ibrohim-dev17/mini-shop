@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Katalog - Uzum Market</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -30,44 +32,84 @@
             overflow-x: hidden;
         }
 
-        .header-title {
-            background: #ffffff;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: 700;
-            border-bottom: 1px solid var(--border);
+        /* TEPADA QOTIB TURADIGAN HEADER (BIROZ PASTGA TUSHIRILGAN) */
+        .sticky-header {
             position: sticky;
             top: 0;
+            background: var(--bg);
             z-index: 999;
+            padding: 16px 16px 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .categories-list {
-            padding: 12px;
+        .sticky-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* KATEGORIYALAR RO'YXATI */
+        .categories-container {
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        .category-item {
+        .category-card {
             background: var(--card);
-            padding: 16px;
-            border-radius: 14px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 12px 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             text-decoration: none;
             color: var(--text);
-            font-size: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            transition: background 0.2s;
+        }
+
+        .category-card:active {
+            background: var(--primary-bg);
+        }
+
+        .cat-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .cat-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #eee;
+            border: 1px solid var(--border);
+        }
+
+        .cat-name {
+            font-size: 16px;
             font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
 
-        .category-item span {
-            color: var(--muted);
-            font-size: 18px;
+        .arrow-icon {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (Savat va Yurak o'rni almashtirilgan) */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -93,7 +135,6 @@
             color: #808080;
             font-size: 10px;
             font-weight: 500;
-            transition: all 0.2s ease;
             width: 20%;
             position: relative;
         }
@@ -111,7 +152,6 @@
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
-            transition: all 0.2s ease;
         }
 
         .nav-item.active {
@@ -140,29 +180,26 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 10;
         }
 
         .badge-count.show {
-            display: flex !important;
+            display: flex;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-title">Katalog</div>
-
-    <div class="categories-list">
-        <a href="products.html?cat=electronics" class="category-item">Elektronika <span>›</span></a>
-        <a href="products.html?cat=appliances" class="category-item">Maishiy texnika <span>›</span></a>
-        <a href="products.html?cat=clothing" class="category-item">Kiyim-kechaklar <span>›</span></a>
-        <a href="products.html?cat=home" class="category-item">Uy-ro'zg'or buyumlari <span>›</span></a>
-        <a href="products.html?cat=beauty" class="category-item">Go'zallik va parvarish <span>›</span></a>
-        <a href="products.html?cat=sport" class="category-item">Sport va hordiq <span>›</span></a>
+    <!-- YUQORIGI QOTIB TURADIGAN HEADER -->
+    <div class="sticky-header">
+        <h1>Katalog</h1>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <!-- KATEGORIYALAR RO'YXATI -->
+    <div class="categories-container" id="categoriesList">
+        <!-- Dinamik to'ldiriladi -->
+    </div>
+
+    <!-- BOTTOM NAVIGATION (Savat va Saralanganlar joyi almashtirildi) -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
             <div class="nav-icon-wrap">
@@ -199,17 +236,42 @@
     </nav>
 
     <script>
-        function updateBadges() {
-            let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
-            let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
-            const favBadge = document.getElementById('favBadge');
-            const cartBadge = document.getElementById('cartBadge');
-            
-            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
-            if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
         }
-        updateBadges();
+
+        const DEFAULT_CATEGORIES = [
+            { id: 1, name: "Tapichka", img: "https://picsum.photos/100/100?random=10" },
+            { id: 2, name: "Telefon", img: "https://picsum.photos/100/100?random=11" },
+            { id: 3, name: "Blender", img: "https://picsum.photos/100/100?random=12" },
+            { id: 4, name: "Dazmol", img: "https://picsum.photos/100/100?random=13" },
+            { id: 5, name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
+        ];
+
+        let categories = JSON.parse(localStorage.getItem('market_categories')) || DEFAULT_CATEGORIES;
+
+        function renderCategories() {
+            const container = document.getElementById('categoriesList');
+            container.innerHTML = categories.map(c => `
+                <a href="products.html?cat_id=${c.id}" class="category-card">
+                    <div class="cat-left">
+                        <img src="${c.img}" alt="${c.name}" class="cat-img">
+                        <span class="cat-name">${c.name}</span>
+                    </div>
+                    <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+            `).join('');
+        }
+
+        // Badge yangilash
+        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+        if (favs.length > 0) { document.getElementById('favBadge').textContent = favs.length; document.getElementById('favBadge').classList.add('show'); }
+        if (cart.length > 0) { document.getElementById('cartBadge').textContent = cart.length; document.getElementById('cartBadge').classList.add('show'); }
+
+        renderCategories();
     </script>
 </body>
 </html>
-
