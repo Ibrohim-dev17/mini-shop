@@ -2,186 +2,166 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Panel - Uzum Market</title>
-    <!-- Telegram WebApp SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --primary: #7000ff;
-            --primary-bg: #eef0ff;
-            --bg: #f4f5f7;
-            --card: #ffffff;
-            --text: #1f2026;
-            --muted: #8b8e99;
-            --border: #e2e5eb;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 16px;
-        }
-
-        .admin-header {
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .admin-header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .admin-header p {
-            font-size: 13px;
-            color: var(--muted);
-        }
-
-        .admin-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-width: 400px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .admin-card-btn {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: var(--text);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-            transition: all 0.2s ease;
-        }
-
-        .admin-card-btn:active {
-            transform: scale(0.98);
-            border-color: var(--primary);
-            background: var(--primary-bg);
-        }
-
-        .btn-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: var(--primary-bg);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-box svg {
-            width: 24px;
-            height: 24px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .btn-text h2 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .btn-text span {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .arrow-icon {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: var(--muted);
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Boshqaruv Paneli - Shop</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome SVG & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-gray-100 font-sans antialiased">
 
-    <div class="admin-header">
-        <h1>Admin Boshqaruvi</h1>
-        <p>Kerakli bo'limni tanlang</p>
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Sidebar (Yon panel) -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-white transform -translate-x-full transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto">
+            <div class="flex items-center justify-between h-16 px-6 bg-slate-800">
+                <span class="text-xl font-bold tracking-wider text-indigo-400">Shop Admin</span>
+                <button onclick="toggleSidebar()" class="md:hidden text-gray-400 hover:text-white focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <nav class="px-4 py-6 space-y-2 overflow-y-auto h-[calc(100vh-4rem)]">
+                <a href="admin.html" class="flex items-center px-4 py-2.5 rounded-lg bg-indigo-600 text-white transition-colors">
+                    <i class="fa-solid fa-chart-pie w-6"><span>Dashboard</span></i>
+                </a>
+                <a href="admin-all-categories.html" class="flex items-center px-4 py-2.5 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fa-solid fa-list w-6"><span>Kategoriyalar</span></i>
+                </a>
+                <a href="admin-add-product.html" class="flex items-center px-4 py-2.5 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fa-solid fa-square-plus w-6"><span>Yangi mahsulot</span></i>
+                </a>
+                <a href="admin-users.html" class="flex items-center px-4 py-2.5 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fa-solid fa-users w-6"><span>Foydalanuvchilar</span></i>
+                </a>
+                <a href="admin-orders.html" class="flex items-center px-4 py-2.5 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fa-solid fa-bag-shopping w-6"><span>Buyurtmalar</span></i>
+                </a>
+                <a href="admin-comments.html" class="flex items-center px-4 py-2.5 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fa-solid fa-comments w-6"><span>Kammentlar</span></i>
+                </a>
+                <a href="admin-most-sold-products.html" class="flex items-center px-4 py-2.5 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fa-solid fa-fire w-6"><span>Ko'p sotilganlar</span></i>
+                </a>
+                <a href="admin-chat.html" class="flex items-center px-4 py-2.5 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fa-solid fa-headset w-6"><span>Chat</span></i>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Asosiy kontent qismi -->
+        <div class="flex flex-col flex-1 h-full overflow-hidden">
+            
+            <!-- Yuqori Header -->
+            <header class="flex items-center justify-between h-16 px-6 bg-white border-b border-gray-200 z-10">
+                <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 md:hidden focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div class="text-lg font-semibold text-gray-800">Boshqaruv Paneli</div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm font-medium text-gray-600">Admin</span>
+                    <div class="w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold">A</div>
+                </div>
+            </header>
+
+            <!-- Sahifa tanasi (Dashboard Cards) -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-gray-800">Xush kelibsiz, Admin!</h1>
+                    <p class="text-sm text-gray-500">Do'koningiz ko'rsatkichlari va tezkor havolalar</p>
+                </div>
+
+                <!-- Tezkor tugmalar/kartochka havolalari -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    
+                    <!-- Kategoriyalar -->
+                    <a href="admin-all-categories.html" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center space-x-4 group">
+                        <div class="p-4 bg-indigo-50 text-indigo-600 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-list text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Kategoriyalar</h3>
+                            <p class="text-xs text-gray-500">Barcha kategoriyalarni boshqarish</p>
+                        </div>
+                    </a>
+
+                    <!-- Yangi mahsulot -->
+                    <a href="admin-add-product.html" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center space-x-4 group">
+                        <div class="p-4 bg-emerald-50 text-emerald-600 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-square-plus text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Yangi mahsulot</h3>
+                            <p class="text-xs text-gray-500">Katalogga mahsulot qo'shish</p>
+                        </div>
+                    </a>
+
+                    <!-- Foydalanuvchilar -->
+                    <a href="admin-users.html" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center space-x-4 group">
+                        <div class="p-4 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-users text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Foydalanuvchilar</h3>
+                            <p class="text-xs text-gray-500">Ro'yxatdan o'tganlar bazasi</p>
+                        </div>
+                    </a>
+
+                    <!-- Buyurtmalar -->
+                    <a href="admin-orders.html" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center space-x-4 group">
+                        <div class="p-4 bg-amber-50 text-amber-600 rounded-lg group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-bag-shopping text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Buyurtmalar</h3>
+                            <p class="text-xs text-gray-500">Kelib tushgan buyurtmalar</p>
+                        </div>
+                    </a>
+
+                    <!-- Kammentlar -->
+                    <a href="admin-comments.html" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center space-x-4 group">
+                        <div class="p-4 bg-purple-50 text-purple-600 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-comments text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Kammentlar</h3>
+                            <p class="text-xs text-gray-500">Mijozlar fikrlari va izohlar</p>
+                        </div>
+                    </a>
+
+                    <!-- Ko'p sotilganlar -->
+                    <a href="admin-most-sold-products.html" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center space-x-4 group">
+                        <div class="p-4 bg-rose-50 text-rose-600 rounded-lg group-hover:bg-rose-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-fire text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Ko'p sotilganlar</h3>
+                            <p class="text-xs text-gray-500">Top mahsulotlar statistikasi</p>
+                        </div>
+                    </a>
+
+                    <!-- Chat -->
+                    <a href="admin-chat.html" class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 flex items-center space-x-4 group">
+                        <div class="p-4 bg-cyan-50 text-cyan-600 rounded-lg group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-headset text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Chat</h3>
+                            <p class="text-xs text-gray-500">Mijozlar bilan onlayn muloqot</p>
+                        </div>
+                    </a>
+
+                </div>
+            </main>
+        </div>
     </div>
 
-    <div class="admin-menu">
-        <!-- Kategoriyalar tugmasi -->
-        <a href="admin-all-categories.html" class="admin-card-btn">
-            <div class="btn-left">
-                <div class="icon-box">
-                    <!-- Katalog/Kategoriyalar SVG iconi -->
-                    <svg viewBox="0 0 24 24">
-                        <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
-                        <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
-                        <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
-                        <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
-                    </svg>
-                </div>
-                <div class="btn-text">
-                    <h2>Kategoriyalar</h2>
-                    <span>Barcha kategoriyalarni boshqarish</span>
-                </div>
-            </div>
-            <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </a>
-
-        <!-- Mahsulot qo'shish tugmasi -->
-        <a href="admin-add-product.html" class="admin-card-btn">
-            <div class="btn-left">
-                <div class="icon-box">
-                    <!-- Mahsulot qo'shish (Plus / Quti) SVG iconi -->
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                        <line x1="12" y1="8" x2="12" y2="16"></line>
-                        <line x1="8" y1="12" x2="16" y2="12"></line>
-                    </svg>
-                </div>
-                <div class="btn-text">
-                    <h2>Mahsulot qo'shish</h2>
-                    <span>Yangi mahsulot kiritish</span>
-                </div>
-            </div>
-            <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </a>
-    </div>
-
+    <!-- Mobil menyu uchun JavaScript script -->
     <script>
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
         }
     </script>
 </body>
