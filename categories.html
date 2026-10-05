@@ -245,13 +245,22 @@
 
         const API_URL = 'http://127.0.0.1:5000/api/categories';
 
+        const DEFAULT_CATEGORIES = [
+            { id: 1, name: "Tapichka", img: "https://picsum.photos/100/100?random=10" },
+            { id: 2, name: "Telefon", img: "https://picsum.photos/100/100?random=11" },
+            { id: 3, name: "Blender", img: "https://picsum.photos/100/100?random=12" },
+            { id: 4, name: "Dazmol", img: "https://picsum.photos/100/100?random=13" },
+            { id: 5, name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
+        ];
+
         // Python bazasidan kategoriyalarni olib kelish
         async function fetchCategories() {
+            const container = document.getElementById('categoriesList');
             try {
                 const response = await fetch(API_URL);
+                if (!response.ok) throw new Error("Server xatosi");
                 const categories = await response.json();
                 
-                const container = document.getElementById('categoriesList');
                 container.innerHTML = categories.map(c => `
                     <a href="products.html?cat_id=${c.id}" class="category-card">
                         <div class="cat-left">
@@ -262,7 +271,16 @@
                     </a>
                 `).join('');
             } catch (error) {
-                console.error("Server bilan bog'lanishda xatolik:", error);
+                console.error("Server bilan bog'lanishda xatolik, zaxira ma'lumotlar olindi:", error);
+                container.innerHTML = DEFAULT_CATEGORIES.map(c => `
+                    <a href="products.html?cat_id=${c.id}" class="category-card">
+                        <div class="cat-left">
+                            <img src="${c.img}" alt="${c.name}" class="cat-img">
+                            <span class="cat-name">${c.name}</span>
+                        </div>
+                        <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </a>
+                `).join('');
             }
         }
 
