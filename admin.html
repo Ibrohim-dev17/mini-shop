@@ -2,23 +2,187 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Boshqaruv Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Panel - Uzum Market</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; background: #f4f5f7; padding: 20px; color: #1f2026; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; margin: 0; }
-        h1 { font-size: 20px; margin-bottom: 25px; font-weight: 800; }
-        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 320px; }
-        .btn { background: #7000ff; color: #fff; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 10px rgba(112,0,255,0.15); }
-        .btn-secondary { background: #007aff; }
+        :root {
+            --primary: #7000ff;
+            --primary-bg: #eef0ff;
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #1f2026;
+            --muted: #8b8e99;
+            --border: #e2e5eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+        }
+
+        .admin-header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .admin-header p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .admin-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .admin-card-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .admin-card-btn:active {
+            transform: scale(0.98);
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .btn-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-box svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .btn-text h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .btn-text span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .arrow-icon {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
     </style>
 </head>
 <body>
-    <h1>Admin Boshqaruv Paneli</h1>
-    <div class="btn-group">
-        <a href="admin-all-categories.html" class="btn">📁 Kategoriyalarni boshqarish</a>
-        <a href="admin-add-product.html" class="btn">➕ Yangi mahsulot qo'shish</a>
-        <a href="admin-all-banners.html" class="btn btn-secondary">🖼️ Bannerlarni boshqarish</a>
-        <a href="admin-banner.html" class="btn btn-secondary">➕ Yangi banner qo'shish</a>
+
+    <div class="admin-header">
+        <h1>Admin Boshqaruvi</h1>
+        <p>Kerakli bo'limni tanlang</p>
     </div>
+
+    <div class="admin-menu">
+        <!-- Kategoriyalar tugmasi -->
+        <a href="admin-all-categories.html" class="admin-card-btn">
+            <div class="btn-left">
+                <div class="icon-box">
+                    <!-- Katalog/Kategoriyalar SVG iconi -->
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                    </svg>
+                </div>
+                <div class="btn-text">
+                    <h2>Kategoriyalar</h2>
+                    <span>Barcha kategoriyalarni boshqarish</span>
+                </div>
+            </div>
+            <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+
+        <!-- Mahsulot qo'shish tugmasi -->
+        <a href="admin-add-product.html" class="admin-card-btn">
+            <div class="btn-left">
+                <div class="icon-box">
+                    <!-- Mahsulot qo'shish (Plus / Quti) SVG iconi -->
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="btn-text">
+                    <h2>Mahsulot qo'shish</h2>
+                    <span>Yangi mahsulot kiritish</span>
+                </div>
+            </div>
+            <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+    </div>
+
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+        }
+    </script>
 </body>
 </html>
