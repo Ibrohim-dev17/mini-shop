@@ -33,11 +33,10 @@
             color: var(--text);
             padding-bottom: 80px;
             overflow-x: hidden;
-            /* Telegram tugmasidan yaxshiroq pastga surish uchun joyni kattalashtiramiz */
-            padding-top: 48px;
+            padding-top: 20px;
         }
 
-        /* HEADER QIDIRUV SATRI */
+        /* HEADER QIDIRUV SATRI (TEPADA QOTIB TURISHI UCHUN) */
         .header-search-container {
             padding: 10px 16px;
             background: #ffffff;
@@ -170,7 +169,7 @@
             100% { transform: scale(1); }
         }
 
-        /* BANNER CAROUSEL (5 sekundlik va suriladigan) */
+        /* BANNER CAROUSEL */
         .banner-carousel-container {
             width: 100%;
             position: relative;
@@ -284,7 +283,7 @@
             overflow: hidden;
         }
 
-        /* MAHSULOTLAR GRIDI (2 ustunli to'g'ri joylashuv) */
+        /* MAHSULOTLAR GRIDI */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -472,7 +471,7 @@
 </head>
 <body>
 
-    <!-- QIDIRUV SATRI -->
+    <!-- QIDIRUV SATRI (Tepada qotib turadi) -->
     <div class="header-search-container">
         <div class="search-box">
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -498,7 +497,7 @@
     <h2 class="section-title">Siz uchun tanladik</h2>
     <div class="products-grid" id="productsGrid"></div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <!-- BOTTOM NAVIGATION (Savat va Yurak o'rni almashtirildi) -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
             <div class="nav-icon-wrap">
@@ -512,19 +511,19 @@
             </div>
             <span>Katalog</span>
         </a>
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <div class="badge-count" id="favBadge">0</div>
-            </div>
-            <span>Saralanganlar</span>
-        </a>
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap">
                 <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                 <div class="badge-count" id="cartBadge">0</div>
             </div>
             <span>Savatcha</span>
+        </a>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <div class="badge-count" id="favBadge">0</div>
+            </div>
+            <span>Saralanganlar</span>
         </a>
         <a href="profil.html" class="nav-item">
             <div class="nav-icon-wrap">
@@ -568,7 +567,6 @@
             { id: 5, name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
         ];
 
-        // --- BANNER LOGIKASI (Har 5 sekundda aylanish va qo'lda surish) ---
         const track = document.getElementById('bannerTrack');
         const dotsContainer = document.getElementById('bannerDots');
         const container = document.getElementById('bannerContainer');
@@ -605,7 +603,7 @@
                 isTransitioning = true;
                 slideIndex++;
                 updateSlider(true);
-            }, 5000); // 5 sekund
+            }, 5000);
         }
 
         startAutoSlide();
@@ -651,7 +649,6 @@
             startAutoSlide();
         });
 
-        // --- KATEGORIYALAR ---
         document.getElementById('categoriesRow').innerHTML = CATEGORIES.map(c => `
             <a href="products.html?cat_id=${c.id}" class="category-item">
                 <div class="category-img-box"><img src="${c.img}" alt="${c.name}"></div>
@@ -681,7 +678,6 @@
             }
         }
 
-        // --- MAHSULOTLAR ---
         function renderProducts() {
             document.getElementById('productsGrid').innerHTML = PRODUCTS.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
