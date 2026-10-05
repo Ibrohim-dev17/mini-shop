@@ -33,9 +33,9 @@
             overflow-x: hidden;
         }
 
-        /* HEADER QIDIRUV SATRI */
+        /* HEADER QIDIRUV SATRI - Telegram headeri bilan ustma-ust tushmasligi uchun margin/padding qo'shildi */
         .header-search-container {
-            padding: 10px 16px;
+            padding: 12px 16px 10px 16px;
             background: #ffffff;
             position: sticky;
             top: 0;
@@ -553,11 +553,11 @@
         ];
 
         const CATEGORIES = [
-            { name: "Televizor", img: "https://picsum.photos/100/100?random=10" },
-            { name: "Telefon", img: "https://picsum.photos/100/100?random=11" },
-            { name: "Blender", img: "https://picsum.photos/100/100?random=12" },
-            { name: "Dazmol", img: "https://picsum.photos/100/100?random=13" },
-            { name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
+            { name: "Televizor", query: "Televizor", img: "https://picsum.photos/100/100?random=10" },
+            { name: "Telefon", query: "Telefon", img: "https://picsum.photos/100/100?random=11" },
+            { name: "Blender", query: "Blender", img: "https://picsum.photos/100/100?random=12" },
+            { name: "Dazmol", query: "Dazmol", img: "https://picsum.photos/100/100?random=13" },
+            { name: "Noutbuk", query: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
         ];
 
         // --- BANNER LOGIKASI (6 SEKUND & SWIPE) ---
@@ -646,9 +646,9 @@
         });
 
 
-        // --- KATEGORIYALARNI RENDER QILISH (categories.html ga yo'naltirish) ---
+        // --- KATEGORIYALARNI RENDER QILISH (products.html ga yo'naltirish) ---
         document.getElementById('categoriesRow').innerHTML = CATEGORIES.map(c => `
-            <a href="categories.html" class="category-item">
+            <a href="products.html?category=${encodeURIComponent(c.query)}" class="category-item">
                 <div class="category-img-box"><img src="${c.img}" alt="${c.name}"></div>
                 <span>${c.name}</span>
             </a>
@@ -742,7 +742,7 @@
         function addToCart(e, id) {
             e.stopPropagation();
             const prod = PRODUCTS.find(p => p.id === id);
-            cart.push(prod);
+            cart.push(prod);.
             localStorage.setItem('cart_products', JSON.stringify(cart));
             updateBadges();
         }
