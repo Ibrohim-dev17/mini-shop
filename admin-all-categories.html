@@ -242,16 +242,21 @@
             tg.expand();
         }
 
-        const DEFAULT_CATEGORIES = [
-            { id: 1, name: "Tapichka", img: "https://picsum.photos/100/100?random=10" },
-            { id: 2, name: "Telefon", img: "https://picsum.photos/100/100?random=11" },
-            { id: 3, name: "Blender", img: "https://picsum.photos/100/100?random=12" },
-            { id: 4, name: "Dazmol", img: "https://picsum.photos/100/100?random=13" },
-            { id: 5, name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
-        ];
-
-        let categories = JSON.parse(localStorage.getItem('market_categories')) || DEFAULT_CATEGORIES;
+        // Python server manzili
+        const API_URL = 'http://127.0.0.1:5000/api/categories';
+        let categories = [];
         let currentEditId = null;
+
+        // Python bazasidan kategoriyalarni olish
+        async function fetchCategories() {
+            try {
+                const response = await fetch(API_URL);
+                categories = await response.json();
+                renderCategories();
+            } catch (error) {
+                console.error("Server bilan bog'lanishda xatolik:", error);
+            }
+        }
 
         function renderCategories() {
             const listEl = document.getElementById('adminCategoriesList');
@@ -286,36 +291,38 @@
             currentEditId = null;
         }
 
-        function saveCategoryName() {
+        // Python bazasiga o'zgarishni yuborish
+        async function saveCategoryName() {
             const newName = document.getElementById('catNameInput').value.trim();
             if (!newName) {
                 alert("Kategoriya nomi bo'sh bo'lishi mumkin emas!");
                 return;
             }
 
-            categories = categories.map(cat => {
-                if (cat.id === currentEditId) {
-                    return { ...cat, name: newName };
+            try {
+                const response = await fetch(`${API_URL}/${currentEditId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: newName })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    fetchCategories(); // Bazadan yangilangan ro'yxatni qayta tortib kelamiz
+                    closeModal();
+                } else {
+                    alert("Xatolik yuz berdi!");
                 }
-                return cat;
-            });
-
-            // LocalStorage ga yozamiz
-            localStorage.setItem('market_categories', JSON.stringify(categories));
-
-            renderCategories();
-            closeModal();
+            } catch (error) {
+                console.error("Saqlashda xatolik:", error);
+                alert("Serverga ulanishda xatolik!");
+            }
         }
 
-        // Boshqa oynada o'zgarsa, bu yerda ham avtomatik yangilanishi uchun
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'market_categories') {
-                categories = JSON.parse(e.newValue) || DEFAULT_CATEGORIES;
-                renderCategories();
-            }
-        });
-
-        renderCategories();
+        // Sahifa ochilganda ma'lumotlarni yuklash
+        fetchCategories();
     </script>
 </body>
 </html>
