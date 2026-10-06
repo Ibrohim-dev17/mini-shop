@@ -31,7 +31,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER QIDIRUV SATRI VA AVTO-TAVSIYA (LIVE SEARCH) - Index.html bilan bir xil */
+        /* HEADER QIDIRUV SATRI VA AVTO-TAVSIYA (LIVE SEARCH) */
         .sticky-header {
             position: sticky;
             top: 0;
@@ -219,7 +219,7 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION - Index.html bilan aynan bir xil razmerda */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(45px + env(safe-area-inset-bottom, 0px));
@@ -388,6 +388,7 @@
             `).join('');
         }
 
+        // --- LIVE SEARCH LOGIKASI ---
         function handleLiveSearch(e) {
             const query = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -408,7 +409,7 @@
 
             if (matchedCategories.length > 0) {
                 matchedCategories.forEach(c => {
-                    html += `<div class="search-suggestion-item" onclick="window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
                         <span>${c.name}</span>
                         <span class="suggestion-type">Kategoriya</span>
                     </div>`;
@@ -416,8 +417,13 @@
             }
 
             if (matchedProducts.length > 0) {
+                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(query)}'">
+                    <span>"${query}" bo'yicha barcha turlarni ko'rish</span>
+                    <span class="suggestion-type">Natijalar</span>
+                </div>`;
+
                 matchedProducts.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="window.location.href='product.html?id=${p.id}'">
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
                         <span>${p.name}</span>
                         <span class="suggestion-type">Mahsulot</span>
                     </div>`;
@@ -435,7 +441,11 @@
         function handleSearch(e) {
             if (e.key === 'Enter') {
                 const query = document.getElementById('searchInput').value.trim();
-                if (query) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                const dropdown = document.getElementById('searchDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+                if (query) {
+                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                }
             }
         }
 
