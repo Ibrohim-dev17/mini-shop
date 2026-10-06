@@ -196,7 +196,7 @@
             margin-bottom: 14px;
         }
 
-        /* UZUM STYLE RATING BLOCK */
+        /* UZUM STYLE RATING BOX */
         .rating-card-box {
             background: var(--card);
             margin: 10px 12px;
@@ -407,7 +407,7 @@
         /* FIXED BOTTOM BAR FOR CART */
         .bottom-action-bar {
             position: fixed;
-            bottom: calc(75px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(115px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -434,6 +434,18 @@
             font-weight: 700;
             cursor: pointer;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-to-cart-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         .cart-counter-box {
@@ -480,10 +492,10 @@
             text-decoration: none;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (40px tepada) */
         .bottom-nav {
             position: fixed;
-            bottom: calc(35px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(40px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -619,6 +631,25 @@
         const DEFAULT_PRODUCTS = [
             { 
                 id: 1, 
+                name: "Raqamli elektron tasbeh, rolikli mexanizm", 
+                price: "29 500 so'm", 
+                oldPrice: "80 000 so'm", 
+                discount: "↓ 63%", 
+                rating: 5.0, 
+                commentsCount: 10,
+                ordersCount: "70+",
+                salesInfo: "Bu haftada 15 kishi sotib oldi",
+                desc: "Zikringizni oson va aniq hisoblang. 0-99999 gacha hisob, kompas funksiyasi, ovosiz bosish, yengil va qulay. Yuqori sifatli materialdan tayyorlangan.", 
+                images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"], 
+                reviewPhotos: ["https://picsum.photos/100/100?random=51"],
+                variants: [
+                    { img: "https://picsum.photos/300/300?random=1", label: "Mis rang", available: true },
+                    { img: "https://picsum.photos/300/300?random=11", label: "Qora rang", available: true },
+                    { img: "https://picsum.photos/300/300?random=12", label: "Oq rang", available: false }
+                ]
+            },
+            { 
+                id: 2, 
                 name: "Kir yuvish kukuni Persil, avtomat, 3 kg", 
                 price: "68 700 so'm", 
                 oldPrice: "120 000 so'm", 
@@ -627,13 +658,12 @@
                 commentsCount: 6870,
                 ordersCount: "31 500+",
                 salesInfo: "Bu haftada 756 kishi sotib oldi",
-                desc: "Persil kir yuvish kukuni Avtomat, 3 kg - bu kirni chuqur tozalash uchun kuchli vositadir. Noyob formula hatto murakkab dog'larni ham samarali ketkazadi, buyumlarga yangi ifor va parvarishlangan ko'rinish beradi. Gazlamaga ehtiyotkorlik bilan munosabatda bo'ladi, uning tuzilishi va rangini saqlaydi.", 
-                images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"], 
-                reviewPhotos: ["https://picsum.photos/100/100?random=51", "https://picsum.photos/100/100?random=52"],
+                desc: "Persil kir yuvish kukuni Avtomat, 3 kg - bu kirni chuqur tozalash uchun kuchli vositadir. Noyob formula hatto murakkab dog'larni ham samarali ketkazadi.", 
+                images: ["https://picsum.photos/300/300?random=2", "https://picsum.photos/300/300?random=21"], 
+                reviewPhotos: ["https://picsum.photos/100/100?random=61", "https://picsum.photos/100/100?random=62"],
                 variants: [
-                    { img: "https://picsum.photos/300/300?random=1", label: "3 kg", available: true },
-                    { img: "https://picsum.photos/300/300?random=11", label: "6 kg", available: true },
-                    { img: "https://picsum.photos/300/300?random=12", label: "9 kg", available: false }
+                    { img: "https://picsum.photos/300/300?random=2", label: "3 kg", available: true },
+                    { img: "https://picsum.photos/300/300?random=21", label: "6 kg", available: true }
                 ]
             }
         ];
@@ -673,7 +703,7 @@
             `;
 
             const container = document.getElementById('productDetailContainer');
-            const ratingVal = product.rating || 4.9;
+            const ratingVal = product.rating || 5.0;
             const starCount = Math.round(ratingVal);
 
             container.innerHTML = `
@@ -686,7 +716,6 @@
                     <h1 class="detail-title">${product.name}</h1>
                 </div>
 
-                <!-- UZUM STYLE RATING BOX -->
                 <div class="rating-card-box" onclick="window.location.href='comments.html?id=${product.id}'">
                     <div class="rating-left-side">
                         <div class="rating-numbers-row">
@@ -707,13 +736,13 @@
 
                 <div class="sales-info-row">
                     <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <span>${product.salesInfo || "Bu haftada 756 kishi sotib oldi"}</span>
+                    <span>${product.salesInfo || "Bu haftada 15 kishi sotib oldi"}</span>
                 </div>
 
                 <div class="section-card">
                     ${product.variants ? `
                         <div class="option-group" style="margin-bottom: 14px;">
-                            <div class="option-title">O'lcham/Tur: <span id="selectedVariantLabel">${product.variants[0].label}</span></div>
+                            <div class="option-title">Tanlov: <span id="selectedVariantLabel">${product.variants[0].label}</span></div>
                             <div class="color-variants-grid">
                                 ${product.variants.map((v, i) => `
                                     <div class="color-chip ${i === 0 ? 'selected' : ''} ${!v.available ? 'out-of-stock' : ''}" 
@@ -770,7 +799,12 @@
             const cartItem = cart.find(item => item.id === product.id);
 
             if (!cartItem) {
-                bar.innerHTML = `<button class="add-to-cart-btn" onclick="addToCart()">Savatga</button>`;
+                bar.innerHTML = `
+                    <button class="add-to-cart-btn" onclick="addToCart()">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>Savatga</span>
+                    </button>
+                `;
             } else {
                 bar.innerHTML = `
                     <div class="cart-counter-box">
@@ -842,7 +876,8 @@
 
         function renderSimilar() {
             const grid = document.getElementById('similarGrid');
-            const similar = allProducts.filter(p => p.id !== product.id).slice(0, 4);
+            // Mavjud mahsulotlar soniga qarab 6 tagacha yoki ko'proq dinamik chiqarish
+            const similar = allProducts.filter(p => p.id !== product.id).slice(0, 6);
 
             grid.innerHTML = similar.map(p => `
                 <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
