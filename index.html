@@ -725,10 +725,9 @@
             `;
 
             history.forEach((item, index) => {
-                const encodedItem = encodeURIComponent(item);
                 html += `
-                    <div class="search-suggestion-item" onclick="selectHistoryItem('${encodedItem}')">
-                        <div class="history-item-left">
+                    <div class="search-suggestion-item history-row-item" data-query="${item.replace(/"/g, '&quot;')}">
+                        <div class="history-item-left" style="pointer-events: none;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             <span>${item}</span>
                         </div>
@@ -739,6 +738,16 @@
 
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
+
+            dropdown.querySelectorAll('.history-row-item').forEach(el => {
+                el.addEventListener('click', function() {
+                    const item = this.getAttribute('data-query');
+                    document.getElementById('searchInput').value = item;
+                    dropdown.classList.remove('show');
+                    saveSearchQuery(item);
+                    window.location.href = `search.html?q=${encodeURIComponent(item)}`;
+                });
+            });
         }
 
         function clearAllHistory(e) {
@@ -753,14 +762,6 @@
             history.splice(index, 1);
             localStorage.setItem('search_history', JSON.stringify(history));
             showSearchHistory();
-        }
-
-        function selectHistoryItem(encodedItem) {
-            const item = decodeURIComponent(encodedItem);
-            document.getElementById('searchInput').value = item;
-            document.getElementById('searchDropdown').classList.remove('show');
-            saveSearchQuery(item);
-            window.location.href = `search.html?q=${encodedItem}`;
         }
 
         function handleLiveSearch(e) {
@@ -782,26 +783,23 @@
 
             if (matchedCategories.length > 0) {
                 matchedCategories.forEach(c => {
-                    const encodedCat = encodeURIComponent(c.name);
-                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${c.name.replace(/'/g, "\\'")}'); window.location.href='products.html?cat_id=${c.id}&cat_name=${encodedCat}'">
-                        <span>${c.name}</span>
-                        <span class="suggestion-type">Kategoriya</span>
+                    html += `<div class="search-suggestion-item cat-suggestion" data-name="${c.name.replace(/"/g, '&quot;')}" data-id="${c.id}">
+                        <span style="pointer-events: none;">${c.name}</span>
+                        <span class="suggestion-type" style="pointer-events: none;">Kategoriya</span>
                     </div>`;
                 });
             }
 
             if (matchedProducts.length > 0) {
-                const encodedQuery = encodeURIComponent(query);
-                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${query.replace(/'/g, "\\'")}'); window.location.href='search.html?q=${encodedQuery}'">
-                    <span>"${query}" bo'yicha barcha turlarni ko'rish</span>
-                    <span class="suggestion-type">Natijalar</span>
+                html += `<div class="search-suggestion-item prod-all-suggestion" data-query="${query.replace(/"/g, '&quot;')}">
+                    <span style="pointer-events: none;">"${query}" bo'yicha barcha turlarni ko'rish</span>
+                    <span class="suggestion-type" style="pointer-events: none;">Natijalar</span>
                 </div>`;
 
                 matchedProducts.forEach(p => {
-                    const encodedProdName = encodeURIComponent(p.name);
-                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name.replace(/'/g, "\\'")}'); window.location.href='search.html?q=${encodedProdName}'">
-                        <span>${p.name}</span>
-                        <span class="suggestion-type">Mahsulot</span>
+                    html += `<div class="search-suggestion-item prod-suggestion" data-name="${p.name.replace(/"/g, '&quot;')}">
+                        <span style="pointer-events: none;">${p.name}</span>
+                        <span class="suggestion-type" style="pointer-events: none;">Mahsulot</span>
                     </div>`;
                 });
             }
@@ -812,6 +810,34 @@
 
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
+
+            dropdown.querySelectorAll('.cat-suggestion').forEach(el => {
+                el.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const id = this.getAttribute('data-id');
+                    dropdown.classList.remove('show');
+                    saveSearchQuery(name);
+                    window.location.href = `products.html?cat_id=${id}&cat_name=${encodeURIComponent(name)}`;
+                });
+            });
+
+            dropdown.querySelectorAll('.prod-all-suggestion').forEach(el => {
+                el.addEventListener('click', function() {
+                    const q = this.getAttribute('data-query');
+                    dropdown.classList.remove('show');
+                    saveSearchQuery(q);
+                    window.location.href = `search.html?q=${encodeURIComponent(q)}`;
+                });
+            });
+
+            dropdown.querySelectorAll('.prod-suggestion').forEach(el => {
+                el.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    dropdown.classList.remove('show');
+                    saveSearchQuery(name);
+                    window.location.href = `search.html?q=${encodeURIComponent(name)}`;
+                });
+            });
         }
 
         function handleSearch(e) {
