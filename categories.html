@@ -31,20 +31,14 @@
             overflow-x: hidden;
         }
 
-        /* HEADER VA LIVE SEARCH QISMI */
+        /* HEADER QIDIRUV SATRI VA AVTO-TAVSIYA (LIVE SEARCH) - Index.html bilan bir xil */
         .sticky-header {
             position: sticky;
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 60px 16px 20px 16px;
+            padding: 50px 16px 12px 16px;
             border-bottom: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .header-row {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -54,9 +48,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
@@ -84,11 +78,12 @@
             display: flex;
             align-items: center;
             background: var(--bg);
-            border-radius: 14px;
-            padding: 12px 14px;
-            gap: 10px;
+            border-radius: 10px;
+            padding: 8px 12px;
+            gap: 8px;
             border: 1px solid transparent;
             width: 100%;
+            transition: border-color 0.2s;
         }
 
         .search-box:focus-within {
@@ -112,6 +107,10 @@
             font-size: 14px;
             width: 100%;
             color: var(--text);
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted);
         }
 
         /* LIVE SEARCH DROPDOWN */
@@ -220,7 +219,7 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION (Index.html bilan bir xil, bittada ishlaydigan qilib to'g'irlandi) */
+        /* BOTTOM NAVIGATION - Index.html bilan aynan bir xil razmerda */
         .bottom-nav {
             position: fixed;
             bottom: calc(40px + env(safe-area-inset-bottom, 0px));
@@ -254,10 +253,17 @@
             position: relative;
             cursor: pointer;
             padding: 8px 0;
-            touch-action: manipulation;
         }
 
-        .nav-icon-wrap, .nav-item span {
+        .nav-icon-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .nav-item span {
             pointer-events: none;
         }
 
@@ -306,17 +312,15 @@
 <body>
 
     <div class="sticky-header">
-        <div class="header-row">
-            <a href="index.html" class="back-btn" title="Orqaga">
-                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </a>
-            <div class="search-box-wrapper">
-                <div class="search-box">
-                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
-                </div>
-                <div class="search-dropdown" id="searchDropdown"></div>
+        <a href="index.html" class="back-btn" title="Orqaga">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </a>
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
             </div>
+            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
     </div>
 
@@ -384,7 +388,6 @@
             `).join('');
         }
 
-        // LIVE SEARCH VA TAVSIYA BERISH
         function handleLiveSearch(e) {
             const query = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
