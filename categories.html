@@ -27,17 +27,18 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 110px;
+            /* Telefon sistemaviy tugmalari yopib qo'ymasligi uchun yetarli bo'shliq */
+            padding-bottom: 120px;
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV (Yanada pastroqqa tushirildi) */
+        /* HEADER VA QIDIRUV (Telegram tugmalariga xalaqit qilmasligi uchun ancha pastga tushirildi) */
         .sticky-header {
             position: sticky;
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 34px 16px 20px 16px;
+            padding: 48px 16px 20px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -165,10 +166,10 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (Telefonning pastdagi tugmalariga xalaqit bermaydigan qilib yuqoriroqqa ko'tarildi) */
         .bottom-nav {
             position: fixed;
-            bottom: 22px;
+            bottom: calc(32px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -183,7 +184,7 @@
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             z-index: 1000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
 
         .nav-item {
@@ -303,8 +304,6 @@
         function loadCategories() {
             const container = document.getElementById('categoriesList');
             let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
-            
-            // index.html ham shu localStorage('categories') dan o'qib olishi uchun saqlab qo'yamiz
             localStorage.setItem('categories', JSON.stringify(categories));
 
             container.innerHTML = categories.map(c => `
