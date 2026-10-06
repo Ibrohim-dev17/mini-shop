@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Uzum Market</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -29,11 +30,11 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 90px;
+            padding-bottom: 120px;
             overflow-x: hidden;
         }
 
-        /* HEADER QIDIRUV SATRI (Telegram tugmalariga xalaqit qilmasligi uchun ancha pastga tushirildi) */
+        /* HEADER QIDIRUV SATRI */
         .header-search-container {
             padding: 50px 16px 12px 16px;
             background: #ffffff;
@@ -80,10 +81,10 @@
             color: var(--muted);
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (categories.html bilan bir xil balandlikda) */
         .bottom-nav {
             position: fixed;
-            bottom: 16px;
+            bottom: calc(32px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -98,7 +99,7 @@
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             z-index: 1000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
 
         .nav-item {
@@ -146,8 +147,8 @@
             position: absolute;
             top: -4px;
             right: -8px;
-            background: #000000;
-            color: #ffffff;
+            background: #000;
+            color: #fff;
             font-size: 10px;
             font-weight: 700;
             min-width: 17px;
@@ -157,17 +158,10 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .badge-count.show {
             display: flex;
-            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
         }
 
         /* BANNER CAROUSEL */
@@ -333,7 +327,6 @@
             stroke: #ff3b30;
         }
 
-        /* MAHSULOT RASMI (Biroz pastga cho'zildi) */
         .product-img-box {
             width: 100%;
             height: 210px;
@@ -476,7 +469,6 @@
 </head>
 <body>
 
-    <!-- QIDIRUV SATRI -->
     <div class="header-search-container">
         <div class="search-box">
             <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -484,7 +476,6 @@
         </div>
     </div>
 
-    <!-- BANNER CAROUSEL -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
@@ -494,51 +485,41 @@
         <div class="dot"></div>
     </div>
 
-    <!-- KATEGORIYALAR -->
     <h2 class="section-title">Kategoriyalar</h2>
     <div class="categories-row" id="categoriesRow"></div>
 
-    <!-- SIZ UCHUN TANLADIK -->
     <h2 class="section-title">Siz uchun tanladik</h2>
     <div class="products-grid" id="productsGrid"></div>
 
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
             <span>Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span>Katalog</span>
         </a>
         <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                <div class="badge-count" id="cartBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span>Savatcha</span>
         </a>
         <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <div class="badge-count" id="favBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
             <span>Saralangan</span>
         </a>
         <a href="profil.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <span>Profil</span>
         </a>
     </nav>
 
     <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
         const BANNERS = [
             "https://picsum.photos/600/250?random=1",
             "https://picsum.photos/600/250?random=2",
@@ -559,7 +540,9 @@
             { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, img: "https://picsum.photos/300/300?random=3" },
             { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, img: "https://picsum.photos/300/300?random=4" },
             { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, img: "https://picsum.photos/300/300?random=5" },
-            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, img: "https://picsum.photos/300/300?random=6" }
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, img: "https://picsum.photos/300/300?random=6" },
+            { id: 7, category_id: 1, name: "Kuzgi yengil kurtka", price: "320 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 28%", rating: 4.6, comments: 64, img: "https://picsum.photos/300/300?random=7" },
+            { id: 8, category_id: 2, name: "Issiq qishki tapichka", price: "55 000 so'm", oldPrice: "90 000 so'm", discount: "↓ 38%", rating: 4.9, comments: 112, img: "https://picsum.photos/300/300?random=8" }
         ];
 
         // --- BANNER LOGIKASI ---
@@ -661,7 +644,7 @@
         }
 
 
-        // --- BADGE LOGIKASI ---
+        // --- BADGE VA MAHSULOTLARNI BOSHQARISH ---
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
@@ -684,11 +667,26 @@
             }
         }
 
-
-        // --- MAHSULOTLARNI RENDER QILISH ---
-        function renderProducts() {
+        // Tasodifiy tartib faqat birinchi marta (ilovaga kirganda sessionStorage orqali saqlanadi)
+        function getShuffledProducts() {
             let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
-            let shuffled = [...products].sort(() => 0.5 - Math.random());
+            let storedOrder = sessionStorage.getItem('shuffled_product_ids');
+            
+            if (storedOrder) {
+                let ids = JSON.parse(storedOrder);
+                let ordered = ids.map(id => products.find(p => p.id === id)).filter(Boolean);
+                // Agar yangi mahsulotlar qo'shilgan bo'lsa ularni ham qo'shamiz
+                let missing = products.filter(p => !ids.includes(p.id));
+                return [...ordered, ...missing];
+            } else {
+                let shuffled = [...products].sort(() => 0.5 - Math.random());
+                sessionStorage.setItem('shuffled_product_ids', JSON.stringify(shuffled.map(p => p.id)));
+                return shuffled;
+            }
+        }
+
+        function renderProducts() {
+            let shuffled = getShuffledProducts();
 
             document.getElementById('productsGrid').innerHTML = shuffled.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
@@ -744,7 +742,9 @@
                 favs.push(id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            renderProducts();
+            // Faqat o'sha tugmani qizartirish uchun butun ro'yxatni qaytadan render qilmasdan faqat klassni o'zgartiramiz
+            const btn = e.currentTarget;
+            btn.classList.toggle('liked', favs.includes(id));
             updateBadges();
         }
 
