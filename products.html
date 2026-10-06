@@ -115,7 +115,7 @@
             color: var(--muted);
         }
 
-        /* QIDIRUV TAVSIYALARI DROPDOWN */
+        /* QIDIRUV DROPDOWN VA TARIX */
         .search-dropdown {
             position: absolute;
             top: 100%;
@@ -126,7 +126,7 @@
             border-radius: 12px;
             margin-top: 6px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            max-height: 280px;
+            max-height: 300px;
             overflow-y: auto;
             z-index: 1000;
             display: none;
@@ -134,6 +134,26 @@
 
         .search-dropdown.show {
             display: block;
+        }
+
+        .search-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .clear-history-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
         }
 
         .search-suggestion-item {
@@ -164,6 +184,26 @@
             border-radius: 4px;
         }
 
+        .history-item-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .remove-history-item {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 16px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
+        .remove-history-item:hover {
+            color: #ff3b30;
+        }
+
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -180,7 +220,6 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            cursor: pointer;
             border: 1px solid var(--border);
         }
 
@@ -221,12 +260,61 @@
             position: relative;
             border-radius: 16px;
             overflow: hidden;
+            cursor: pointer;
         }
 
-        .product-img-box img {
+        .card-slider-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-slider-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+        }
+
+        .card-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+        }
+
+        .card-dots {
+            position: absolute;
+            bottom: 35px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .card-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s;
+        }
+
+        .card-dot.active {
+            width: 14px;
+            border-radius: 3px;
+            background: #ffffff;
         }
 
         .badge-original {
@@ -239,6 +327,8 @@
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 6px;
+            z-index: 4;
+            pointer-events: none;
         }
 
         .product-info {
@@ -246,6 +336,7 @@
             display: flex;
             flex-direction: column;
             flex: 1;
+            cursor: pointer;
         }
 
         .price-row {
@@ -452,7 +543,7 @@
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulot nomidan izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+                <input type="text" id="searchInput" placeholder="Mahsulot nomidan izlash..." onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
             </div>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
@@ -488,12 +579,12 @@
         const catId = urlParams.get('cat_id') || 1;
 
         const PRODUCTS = [
-            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, img: "https://picsum.photos/300/300?random=1" },
-            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, img: "https://picsum.photos/300/300?random=2" },
-            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, img: "https://picsum.photos/300/300?random=3" },
-            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, img: "https://picsum.photos/300/300?random=4" },
-            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, img: "https://picsum.photos/300/300?random=5" },
-            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, img: "https://picsum.photos/300/300?random=6" }
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, images: ["https://picsum.photos/300/300?random=2", "https://picsum.photos/300/300?random=21"] },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, images: ["https://picsum.photos/300/300?random=3", "https://picsum.photos/300/300?random=31", "https://picsum.photos/300/300?random=32"] },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, images: ["https://picsum.photos/300/300?random=4", "https://picsum.photos/300/300?random=41"] },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, images: ["https://picsum.photos/300/300?random=5", "https://picsum.photos/300/300?random=51"] },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, images: ["https://picsum.photos/300/300?random=6", "https://picsum.photos/300/300?random=61"] }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
@@ -514,16 +605,25 @@
 
             grid.innerHTML = list.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
+                const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
+
                 return `
-                    <div class="product-card" onclick="goToProduct(${p.id})">
+                    <div class="product-card">
                         <button class="heart-icon ${isLiked}" onclick="toggleHeart(event, ${p.id})">
                             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </button>
-                        <div class="product-img-box">
-                            <img src="${p.img}" alt="${p.name}">
+                        <div class="product-img-box" onclick="goToProduct(${p.id})">
+                            <div class="card-slider-container" onscroll="handleCardScroll(event)" onclick="event.stopPropagation()">
+                                ${pImages.map(imgUrl => `
+                                    <div class="card-slide"><img src="${imgUrl}" alt="${p.name}"></div>
+                                `).join('')}
+                            </div>
+                            <div class="card-dots">
+                                ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
+                            </div>
                             <div class="badge-original">✓ ORIGINAL</div>
                         </div>
-                        <div class="product-info">
+                        <div class="product-info" onclick="goToProduct(${p.id})">
                             <div class="price-row">
                                 <span class="main-price">${p.price}</span>
                                 <span class="discount-tag">${p.discount}</span>
@@ -554,15 +654,94 @@
             }).join('');
         }
 
-        // --- HARF VA SO'ZLARGA QARAB LIVE SEARCH (Dropdown darhol yopiladigan qilindi) ---
+        function handleCardScroll(e) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const activeIndex = Math.round(container.scrollLeft / slideWidth);
+            const dotsBox = container.nextElementSibling;
+            if (dotsBox && dotsBox.classList.contains('card-dots')) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === activeIndex);
+                }
+            }
+        }
+
+        // QIDIRUV TARIXINI BOSHQARISH
+        function getSearchHistory() {
+            return JSON.parse(localStorage.getItem('search_history')) || [];
+        }
+
+        function saveSearchQuery(query) {
+            if (!query) return;
+            let history = getSearchHistory();
+            history = history.filter(item => item.toLowerCase() !== query.toLowerCase());
+            history.unshift(query);
+            if (history.length > 5) history = history.slice(0, 5);
+            localStorage.setItem('search_history', JSON.stringify(history));
+        }
+
+        function showSearchHistory() {
+            const query = document.getElementById('searchInput').value.trim();
+            const dropdown = document.getElementById('searchDropdown');
+            if (query.length > 0) return;
+
+            let history = getSearchHistory();
+            if (history.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            let html = `
+                <div class="search-header-row">
+                    <span>Oxirgi qidiruvlar</span>
+                    <button class="clear-history-btn" onclick="clearAllHistory(event)">Tozalash</button>
+                </div>
+            `;
+
+            history.forEach((item, index) => {
+                html += `
+                    <div class="search-suggestion-item">
+                        <div class="history-item-left" onclick="selectHistoryItem('${item}')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>${item}</span>
+                        </div>
+                        <button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button>
+                    </div>
+                `;
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function clearAllHistory(e) {
+            e.stopPropagation();
+            localStorage.removeItem('search_history');
+            document.getElementById('searchDropdown').classList.remove('show');
+        }
+
+        function removeHistoryItem(e, index) {
+            e.stopPropagation();
+            let history = getSearchHistory();
+            history.splice(index, 1);
+            localStorage.setItem('search_history', JSON.stringify(history));
+            showSearchHistory();
+        }
+
+        function selectHistoryItem(item) {
+            document.getElementById('searchInput').value = item;
+            document.getElementById('searchDropdown').classList.remove('show');
+            window.location.href = `search.html?q=${encodeURIComponent(item)}`;
+        }
+
         function handleLiveSearch(e) {
             const query = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
             let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
 
             if (query.length === 0) {
-                dropdown.classList.remove('show');
-                dropdown.innerHTML = '';
+                showSearchHistory();
                 renderProducts(getCategoryProducts());
                 return;
             }
@@ -572,13 +751,13 @@
 
             let html = '';
             if (matched.length > 0) {
-                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(query)}'">
+                html += `<div class="search-suggestion-item" onclick="saveSearchHistory('${query}'); window.location.href='search.html?q=${encodeURIComponent(query)}'">
                     <span>"${query}" bo'yicha barcha turlarni ko'rish</span>
                     <span class="suggestion-type">Natijalar</span>
                 </div>`;
 
                 matched.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
+                    html += `<div class="search-suggestion-item" onclick="saveSearchHistory('${p.name}'); window.location.href='product.html?id=${p.id}'">
                         <span>${p.name}</span>
                         <span class="suggestion-type">Mahsulot</span>
                     </div>`;
@@ -597,6 +776,7 @@
                 const dropdown = document.getElementById('searchDropdown');
                 if (dropdown) dropdown.classList.remove('show');
                 if (query) {
+                    saveSearchHistory(query);
                     window.location.href = `search.html?q=${encodeURIComponent(query)}`;
                 }
             }
