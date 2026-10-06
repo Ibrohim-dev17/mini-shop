@@ -28,10 +28,9 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            /* Telegram va telefonlarda yuqori qism kesilib qolmasligi uchun */
             padding-top: env(safe-area-inset-top, 12px);
             /* Pastdagi navigator yopib qo'ymasligi uchun bo'shliq */
-            padding-bottom: 90px;
+            padding-bottom: 100px;
             overflow-x: hidden;
         }
 
@@ -41,21 +40,50 @@
             top: env(safe-area-inset-top, 0px);
             background: var(--card);
             z-index: 999;
-            padding: 12px 16px;
+            padding: 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .header-top-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px; /* Sarlavhani biroz pastroqqa tushirish uchun */
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .back-btn:active {
+            background: var(--border);
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .sticky-header h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--text);
         }
@@ -64,8 +92,8 @@
             display: flex;
             align-items: center;
             background: var(--bg);
-            border-radius: 10px;
-            padding: 8px 12px;
+            border-radius: 12px;
+            padding: 10px 14px;
             gap: 8px;
             border: 1px solid transparent;
             transition: border-color 0.2s;
@@ -111,18 +139,19 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             text-decoration: none;
             color: var(--text);
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
 
         .category-card:active {
             background: var(--primary-bg);
+            transform: scale(0.98);
         }
 
         .cat-left {
@@ -132,8 +161,8 @@
         }
 
         .cat-img {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 12px;
             object-fit: cover;
             background: #eee;
@@ -155,22 +184,25 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (YUQORIROQGA KO'TARILDI) */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 12px;
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
             height: 64px;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
             z-index: 1000;
-            padding-bottom: env(safe-area-inset-bottom, 0px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         .nav-item {
@@ -240,6 +272,10 @@
     <!-- TEPADA MAHKAM TURADIGAN HEADER VA QIDIRUV -->
     <div class="sticky-header">
         <div class="header-top-row">
+            <!-- Index.html ga qaytish tugmasi -->
+            <a href="index.html" class="back-btn" title="Orqaga">
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </a>
             <h1>Katalog</h1>
         </div>
         <div class="search-box">
@@ -250,10 +286,10 @@
 
     <!-- KATEGORIYALAR RO'YXATI -->
     <div class="categories-container" id="categoriesList">
-        <!-- Python bazasidan dinamik to'ldiriladi -->
+        <!-- LocalStorage dan dinamik to'ldiriladi -->
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <!-- BOTTOM NAVIGATION (Yurak va Savat o'rinlari almashtirildi) -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
             <div class="nav-icon-wrap">
@@ -267,19 +303,21 @@
             </div>
             <span>Katalog</span>
         </a>
+        <!-- Saralanganlar (Yurak) oldinga olib o'tildi -->
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <div class="badge-count" id="favBadge">0</div>
+            </div>
+            <span>Saralangan</span>
+        </a>
+        <!-- Savatcha keyingi o'ringa qo'yildi -->
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap">
                 <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                 <div class="badge-count" id="cartBadge">0</div>
             </div>
             <span>Savatcha</span>
-        </a>
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <div class="badge-count" id="favBadge">0</div>
-            </div>
-            <span>Saralanganlar</span>
         </a>
         <a href="profil.html" class="nav-item">
             <div class="nav-icon-wrap">
@@ -296,44 +334,30 @@
             tg.expand();
         }
 
-        const API_URL = 'http://127.0.0.1:5000/api/categories';
-
+        // Zaxira va Odatiy kategoriyalar (LocalStorage bo'sh bo'lsa ishlaydi)
         const DEFAULT_CATEGORIES = [
-            { id: 1, name: "Tapichka", img: "https://picsum.photos/100/100?random=10" },
-            { id: 2, name: "Telefon", img: "https://picsum.photos/100/100?random=11" },
-            { id: 3, name: "Blender", img: "https://picsum.photos/100/100?random=12" },
-            { id: 4, name: "Dazmol", img: "https://picsum.photos/100/100?random=13" },
-            { id: 5, name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
+            { id: 1, name: "Kurtkalar", img: "https://picsum.photos/100/100?random=1" },
+            { id: 2, name: "Tapichka", img: "https://picsum.photos/100/100?random=2" },
+            { id: 3, name: "Shapkalar", img: "https://picsum.photos/100/100?random=3" },
+            { id: 4, name: "Ko'ylaklar", img: "https://picsum.photos/100/100?random=4" },
+            { id: 5, name: "Ichki kiyimlar", img: "https://picsum.photos/100/100?random=5" }
         ];
 
-        async function fetchCategories() {
+        function loadCategories() {
             const container = document.getElementById('categoriesList');
-            try {
-                const response = await fetch(API_URL);
-                if (!response.ok) throw new Error("Server xatosi");
-                const categories = await response.json();
+            
+            // LocalStorage dan kategoriyalarni olish (Admin panel keyinchalik shu yozuvni o'zgartiradi)
+            let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
 
-                container.innerHTML = categories.map(c => `
-                    <a href="products.html?cat_id=${c.id}" class="category-card">
-                        <div class="cat-left">
-                            <img src="${c.img}" alt="${c.name}" class="cat-img">
-                            <span class="cat-name">${c.name}</span>
-                        </div>
-                        <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </a>
-                `).join('');
-            } catch (error) {
-                console.error("Server bilan bog'lanishda xatolik, zaxira ma'lumotlar olindi:", error);
-                container.innerHTML = DEFAULT_CATEGORIES.map(c => `
-                    <a href="products.html?cat_id=${c.id}" class="category-card">
-                        <div class="cat-left">
-                            <img src="${c.img}" alt="${c.name}" class="cat-img">
-                            <span class="cat-name">${c.name}</span>
-                        </div>
-                        <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </a>
-                `).join('');
-            }
+            container.innerHTML = categories.map(c => `
+                <a href="products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}" class="category-card">
+                    <div class="cat-left">
+                        <img src="${c.img}" alt="${c.name}" class="cat-img">
+                        <span class="cat-name">${c.name}</span>
+                    </div>
+                    <svg class="arrow-icon" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+            `).join('');
         }
 
         function handleSearch(e) {
@@ -345,12 +369,13 @@
             }
         }
 
+        // Badge (belgilar) sonini tekshirish
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
         if (favs.length > 0) { document.getElementById('favBadge').textContent = favs.length; document.getElementById('favBadge').classList.add('show'); }
         if (cart.length > 0) { document.getElementById('cartBadge').textContent = cart.length; document.getElementById('cartBadge').classList.add('show'); }
 
-        fetchCategories();
+        loadCategories();
     </script>
 </body>
 </html>
