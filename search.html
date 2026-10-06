@@ -70,6 +70,100 @@
             stroke-linejoin: round;
         }
 
+        /* QIDIRUV SATRI VA DROPDOWN */
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
+            flex: 1;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 8px 12px;
+            gap: 8px;
+            border: 1px solid transparent;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
+        .search-box svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            width: 100%;
+            color: var(--text);
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted);
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-suggestion-item {
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover, .search-suggestion-item:active {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
         .search-title-info {
             font-size: 15px;
             font-weight: 600;
@@ -300,7 +394,6 @@
             position: relative;
             cursor: pointer;
             padding: 8px 0;
-            touch-action: manipulation;
         }
 
         .nav-icon-wrap {
@@ -363,7 +456,13 @@
         <a href="categories.html" class="back-btn" title="Orqaga">
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </a>
-        <div style="font-size: 16px; font-weight: 700;">Qidiruv natijalari</div>
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+            </div>
+            <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
     </div>
 
     <div class="search-title-info" id="searchInfoText"></div>
@@ -397,6 +496,11 @@
         const urlParams = new URLSearchParams(window.location.search);
         const query = (urlParams.get('q') || '').toLowerCase().trim();
 
+        // Qidiruv satriga hozirgi so'zni yozib qo'yamiz
+        if (query) {
+            document.getElementById('searchInput').value = urlParams.get('q') || '';
+        }
+
         document.getElementById('searchInfoText').textContent = `"${query}" bo'yicha natijalar:`;
 
         const PRODUCTS = [
@@ -406,6 +510,14 @@
             { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, img: "https://picsum.photos/300/300?random=4" },
             { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, img: "https://picsum.photos/300/300?random=5" },
             { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, img: "https://picsum.photos/300/300?random=6" }
+        ];
+
+        const DEFAULT_CATEGORIES = [
+            { id: 1, name: "Kurtkalar", img: "https://picsum.photos/100/100?random=1" },
+            { id: 2, name: "Tapichka", img: "https://picsum.photos/100/100?random=2" },
+            { id: 3, name: "Shapkalar", img: "https://picsum.photos/100/100?random=3" },
+            { id: 4, name: "Ko'ylaklar", img: "https://picsum.photos/100/100?random=4" },
+            { id: 5, name: "Ichki kiyimlar", img: "https://picsum.photos/100/100?random=5" }
         ];
 
         let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
@@ -465,6 +577,75 @@
                 `;
             }).join('');
         }
+
+        // --- LIVE SEARCH LOGIKASI ---
+        function handleLiveSearch(e) {
+            const val = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
+
+            if (val.length === 0) {
+                dropdown.classList.remove('show');
+                dropdown.innerHTML = '';
+                return;
+            }
+
+            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
+
+            let matchedProducts = products.filter(p => p.name.toLowerCase().includes(val));
+            let matchedCategories = categories.filter(c => c.name.toLowerCase().includes(val));
+
+            let html = '';
+
+            if (matchedCategories.length > 0) {
+                matchedCategories.forEach(c => {
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
+                        <span>${c.name}</span>
+                        <span class="suggestion-type">Kategoriya</span>
+                    </div>`;
+                });
+            }
+
+            if (matchedProducts.length > 0) {
+                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(val)}'">
+                    <span>"${val}" bo'yicha barcha turlarni ko'rish</span>
+                    <span class="suggestion-type">Natijalar</span>
+                </div>`;
+
+                matchedProducts.forEach(p => {
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
+                        <span>${p.name}</span>
+                        <span class="suggestion-type">Mahsulot</span>
+                    </div>`;
+                });
+            }
+
+            if (matchedCategories.length === 0 && matchedProducts.length === 0) {
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Bunday mahsulot topilmadi...</div>`;
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const val = document.getElementById('searchInput').value.trim();
+                const dropdown = document.getElementById('searchDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+                if (val) {
+                    window.location.href = `search.html?q=${encodeURIComponent(val)}`;
+                }
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
 
         function goToProduct(id) {
             window.location.href = `product.html?id=${id}`;
