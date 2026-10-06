@@ -34,7 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER QIDIRUV SATRI VA QIDIRUV TARIXI DROPDOWN */
         .header-search-container {
             padding: 50px 16px 12px 16px;
             background: #ffffff;
@@ -176,7 +175,6 @@
             color: #ff3b30;
         }
 
-        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(45px + env(safe-area-inset-bottom, 0px));
@@ -265,7 +263,6 @@
             display: flex;
         }
 
-        /* BANNER CAROUSEL */
         .banner-carousel-container {
             width: 100%;
             position: relative;
@@ -324,7 +321,6 @@
             background: var(--primary);
         }
 
-        /* KATEGORIYALAR */
         .section-title {
             font-size: 16px;
             font-weight: 700;
@@ -380,7 +376,6 @@
             overflow: hidden;
         }
 
-        /* MAHSULOTLAR GRIDI VA SLAYDER */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -634,7 +629,6 @@
         </div>
     </div>
 
-    <!-- BANNER CAROUSEL -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
@@ -699,7 +693,6 @@
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
-        // --- QIDIRUV TARIXINI BOSHQARISH ---
         function getSearchHistory() {
             return JSON.parse(localStorage.getItem('search_history')) || [];
         }
@@ -836,7 +829,6 @@
             }
         });
 
-        // --- BANNER LOGIKASI ---
         function renderBanner() {
             const track = document.getElementById('bannerTrack');
             let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
@@ -924,7 +916,6 @@
             });
         }
 
-        // --- KATEGORIYALAR ---
         function renderCategories() {
             const categoriesContainer = document.getElementById('categoriesRow');
             let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
@@ -937,7 +928,6 @@
             `).join('');
         }
 
-        // --- MAHSULOTLAR VA SLAYDER ---
         function renderProducts() {
             let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
 
