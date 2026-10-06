@@ -30,7 +30,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 140px;
+            padding-bottom: 160px;
             overflow-x: hidden;
         }
 
@@ -46,12 +46,6 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--border);
-        }
-
-        .header-left, .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .icon-btn {
@@ -81,11 +75,20 @@
             stroke: #ff3b30;
         }
 
-        /* PRODUCT IMAGE SLIDER */
-        .product-img-box {
+        /* STICKY PRODUCT IMAGE SLIDER */
+        .product-img-wrapper {
+            position: sticky;
+            top: 94px;
+            z-index: 10;
+            background: #ffffff;
             width: 100%;
             height: 360px;
-            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product-img-box {
+            width: 100%;
+            height: 100%;
             position: relative;
             overflow: hidden;
         }
@@ -144,7 +147,13 @@
             background: #ffffff;
         }
 
-        /* CONTENT SECTIONS */
+        /* SCROLLABLE CONTENT AREA */
+        .scrollable-content {
+            position: relative;
+            z-index: 20;
+            background: var(--bg);
+        }
+
         .section-card {
             background: var(--card);
             margin: 10px 12px;
@@ -190,7 +199,7 @@
             margin-bottom: 14px;
         }
 
-        /* RATINGS */
+        /* RATINGS & COMMENTS LINK */
         .rating-block {
             display: flex;
             align-items: center;
@@ -199,6 +208,7 @@
             background: var(--bg);
             border-radius: 12px;
             cursor: pointer;
+            margin-bottom: 10px;
         }
 
         .rating-left {
@@ -222,37 +232,69 @@
             gap: 4px;
         }
 
-        /* OPTIONS (COLOR / SIZE) */
-        .option-group {
-            margin-top: 14px;
+        /* SALES INFO WITH TRUCK ICON */
+        .sales-info-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+            padding: 0 4px;
         }
 
+        .sales-info-row svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+        }
+
+        /* IMAGE COLOR OPTIONS */
         .option-title {
             font-size: 13px;
             color: var(--muted);
             margin-bottom: 8px;
         }
 
-        .option-values {
+        .color-variants-grid {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .option-chip {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            font-size: 13px;
-            background: #fff;
+        .color-chip {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border);
             cursor: pointer;
+            position: relative;
+            background: #fff;
         }
 
-        .option-chip.selected {
+        .color-chip img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .color-chip.selected {
             border-color: var(--primary);
-            background: var(--primary-bg);
-            color: var(--primary);
-            font-weight: 600;
+        }
+
+        .color-chip.out-of-stock {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .color-chip.out-of-stock::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top right, transparent 48%, #ff3b30 49%, #ff3b30 51%, transparent 52%);
         }
 
         /* DESCRIPTION */
@@ -318,7 +360,7 @@
         /* FIXED BOTTOM BAR FOR CART */
         .bottom-action-bar {
             position: fixed;
-            bottom: calc(45px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(75px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -391,51 +433,163 @@
             text-decoration: none;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (35px dan tepada) */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50px;
+            bottom: calc(35px + env(safe-area-inset-bottom, 0px));
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
+            height: 64px;
             background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid var(--border);
-            z-index: 990;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #808080;
+            font-size: 10px;
+            font-weight: 500;
+            width: 20%;
+            position: relative;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .nav-icon-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .nav-item span {
+            pointer-events: none;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: #808080;
+            stroke-width: 1.8;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-item.active svg {
+            stroke: var(--primary);
+            fill: var(--primary-bg);
+            transform: scale(1.05);
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+            background: #000;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 17px;
+            height: 17px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .badge-count.show {
+            display: flex;
         }
     </style>
 </head>
 <body>
 
     <div class="sticky-header">
-        <div class="header-left">
-            <button class="icon-btn" onclick="history.back()">
-                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
-        </div>
-        <div class="header-right">
-            <button class="icon-btn" id="heartBtn" onclick="toggleMainHeart()">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            </button>
-            <button class="icon-btn" onclick="shareProduct()">
-                <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-            </button>
-        </div>
+        <button class="icon-btn" onclick="history.back()">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button class="icon-btn" id="heartBtn" onclick="toggleMainHeart()">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </button>
     </div>
 
-    <div id="productDetailContainer"></div>
+    <!-- STICKY IMAGE SLIDER -->
+    <div class="product-img-wrapper" id="imageWrapper"></div>
 
-    <div class="similar-title">O'xshash mahsulotlar</div>
-    <div class="similar-grid" id="similarGrid"></div>
+    <!-- SCROLLABLE CONTENT AREA -->
+    <div class="scrollable-content">
+        <div id="productDetailContainer"></div>
+
+        <div class="similar-title">O'xshash mahsulotlar</div>
+        <div class="similar-grid" id="similarGrid"></div>
+    </div>
 
     <div class="bottom-action-bar" id="bottomActionBar"></div>
 
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+            <span>Bosh sahifa</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
+            <span>Katalog</span>
+        </a>
+        <a href="cart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
+            <span>Savatcha</span>
+        </a>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span>Saralangan</span>
+        </a>
+        <a href="profil.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <span>Profil</span>
+        </a>
+    </nav>
+
     <script>
         const DEFAULT_PRODUCTS = [
-            { id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, desc: "Yuqori sifatli va issiq materialdan tayyorlangan qishki kurtka. Sovuq kunlarda mukammal himoya va qulaylik ta'minlaydi.", images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11"], colors: ["Qora", "Ko'k", "Kulrang"], sizes: ["S", "M", "L", "XL"] },
-            { id: 2, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, desc: "Zamonaviy sport uslubidagi yengil va qulay kurtka.", images: ["https://picsum.photos/300/300?random=2"], colors: ["Qora", "Qizil"], sizes: ["M", "L"] }
+            { 
+                id: 1, 
+                name: "Raqamli elektron tasbeh, rolikli mexanizm", 
+                price: "29 500 so'm", 
+                oldPrice: "80 000 so'm", 
+                discount: "↓ 63%", 
+                rating: 5.0, 
+                comments: 10, 
+                salesInfo: "Bu haftada 15 kishi sotib oldi",
+                desc: "Zikringizni oson va aniq hisoblang. 0-99999 gacha hisob, kompas funksiyasi, ovosiz bosish, yengil va qulay. Yuqori sifatli materialdan tayyorlangan.", 
+                images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"], 
+                variants: [
+                    { img: "https://picsum.photos/300/300?random=1", label: "Mis rang", available: true },
+                    { img: "https://picsum.photos/300/300?random=11", label: "Qora rang", available: true },
+                    { img: "https://picsum.photos/300/300?random=12", label: "Oq rang", available: false }
+                ]
+            }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -447,30 +601,33 @@
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
-        function renderProductDetail() {
-            const container = document.getElementById('productDetailContainer');
-            const pImages = product.images || [product.img || "https://picsum.photos/300/300"];
-            const hasMultipleImages = pImages.length > 1;
-            const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
-
+        function renderProduct() {
             if (favs.includes(product.id)) {
                 document.getElementById('heartBtn').classList.add('liked');
             }
 
-            container.innerHTML = `
-                <div class="product-img-box">
-                    <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
+            const imgWrapper = document.getElementById('imageWrapper');
+            const pImages = product.images || [product.img || "https://picsum.photos/300/300"];
+            const hasMultipleImages = pImages.length > 1;
+            const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
+
+            imgWrapper.innerHTML = `
+                <div class="product-img-box" id="mainImgBox">
+                    <div class="card-slider-container" id="mainSlider" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
                         ${loopedImages.map(imgUrl => `
                             <div class="card-slide"><img src="${imgUrl}" alt="${product.name}"></div>
                         `).join('')}
                     </div>
                     ${hasMultipleImages ? `
-                        <div class="card-dots">
+                        <div class="card-dots" id="mainDots">
                             ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
                         </div>
                     ` : ''}
                 </div>
+            `;
 
+            const container = document.getElementById('productDetailContainer');
+            container.innerHTML = `
                 <div class="section-card">
                     <div class="price-row">
                         <span class="main-price">${product.price}</span>
@@ -484,48 +641,64 @@
                     <div class="rating-block" onclick="window.location.href='comments.html?id=${product.id}'">
                         <div class="rating-left">
                             <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <span>${product.rating || 4.8}</span>
+                            <span>${product.rating || 5.0}</span>
                         </div>
                         <div class="rating-right">
-                            <span>${product.comments || 50} ta sharh</span>
+                            <span>${product.comments || 10} ta sharh</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </div>
                     </div>
 
-                    ${product.colors ? `
-                        <div class="option-group">
-                            <div class="option-title">Rang: <span id="selectedColor">${product.colors[0]}</span></div>
-                            <div class="option-values">
-                                ${product.colors.map((c, i) => `<div class="option-chip ${i === 0 ? 'selected' : ''}" onclick="selectOption(this, 'selectedColor', '${c}')">${c}</div>`).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
+                    <div class="sales-info-row">
+                        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        <span>${product.salesInfo || "Bu haftada 15 kishi sotib oldi"}[span_0](start_span)[span_0](end_span)</span>
+                    </div>
 
-                    ${product.sizes ? `
+                    ${product.variants ? `
                         <div class="option-group">
-                            <div class="option-title">O'lcham: <span id="selectedSize">${product.sizes[0]}</span></div>
-                            <div class="option-values">
-                                ${product.sizes.map((s, i) => `<div class="option-chip ${i === 0 ? 'selected' : ''}" onclick="selectOption(this, 'selectedSize', '${s}')">${s}</div>`).join('')}
+                            <div class="option-title">Rang: <span id="selectedVariantLabel">${product.variants[0].label}</span></div>
+                            <div class="color-variants-grid">
+                                ${product.variants.map((v, i) => `
+                                    <div class="color-chip ${i === 0 ? 'selected' : ''} ${!v.available ? 'out-of-stock' : ''}" 
+                                         onclick="${v.available ? `selectVariant(${i}, '${v.label}')` : ''}">
+                                        <img src="${v.img}" alt="${v.label}">
+                                    </div>
+                                `).join('')}
                             </div>
                         </div>
                     ` : ''}
                 </div>
 
                 <div class="section-card">
-                    <div class="option-title" style="font-weight: 700; color: var(--text); margin-bottom: 6px;">Tavsif</div>
-                    <div class="desc-text" id="descText">${product.desc || "Mahsulot haqida batafsil ma'lumot keltirilmagan."}</div>
+                    <div class="option-title" style="font-weight: 700; color: var(--text); margin-bottom: 6px;">Tovar haqida</div>
+                    <div class="desc-text" id="descText">${product.desc || "Qisqacha ma'lumot mavjud emas."}</div>
                     <button class="toggle-desc-btn" id="toggleDescBtn" onclick="toggleDescription()">Hammasini ko'rish</button>
                 </div>
             `;
 
             renderActionBar();
             renderSimilar();
+            updateBadges();
+
+            setTimeout(() => {
+                const slider = document.getElementById('mainSlider');
+                if (slider && slider.dataset.originalLength) {
+                    slider.scrollLeft = slider.clientWidth;
+                }
+            }, 50);
         }
 
-        function selectOption(el, targetId, val) {
-            el.parentElement.querySelectorAll('.option-chip').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            document.getElementById(targetId).textContent = val;
+        function selectVariant(index, label) {
+            document.querySelectorAll('.color-chip').forEach((c, idx) => {
+                c.classList.toggle('selected', idx === index);
+            });
+            document.getElementById('selectedVariantLabel').textContent = label;
+
+            const slider = document.getElementById('mainSlider');
+            if (slider) {
+                const slideWidth = slider.clientWidth;
+                slider.scrollTo({ left: (index + 1) * slideWidth, behavior: 'smooth' });
+            }
         }
 
         function toggleDescription() {
@@ -561,6 +734,7 @@
             cart.push(item);
             localStorage.setItem('cart_products', JSON.stringify(cart));
             renderActionBar();
+            updateBadges();
         }
 
         function changeQty(delta) {
@@ -572,6 +746,7 @@
                 }
                 localStorage.setItem('cart_products', JSON.stringify(cart));
                 renderActionBar();
+                updateBadges();
             }
         }
 
@@ -585,13 +760,26 @@
                 btn.classList.add('liked');
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
+            updateBadges();
         }
 
-        function shareProduct() {
-            if (navigator.share) {
-                navigator.share({ title: product.name, url: window.location.href });
+        function updateBadges() {
+            const favBadge = document.getElementById('favBadge');
+            const cartBadge = document.getElementById('cartBadge');
+            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
+
+            if (validFavs.length > 0) {
+                favBadge.textContent = validFavs.length;
+                favBadge.classList.add('show');
             } else {
-                alert("Havola nusxalandi!");
+                favBadge.classList.remove('show');
+            }
+
+            if (cart.length > 0) {
+                cartBadge.textContent = cart.length;
+                cartBadge.classList.add('show');
+            } else {
+                cartBadge.classList.remove('show');
             }
         }
 
@@ -627,7 +815,7 @@
 
             const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
             const realIndex = (activeIndex + originalLen) % originalLen;
-            const dots = container.parentElement.querySelector('.card-dots')?.children;
+            const dots = document.getElementById('mainDots')?.children;
             if (dots) {
                 for (let i = 0; i < dots.length; i++) {
                     dots[i].classList.toggle('active', i === realIndex);
@@ -635,7 +823,7 @@
             }
         }
 
-        renderProductDetail();
+        renderProduct();
     </script>
 </body>
 </html>
