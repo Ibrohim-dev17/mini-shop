@@ -27,18 +27,17 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            /* Telefon sistemaviy tugmalari yopib qo'ymasligi uchun yetarli bo'shliq */
             padding-bottom: 120px;
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV (Telegram tugmalariga xalaqit qilmasligi uchun ancha pastga tushirildi) */
+        /* HEADER VA QIDIRUV (Telegram tugmalariga xalaqit qilmasligi uchun yanada pastga tushirildi) */
         .sticky-header {
             position: sticky;
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 48px 16px 20px 16px;
+            padding: 60px 16px 20px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -166,7 +165,7 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION (Telefonning pastdagi tugmalariga xalaqit bermaydigan qilib yuqoriroqqa ko'tarildi) */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(32px + env(safe-area-inset-bottom, 0px));
