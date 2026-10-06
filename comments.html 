@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sharhlar - Uzum Market</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #7000ff;
+            --primary-bg: #eef0ff;
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #1f2026;
+            --muted: #8b8e99;
+            --border: #e2e5eb;
+            --star: #ffb800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 140px;
+            overflow-x: hidden;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 999;
+            padding: 44px 16px 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #f4f5f7;
+            color: var(--text);
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        /* PHOTOS SECTION */
+        .photos-section {
+            background: var(--card);
+            margin: 12px;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .photos-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .photos-grid {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .photos-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .review-photo-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+
+        .review-photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* REVIEWS LIST */
+        .review-card {
+            background: var(--card);
+            margin: 12px;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        .reviewer-name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .review-date {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .stars-row {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 8px;
+        }
+
+        .stars-row svg {
+            width: 15px;
+            height: 15px;
+            fill: var(--star);
+        }
+
+        .review-variant {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .review-subtitle {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            margin-top: 8px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        /* SELLER REPLY */
+        .seller-reply {
+            background: var(--bg);
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .seller-name {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .seller-text {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        /* FIXED BOTTOM BAR */
+        .bottom-action-bar {
+            position: fixed;
+            bottom: calc(45px + env(safe-area-inset-bottom, 0px));
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border: 1px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .cart-counter-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+            background: var(--bg);
+            border-radius: 14px;
+            padding: 6px 12px;
+        }
+
+        .counter-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .counter-val {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .go-to-cart-btn {
+            background: var(--primary-bg);
+            color: var(--primary);
+            border: none;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sticky-header">
+        <button class="back-btn" onclick="history.back()">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        Sharhlar
+    </div>
+
+    <!-- Xaridorlarning fotosuratlari -->
+    <div class="photos-section">
+        <div class="photos-title">Xaridorlarning fotosurati</div>
+        <div class="photos-grid">
+            <div class="review-photo-item"><img src="https://picsum.photos/200/200?random=50" alt="Mijoz rasmi"></div>
+        </div>
+    </div>
+
+    <div id="reviewsContainer"></div>
+
+    <div class="bottom-action-bar" id="bottomActionBar"></div>
+
+    <script>
+        const DEFAULT_PRODUCTS = [
+            { id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", images: ["https://picsum.photos/300/300?random=1"] }
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id')) || 1;
+
+        let allProducts = JSON.parse(localStorage.getItem('products')) || DEFAULT_PRODUCTS;
+        let product = allProducts.find(p => p.id === productId) || allProducts[0];
+        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+
+        // Namunaviy sharhlar ma'lumotlari
+        const REVIEWS = [
+            {
+                name: "Gulhayo",
+                date: "25 Sentyabr",
+                rating: 5,
+                variant: "Rang: Qizil",
+                pros: "rangi, aylanuvchi mexanizm mustahkamligi",
+                text: "uxlab qolganda behosdan aylanib ketmedi. olilar. puliga arziydi",
+                reply: { name: "Zorix 🏢", text: "Assalomu alaykum Gulhayo. Sizning mamnunligingiz bizning yutug'imiz! 🎉 Yuqori baho uchun katta rahmat. Agar savolingiz bo'lsa, bizga yozing. 📞" }
+            },
+            {
+                name: "Shohista",
+                date: "17 Sentyabr",
+                rating: 5,
+                variant: "Rang: Qizil",
+                pros: "Juda zo'r tasbeh ekan manga yoqdi",
+                text: "tavsiya qilaman",
+                reply: { name: "Zorix 🏢", text: "Bizni tanlaganingiz uchun rahmat 😊❤️" }
+            },
+            {
+                name: "***",
+                date: "24 Avgust",
+                rating: 5,
+                variant: "Rang: Och-jigarang",
+                pros: "qulay oson",
+                text: "",
+                reply: { name: "Zorix 🏢", text: "Bizni tanlaganingiz uchun rahmat 😊❤️" }
+            },
+            {
+                name: "axror",
+                date: "3 Oktyabr",
+                rating: 5,
+                variant: "Rang: Xromrang",
+                pros: "Hs",
+                cons: "Magnit degan joyiga e'tibor bermabman to'g'ri qilar ammo issiq sovuq l oson tortarka",
+                text: ""
+            }
+        ];
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            container.innerHTML = REVIEWS.map(r => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="reviewer-name">${r.name}</span>
+                        <span class="review-date">${r.date}</span>
+                    </div>
+                    <div class="stars-row">
+                        ${'<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'.repeat(r.rating)}
+                    </div>
+                    <div class="review-variant">${r.variant}</div>
+                    
+                    ${r.pros ? `<div class="review-subtitle">Afzalliklari</div><div class="review-text">${r.pros}</div>` : ''}
+                    ${r.cons ? `<div class="review-subtitle">Kamchiliklari</div><div class="review-text">${r.cons}</div>` : ''}
+                    ${r.text ? `<div class="review-subtitle">Izoh</div><div class="review-text">${r.text}</div>` : ''}
+
+                    ${r.reply ? `
+                        <div class="seller-reply">
+                            <div class="seller-name">${r.reply.name}</div>
+                            <div class="seller-text">${r.reply.text}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function renderActionBar() {
+            const bar = document.getElementById('bottomActionBar');
+            const cartItem = cart.find(item => item.id === product.id);
+
+            if (!cartItem) {
+                bar.innerHTML = `<button class="add-to-cart-btn" onclick="addToCart()">Savatga qo'shish</button>`;
+            } else {
+                bar.innerHTML = `
+                    <div class="cart-counter-box">
+                        <button class="counter-btn" onclick="changeQty(-1)">-</button>
+                        <span class="counter-val">${cartItem.qty || 1}</span>
+                        <button class="counter-btn" onclick="changeQty(1)">+</button>
+                    </div>
+                    <a href="cart.html" class="go-to-cart-btn">
+                        <span>O'tish</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </a>
+                `;
+            }
+        }
+
+        function addToCart() {
+            let item = { ...product, qty: 1 };
+            cart.push(item);
+            localStorage.setItem('cart_products', JSON.stringify(cart));
+            renderActionBar();
+        }
+
+        function changeQty(delta) {
+            let cartItem = cart.find(item => item.id === product.id);
+            if (cartItem) {
+                cartItem.qty = (cartItem.qty || 1) + delta;
+                if (cartItem.qty <= 0) {
+                    cart = cart.filter(item => item.id !== product.id);
+                }
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                renderActionBar();
+            }
+        }
+
+        renderReviews();
+        renderActionBar();
+    </script>
+</body>
+</html>
