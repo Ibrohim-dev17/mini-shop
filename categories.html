@@ -27,37 +27,36 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 100px;
+            padding-bottom: 80px; /* Pastdagi navigator yopib qo'ymasligi uchun */
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV */
+        /* HEADER VA QIDIRUV (Rasmga moslab yonma-yon qilindi) */
         .sticky-header {
             position: sticky;
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .header-top-row {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 4px;
         }
 
         .back-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
             background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
@@ -65,10 +64,10 @@
         }
 
         .back-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             stroke: var(--text);
-            stroke-width: 2;
+            stroke-width: 2.2;
             fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
@@ -83,8 +82,8 @@
             display: flex;
             align-items: center;
             background: var(--bg);
-            border-radius: 12px;
-            padding: 10px 14px;
+            border-radius: 10px;
+            padding: 9px 12px;
             gap: 8px;
             border: 1px solid transparent;
         }
@@ -111,7 +110,7 @@
             color: var(--text);
         }
 
-        /* KATEGORIYALAR */
+        /* KATEGORIYALAR RO'YXATI */
         .categories-container {
             padding: 16px;
             display: flex;
@@ -125,7 +124,7 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 14px 16px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -145,8 +144,8 @@
         }
 
         .cat-img {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 12px;
             object-fit: cover;
             background: #eee;
@@ -168,31 +167,27 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (Rasmdagidek pastga to'g'ridan-to'g'ri yopishdi) */
         .bottom-nav {
             position: fixed;
-            bottom: 16px;
-            left: 16px;
-            right: 16px;
-            max-width: 480px;
-            margin: 0 auto;
-            height: 64px;
-            background: rgba(255, 255, 255, 0.95);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
             z-index: 1000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             text-decoration: none;
             color: #808080;
             font-size: 10px;
@@ -209,8 +204,8 @@
         }
 
         .nav-item svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
@@ -233,15 +228,15 @@
             right: -8px;
             background: #000;
             color: #fff;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
-            min-width: 17px;
-            height: 17px;
-            border-radius: 10px;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 0 4px;
+            padding: 0 3px;
         }
 
         .badge-count.show {
@@ -275,10 +270,12 @@
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span>Katalog</span>
         </a>
+        <!-- Yurak (Saralangan) oldinda -->
         <a href="heart.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
             <span>Saralangan</span>
         </a>
+        <!-- Savatcha keyinda -->
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span>Savatcha</span>
