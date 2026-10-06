@@ -554,7 +554,7 @@
             }).join('');
         }
 
-        // --- HARF VA SO'ZLARGA QARAB LIVE SEARCH ---
+        // --- HARF VA SO'ZLARGA QARAB LIVE SEARCH (Dropdown darhol yopiladigan qilindi) ---
         function handleLiveSearch(e) {
             const query = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -567,22 +567,18 @@
                 return;
             }
 
-            // Barcha mahsulotlar ichidan kiritilgan harf/so'zga mos keladiganlarini topish
             const matched = allProducts.filter(p => p.name.toLowerCase().includes(query));
-
-            // Sahifadagi gridni ham mos kelganlar bilan yangilaymiz
             renderProducts(matched);
 
             let html = '';
             if (matched.length > 0) {
-                // Bosilganda search.html sahifasiga o'tib, o'sha so'rov bo'yicha barcha natijalarni chiqaradi
-                html += `<div class="search-suggestion-item" onclick="window.location.href='search.html?q=${encodeURIComponent(query)}'">
+                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(query)}'">
                     <span>"${query}" bo'yicha barcha turlarni ko'rish</span>
                     <span class="suggestion-type">Natijalar</span>
                 </div>`;
 
                 matched.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
                         <span>${p.name}</span>
                         <span class="suggestion-type">Mahsulot</span>
                     </div>`;
@@ -598,6 +594,8 @@
         function handleSearch(e) {
             if (e.key === 'Enter') {
                 const query = document.getElementById('searchInput').value.trim();
+                const dropdown = document.getElementById('searchDropdown');
+                if (dropdown) dropdown.classList.remove('show');
                 if (query) {
                     window.location.href = `search.html?q=${encodeURIComponent(query)}`;
                 }
