@@ -260,13 +260,11 @@
             border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
         }
 
         .card-slider-container {
             width: 100%;
-            height: 175px;
+            height: 100%;
             display: flex;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
@@ -292,34 +290,36 @@
             display: block;
         }
 
-        /* Nuqtalar endi rasm va narx oralig'ida joylashadi */
+        /* Nuqtalar xuddi rasmdagidek rasm ustining pastki qismida joylashadi[span_1](start_span)[span_1](end_span) */
         .card-dots {
-            height: 35px;
-            width: 100%;
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
             gap: 4px;
-            background: #f8f9fa;
+            z-index: 4;
+            pointer-events: none;
         }
 
         .card-dot {
             width: 5px;
             height: 5px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.6);
             transition: all 0.2s;
         }
 
         .card-dot.active {
             width: 14px;
             border-radius: 3px;
-            background: var(--primary);
+            background: #ffffff;
         }
 
         .badge-original {
             position: absolute;
-            top: 8px;
+            bottom: 8px;
             left: 8px;
             background: #00c853;
             color: #fff;
@@ -608,7 +608,6 @@
                 const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
                 const hasMultipleImages = pImages.length > 1;
 
-                // Cheksiz aylanish uchun rasmlarni massiv oxiridan boshiga ulab chiqamiz (1 2 3 1 2 3)
                 const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
 
                 return `
@@ -652,14 +651,13 @@
 
                             <button class="cart-btn" onclick="addToCart(event, ${p.id})">
                                 <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                               <span>Savatga</span>
+                                <span>Savatga</span>
                             </button>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            // Sahifa yuklanganda cheksiz aylanish uchun 1-chi real slaydga o'tkazib qo'yamiz
             setTimeout(() => {
                 document.querySelectorAll('.card-slider-container').forEach(container => {
                     if (container.dataset.originalLength) {
@@ -670,13 +668,11 @@
             }, 50);
         }
 
-        // Cheksiz aylanish va nuqtalarni boshqarish
         function handleCardScroll(e, originalLen) {
             const container = e.target;
             const slideWidth = container.clientWidth;
             const scrollLeft = container.scrollLeft;
 
-            // Oxirgi soxta slaydga o'tib ketsa, jimirlatib boshiga o'tkazib yuborish
             if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
                 container.style.scrollBehavior = 'auto';
                 container.scrollLeft = slideWidth;
@@ -699,7 +695,6 @@
             }
         }
 
-        // QIDIRUV TARIXINI BOSHQARISH
         function getSearchHistory() {
             return JSON.parse(localStorage.getItem('search_history')) || [];
         }
@@ -790,9 +785,9 @@
                 </div>`;
 
                 matched.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name}'); window.location.href='product.html?id=${p.id}'">
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name}'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
                         <span>${p.name}</span>
-                        <span class="suggestion-type">Mahsulot</span>
+                        <span class="suggestion-type">Natijalar</span>
                     </div>`;
                 });
             } else {
