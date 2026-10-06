@@ -31,7 +31,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER QIDIRUV SATRI VA AVTO-TAVSIYA (LIVE SEARCH) */
         .sticky-header {
             position: sticky;
             top: 0;
@@ -113,7 +112,6 @@
             color: var(--muted);
         }
 
-        /* LIVE SEARCH DROPDOWN */
         .search-dropdown {
             position: absolute;
             top: 100%;
@@ -162,7 +160,6 @@
             border-radius: 4px;
         }
 
-        /* KATEGORIYALAR RO'YXATI */
         .categories-container {
             padding: 16px;
             display: flex;
@@ -219,7 +216,6 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(45px + env(safe-area-inset-bottom, 0px));
@@ -388,7 +384,6 @@
             `).join('');
         }
 
-        // --- LIVE SEARCH LOGIKASI ---
         function handleLiveSearch(e) {
             const query = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -459,8 +454,22 @@
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
-        if (favs.length > 0) { document.getElementById('favBadge').textContent = favs.length; document.getElementById('favBadge').classList.add('show'); }
-        if (cart.length > 0) { document.getElementById('cartBadge').textContent = cart.length; document.getElementById('cartBadge').classList.add('show'); }
+        let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+
+        let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
+        if (validFavs.length > 0) { 
+            document.getElementById('favBadge').textContent = validFavs.length; 
+            document.getElementById('favBadge').classList.add('show'); 
+        } else {
+            document.getElementById('favBadge').classList.remove('show');
+        }
+
+        if (cart.length > 0) { 
+            document.getElementById('cartBadge').textContent = cart.length; 
+            document.getElementById('cartBadge').classList.add('show'); 
+        } else {
+            document.getElementById('cartBadge').classList.remove('show');
+        }
 
         loadCategories();
     </script>
