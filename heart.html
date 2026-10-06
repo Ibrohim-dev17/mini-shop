@@ -670,7 +670,6 @@
             }
         }
 
-        // QIDIRUV TARIXINI BOSHQARISH
         function getSearchHistory() {
             return JSON.parse(localStorage.getItem('search_history')) || [];
         }
@@ -821,8 +820,23 @@
         function updateBadges() {
             const favBadge = document.getElementById('favBadge');
             const cartBadge = document.getElementById('cartBadge');
-            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
-            if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
+            
+            let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
+
+            if (validFavs.length > 0) { 
+                favBadge.textContent = validFavs.length; 
+                favBadge.classList.add('show'); 
+            } else { 
+                favBadge.classList.remove('show'); 
+            }
+
+            if (cart.length > 0) { 
+                cartBadge.textContent = cart.length; 
+                cartBadge.classList.add('show'); 
+            } else { 
+                cartBadge.classList.remove('show'); 
+            }
         }
 
         renderFavs();
