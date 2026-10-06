@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER (Biroz pastroqqa tushirildi) */
+        /* HEADER */
         .sticky-header {
             position: sticky;
             top: 0;
@@ -75,6 +75,7 @@
             stroke: #ff3b30;
         }
 
+        /* IMAGE SKELETON & LOADER */
         .product-img-wrapper {
             position: sticky;
             top: 104px;
@@ -90,6 +91,19 @@
             height: 100%;
             position: relative;
             overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        /* Skeleton Shimmer Animation */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .card-slider-container {
@@ -145,6 +159,53 @@
             width: 16px;
             border-radius: 4px;
             background: var(--primary);
+        }
+
+        /* OFFLINE / ERROR STATE */
+        .offline-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            background: var(--card);
+            margin: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .offline-container svg {
+            width: 64px;
+            height: 64px;
+            stroke: var(--muted);
+            fill: none;
+            stroke-width: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .offline-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .offline-desc {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .reload-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
         }
 
         .scrollable-content {
@@ -264,19 +325,6 @@
             object-fit: cover;
         }
 
-        .preview-thumb.more-overlay::after {
-            content: '+85';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         .sales-info-row {
             display: flex;
             align-items: center;
@@ -331,18 +379,6 @@
             border-color: var(--primary);
         }
 
-        .color-chip.out-of-stock {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .color-chip.out-of-stock::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top right, transparent 48%, #ff3b30 49%, #ff3b30 51%, transparent 52%);
-        }
-
         .desc-text {
             font-size: 14px;
             color: var(--text);
@@ -367,7 +403,7 @@
             cursor: pointer;
         }
 
-        /* PRODUCTS.HTML STYLE SIMILAR CARDS */
+        /* SIMILAR PRODUCTS (PRODUCTS.HTML STYLE) */
         .similar-title {
             font-size: 18px;
             font-weight: 700;
@@ -610,12 +646,23 @@
         </button>
     </div>
 
-    <div class="product-img-wrapper" id="imageWrapper"></div>
+    <!-- PRODUCT IMAGE WRAPPER WITH SKELETON -->
+    <div class="product-img-wrapper" id="imageWrapper">
+        <div class="product-img-box skeleton"></div>
+    </div>
 
-    <div class="scrollable-content">
+    <!-- OFFLINE / ERROR NOTIFICATION -->
+    <div class="offline-container" id="offlineBox">
+        <svg viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+        <div class="offline-title">Internetda uzulish yuzaga keldi</div>
+        <div class="offline-desc">Tarmoqqa ulanishni tekshiring va qayta urinib ko'ring</div>
+        <button class="reload-btn" onclick="location.reload()">Yangilash</button>
+    </div>
+
+    <div class="scrollable-content" id="mainContentArea">
         <div id="productDetailContainer"></div>
 
-        <div class="similar-title">O'xshash mahsulotlar</div>
+        <div class="similar-title" id="similarTitle">O'xshash mahsulotlar</div>
         <div class="similar-grid" id="similarGrid"></div>
     </div>
 
@@ -656,13 +703,12 @@
                 commentsCount: 142,
                 ordersCount: "1 200+",
                 salesInfo: "Bu haftada 89 kishi sotib oldi",
-                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material, yumshoq ichki qoplama va qulay kapushonga ega. Har kuni kiyish uchun juda qulay va issiq saqlaydi.", 
-                images: ["https://picsum.photos/600/600?random=101", "https://picsum.photos/600/600?random=102", "https://picsum.photos/600/600?random=103"], 
+                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material, yumshoq ichki qoplama va qulay kapushonga ega.", 
+                images: ["https://picsum.photos/600/600?random=101", "https://picsum.photos/600/600?random=102"], 
                 reviewPhotos: ["https://picsum.photos/100/100?random=151"],
                 variants: [
                     { img: "https://picsum.photos/200/200?random=101", label: "Qora (M)", available: true },
-                    { img: "https://picsum.photos/200/200?random=102", label: "Qora (L)", available: true },
-                    { img: "https://picsum.photos/200/200?random=103", label: "Qora (XL)", available: false }
+                    { img: "https://picsum.photos/200/200?random=102", label: "Qora (L)", available: true }
                 ]
             },
             { 
@@ -679,21 +725,6 @@
                 images: ["https://picsum.photos/600/600?random=1"], 
                 reviewPhotos: [],
                 variants: []
-            },
-            { 
-                id: 3, 
-                name: "Kir yuvish kukuni Persil, avtomat, 3 kg", 
-                price: "68 700 so'm", 
-                oldPrice: "120 000 so'm", 
-                discount: "↓ 43%", 
-                rating: 4.9, 
-                commentsCount: 6870,
-                ordersCount: "31 500+",
-                salesInfo: "Bu haftada 756 kishi sotib oldi",
-                desc: "Persil kir yuvish kukuni Avtomat, 3 kg - bu kirni chuqur tozalash uchun kuchli vositadir.", 
-                images: ["https://picsum.photos/600/600?random=2"], 
-                reviewPhotos: [],
-                variants: []
             }
         ];
 
@@ -707,6 +738,14 @@
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
         function renderProduct() {
+            // Check network status simulation / handling
+            if (!navigator.onLine) {
+                document.getElementById('offlineBox').style.display = 'flex';
+                document.getElementById('mainContentArea').style.display = 'none';
+                document.getElementById('imageWrapper').style.display = 'none';
+                return;
+            }
+
             if (favs.includes(product.id)) {
                 document.getElementById('heartBtn').classList.add('liked');
             }
@@ -720,7 +759,7 @@
                 <div class="product-img-box" id="mainImgBox">
                     <div class="card-slider-container" id="mainSlider" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
                         ${loopedImages.map(imgUrl => `
-                            <div class="card-slide"><img src="${imgUrl}" alt="${product.name}"></div>
+                            <div class="card-slide"><img src="${imgUrl}" alt="${product.name}" onerror="handleImgError(this)"></div>
                         `).join('')}
                     </div>
                     ${hasMultipleImages ? `
@@ -759,7 +798,6 @@
                         ${(product.reviewPhotos || []).map(img => `
                             <div class="preview-thumb"><img src="${img}" alt="Sharh rasmi"></div>
                         `).join('')}
-                        ${product.reviewPhotos && product.reviewPhotos.length > 0 ? `<div class="preview-thumb more-overlay"><img src="${pImages[0]}" alt="More"></div>` : ''}
                     </div>
                 </div>
 
@@ -801,6 +839,13 @@
                     slider.scrollLeft = slider.clientWidth;
                 }
             }, 50);
+        }
+
+        function handleImgError(img) {
+            // Trigger offline block if image fails to load due to network connection issues
+            document.getElementById('offlineBox').style.display = 'flex';
+            document.getElementById('mainContentArea').style.display = 'none';
+            document.getElementById('imageWrapper').style.display = 'none';
         }
 
         function selectVariant(index, label) {
@@ -911,6 +956,11 @@
         function renderSimilar() {
             const grid = document.getElementById('similarGrid');
             const similar = allProducts.filter(p => p.id !== product.id).slice(0, 6);
+
+            if (similar.length === 0) {
+                document.getElementById('similarTitle').style.display = 'none';
+                return;
+            }
 
             grid.innerHTML = similar.map(p => `
                 <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
