@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mahsulotlar - Uzum Market</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -28,26 +29,98 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 80px;
+            padding-bottom: 100px;
             overflow-x: hidden;
         }
 
-        .header-title {
-            background: #ffffff;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: 700;
-            border-bottom: 1px solid var(--border);
+        /* HEADER VA QIDIRUV */
+        .sticky-header {
             position: sticky;
             top: 0;
+            background: var(--card);
             z-index: 999;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .sticky-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 10px 14px;
+            gap: 8px;
+            border: 1px solid transparent;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
+        .search-box svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            width: 100%;
+            color: var(--text);
+        }
+
+        /* MAHSULOTLAR GRID */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             padding: 12px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .product-card {
@@ -58,6 +131,7 @@
             display: flex;
             flex-direction: column;
             cursor: pointer;
+            border: 1px solid var(--border);
         }
 
         .heart-icon {
@@ -94,7 +168,6 @@
             height: 170px;
             background: #f8f9fa;
             position: relative;
-            border-radius: 16px;
             overflow: hidden;
         }
 
@@ -105,7 +178,7 @@
         }
 
         .product-info {
-            padding: 10px 4px 6px 4px;
+            padding: 10px 8px 10px 8px;
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -118,7 +191,7 @@
         }
 
         .main-price {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             color: var(--text);
         }
@@ -165,24 +238,27 @@
             justify-content: center;
             gap: 6px;
             cursor: pointer;
-            margin-top: auto;
+            margin-top: 10px;
         }
 
         /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
             height: 64px;
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
             z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         .nav-item {
@@ -194,7 +270,6 @@
             color: #808080;
             font-size: 10px;
             font-weight: 500;
-            transition: all 0.2s ease;
             width: 20%;
             position: relative;
         }
@@ -212,7 +287,6 @@
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
-            transition: all 0.2s ease;
         }
 
         .nav-item.active {
@@ -230,8 +304,8 @@
             position: absolute;
             top: -4px;
             right: -8px;
-            background: #000000;
-            color: #ffffff;
+            background: #000;
+            color: #fff;
             font-size: 10px;
             font-weight: 700;
             min-width: 17px;
@@ -241,8 +315,6 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 10;
         }
 
         .badge-count.show {
@@ -252,57 +324,61 @@
 </head>
 <body>
 
-    <div class="header-title" id="pageTitle">Mahsulotlar</div>
+    <div class="sticky-header">
+        <div class="header-top-row">
+            <!-- Categories.html ga qaytish tugmasi -->
+            <a href="categories.html" class="back-btn">
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </a>
+            <h1 id="pageTitle">Mahsulotlar</h1>
+        </div>
+        <div class="search-box">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" placeholder="Mahsulotlar izlash..." onkeypress="handleSearch(event)">
+        </div>
+    </div>
+
     <div class="products-grid" id="productsGrid"></div>
 
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
             <span>Bosh sahifa</span>
         </a>
-        <a href="categories.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
-            </div>
+        <a href="categories.html" class="nav-item active">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span>Katalog</span>
         </a>
         <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <div class="badge-count" id="favBadge">0</div>
-            </div>
-            <span>Saralanganlar</span>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span>Saralangan</span>
         </a>
         <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                <div class="badge-count" id="cartBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span>Savatcha</span>
         </a>
         <a href="profil.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <span>Profil</span>
         </a>
     </nav>
 
     <script>
-        const PRODUCTS = [
-            { id: 1, name: "Kir yuvish kukuni Persil Professional Color, 10 kg", price: "196 220 so'm", oldPrice: "309 990 so'm", discount: "↓ 37%", img: "https://picsum.photos/300/300?random=20" },
-            { id: 2, name: "Inozitol 1000 mg, vazn yo'qotish uchun", price: "141 300 so'm", oldPrice: "320 000 so'm", discount: "↓ 56%", img: "https://picsum.photos/300/300?random=21" },
-            { id: 3, name: "Samsung 55 Smart TV 4K Ultra HD", price: "5 400 000 so'm", oldPrice: "6 900 000 so'm", discount: "↓ 21%", img: "https://picsum.photos/300/300?random=22" },
-            { id: 4, name: "iPhone 15 Pro Max 256GB Natural Titanium", price: "16 200 000 so'm", oldPrice: "18 500 000 so'm", discount: "↓ 12%", img: "https://picsum.photos/300/300?random=23" },
-            { id: 5, name: "Bosch SilentMixx Professional Blender", price: "850 000 so'm", oldPrice: "1 200 000 so'm", discount: "↓ 29%", img: "https://picsum.photos/300/300?random=24" },
-            { id: 6, name: "Tefal Express Steam Bug'li Dazmol", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", img: "https://picsum.photos/300/300?random=25" },
-            { id: 7, name: "Xiaomi Redmi Note 13 Pro 8/256GB", price: "3 100 000 so'm", oldPrice: "4 000 000 so'm", discount: "↓ 22%", img: "https://picsum.photos/300/300?random=26" },
-            { id: 8, name: "Sony WH-1000XM5 Shovqinsiz Quloqchin", price: "4 200 000 so'm", oldPrice: "5 100 000 so'm", discount: "↓ 17%", img: "https://picsum.photos/300/300?random=27" },
-            { id: 9, name: "Apple MacBook Air 13 M2 8/256GB", price: "12 800 000 so'm", oldPrice: "15 000 000 so'm", discount: "↓ 14%", img: "https://picsum.photos/300/300?random=28" },
-            { id: 10, name: "Dyson V15 Detect Simsiz Changyutgich", price: "8 900 000 so'm", oldPrice: "11 000 000 so'm", discount: "↓ 19%", img: "https://picsum.photos/300/300?random=29" }
+        // URL dan cat_id va cat_name ni o'qib olish
+        const urlParams = new URLSearchParams(window.location.search);
+        const catId = urlParams.get('cat_id') || 1;
+        const catName = urlParams.get('cat_name') || "Mahsulotlar";
+
+        document.getElementById('pageTitle').textContent = decodeURIComponent(catName);
+
+        // Zaxira mahsulotlar (Har bir kategoriya uchun alohida category_id berilgan)
+        const ALL_PRODUCTS = [
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", img: "https://picsum.photos/300/300?random=1" },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", img: "https://picsum.photos/300/300?random=2" },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", img: "https://picsum.photos/300/300?random=3" },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", img: "https://picsum.photos/300/300?random=4" },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", img: "https://picsum.photos/300/300?random=5" },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", img: "https://picsum.photos/300/300?random=6" }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
@@ -310,7 +386,19 @@
 
         function renderProducts() {
             const grid = document.getElementById('productsGrid');
-            grid.innerHTML = PRODUCTS.map(p => {
+            
+            // LocalStorage dan yoki zaxiradan mahsulotlarni olish
+            let products = JSON.parse(localStorage.getItem('products')) || ALL_PRODUCTS;
+            
+            // Faqat tanlangan kategoriya ID siga mos keluvchilarni saralash
+            const filteredProducts = products.filter(p => String(p.category_id) === String(catId));
+
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: var(--muted);">Bu kategoriyada hozircha mahsulot yo'q.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filteredProducts.map(p => {
                 const isFav = favs.includes(p.id);
                 return `
                     <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
@@ -348,11 +436,14 @@
 
         function addToCart(e, id) {
             e.stopPropagation();
-            const prod = PRODUCTS.find(p => p.id === id);
-            cart.push(prod);
-            localStorage.setItem('cart_products', JSON.stringify(cart));
-            updateBadges();
-            alert("Mahsulot savatchaga qo'shildi!");
+            let products = JSON.parse(localStorage.getItem('products')) || ALL_PRODUCTS;
+            const prod = products.find(p => p.id === id);
+            if(prod) {
+                cart.push(prod);
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateBadges();
+                alert("Mahsulot savatchaga qo'shildi!");
+            }
         }
 
         function updateBadges() {
@@ -362,9 +453,15 @@
             if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
         }
 
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            }
+        }
+
         renderProducts();
         updateBadges();
     </script>
 </body>
 </html>
-
