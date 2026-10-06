@@ -34,13 +34,14 @@
             overflow-x: hidden;
         }
 
+        /* HEADER (Biroz pastroqqa tushirildi) */
         .sticky-header {
             position: sticky;
             top: 0;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             z-index: 999;
-            padding: 44px 16px 12px 16px;
+            padding: 52px 16px 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -76,7 +77,7 @@
 
         .product-img-wrapper {
             position: sticky;
-            top: 94px;
+            top: 104px;
             z-index: 10;
             background: #ffffff;
             width: 100%;
@@ -115,7 +116,7 @@
         .card-slide img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Sifatni yo'qotmaslik uchun */
+            object-fit: contain;
             background: #fff;
             display: block;
         }
@@ -376,7 +377,7 @@
         .similar-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
             padding: 0 12px;
         }
 
@@ -391,16 +392,9 @@
             cursor: pointer;
         }
 
-        .product-card-img-wrap {
+        .product-card img {
             width: 100%;
-            height: 170px;
-            position: relative;
-            background: #fff;
-        }
-
-        .product-card-img-wrap img {
-            width: 100%;
-            height: 100%;
+            height: 160px;
             object-fit: cover;
         }
 
@@ -411,13 +405,13 @@
             gap: 4px;
         }
 
-        .card-price {
+        .product-card-price {
             font-size: 15px;
             font-weight: 800;
             color: var(--text);
         }
 
-        .card-title {
+        .product-card-title {
             font-size: 12px;
             color: var(--text);
             display: -webkit-box;
@@ -654,6 +648,25 @@
         const DEFAULT_PRODUCTS = [
             { 
                 id: 1, 
+                name: "Qishki issiq qora kurtka, kapushonli", 
+                price: "349 000 so'm", 
+                oldPrice: "650 000 so'm", 
+                discount: "↓ 46%", 
+                rating: 4.8, 
+                commentsCount: 142,
+                ordersCount: "1 200+",
+                salesInfo: "Bu haftada 89 kishi sotib oldi",
+                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material, yumshoq ichki qoplama va qulay kapushonga ega. Har kuni kiyish uchun juda qulay va issiq saqlaydi.", 
+                images: ["https://picsum.photos/600/600?random=101", "https://picsum.photos/600/600?random=102", "https://picsum.photos/600/600?random=103"], 
+                reviewPhotos: ["https://picsum.photos/100/100?random=151"],
+                variants: [
+                    { img: "https://picsum.photos/200/200?random=101", label: "Qora (M)", available: true },
+                    { img: "https://picsum.photos/200/200?random=102", label: "Qora (L)", available: true },
+                    { img: "https://picsum.photos/200/200?random=103", label: "Qora (XL)", available: false }
+                ]
+            },
+            { 
+                id: 2, 
                 name: "Raqamli elektron tasbeh, rolikli mexanizm", 
                 price: "29 500 so'm", 
                 oldPrice: "80 000 so'm", 
@@ -662,14 +675,25 @@
                 commentsCount: 10,
                 ordersCount: "70+",
                 salesInfo: "Bu haftada 15 kishi sotib oldi",
-                desc: "Zikringizni oson va aniq hisoblang. 0-99999 gacha hisob, kompas funksiyasi, ovosiz bosish, yengil va qulay. Yuqori sifatli materialdan tayyorlangan.", 
-                images: ["https://picsum.photos/600/600?random=1", "https://picsum.photos/600/600?random=11", "https://picsum.photos/600/600?random=12"], 
-                reviewPhotos: ["https://picsum.photos/100/100?random=51"],
-                variants: [
-                    { img: "https://picsum.photos/200/200?random=1", label: "Mis rang", available: true },
-                    { img: "https://picsum.photos/200/200?random=11", label: "Qora rang", available: true },
-                    { img: "https://picsum.photos/200/200?random=12", label: "Oq rang", available: false }
-                ]
+                desc: "Zikringizni oson va aniq hisoblang. 0-99999 gacha hisob, kompas funksiyasi, ovosiz bosish, yengil va qulay.", 
+                images: ["https://picsum.photos/600/600?random=1"], 
+                reviewPhotos: [],
+                variants: []
+            },
+            { 
+                id: 3, 
+                name: "Kir yuvish kukuni Persil, avtomat, 3 kg", 
+                price: "68 700 so'm", 
+                oldPrice: "120 000 so'm", 
+                discount: "↓ 43%", 
+                rating: 4.9, 
+                commentsCount: 6870,
+                ordersCount: "31 500+",
+                salesInfo: "Bu haftada 756 kishi sotib oldi",
+                desc: "Persil kir yuvish kukuni Avtomat, 3 kg - bu kirni chuqur tozalash uchun kuchli vositadir.", 
+                images: ["https://picsum.photos/600/600?random=2"], 
+                reviewPhotos: [],
+                variants: []
             }
         ];
 
@@ -735,7 +759,7 @@
                         ${(product.reviewPhotos || []).map(img => `
                             <div class="preview-thumb"><img src="${img}" alt="Sharh rasmi"></div>
                         `).join('')}
-                        <div class="preview-thumb more-overlay"><img src="${pImages[0]}" alt="More"></div>
+                        ${product.reviewPhotos && product.reviewPhotos.length > 0 ? `<div class="preview-thumb more-overlay"><img src="${pImages[0]}" alt="More"></div>` : ''}
                     </div>
                 </div>
 
@@ -745,7 +769,7 @@
                 </div>
 
                 <div class="section-card">
-                    ${product.variants ? `
+                    ${product.variants && product.variants.length > 0 ? `
                         <div class="option-group" style="margin-bottom: 14px;">
                             <div class="option-title">Tanlov: <span id="selectedVariantLabel">${product.variants[0].label}</span></div>
                             <div class="color-variants-grid">
@@ -890,12 +914,10 @@
 
             grid.innerHTML = similar.map(p => `
                 <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
-                    <div class="product-card-img-wrap">
-                        <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
-                    </div>
+                    <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
                     <div class="product-card-body">
-                        <div class="card-price">${p.price}</div>
-                        <div class="card-title">${p.name}</div>
+                        <div class="product-card-price">${p.price}</div>
+                        <div class="product-card-title">${p.name}</div>
                     </div>
                 </div>
             `).join('');
