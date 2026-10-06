@@ -29,7 +29,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 120px;
+            padding-bottom: 110px;
             overflow-x: hidden;
         }
 
@@ -39,7 +39,7 @@
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 60px 16px 20px 16px;
+            padding: 34px 16px 16px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -110,7 +110,7 @@
             color: var(--text);
         }
 
-        /* MAHSULOTLAR GRID (index.html bilan bir xil uzun rasm va sharhlar bilan) */
+        /* MAHSULOTLAR GRID */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -138,7 +138,7 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.8);
+            background: transparent;
             border: none;
             display: flex;
             align-items: center;
@@ -148,8 +148,8 @@
         }
 
         .heart-icon svg {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             fill: #d1d5db;
             stroke: #ffffff;
             stroke-width: 1.5;
@@ -162,7 +162,7 @@
 
         .product-img-box {
             width: 100%;
-            height: 190px;
+            height: 170px;
             background: #f8f9fa;
             position: relative;
             overflow: hidden;
@@ -175,43 +175,16 @@
         }
 
         .product-info {
-            padding: 10px;
+            padding: 10px 8px;
             display: flex;
             flex-direction: column;
             flex: 1;
-        }
-
-        .product-title {
-            font-size: 12px;
-            line-height: 1.3;
-            color: var(--text);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            height: 32px;
-        }
-
-        .rating-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            color: var(--muted);
-            margin: 4px 0;
-        }
-
-        .rating-row svg {
-            width: 13px;
-            height: 13px;
-            fill: #ffbc0d;
         }
 
         .price-row {
             display: flex;
             align-items: center;
             gap: 6px;
-            margin-top: 4px;
         }
 
         .main-price {
@@ -230,9 +203,22 @@
         }
 
         .old-prices {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--muted);
+            margin-top: 2px;
             text-decoration: line-through;
+        }
+
+        .product-title {
+            font-size: 12px;
+            line-height: 1.3;
+            color: var(--text);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: 6px;
+            height: 32px;
         }
 
         .cart-btn {
@@ -255,7 +241,7 @@
         /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
-            bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+            bottom: 22px;
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -270,7 +256,7 @@
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             z-index: 1000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         .nav-item {
@@ -378,12 +364,12 @@
         const catId = urlParams.get('cat_id') || 1;
 
         const ALL_PRODUCTS = [
-            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: "4.9", reviews: "124", img: "https://picsum.photos/300/300?random=1" },
-            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: "4.8", reviews: "92", img: "https://picsum.photos/300/300?random=2" },
-            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: "5.0", reviews: "310", img: "https://picsum.photos/300/300?random=3" },
-            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: "4.7", reviews: "45", img: "https://picsum.photos/300/300?random=4" },
-            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: "4.9", reviews: "178", img: "https://picsum.photos/300/300?random=5" },
-            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: "4.8", reviews: "89", img: "https://picsum.photos/300/300?random=6" }
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", img: "https://picsum.photos/300/300?random=1" },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", img: "https://picsum.photos/300/300?random=2" },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", img: "https://picsum.photos/300/300?random=3" },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", img: "https://picsum.photos/300/300?random=4" },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", img: "https://picsum.photos/300/300?random=5" },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", img: "https://picsum.photos/300/300?random=6" }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
@@ -410,16 +396,12 @@
                             <img src="${p.img}" alt="${p.name}">
                         </div>
                         <div class="product-info">
-                            <div class="product-title">${p.name}</div>
-                            <div class="rating-row">
-                                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                                <span>${p.rating || '4.8'} (${p.reviews || '50'} sharh)</span>
-                            </div>
                             <div class="price-row">
                                 <span class="main-price">${p.price}</span>
                                 <span class="discount-tag">${p.discount}</span>
                             </div>
                             <div class="old-prices">${p.oldPrice}</div>
+                            <div class="product-title">${p.name}</div>
                             <button class="cart-btn" onclick="addToCart(event, ${p.id})">Savatga qo'shish</button>
                         </div>
                     </div>
