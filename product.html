@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mahsulot - Uzum Market</title>
+    <title>Mahsulot tavsiloti - Uzum Market</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -13,6 +14,7 @@
             --text: #1f2026;
             --muted: #8b8e99;
             --border: #e2e5eb;
+            --star: #ffb800;
             --discount-bg: #f1e5ff;
             --discount-text: #7000ff;
         }
@@ -28,30 +30,47 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 90px;
+            padding-bottom: 120px;
             overflow-x: hidden;
         }
 
-        .header-title {
-            background: #ffffff;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: 700;
-            border-bottom: 1px solid var(--border);
+        .sticky-header {
             position: sticky;
             top: 0;
+            background: #ffffff;
             z-index: 999;
+            padding: 50px 16px 12px 16px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
         }
 
         .back-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
             color: var(--text);
+            text-decoration: none;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .product-detail-container {
@@ -59,79 +78,211 @@
             margin: 12px;
             border-radius: 16px;
             overflow: hidden;
+            border: 1px solid var(--border);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .product-img-large {
+        .product-img-box {
             width: 100%;
             height: 320px;
             background: #f8f9fa;
             position: relative;
+            overflow: hidden;
         }
 
-        .product-img-large img {
+        .card-slider-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-slider-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+        }
+
+        .card-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+        }
+
+        .card-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .card-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s;
+        }
+
+        .card-dot.active {
+            width: 16px;
+            border-radius: 4px;
+            background: #ffffff;
+        }
+
+        .badge-original {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: #00c853;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            z-index: 4;
+            pointer-events: none;
         }
 
         .detail-info {
             padding: 16px;
         }
 
-        .detail-title {
-            font-size: 18px;
-            font-weight: 600;
-            line-height: 1.4;
-            color: var(--text);
-            margin-bottom: 12px;
-        }
-
-        .detail-price-box {
+        .price-row {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
         }
 
-        .detail-main-price {
-            font-size: 24px;
+        .main-price {
+            font-size: 22px;
             font-weight: 800;
             color: var(--text);
         }
 
-        .detail-old-price {
+        .discount-tag {
+            background: var(--discount-bg);
+            color: var(--discount-text);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .old-prices {
             font-size: 14px;
             color: var(--muted);
             text-decoration: line-through;
+            margin-bottom: 12px;
+        }
+
+        .detail-title {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        .rating-box, .comment-box {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rating-box svg {
+            width: 15px;
+            height: 15px;
+            fill: var(--star);
+        }
+
+        .comment-box svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: #8b8e99;
+            stroke-width: 2;
+        }
+
+        .rating-num {
+            font-weight: 700;
+            color: var(--text);
         }
 
         .add-to-cart-main {
             width: 100%;
-            background: var(--primary);
-            color: #ffffff;
+            background: var(--primary-bg);
+            color: var(--primary);
             border: none;
             padding: 14px;
             border-radius: 12px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .add-to-cart-main:active {
+            opacity: 0.8;
+        }
+
+        .add-to-cart-main svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
             height: 64px;
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
             z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
 
         .nav-item {
@@ -143,9 +294,10 @@
             color: #808080;
             font-size: 10px;
             font-weight: 500;
-            transition: all 0.2s ease;
             width: 20%;
             position: relative;
+            cursor: pointer;
+            padding: 8px 0;
         }
 
         .nav-icon-wrap {
@@ -153,6 +305,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: none;
+        }
+
+        .nav-item span {
+            pointer-events: none;
         }
 
         .nav-item svg {
@@ -179,8 +336,8 @@
             position: absolute;
             top: -4px;
             right: -8px;
-            background: #000000;
-            color: #ffffff;
+            background: #000;
+            color: #fff;
             font-size: 10px;
             font-weight: 700;
             min-width: 17px;
@@ -190,19 +347,19 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 10;
         }
 
         .badge-count.show {
-            display: flex !important;
+            display: flex;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-title">
-        <button class="back-btn" onclick="history.back()">‹</button>
+    <div class="sticky-header">
+        <a href="javascript:history.back()" class="back-btn" title="Orqaga">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </a>
         Mahsulot tavsiloti
     </div>
 
@@ -211,91 +368,160 @@
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
             <span>Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span>Katalog</span>
         </a>
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <div class="badge-count" id="favBadge">0</div>
-            </div>
-            <span>Saralanganlar</span>
-        </a>
         <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                <div class="badge-count" id="cartBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span>Savatcha</span>
         </a>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span>Saralangan</span>
+        </a>
         <a href="profil.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <span>Profil</span>
         </a>
     </nav>
 
     <script>
-        const PRODUCTS = [
-            { id: 1, name: "Kir yuvish kukuni Persil Professional Color, 10 kg", price: "196 220 so'm", oldPrice: "309 990 so'm", discount: "↓ 37%", img: "https://picsum.photos/300/300?random=20" },
-            { id: 2, name: "Inozitol 1000 mg, vazn yo'qotish uchun", price: "141 300 so'm", oldPrice: "320 000 so'm", discount: "↓ 56%", img: "https://picsum.photos/300/300?random=21" },
-            { id: 3, name: "Samsung 55 Smart TV 4K Ultra HD", price: "5 400 000 so'm", oldPrice: "6 900 000 so'm", discount: "↓ 21%", img: "https://picsum.photos/300/300?random=22" },
-            { id: 4, name: "iPhone 15 Pro Max 256GB Natural Titanium", price: "16 200 000 so'm", oldPrice: "18 500 000 so'm", discount: "↓ 12%", img: "https://picsum.photos/300/300?random=23" },
-            { id: 5, name: "Bosch SilentMixx Professional Blender", price: "850 000 so'm", oldPrice: "1 200 000 so'm", discount: "↓ 29%", img: "https://picsum.photos/300/300?random=24" },
-            { id: 6, name: "Tefal Express Steam Bug'li Dazmol", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", img: "https://picsum.photos/300/300?random=25" },
-            { id: 7, name: "Xiaomi Redmi Note 13 Pro 8/256GB", price: "3 100 000 so'm", oldPrice: "4 000 000 so'm", discount: "↓ 22%", img: "https://picsum.photos/300/300?random=26" },
-            { id: 8, name: "Sony WH-1000XM5 Shovqinsiz Quloqchin", price: "4 200 000 so'm", oldPrice: "5 100 000 so'm", discount: "↓ 17%", img: "https://picsum.photos/300/300?random=27" },
-            { id: 9, name: "Apple MacBook Air 13 M2 8/256GB", price: "12 800 000 so'm", oldPrice: "15 000 000 so'm", discount: "↓ 14%", img: "https://picsum.photos/300/300?random=28" },
-            { id: 10, name: "Dyson V15 Detect Simsiz Changyutgich", price: "8 900 000 so'm", oldPrice: "11 000 000 so'm", discount: "↓ 19%", img: "https://picsum.photos/300/300?random=29" }
+        const DEFAULT_PRODUCTS = [
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, images: ["https://picsum.photos/300/300?random=2"] },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, images: ["https://picsum.photos/300/300?random=3", "https://picsum.photos/300/300?random=31"] },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, images: ["https://picsum.photos/300/300?random=4"] },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, images: ["https://picsum.photos/300/300?random=5", "https://picsum.photos/300/300?random=51"] },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, images: ["https://picsum.photos/300/300?random=6"] }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
         const productId = parseInt(urlParams.get('id')) || 1;
-        const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+
+        let allProducts = JSON.parse(localStorage.getItem('products')) || DEFAULT_PRODUCTS;
+        const product = allProducts.find(p => p.id === productId) || allProducts[0];
+
+        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
         function renderDetail() {
             const container = document.getElementById('productContent');
+            const pImages = product.images || [product.img || "https://picsum.photos/300/300"];
+            const hasMultipleImages = pImages.length > 1;
+            const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
+
             container.innerHTML = `
                 <div class="product-detail-container">
-                    <div class="product-img-large">
-                        <img src="${product.img}" alt="${product.name}">
+                    <div class="product-img-box">
+                        <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
+                            ${loopedImages.map(imgUrl => `
+                                <div class="card-slide"><img src="${imgUrl}" alt="${product.name}"></div>
+                            `).join('')}
+                        </div>
+                        ${hasMultipleImages ? `
+                            <div class="card-dots">
+                                ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
+                            </div>
+                        ` : ''}
+                        <div class="badge-original">✓ ORIGINAL</div>
                     </div>
                     <div class="detail-info">
-                        <h1 class="detail-title">${product.name}</h1>
-                        <div class="detail-price-box">
-                            <span class="detail-main-price">${product.price}</span>
-                            <span class="detail-old-price">${product.oldPrice}</span>
+                        <div class="price-row">
+                            <span class="main-price">${product.price}</span>
+                            <span class="discount-tag">${product.discount || '↓ 20%'}</span>
                         </div>
-                        <button class="add-to-cart-main" onclick="addToCart()">Savatga qo'shish</button>
+                        <div class="old-prices">${product.oldPrice}</div>
+                        <h1 class="detail-title">${product.name}</h1>
+                        
+                        <div class="product-rating">
+                            <div class="rating-box">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                <span class="rating-num">${product.rating || 4.8}</span>
+                            </div>
+                            <div class="comment-box">
+                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                <span>${product.comments || 50} sharh</span>
+                            </div>
+                        </div>
+
+                        <button class="add-to-cart-main" onclick="addToCart()">
+                            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            <span>Savatga qo'shish</span>
+                        </button>
                     </div>
                 </div>
             `;
+
+            setTimeout(() => {
+                document.querySelectorAll('.card-slider-container').forEach(container => {
+                    if (container.dataset.originalLength) {
+                        const slideWidth = container.clientWidth;
+                        container.scrollLeft = slideWidth;
+                    }
+                });
+            }, 50);
         }
 
-        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
-        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+        function handleCardScroll(e, originalLen) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const scrollLeft = container.scrollLeft;
+
+            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            } else if (scrollLeft <= 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = originalLen * slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            }
+
+            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            const realIndex = (activeIndex + originalLen) % originalLen;
+
+            const dotsBox = container.parentElement.querySelector('.card-dots');
+            if (dotsBox) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
+        }
 
         function addToCart() {
             cart.push(product);
             localStorage.setItem('cart_products', JSON.stringify(cart));
             updateBadges();
-            alert("Mahsulot savatchaga qo'shildi!");
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showAlert) {
+                window.Telegram.WebApp.showAlert("Mahsulot savatchaga qo'shildi!");
+            } else {
+                alert("Mahsulot savatchaga qo'shildi!");
+            }
         }
 
         function updateBadges() {
             const favBadge = document.getElementById('favBadge');
             const cartBadge = document.getElementById('cartBadge');
-            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
-            if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
+            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
+
+            if (validFavs.length > 0) { 
+                favBadge.textContent = validFavs.length; 
+                favBadge.classList.add('show'); 
+            } else { 
+                favBadge.classList.remove('show'); 
+            }
+
+            if (cart.length > 0) { 
+                cartBadge.textContent = cart.length; 
+                cartBadge.classList.add('show'); 
+            } else { 
+                cartBadge.classList.remove('show'); 
+            }
         }
 
         renderDetail();
@@ -303,4 +529,3 @@
     </script>
 </body>
 </html>
-
