@@ -973,10 +973,10 @@
                         <button class="heart-icon ${isLiked}" onclick="toggleHeart(event, ${p.id})">
                             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </button>
-                        <div class="product-img-box" onclick="goToProduct(${p.id})">
-                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})" onclick="event.stopPropagation()"` : ''}>
+                        <div class="product-img-box" data-product-id="${p.id}">
+                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
                                 ${loopedImages.map(imgUrl => `
-                                    <div class="card-slide" onclick="goToProduct(${p.id})"><img src="${imgUrl}" alt="${p.name}"></div>
+                                    <div class="card-slide"><img src="${imgUrl}" alt="${p.name}"></div>
                                 `).join('')}
                             </div>
                             ${hasMultipleImages ? `
@@ -1015,6 +1015,24 @@
                     </div>
                 `;
             }).join('');
+
+            // Rasm qismiga bosganda sahifaga o'tish (siljitish vaqtida ishlamasligi uchun maxsus tekshiruv)
+            document.querySelectorAll('.product-img-box').forEach(box => {
+                let startX = 0;
+                let startY = 0;
+                box.addEventListener('pointerdown', (e) => {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                });
+                box.addEventListener('pointerup', (e) => {
+                    let diffX = Math.abs(e.clientX - startX);
+                    let diffY = Math.abs(e.clientY - startY);
+                    if (diffX < 6 && diffY < 6) {
+                        const prodId = box.getAttribute('data-product-id');
+                        goToProduct(prodId);
+                    }
+                });
+            });
 
             setTimeout(() => {
                 document.querySelectorAll('.card-slider-container').forEach(container => {
@@ -1105,3 +1123,6 @@
         renderCategories();
         renderProducts();
         updateBadges();
+    </script>
+</body>
+</html>
