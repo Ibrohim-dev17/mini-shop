@@ -27,24 +27,24 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 80px; /* Pastdagi navigator yopib qo'ymasligi uchun */
+            padding-bottom: 100px;
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV (Rasmga moslab yonma-yon qilindi) */
+        /* HEADER VA QIDIRUV (Orqaga tugmasi va qidiruv yonma-yon, qidiruv yana ham pastroqda) */
         .sticky-header {
             position: sticky;
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 12px 16px;
+            padding: 16px 16px 14px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .header-top-row {
+        .header-row {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -54,38 +54,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
             text-decoration: none;
+            flex-shrink: 0;
         }
 
         .back-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             stroke: var(--text);
-            stroke-width: 2.2;
+            stroke-width: 2;
             fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
-        }
-
-        .sticky-header h1 {
-            font-size: 20px;
-            font-weight: 700;
         }
 
         .search-box {
             display: flex;
             align-items: center;
             background: var(--bg);
-            border-radius: 10px;
-            padding: 9px 12px;
-            gap: 8px;
+            border-radius: 14px;
+            padding: 12px 14px;
+            gap: 10px;
             border: 1px solid transparent;
+            flex: 1;
         }
 
         .search-box:focus-within {
@@ -99,6 +96,7 @@
             fill: none;
             stroke: var(--muted);
             stroke-width: 2;
+            flex-shrink: 0;
         }
 
         .search-box input {
@@ -124,7 +122,7 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -144,8 +142,8 @@
         }
 
         .cat-img {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 12px;
             object-fit: cover;
             background: #eee;
@@ -167,27 +165,32 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION (Rasmdagidek pastga to'g'ridan-to'g'ri yopishdi) */
+        /* BOTTOM NAVIGATION (Avvalgi chiroyli float holati, biroz teparoqqa surildi) */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.98);
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
             z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
             text-decoration: none;
             color: #808080;
             font-size: 10px;
@@ -204,8 +207,8 @@
         }
 
         .nav-item svg {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
@@ -228,15 +231,15 @@
             right: -8px;
             background: #000;
             color: #fff;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 700;
-            min-width: 16px;
-            height: 16px;
-            border-radius: 8px;
+            min-width: 17px;
+            height: 17px;
+            border-radius: 10px;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 0 3px;
+            padding: 0 4px;
         }
 
         .badge-count.show {
@@ -247,15 +250,16 @@
 <body>
 
     <div class="sticky-header">
-        <div class="header-top-row">
-            <a href="index.html" class="back-btn">
+        <div class="header-row">
+            <!-- Orqaga qaytish tugmasi qidiruv paneli bilan bir qatorda chapda -->
+            <a href="index.html" class="back-btn" title="Orqaga">
                 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </a>
-            <h1>Katalog</h1>
-        </div>
-        <div class="search-box">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." onkeypress="handleSearch(event)">
+            <!-- Qidiruv paneli -->
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." onkeypress="handleSearch(event)">
+            </div>
         </div>
     </div>
 
@@ -270,15 +274,15 @@
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span>Katalog</span>
         </a>
-        <!-- Yurak (Saralangan) oldinda -->
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
-            <span>Saralangan</span>
-        </a>
-        <!-- Savatcha keyinda -->
+        <!-- Savat va Yurak o'rinlari almashtirildi: Savat oldinda -->
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span>Savatcha</span>
+        </a>
+        <!-- Yurak keyingi o'rinda -->
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span>Saralangan</span>
         </a>
         <a href="profil.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
