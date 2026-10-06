@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER QIDIRUV SATRI */
+        /* HEADER QIDIRUV SATRI VA AVTO-TAVSIYA (LIVE SEARCH) */
         .header-search-container {
             padding: 50px 16px 12px 16px;
             background: #ffffff;
@@ -42,6 +42,11 @@
             top: 0;
             z-index: 999;
             border-bottom: 1px solid var(--border);
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
         }
 
         .search-box {
@@ -66,6 +71,7 @@
             fill: none;
             stroke: var(--muted);
             stroke-width: 2;
+            flex-shrink: 0;
         }
 
         .search-box input {
@@ -81,7 +87,56 @@
             color: var(--muted);
         }
 
-        /* BOTTOM NAVIGATION (categories.html bilan bir xil balandlikda) */
+        /* LIVE SEARCH DROPDOWN */
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-suggestion-item {
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover, .search-suggestion-item:active {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(32px + env(safe-area-inset-bottom, 0px));
@@ -111,9 +166,10 @@
             color: #808080;
             font-size: 10px;
             font-weight: 500;
-            transition: all 0.2s ease;
             width: 20%;
             position: relative;
+            cursor: pointer;
+            padding: 8px 0; /* Bosish maydonini kattalashtirish va 1 ta bosishda ishlashi uchun */
         }
 
         .nav-icon-wrap {
@@ -121,6 +177,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: none; /* Sichqoncha bosilganda svg emas, to'g'ridan-to'g'ri link ishlashi uchun */
+        }
+
+        .nav-item span {
+            pointer-events: none;
         }
 
         .nav-item svg {
@@ -189,6 +250,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             background: #e0e0e0;
             user-select: none;
+            cursor: pointer;
         }
 
         .banner-slide img {
@@ -470,12 +532,16 @@
 <body>
 
     <div class="header-search-container">
-        <div class="search-box">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." onkeypress="handleSearch(event)">
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+            </div>
+            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
     </div>
 
+    <!-- BANNER CAROUSEL (Products.html dagi mahsulotlardan yoki admin panel yuklaganlardan 3 tasi) -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
@@ -520,12 +586,6 @@
             window.Telegram.WebApp.expand();
         }
 
-        const BANNERS = [
-            "https://picsum.photos/600/250?random=1",
-            "https://picsum.photos/600/250?random=2",
-            "https://picsum.photos/600/250?random=3"
-        ];
-
         const DEFAULT_CATEGORIES = [
             { id: 1, name: "Kurtkalar", img: "https://picsum.photos/100/100?random=1" },
             { id: 2, name: "Tapichka", img: "https://picsum.photos/100/100?random=2" },
@@ -545,88 +605,166 @@
             { id: 8, category_id: 2, name: "Issiq qishki tapichka", price: "55 000 so'm", oldPrice: "90 000 so'm", discount: "↓ 38%", rating: 4.9, comments: 112, img: "https://picsum.photos/300/300?random=8" }
         ];
 
-        // --- BANNER LOGIKASI ---
-        const track = document.getElementById('bannerTrack');
-        const dotsContainer = document.getElementById('bannerDots');
-        const container = document.getElementById('bannerContainer');
+        // --- BANNER LOGIKASI (Admin panel yoki Products dagi dastlabki 3 ta mahsulot bilan bog'langan) ---
+        function renderBanner() {
+            const track = document.getElementById('bannerTrack');
+            let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            
+            // Admin panel yoki maxsus banner ro'yxati tekshiriladi, agar bo'lmasa mahsulotlardan dastlabki 3 tasi olinadi
+            let bannerProducts = JSON.parse(localStorage.getItem('banner_products')) || allProducts.slice(0, 3);
+            
+            let slidesData = [bannerProducts[bannerProducts.length - 1], ...bannerProducts, bannerProducts[0]];
+            
+            track.innerHTML = slidesData.map(p => `
+                <div class="banner-slide" onclick="goToProduct(${p.id})">
+                    <img src="${p.img}" alt="${p.name}">
+                </div>
+            `).join('');
 
-        let slidesData = [BANNERS[BANNERS.length - 1], ...BANNERS, BANNERS[0]];
-        track.innerHTML = slidesData.map(src => `<div class="banner-slide"><img src="${src}" alt="Banner"></div>`).join('');
+            let slideIndex = 1;
+            let isTransitioning = false;
+            let slideInterval;
+            const dotsContainer = document.getElementById('bannerDots');
+            const container = document.getElementById('bannerContainer');
 
-        let slideIndex = 1;
-        let isTransitioning = false;
-        let slideInterval;
+            function updateSlider(animate = true) {
+                const slideWidth = window.innerWidth * 0.8 + 10;
+                if (animate) {
+                    track.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                } else {
+                    track.style.transition = 'none';
+                }
+                track.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
 
-        function updateSlider(animate = true) {
-            const slideWidth = window.innerWidth * 0.8 + 10;
-            if (animate) {
-                track.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-            } else {
-                track.style.transition = 'none';
+                let realIndex = (slideIndex - 1 + bannerProducts.length) % bannerProducts.length;
+                const dots = dotsContainer.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
             }
-            track.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
 
-            let realIndex = (slideIndex - 1 + BANNERS.length) % BANNERS.length;
-            const dots = dotsContainer.children;
-            for (let i = 0; i < dots.length; i++) {
-                dots[i].classList.toggle('active', i === realIndex);
+            updateSlider(false);
+
+            function startAutoSlide() {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(() => {
+                    if (isTransitioning) return;
+                    isTransitioning = true;
+                    slideIndex++;
+                    updateSlider(true);
+                }, 6000);
             }
-        }
 
-        updateSlider(false);
-
-        function startAutoSlide() {
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                if (isTransitioning) return;
-                isTransitioning = true;
-                slideIndex++;
-                updateSlider(true);
-            }, 6000);
-        }
-
-        startAutoSlide();
-
-        track.addEventListener('transitionend', () => {
-            isTransitioning = false;
-            if (slideIndex >= slidesData.length - 1) {
-                slideIndex = 1;
-                updateSlider(false);
-            }
-            if (slideIndex <= 0) {
-                slideIndex = slidesData.length - 2;
-                updateSlider(false);
-            }
-        });
-
-        let startX = 0;
-        let isDragging = false;
-
-        container.addEventListener('pointerdown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            clearInterval(slideInterval);
-        });
-
-        container.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
-            let diff = e.clientX - startX;
-            const slideWidth = window.innerWidth * 0.8 + 10;
-            track.style.transition = 'none';
-            track.style.transform = `translateX(${-slideIndex * slideWidth + diff}px)`;
-        });
-
-        container.addEventListener('pointerup', (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            let diff = e.clientX - startX;
-            if (diff > 50 && slideIndex > 0) {
-                slideIndex--;
-            } else if (diff < -50 && slideIndex < slidesData.length - 1) {
-                slideIndex++;
-            }
-            updateSlider(true);
             startAutoSlide();
+
+            track.addEventListener('transitionend', () => {
+                isTransitioning = false;
+                if (slideIndex >= slidesData.length - 1) {
+                    slideIndex = 1;
+                    updateSlider(false);
+                }
+                if (slideIndex <= 0) {
+                    slideIndex = slidesData.length - 2;
+                    updateSlider(false);
+                }
+            });
+
+            let startX = 0;
+            let isDragging = false;
+
+            container.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                clearInterval(slideInterval);
+            });
+
+            container.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                let diff = e.clientX - startX;
+                const slideWidth = window.innerWidth * 0.8 + 10;
+                track.style.transition = 'none';
+                track.style.transform = `translateX(${-slideIndex * slideWidth + diff}px)`;
+            });
+
+            container.addEventListener('pointerup', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                let diff = e.clientX - startX;
+                if (diff > 50 && slideIndex > 0) {
+                    slideIndex--;
+                } else if (diff < -50 && slideIndex < slidesData.length - 1) {
+                    slideIndex++;
+                }
+                updateSlider(true);
+                startAutoSlide();
+            });
+        }
+
+
+        // --- LIVE SEARCH VA TAVSIYA BERISH (Bitta harfdan qidirish va xatoni to'g'rilash) ---
+        function handleLiveSearch(e) {
+            const query = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
+
+            if (query.length === 0) {
+                dropdown.classList.remove('show');
+                dropdown.innerHTML = '';
+                return;
+            }
+
+            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
+
+            // Mos keluvchi mahsulotlar va kategoriyalarni topish (bitta harfdan boshlab)
+            let matchedProducts = products.filter(p => p.name.toLowerCase().includes(query));
+            let matchedCategories = categories.filter(c => c.name.toLowerCase().includes(query));
+
+            let html = '';
+
+            if (matchedCategories.length > 0) {
+                matchedCategories.forEach(c => {
+                    html += `<div class="search-suggestion-item" onclick="window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
+                        <span>${c.name}</span>
+                        <span class="suggestion-type">Kategoriya</span>
+                    </div>`;
+                });
+            }
+
+            if (matchedProducts.length > 0) {
+                matchedProducts.forEach(p => {
+                    html += `<div class="search-suggestion-item" onclick="window.location.href='product.html?id=${p.id}'">
+                        <span>${p.name}</span>
+                        <span class="suggestion-type">Mahsulot</span>
+                    </div>`;
+                });
+            }
+
+            if (matchedCategories.length === 0 && matchedProducts.length === 0) {
+                // Xato yozilganda yoki topilmaganda maslahat / yaqin variantlarni tavsiya qilish
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Bunday mahsulot topilmadi. Qidiruvni davom ettiring...</div>`;
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        // Qidiruv satridan Enter bosilganda
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                }
+            }
+        }
+
+        // Dropdown tashqarisiga bosilganda uni yopish
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (!wrapper.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
         });
 
 
@@ -667,15 +805,13 @@
             }
         }
 
-        // Tasodifiy tartib faqat birinchi marta (ilovaga kirganda sessionStorage orqali saqlanadi)
         function getShuffledProducts() {
             let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
             let storedOrder = sessionStorage.getItem('shuffled_product_ids');
-            
+
             if (storedOrder) {
                 let ids = JSON.parse(storedOrder);
                 let ordered = ids.map(id => products.find(p => p.id === id)).filter(Boolean);
-                // Agar yangi mahsulotlar qo'shilgan bo'lsa ularni ham qo'shamiz
                 let missing = products.filter(p => !ids.includes(p.id));
                 return [...ordered, ...missing];
             } else {
@@ -742,7 +878,6 @@
                 favs.push(id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            // Faqat o'sha tugmani qizartirish uchun butun ro'yxatni qaytadan render qilmasdan faqat klassni o'zgartiramiz
             const btn = e.currentTarget;
             btn.classList.toggle('liked', favs.includes(id));
             updateBadges();
@@ -759,15 +894,7 @@
             }
         }
 
-        function handleSearch(e) {
-            if (e.key === 'Enter') {
-                const query = document.getElementById('searchInput').value;
-                if (query.trim()) {
-                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-                }
-            }
-        }
-
+        renderBanner();
         renderCategories();
         renderProducts();
         updateBadges();
