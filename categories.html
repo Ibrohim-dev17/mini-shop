@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Katalog - Uzum Market</title>
-    <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -28,16 +27,14 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-top: env(safe-area-inset-top, 12px);
-            /* Pastdagi navigator yopib qo'ymasligi uchun bo'shliq */
             padding-bottom: 100px;
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV SATRI */
+        /* HEADER VA QIDIRUV */
         .sticky-header {
             position: sticky;
-            top: env(safe-area-inset-top, 0px);
+            top: 0;
             background: var(--card);
             z-index: 999;
             padding: 16px;
@@ -51,7 +48,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 6px; /* Sarlavhani biroz pastroqqa tushirish uchun */
+            margin-top: 4px;
         }
 
         .back-btn {
@@ -65,11 +62,6 @@
             border: 1px solid var(--border);
             color: var(--text);
             text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .back-btn:active {
-            background: var(--border);
         }
 
         .back-btn svg {
@@ -83,9 +75,8 @@
         }
 
         .sticky-header h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
-            color: var(--text);
         }
 
         .search-box {
@@ -96,7 +87,6 @@
             padding: 10px 14px;
             gap: 8px;
             border: 1px solid transparent;
-            transition: border-color 0.2s;
         }
 
         .search-box:focus-within {
@@ -121,11 +111,7 @@
             color: var(--text);
         }
 
-        .search-box input::placeholder {
-            color: var(--muted);
-        }
-
-        /* KATEGORIYALAR RO'YXATI */
+        /* KATEGORIYALAR */
         .categories-container {
             padding: 16px;
             display: flex;
@@ -146,12 +132,10 @@
             text-decoration: none;
             color: var(--text);
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            transition: background 0.2s, transform 0.1s;
         }
 
         .category-card:active {
             background: var(--primary-bg);
-            transform: scale(0.98);
         }
 
         .cat-left {
@@ -184,10 +168,10 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION (YUQORIROQGA KO'TARILDI) */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
-            bottom: 12px;
+            bottom: 16px;
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -195,7 +179,6 @@
             height: 64px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -248,8 +231,8 @@
             position: absolute;
             top: -4px;
             right: -8px;
-            background: #000000;
-            color: #ffffff;
+            background: #000;
+            color: #fff;
             font-size: 10px;
             font-weight: 700;
             min-width: 17px;
@@ -259,7 +242,6 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .badge-count.show {
@@ -269,11 +251,9 @@
 </head>
 <body>
 
-    <!-- TEPADA MAHKAM TURADIGAN HEADER VA QIDIRUV -->
     <div class="sticky-header">
         <div class="header-top-row">
-            <!-- Index.html ga qaytish tugmasi -->
-            <a href="index.html" class="back-btn" title="Orqaga">
+            <a href="index.html" class="back-btn">
                 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </a>
             <h1>Katalog</h1>
@@ -284,57 +264,37 @@
         </div>
     </div>
 
-    <!-- KATEGORIYALAR RO'YXATI -->
-    <div class="categories-container" id="categoriesList">
-        <!-- LocalStorage dan dinamik to'ldiriladi -->
-    </div>
+    <div class="categories-container" id="categoriesList"></div>
 
-    <!-- BOTTOM NAVIGATION (Yurak va Savat o'rinlari almashtirildi) -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
             <span>Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item active">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span>Katalog</span>
         </a>
-        <!-- Saralanganlar (Yurak) oldinga olib o'tildi -->
         <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <div class="badge-count" id="favBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
             <span>Saralangan</span>
         </a>
-        <!-- Savatcha keyingi o'ringa qo'yildi -->
         <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                <div class="badge-count" id="cartBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span>Savatcha</span>
         </a>
         <a href="profil.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <span>Profil</span>
         </a>
     </nav>
 
     <script>
         if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
         }
 
-        // Zaxira va Odatiy kategoriyalar (LocalStorage bo'sh bo'lsa ishlaydi)
         const DEFAULT_CATEGORIES = [
             { id: 1, name: "Kurtkalar", img: "https://picsum.photos/100/100?random=1" },
             { id: 2, name: "Tapichka", img: "https://picsum.photos/100/100?random=2" },
@@ -345,8 +305,6 @@
 
         function loadCategories() {
             const container = document.getElementById('categoriesList');
-            
-            // LocalStorage dan kategoriyalarni olish (Admin panel keyinchalik shu yozuvni o'zgartiradi)
             let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
 
             container.innerHTML = categories.map(c => `
@@ -363,13 +321,10 @@
         function handleSearch(e) {
             if (e.key === 'Enter') {
                 const query = document.getElementById('searchInput').value.trim();
-                if (query) {
-                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-                }
+                if (query) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
             }
         }
 
-        // Badge (belgilar) sonini tekshirish
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
         if (favs.length > 0) { document.getElementById('favBadge').textContent = favs.length; document.getElementById('favBadge').classList.add('show'); }
