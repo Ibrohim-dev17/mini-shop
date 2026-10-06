@@ -91,10 +91,9 @@
             height: 100%;
             position: relative;
             overflow: hidden;
-            background: #f0f0f0;
+            background: #f8f9fa;
         }
 
-        /* Skeleton Shimmer Animation */
         .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
@@ -346,39 +345,6 @@
             stroke-width: 2;
         }
 
-        .option-title {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 8px;
-        }
-
-        .color-variants-grid {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .color-chip {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            position: relative;
-            background: #fff;
-        }
-
-        .color-chip img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .color-chip.selected {
-            border-color: var(--primary);
-        }
-
         .desc-text {
             font-size: 14px;
             color: var(--text);
@@ -428,33 +394,125 @@
             cursor: pointer;
         }
 
-        .product-card img {
+        .product-img-box-sm {
             width: 100%;
-            height: 160px;
-            object-fit: cover;
+            height: 210px;
+            background: #f8f9fa;
+            position: relative;
+            overflow: hidden;
         }
 
-        .product-card-body {
-            padding: 10px;
+        .product-img-box-sm img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .badge-original-sm {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: #00c853;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            z-index: 4;
+        }
+
+        .product-info-sm {
+            padding: 10px 8px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            flex: 1;
         }
 
-        .product-card-price {
-            font-size: 15px;
+        .price-row-sm {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .main-price-sm {
+            font-size: 16px;
             font-weight: 800;
             color: var(--text);
         }
 
-        .product-card-title {
+        .discount-tag-sm {
+            background: var(--discount-bg);
+            color: var(--discount-text);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+
+        .old-prices-sm {
             font-size: 12px;
+            color: var(--muted);
+            text-decoration: line-through;
+            margin-top: 2px;
+        }
+
+        .product-title-sm {
+            font-size: 12px;
+            line-height: 1.3;
             color: var(--text);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            line-height: 1.3;
+            margin-top: 6px;
+            height: 32px;
+        }
+
+        .product-rating-sm {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--muted);
+            margin: 8px 0;
+        }
+
+        .rating-box-sm {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .rating-box-sm svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--star);
+        }
+
+        .cart-btn-sm {
+            width: 100%;
+            height: 36px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+        .cart-btn-sm svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         /* FIXED BOTTOM BAR FOR CART */
@@ -646,12 +704,10 @@
         </button>
     </div>
 
-    <!-- PRODUCT IMAGE WRAPPER WITH SKELETON -->
     <div class="product-img-wrapper" id="imageWrapper">
         <div class="product-img-box skeleton"></div>
     </div>
 
-    <!-- OFFLINE / ERROR NOTIFICATION -->
     <div class="offline-container" id="offlineBox">
         <svg viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
         <div class="offline-title">Internetda uzulish yuzaga keldi</div>
@@ -693,39 +749,12 @@
 
     <script>
         const DEFAULT_PRODUCTS = [
-            { 
-                id: 1, 
-                name: "Qishki issiq qora kurtka, kapushonli", 
-                price: "349 000 so'm", 
-                oldPrice: "650 000 so'm", 
-                discount: "↓ 46%", 
-                rating: 4.8, 
-                commentsCount: 142,
-                ordersCount: "1 200+",
-                salesInfo: "Bu haftada 89 kishi sotib oldi",
-                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material, yumshoq ichki qoplama va qulay kapushonga ega.", 
-                images: ["https://picsum.photos/600/600?random=101", "https://picsum.photos/600/600?random=102"], 
-                reviewPhotos: ["https://picsum.photos/100/100?random=151"],
-                variants: [
-                    { img: "https://picsum.photos/200/200?random=101", label: "Qora (M)", available: true },
-                    { img: "https://picsum.photos/200/200?random=102", label: "Qora (L)", available: true }
-                ]
-            },
-            { 
-                id: 2, 
-                name: "Raqamli elektron tasbeh, rolikli mexanizm", 
-                price: "29 500 so'm", 
-                oldPrice: "80 000 so'm", 
-                discount: "↓ 63%", 
-                rating: 5.0, 
-                commentsCount: 10,
-                ordersCount: "70+",
-                salesInfo: "Bu haftada 15 kishi sotib oldi",
-                desc: "Zikringizni oson va aniq hisoblang. 0-99999 gacha hisob, kompas funksiyasi, ovosiz bosish, yengil va qulay.", 
-                images: ["https://picsum.photos/600/600?random=1"], 
-                reviewPhotos: [],
-                variants: []
-            }
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, ordersCount: "1 200+", salesInfo: "Bu haftada 89 kishi sotib oldi", desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material.", images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, ordersCount: "850+", salesInfo: "Bu haftada 54 kishi sotib oldi", desc: "Sport uslubidagi qulay va yengil kurtka.", images: ["https://picsum.photos/300/300?random=2"] },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, ordersCount: "3 400+", salesInfo: "Bu haftada 210 kishi sotib oldi", desc: "Uy uchun juda yumshoq va iliq tapichka.", images: ["https://picsum.photos/300/300?random=3"] },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, ordersCount: "400+", salesInfo: "Bu haftada 32 kishi sotib oldi", desc: "Bahorgi mavsum uchun qulay qora shapka.", images: ["https://picsum.photos/300/300?random=4"] },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, ordersCount: "950+", salesInfo: "Bu haftada 67 kishi sotib oldi", desc: "Zamonaviy dizayndagi ayollar ko'ylagi.", images: ["https://picsum.photos/300/300?random=5"] },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, ordersCount: "1 500+", salesInfo: "Bu haftada 120 kishi sotib oldi", desc: "100% toza paxtadan tayyorlangan sifatli to'plam.", images: ["https://picsum.photos/300/300?random=6"] }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -738,7 +767,6 @@
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
         function renderProduct() {
-            // Check network status simulation / handling
             if (!navigator.onLine) {
                 document.getElementById('offlineBox').style.display = 'flex';
                 document.getElementById('mainContentArea').style.display = 'none';
@@ -751,7 +779,7 @@
             }
 
             const imgWrapper = document.getElementById('imageWrapper');
-            const pImages = product.images || [product.img || "https://picsum.photos/600/600"];
+            const pImages = product.images || [product.img || "https://picsum.photos/300/300"];
             const hasMultipleImages = pImages.length > 1;
             const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
 
@@ -771,7 +799,7 @@
             `;
 
             const container = document.getElementById('productDetailContainer');
-            const ratingVal = product.rating || 5.0;
+            const ratingVal = product.rating || 4.9;
             const starCount = Math.round(ratingVal);
 
             container.innerHTML = `
@@ -792,34 +820,16 @@
                                 ${'<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'.repeat(starCount)}
                             </div>
                         </div>
-                        <div class="rating-sub-text">${product.commentsCount || 10} ta sharh · ${product.ordersCount || '100+'} ta buyurtma</div>
+                        <div class="rating-sub-text">${product.comments || 50} ta sharh · ${product.ordersCount || '100+'} ta buyurtma</div>
                     </div>
                     <div class="rating-photos-preview">
-                        ${(product.reviewPhotos || []).map(img => `
-                            <div class="preview-thumb"><img src="${img}" alt="Sharh rasmi"></div>
-                        `).join('')}
+                        <div class="preview-thumb"><img src="${pImages[0]}" alt="Sharh rasmi"></div>
                     </div>
                 </div>
 
                 <div class="sales-info-row">
                     <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <span>${product.salesInfo || "Bu haftada 15 kishi sotib oldi"}</span>
-                </div>
-
-                <div class="section-card">
-                    ${product.variants && product.variants.length > 0 ? `
-                        <div class="option-group" style="margin-bottom: 14px;">
-                            <div class="option-title">Tanlov: <span id="selectedVariantLabel">${product.variants[0].label}</span></div>
-                            <div class="color-variants-grid">
-                                ${product.variants.map((v, i) => `
-                                    <div class="color-chip ${i === 0 ? 'selected' : ''} ${!v.available ? 'out-of-stock' : ''}" 
-                                         onclick="${v.available ? `selectVariant(${i}, '${v.label}')` : ''}">
-                                        <img src="${v.img}" alt="${v.label}">
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
+                    <span>${product.salesInfo || "Bu haftada 150 kishi sotib oldi"}</span>
                 </div>
 
                 <div class="section-card">
@@ -842,23 +852,9 @@
         }
 
         function handleImgError(img) {
-            // Trigger offline block if image fails to load due to network connection issues
             document.getElementById('offlineBox').style.display = 'flex';
             document.getElementById('mainContentArea').style.display = 'none';
             document.getElementById('imageWrapper').style.display = 'none';
-        }
-
-        function selectVariant(index, label) {
-            document.querySelectorAll('.color-chip').forEach((c, idx) => {
-                c.classList.toggle('selected', idx === index);
-            });
-            document.getElementById('selectedVariantLabel').textContent = label;
-
-            const slider = document.getElementById('mainSlider');
-            if (slider) {
-                const slideWidth = slider.clientWidth;
-                slider.scrollTo({ left: (index + 1) * slideWidth, behavior: 'smooth' });
-            }
         }
 
         function toggleDescription() {
@@ -962,15 +958,50 @@
                 return;
             }
 
-            grid.innerHTML = similar.map(p => `
-                <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
-                    <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
-                    <div class="product-card-body">
-                        <div class="product-card-price">${p.price}</div>
-                        <div class="product-card-title">${p.name}</div>
+            grid.innerHTML = similar.map(p => {
+                const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
+                return `
+                    <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
+                        <div class="product-img-box-sm">
+                            <img src="${pImages[0]}" alt="${p.name}">
+                            <div class="badge-original-sm">✓ ORIGINAL</div>
+                        </div>
+                        <div class="product-info-sm">
+                            <div class="price-row-sm">
+                                <span class="main-price-sm">${p.price}</span>
+                                <span class="discount-tag-sm">${p.discount}</span>
+                            </div>
+                            <div class="old-prices-sm">${p.oldPrice}</div>
+                            <div class="product-title-sm">${p.name}</div>
+                            <div class="product-rating-sm">
+                                <div class="rating-box-sm">
+                                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                    <span style="font-weight:700; color:var(--text);">${p.rating || 4.8}</span>
+                                </div>
+                                <div>${p.comments || 50} sharh</div>
+                            </div>
+                            <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                <span>Savatga</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+
+        function addSimilarToCart(id) {
+            let prod = allProducts.find(p => p.id === id);
+            if (prod) {
+                let cartItem = cart.find(item => item.id === id);
+                if (!cartItem) {
+                    cart.push({ ...prod, qty: 1 });
+                } else {
+                    cartItem.qty = (cartItem.qty || 1) + 1;
+                }
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateBadges();
+            }
         }
 
         function handleCardScroll(e, originalLen) {
