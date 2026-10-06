@@ -33,13 +33,13 @@
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV (Ancha pastroqqa tushirildi) */
+        /* HEADER VA QIDIRUV (Yanada pastroqqa tushirildi) */
         .sticky-header {
             position: sticky;
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 24px 16px 18px 16px;
+            padding: 34px 16px 20px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -238,7 +238,7 @@
             margin-top: 10px;
         }
 
-        /* BOTTOM NAVIGATION (Yana biroz yuqoriroqqa chiqarildi) */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: 22px;
@@ -362,7 +362,6 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const catId = urlParams.get('cat_id') || 1;
-        const catName = urlParams.get('cat_name') || "Mahsulotlar";
 
         const ALL_PRODUCTS = [
             { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", img: "https://picsum.photos/300/300?random=1" },
