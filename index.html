@@ -725,8 +725,9 @@
             `;
 
             history.forEach((item, index) => {
+                const encodedItem = encodeURIComponent(item);
                 html += `
-                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item}')">
+                    <div class="search-suggestion-item" onclick="selectHistoryItem('${encodedItem}')">
                         <div class="history-item-left">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             <span>${item}</span>
@@ -754,11 +755,12 @@
             showSearchHistory();
         }
 
-        function selectHistoryItem(item) {
+        function selectHistoryItem(encodedItem) {
+            const item = decodeURIComponent(encodedItem);
             document.getElementById('searchInput').value = item;
             document.getElementById('searchDropdown').classList.remove('show');
             saveSearchQuery(item);
-            window.location.href = `search.html?q=${encodeURIComponent(item)}`;
+            window.location.href = `search.html?q=${encodedItem}`;
         }
 
         function handleLiveSearch(e) {
@@ -780,7 +782,8 @@
 
             if (matchedCategories.length > 0) {
                 matchedCategories.forEach(c => {
-                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${c.name}'); window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
+                    const encodedCat = encodeURIComponent(c.name);
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${c.name.replace(/'/g, "\\'")}'); window.location.href='products.html?cat_id=${c.id}&cat_name=${encodedCat}'">
                         <span>${c.name}</span>
                         <span class="suggestion-type">Kategoriya</span>
                     </div>`;
@@ -788,13 +791,15 @@
             }
 
             if (matchedProducts.length > 0) {
-                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${query}'); window.location.href='search.html?q=${encodeURIComponent(query)}'">
+                const encodedQuery = encodeURIComponent(query);
+                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${query.replace(/'/g, "\\'")}'); window.location.href='search.html?q=${encodedQuery}'">
                     <span>"${query}" bo'yicha barcha turlarni ko'rish</span>
                     <span class="suggestion-type">Natijalar</span>
                 </div>`;
 
                 matchedProducts.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name}'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
+                    const encodedProdName = encodeURIComponent(p.name);
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name.replace(/'/g, "\\'")}'); window.location.href='search.html?q=${encodedProdName}'">
                         <span>${p.name}</span>
                         <span class="suggestion-type">Mahsulot</span>
                     </div>`;
