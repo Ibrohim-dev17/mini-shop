@@ -28,19 +28,27 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 80px;
+            /* Telegram va telefonlarda yuqori qism kesilib qolmasligi uchun */
+            padding-top: env(safe-area-inset-top, 12px);
+            /* Pastdagi navigator yopib qo'ymasligi uchun bo'shliq */
+            padding-bottom: 90px;
             overflow-x: hidden;
         }
 
-        /* TELEGRAM TUGMALARI BILAN YOPISHIB QOLMASLIK UCHUN VA TEPADA MAHKAM TURISH UCHUN */
+        /* HEADER VA QIDIRUV SATRI */
         .sticky-header {
             position: sticky;
-            top: 0;
-            background: var(--bg);
+            top: env(safe-area-inset-top, 0px);
+            background: var(--card);
             z-index: 999;
-            padding: 20px 16px 12px 16px;
-            margin-top: 10px; /* Telegram tepa paneli bilan oraliq */
+            padding: 12px 16px;
             border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .header-top-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -50,6 +58,43 @@
             font-size: 20px;
             font-weight: 700;
             color: var(--text);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 8px 12px;
+            gap: 8px;
+            border: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
+        .search-box svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            width: 100%;
+            color: var(--text);
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted);
         }
 
         /* KATEGORIYALAR RO'YXATI */
@@ -110,14 +155,14 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION (Savat va Yurak o'rinlari almashtirildi) */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             height: 64px;
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             display: flex;
@@ -125,6 +170,7 @@
             align-items: center;
             border-top: 1px solid rgba(0, 0, 0, 0.08);
             z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         .nav-item {
@@ -181,6 +227,7 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .badge-count.show {
@@ -190,9 +237,15 @@
 </head>
 <body>
 
-    <!-- TEPADA MAHKAM TURADIGAN HEADER -->
+    <!-- TEPADA MAHKAM TURADIGAN HEADER VA QIDIRUV -->
     <div class="sticky-header">
-        <h1>Katalog</h1>
+        <div class="header-top-row">
+            <h1>Katalog</h1>
+        </div>
+        <div class="search-box">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." onkeypress="handleSearch(event)">
+        </div>
     </div>
 
     <!-- KATEGORIYALAR RO'YXATI -->
@@ -200,7 +253,7 @@
         <!-- Python bazasidan dinamik to'ldiriladi -->
     </div>
 
-    <!-- BOTTOM NAVIGATION (1: Bosh sahifa, 2: Katalog, 3: Savatcha, 4: Saralanganlar, 5: Profil) -->
+    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
             <div class="nav-icon-wrap">
@@ -253,14 +306,13 @@
             { id: 5, name: "Noutbuk", img: "https://picsum.photos/100/100?random=14" }
         ];
 
-        // Python bazasidan kategoriyalarni olib kelish
         async function fetchCategories() {
             const container = document.getElementById('categoriesList');
             try {
                 const response = await fetch(API_URL);
                 if (!response.ok) throw new Error("Server xatosi");
                 const categories = await response.json();
-                
+
                 container.innerHTML = categories.map(c => `
                     <a href="products.html?cat_id=${c.id}" class="category-card">
                         <div class="cat-left">
@@ -284,7 +336,15 @@
             }
         }
 
-        // Badge sonlarini LocalStorage'dan o'qish (Savat va Yurak uchun)
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                }
+            }
+        }
+
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
         if (favs.length > 0) { document.getElementById('favBadge').textContent = favs.length; document.getElementById('favBadge').classList.add('show'); }
