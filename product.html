@@ -115,7 +115,8 @@
         .card-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* Sifatni yo'qotmaslik uchun */
+            background: #fff;
             display: block;
         }
 
@@ -135,14 +136,14 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.2);
             transition: all 0.2s;
         }
 
         .card-dot.active {
             width: 16px;
             border-radius: 4px;
-            background: #ffffff;
+            background: var(--primary);
         }
 
         .scrollable-content {
@@ -196,7 +197,6 @@
             margin-bottom: 14px;
         }
 
-        /* UZUM STYLE RATING BOX */
         .rating-card-box {
             background: var(--card);
             margin: 10px 12px;
@@ -276,7 +276,6 @@
             justify-content: center;
         }
 
-        /* SALES INFO ROW */
         .sales-info-row {
             display: flex;
             align-items: center;
@@ -298,7 +297,6 @@
             stroke-width: 2;
         }
 
-        /* COLOR VARIANTS */
         .option-title {
             font-size: 13px;
             color: var(--muted);
@@ -344,7 +342,6 @@
             background: linear-gradient(to top right, transparent 48%, #ff3b30 49%, #ff3b30 51%, transparent 52%);
         }
 
-        /* DESCRIPTION */
         .desc-text {
             font-size: 14px;
             color: var(--text);
@@ -369,7 +366,7 @@
             cursor: pointer;
         }
 
-        /* SIMILAR PRODUCTS */
+        /* PRODUCTS.HTML STYLE SIMILAR CARDS */
         .similar-title {
             font-size: 18px;
             font-weight: 700;
@@ -379,7 +376,7 @@
         .similar-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             padding: 0 12px;
         }
 
@@ -394,14 +391,40 @@
             cursor: pointer;
         }
 
-        .product-card img {
+        .product-card-img-wrap {
             width: 100%;
             height: 170px;
+            position: relative;
+            background: #fff;
+        }
+
+        .product-card-img-wrap img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
-        .product-card-info {
+        .product-card-body {
             padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .card-price {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .card-title {
+            font-size: 12px;
+            color: var(--text);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
         }
 
         /* FIXED BOTTOM BAR FOR CART */
@@ -492,7 +515,7 @@
             text-decoration: none;
         }
 
-        /* BOTTOM NAVIGATION (40px tepada) */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(40px + env(safe-area-inset-bottom, 0px));
@@ -640,30 +663,12 @@
                 ordersCount: "70+",
                 salesInfo: "Bu haftada 15 kishi sotib oldi",
                 desc: "Zikringizni oson va aniq hisoblang. 0-99999 gacha hisob, kompas funksiyasi, ovosiz bosish, yengil va qulay. Yuqori sifatli materialdan tayyorlangan.", 
-                images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"], 
+                images: ["https://picsum.photos/600/600?random=1", "https://picsum.photos/600/600?random=11", "https://picsum.photos/600/600?random=12"], 
                 reviewPhotos: ["https://picsum.photos/100/100?random=51"],
                 variants: [
-                    { img: "https://picsum.photos/300/300?random=1", label: "Mis rang", available: true },
-                    { img: "https://picsum.photos/300/300?random=11", label: "Qora rang", available: true },
-                    { img: "https://picsum.photos/300/300?random=12", label: "Oq rang", available: false }
-                ]
-            },
-            { 
-                id: 2, 
-                name: "Kir yuvish kukuni Persil, avtomat, 3 kg", 
-                price: "68 700 so'm", 
-                oldPrice: "120 000 so'm", 
-                discount: "↓ 43%", 
-                rating: 4.9, 
-                commentsCount: 6870,
-                ordersCount: "31 500+",
-                salesInfo: "Bu haftada 756 kishi sotib oldi",
-                desc: "Persil kir yuvish kukuni Avtomat, 3 kg - bu kirni chuqur tozalash uchun kuchli vositadir. Noyob formula hatto murakkab dog'larni ham samarali ketkazadi.", 
-                images: ["https://picsum.photos/300/300?random=2", "https://picsum.photos/300/300?random=21"], 
-                reviewPhotos: ["https://picsum.photos/100/100?random=61", "https://picsum.photos/100/100?random=62"],
-                variants: [
-                    { img: "https://picsum.photos/300/300?random=2", label: "3 kg", available: true },
-                    { img: "https://picsum.photos/300/300?random=21", label: "6 kg", available: true }
+                    { img: "https://picsum.photos/200/200?random=1", label: "Mis rang", available: true },
+                    { img: "https://picsum.photos/200/200?random=11", label: "Qora rang", available: true },
+                    { img: "https://picsum.photos/200/200?random=12", label: "Oq rang", available: false }
                 ]
             }
         ];
@@ -683,7 +688,7 @@
             }
 
             const imgWrapper = document.getElementById('imageWrapper');
-            const pImages = product.images || [product.img || "https://picsum.photos/300/300"];
+            const pImages = product.images || [product.img || "https://picsum.photos/600/600"];
             const hasMultipleImages = pImages.length > 1;
             const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
 
@@ -821,8 +826,12 @@
         }
 
         function addToCart() {
-            let item = { ...product, qty: 1 };
-            cart.push(item);
+            let cartItem = cart.find(item => item.id === product.id);
+            if (!cartItem) {
+                cart.push({ ...product, qty: 1 });
+            } else {
+                cartItem.qty = (cartItem.qty || 1) + 1;
+            }
             localStorage.setItem('cart_products', JSON.stringify(cart));
             renderActionBar();
             updateBadges();
@@ -866,8 +875,9 @@
                 favBadge.classList.remove('show');
             }
 
-            if (cart.length > 0) {
-                cartBadge.textContent = cart.length;
+            let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+            if (totalCartCount > 0) {
+                cartBadge.textContent = totalCartCount;
                 cartBadge.classList.add('show');
             } else {
                 cartBadge.classList.remove('show');
@@ -876,15 +886,16 @@
 
         function renderSimilar() {
             const grid = document.getElementById('similarGrid');
-            // Mavjud mahsulotlar soniga qarab 6 tagacha yoki ko'proq dinamik chiqarish
             const similar = allProducts.filter(p => p.id !== product.id).slice(0, 6);
 
             grid.innerHTML = similar.map(p => `
                 <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
-                    <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
-                    <div class="product-card-info">
-                        <div style="font-weight: 800; font-size: 14px; margin-bottom: 4px;">${p.price}</div>
-                        <div style="font-size: 11px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${p.name}</div>
+                    <div class="product-card-img-wrap">
+                        <img src="${p.images ? p.images[0] : p.img}" alt="${p.name}">
+                    </div>
+                    <div class="product-card-body">
+                        <div class="card-price">${p.price}</div>
+                        <div class="card-title">${p.name}</div>
                     </div>
                 </div>
             `).join('');
