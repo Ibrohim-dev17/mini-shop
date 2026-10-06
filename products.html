@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV */
+        /* HEADER VA LIVE SEARCH QISMI */
         .sticky-header {
             position: sticky;
             top: 0;
@@ -114,6 +114,55 @@
 
         .search-box input::placeholder {
             color: var(--muted);
+        }
+
+        /* LIVE SEARCH DROPDOWN TAVSIYALARI */
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-suggestion-item {
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover, .search-suggestion-item:active {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
         /* MAHSULOTLAR GRIDI */
@@ -406,8 +455,9 @@
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Shu kategoriya ichidan izlash..." oninput="filterCategoryProducts()">
+                <input type="text" id="searchInput" placeholder="Shu kategoriya ichidan izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
             </div>
+            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
     </div>
 
@@ -451,6 +501,11 @@
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+
+        function getCategoryProducts() {
+            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            return products.filter(p => String(p.category_id) === String(catId));
+        }
 
         function renderProducts(list) {
             const grid = document.getElementById('productsGrid');
@@ -502,23 +557,61 @@
             }).join('');
         }
 
-        function getCategoryProducts() {
-            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
-            return products.filter(p => String(p.category_id) === String(catId));
-        }
-
-        function filterCategoryProducts() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        // --- LIVE SEARCH (Faqat shu kategoriya ichidan bitta harfdan boshlab qidirish va tavsiya berish) ---
+        function handleLiveSearch(e) {
+            const query = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
             const catProducts = getCategoryProducts();
 
-            if (!query) {
+            if (query.length === 0) {
+                dropdown.classList.remove('show');
+                dropdown.innerHTML = '';
                 renderProducts(catProducts);
                 return;
             }
 
-            const filtered = catProducts.filter(p => p.name.toLowerCase().includes(query));
-            renderProducts(filtered);
+            const matched = catProducts.filter(p => p.name.toLowerCase().includes(query));
+
+            // Grid ichini ham darhol filtrlaymiz
+            renderProducts(matched);
+
+            let html = '';
+            if (matched.length > 0) {
+                matched.forEach(p => {
+                    html += `<div class="search-suggestion-item" onclick="window.location.href='product.html?id=${p.id}'">
+                        <span>${p.name}</span>
+                        <span class="suggestion-type">Mahsulot</span>
+                    </div>`;
+                });
+            } else {
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Bunday mahsulot topilmadi...</div>`;
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
         }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                const dropdown = document.getElementById('searchDropdown');
+                dropdown.classList.remove('show');
+                if (query) {
+                    const catProducts = getCategoryProducts();
+                    const filtered = catProducts.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+                    renderProducts(filtered);
+                }
+            }
+        }
+
+        // Dropdown tashqarisiga bosilganda uni yopish
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
 
         function goToProduct(id) {
             window.location.href = `product.html?id=${id}`;
@@ -532,7 +625,14 @@
                 favs.push(id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            filterCategoryProducts();
+            
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const catProducts = getCategoryProducts();
+            if (query) {
+                renderProducts(catProducts.filter(p => p.name.toLowerCase().includes(query)));
+            } else {
+                renderProducts(catProducts);
+            }
             updateBadges();
         }
 
