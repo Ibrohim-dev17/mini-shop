@@ -34,7 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER VA LIVE SEARCH QISMI */
         .sticky-header {
             position: sticky;
             top: 0;
@@ -116,7 +115,7 @@
             color: var(--muted);
         }
 
-        /* LIVE SEARCH DROPDOWN TAVSIYALARI */
+        /* QIDIRUV TAVSIYALARI DROPDOWN */
         .search-dropdown {
             position: absolute;
             top: 100%;
@@ -138,7 +137,7 @@
         }
 
         .search-suggestion-item {
-            padding: 10px 14px;
+            padding: 12px 14px;
             font-size: 13px;
             color: var(--text);
             border-bottom: 1px solid var(--border);
@@ -152,7 +151,7 @@
             border-bottom: none;
         }
 
-        .search-suggestion-item:hover, .search-suggestion-item:active {
+        .search-suggestion-item:hover {
             background: var(--primary-bg);
             color: var(--primary);
         }
@@ -165,7 +164,6 @@
             border-radius: 4px;
         }
 
-        /* MAHSULOTLAR GRIDI */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -355,7 +353,6 @@
             stroke-width: 2;
         }
 
-        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(40px + env(safe-area-inset-bottom, 0px));
@@ -455,7 +452,7 @@
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Shu kategoriya ichidan izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+                <input type="text" id="searchInput" placeholder="Mahsulot nomidan izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
             </div>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
@@ -557,34 +554,35 @@
             }).join('');
         }
 
-        // --- LIVE SEARCH (Faqat mos keluvchi mahsulotlar nomlari chiqadi, bossa barcha natijalar ochiladi) ---
+        // --- HARF VA SO'ZLARGA QARAB LIVE SEARCH ---
         function handleLiveSearch(e) {
             const query = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
-            const catProducts = getCategoryProducts();
+            let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
 
             if (query.length === 0) {
                 dropdown.classList.remove('show');
                 dropdown.innerHTML = '';
-                renderProducts(catProducts);
+                renderProducts(getCategoryProducts());
                 return;
             }
 
-            const matched = catProducts.filter(p => p.name.toLowerCase().includes(query));
+            // Barcha mahsulotlar ichidan kiritilgan harf/so'zga mos keladiganlarini topish
+            const matched = allProducts.filter(p => p.name.toLowerCase().includes(query));
 
-            // Grid ichini ham mos keluvchi mahsulotlar bilan filtrlash
+            // Sahifadagi gridni ham mos kelganlar bilan yangilaymiz
             renderProducts(matched);
 
             let html = '';
             if (matched.length > 0) {
-                // Umumiy mos keluvchi barcha turlarni ko'rsatish uchun havolali yozuv
+                // Bosilganda search.html sahifasiga o'tib, o'sha so'rov bo'yicha barcha natijalarni chiqaradi
                 html += `<div class="search-suggestion-item" onclick="window.location.href='search.html?q=${encodeURIComponent(query)}'">
                     <span>"${query}" bo'yicha barcha turlarni ko'rish</span>
                     <span class="suggestion-type">Natijalar</span>
                 </div>`;
 
                 matched.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="window.location.href='product.html?id=${p.id}'">
+                    html += `<div class="search-suggestion-item" onclick="window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
                         <span>${p.name}</span>
                         <span class="suggestion-type">Mahsulot</span>
                     </div>`;
@@ -606,7 +604,6 @@
             }
         }
 
-        // Dropdown tashqarisiga bosilganda uni yopish
         document.addEventListener('click', (e) => {
             const wrapper = document.querySelector('.search-box-wrapper');
             const dropdown = document.getElementById('searchDropdown');
@@ -627,14 +624,7 @@
                 favs.push(id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            const catProducts = getCategoryProducts();
-            if (query) {
-                renderProducts(catProducts.filter(p => p.name.toLowerCase().includes(query)));
-            } else {
-                renderProducts(catProducts);
-            }
+            renderProducts(getCategoryProducts());
             updateBadges();
         }
 
