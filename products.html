@@ -290,7 +290,6 @@
             display: block;
         }
 
-        /* Nuqtalar xuddi rasmdagidek rasm ustining pastki qismida joylashadi[span_1](start_span)[span_1](end_span) */
         .card-dots {
             position: absolute;
             bottom: 8px;
@@ -607,7 +606,6 @@
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
                 const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
                 const hasMultipleImages = pImages.length > 1;
-
                 const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
 
                 return `
@@ -615,8 +613,8 @@
                         <button class="heart-icon ${isLiked}" onclick="toggleHeart(event, ${p.id})">
                             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </button>
-                        <div class="product-img-box" onclick="goToProduct(${p.id})">
-                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})" onclick="event.stopPropagation()"` : ''}>
+                        <div class="product-img-box" data-product-id="${p.id}">
+                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
                                 ${loopedImages.map(imgUrl => `
                                     <div class="card-slide"><img src="${imgUrl}" alt="${p.name}"></div>
                                 `).join('')}
@@ -657,6 +655,23 @@
                     </div>
                 `;
             }).join('');
+
+            document.querySelectorAll('.product-img-box').forEach(box => {
+                let startX = 0;
+                let startY = 0;
+                box.addEventListener('pointerdown', (e) => {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                });
+                box.addEventListener('pointerup', (e) => {
+                    let diffX = Math.abs(e.clientX - startX);
+                    let diffY = Math.abs(e.clientY - startY);
+                    if (diffX < 6 && diffY < 6) {
+                        const prodId = box.getAttribute('data-product-id');
+                        goToProduct(prodId);
+                    }
+                });
+            });
 
             setTimeout(() => {
                 document.querySelectorAll('.card-slider-container').forEach(container => {
@@ -785,9 +800,9 @@
                 </div>`;
 
                 matched.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name}'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name}'); window.location.href='product.html?id=${p.id}'">
                         <span>${p.name}</span>
-                        <span class="suggestion-type">Natijalar</span>
+                        <span class="suggestion-type">Mahsulot</span>
                     </div>`;
                 });
             } else {
@@ -848,8 +863,11 @@
         function updateBadges() {
             const favBadge = document.getElementById('favBadge');
             const cartBadge = document.getElementById('cartBadge');
-            if (favs.length > 0) {
-                favBadge.textContent = favs.length;
+            let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
+
+            if (validFavs.length > 0) {
+                favBadge.textContent = validFavs.length;
                 favBadge.classList.add('show');
             } else {
                 favBadge.classList.remove('show');
