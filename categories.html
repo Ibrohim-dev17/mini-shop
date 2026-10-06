@@ -31,13 +31,13 @@
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV (Ancha pastroqqa tushirildi) */
+        /* HEADER VA QIDIRUV (Yanada pastroqqa tushirildi) */
         .sticky-header {
             position: sticky;
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 24px 16px 18px 16px;
+            padding: 34px 16px 20px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             flex-direction: column;
@@ -165,7 +165,7 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION (Yana biroz yuqoriroqqa chiqarildi) */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: 22px;
@@ -303,6 +303,9 @@
         function loadCategories() {
             const container = document.getElementById('categoriesList');
             let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
+            
+            // index.html ham shu localStorage('categories') dan o'qib olishi uchun saqlab qo'yamiz
+            localStorage.setItem('categories', JSON.stringify(categories));
 
             container.innerHTML = categories.map(c => `
                 <a href="products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}" class="category-card">
