@@ -169,7 +169,7 @@
             width: 20%;
             position: relative;
             cursor: pointer;
-            padding: 8px 0; /* Bosish maydonini kattalashtirish va 1 ta bosishda ishlashi uchun */
+            padding: 8px 0;
         }
 
         .nav-icon-wrap {
@@ -177,7 +177,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            pointer-events: none; /* Sichqoncha bosilganda svg emas, to'g'ridan-to'g'ri link ishlashi uchun */
+            pointer-events: none;
         }
 
         .nav-item span {
@@ -541,7 +541,7 @@
         </div>
     </div>
 
-    <!-- BANNER CAROUSEL (Products.html dagi mahsulotlardan yoki admin panel yuklaganlardan 3 tasi) -->
+    <!-- BANNER CAROUSEL (Doimiy barqaror 3 ta mahsulot) -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
@@ -605,16 +605,16 @@
             { id: 8, category_id: 2, name: "Issiq qishki tapichka", price: "55 000 so'm", oldPrice: "90 000 so'm", discount: "↓ 38%", rating: 4.9, comments: 112, img: "https://picsum.photos/300/300?random=8" }
         ];
 
-        // --- BANNER LOGIKASI (Admin panel yoki Products dagi dastlabki 3 ta mahsulot bilan bog'langan) ---
+        // --- BANNER LOGIKASI (Doimiy barqaror 3 ta mahsulot) ---
         function renderBanner() {
             const track = document.getElementById('bannerTrack');
             let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
-            
-            // Admin panel yoki maxsus banner ro'yxati tekshiriladi, agar bo'lmasa mahsulotlardan dastlabki 3 tasi olinadi
+
+            // Admin panel yoki maxsus banner ro'yxati (doimiy 1, 2, 3-mahsulotlar)
             let bannerProducts = JSON.parse(localStorage.getItem('banner_products')) || allProducts.slice(0, 3);
-            
+
             let slidesData = [bannerProducts[bannerProducts.length - 1], ...bannerProducts, bannerProducts[0]];
-            
+
             track.innerHTML = slidesData.map(p => `
                 <div class="banner-slide" onclick="goToProduct(${p.id})">
                     <img src="${p.img}" alt="${p.name}">
@@ -701,7 +701,7 @@
         }
 
 
-        // --- LIVE SEARCH VA TAVSIYA BERISH (Bitta harfdan qidirish va xatoni to'g'rilash) ---
+        // --- LIVE SEARCH VA TAVSIYA BERISH ---
         function handleLiveSearch(e) {
             const query = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -715,7 +715,6 @@
             let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
             let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
 
-            // Mos keluvchi mahsulotlar va kategoriyalarni topish (bitta harfdan boshlab)
             let matchedProducts = products.filter(p => p.name.toLowerCase().includes(query));
             let matchedCategories = categories.filter(c => c.name.toLowerCase().includes(query));
 
@@ -723,7 +722,7 @@
 
             if (matchedCategories.length > 0) {
                 matchedCategories.forEach(c => {
-                    html += `<div class="search-suggestion-item" onclick="window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
                         <span>${c.name}</span>
                         <span class="suggestion-type">Kategoriya</span>
                     </div>`;
@@ -731,8 +730,14 @@
             }
 
             if (matchedProducts.length > 0) {
+                // To'g'ridan-to'g'ri search.html sahifasiga o'tkazish logikasi (products.html dagi kabi)
+                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(query)}'">
+                    <span>"${query}" bo'yicha barcha turlarni ko'rish</span>
+                    <span class="suggestion-type">Natijalar</span>
+                </div>`;
+
                 matchedProducts.forEach(p => {
-                    html += `<div class="search-suggestion-item" onclick="window.location.href='product.html?id=${p.id}'">
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(p.name)}'">
                         <span>${p.name}</span>
                         <span class="suggestion-type">Mahsulot</span>
                     </div>`;
@@ -740,29 +745,28 @@
             }
 
             if (matchedCategories.length === 0 && matchedProducts.length === 0) {
-                // Xato yozilganda yoki topilmaganda maslahat / yaqin variantlarni tavsiya qilish
-                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Bunday mahsulot topilmadi. Qidiruvni davom ettiring...</div>`;
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Bunday mahsulot topilmadi...</div>`;
             }
 
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
         }
 
-        // Qidiruv satridan Enter bosilganda
         function handleSearch(e) {
             if (e.key === 'Enter') {
                 const query = document.getElementById('searchInput').value.trim();
+                const dropdown = document.getElementById('searchDropdown');
+                if (dropdown) dropdown.classList.remove('show');
                 if (query) {
                     window.location.href = `search.html?q=${encodeURIComponent(query)}`;
                 }
             }
         }
 
-        // Dropdown tashqarisiga bosilganda uni yopish
         document.addEventListener('click', (e) => {
             const wrapper = document.querySelector('.search-box-wrapper');
             const dropdown = document.getElementById('searchDropdown');
-            if (!wrapper.contains(e.target)) {
+            if (wrapper && !wrapper.contains(e.target)) {
                 dropdown.classList.remove('show');
             }
         });
@@ -805,26 +809,10 @@
             }
         }
 
-        function getShuffledProducts() {
-            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
-            let storedOrder = sessionStorage.getItem('shuffled_product_ids');
-
-            if (storedOrder) {
-                let ids = JSON.parse(storedOrder);
-                let ordered = ids.map(id => products.find(p => p.id === id)).filter(Boolean);
-                let missing = products.filter(p => !ids.includes(p.id));
-                return [...ordered, ...missing];
-            } else {
-                let shuffled = [...products].sort(() => 0.5 - Math.random());
-                sessionStorage.setItem('shuffled_product_ids', JSON.stringify(shuffled.map(p => p.id)));
-                return shuffled;
-            }
-        }
-
         function renderProducts() {
-            let shuffled = getShuffledProducts();
+            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
 
-            document.getElementById('productsGrid').innerHTML = shuffled.map(p => {
+            document.getElementById('productsGrid').innerHTML = products.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
                 return `
                     <div class="product-card" onclick="goToProduct(${p.id})">
@@ -878,8 +866,7 @@
                 favs.push(id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            const btn = e.currentTarget;
-            btn.classList.toggle('liked', favs.includes(id));
+            renderProducts();
             updateBadges();
         }
 
