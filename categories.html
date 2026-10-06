@@ -31,7 +31,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV (Telegram tugmalariga xalaqit qilmasligi uchun yanada pastga tushirildi) */
+        /* HEADER VA LIVE SEARCH QISMI */
         .sticky-header {
             position: sticky;
             top: 0;
@@ -74,6 +74,12 @@
             stroke-linejoin: round;
         }
 
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
+            flex: 1;
+        }
+
         .search-box {
             display: flex;
             align-items: center;
@@ -82,7 +88,7 @@
             padding: 12px 14px;
             gap: 10px;
             border: 1px solid transparent;
-            flex: 1;
+            width: 100%;
         }
 
         .search-box:focus-within {
@@ -106,6 +112,55 @@
             font-size: 14px;
             width: 100%;
             color: var(--text);
+        }
+
+        /* LIVE SEARCH DROPDOWN */
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-suggestion-item {
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover, .search-suggestion-item:active {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
         /* KATEGORIYALAR RO'YXATI */
@@ -165,10 +220,10 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION (Telefon tizim panellari bilan to'qnashmaydigan va bittada ishlaydigan qilib tuzatildi) */
         .bottom-nav {
             position: fixed;
-            bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(16px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -197,13 +252,12 @@
             font-weight: 500;
             width: 20%;
             position: relative;
+            cursor: pointer;
+            padding: 8px 0;
         }
 
-        .nav-icon-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .nav-icon-wrap, .nav-item span {
+            pointer-events: none;
         }
 
         .nav-item svg {
@@ -212,6 +266,7 @@
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
+            transition: all 0.2s ease;
         }
 
         .nav-item.active {
@@ -227,8 +282,8 @@
 
         .badge-count {
             position: absolute;
-            top: -4px;
-            right: -8px;
+            top: 2px;
+            right: 8px;
             background: #000;
             color: #fff;
             font-size: 10px;
@@ -254,9 +309,12 @@
             <a href="index.html" class="back-btn" title="Orqaga">
                 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </a>
-            <div class="search-box">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." onkeypress="handleSearch(event)">
+            <div class="search-box-wrapper">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+                </div>
+                <div class="search-dropdown" id="searchDropdown"></div>
             </div>
         </div>
     </div>
@@ -300,6 +358,15 @@
             { id: 5, name: "Ichki kiyimlar", img: "https://picsum.photos/100/100?random=5" }
         ];
 
+        const PRODUCTS = [
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, img: "https://picsum.photos/300/300?random=1" },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, img: "https://picsum.photos/300/300?random=2" },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, img: "https://picsum.photos/300/300?random=3" },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, img: "https://picsum.photos/300/300?random=4" },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, img: "https://picsum.photos/300/300?random=5" },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, img: "https://picsum.photos/300/300?random=6" }
+        ];
+
         function loadCategories() {
             const container = document.getElementById('categoriesList');
             let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
@@ -316,12 +383,65 @@
             `).join('');
         }
 
+        // LIVE SEARCH VA TAVSIYA BERISH
+        function handleLiveSearch(e) {
+            const query = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
+
+            if (query.length === 0) {
+                dropdown.classList.remove('show');
+                dropdown.innerHTML = '';
+                return;
+            }
+
+            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let categories = JSON.parse(localStorage.getItem('categories')) || DEFAULT_CATEGORIES;
+
+            let matchedProducts = products.filter(p => p.name.toLowerCase().includes(query));
+            let matchedCategories = categories.filter(c => c.name.toLowerCase().includes(query));
+
+            let html = '';
+
+            if (matchedCategories.length > 0) {
+                matchedCategories.forEach(c => {
+                    html += `<div class="search-suggestion-item" onclick="window.location.href='products.html?cat_id=${c.id}&cat_name=${encodeURIComponent(c.name)}'">
+                        <span>${c.name}</span>
+                        <span class="suggestion-type">Kategoriya</span>
+                    </div>`;
+                });
+            }
+
+            if (matchedProducts.length > 0) {
+                matchedProducts.forEach(p => {
+                    html += `<div class="search-suggestion-item" onclick="window.location.href='product.html?id=${p.id}'">
+                        <span>${p.name}</span>
+                        <span class="suggestion-type">Mahsulot</span>
+                    </div>`;
+                });
+            }
+
+            if (matchedCategories.length === 0 && matchedProducts.length === 0) {
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Bunday mahsulot topilmadi...</div>`;
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
         function handleSearch(e) {
             if (e.key === 'Enter') {
                 const query = document.getElementById('searchInput').value.trim();
                 if (query) window.location.href = `search.html?q=${encodeURIComponent(query)}`;
             }
         }
+
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
