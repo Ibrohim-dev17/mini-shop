@@ -220,10 +220,10 @@
             stroke-linejoin: round;
         }
 
-        /* BOTTOM NAVIGATION (Telefon tizim panellari bilan to'qnashmaydigan va bittada ishlaydigan qilib tuzatildi) */
+        /* BOTTOM NAVIGATION (Index.html bilan bir xil, bittada ishlaydigan qilib to'g'irlandi) */
         .bottom-nav {
             position: fixed;
-            bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(32px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -254,6 +254,7 @@
             position: relative;
             cursor: pointer;
             padding: 8px 0;
+            touch-action: manipulation;
         }
 
         .nav-icon-wrap, .nav-item span {
@@ -282,8 +283,8 @@
 
         .badge-count {
             position: absolute;
-            top: 2px;
-            right: 8px;
+            top: -4px;
+            right: -8px;
             background: #000;
             color: #fff;
             font-size: 10px;
