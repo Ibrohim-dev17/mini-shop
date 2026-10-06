@@ -34,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* HEADER VA QIDIRUV (Telegram tugmalariga xalaqit qilmaydi) */
+        /* HEADER VA QIDIRUV */
         .header-search-container {
             padding: 50px 16px 12px 16px;
             background: #ffffff;
@@ -42,6 +42,11 @@
             top: 0;
             z-index: 999;
             border-bottom: 1px solid var(--border);
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
         }
 
         .search-box {
@@ -53,6 +58,7 @@
             gap: 8px;
             border: 1px solid transparent;
             transition: border-color 0.2s;
+            width: 100%;
         }
 
         .search-box:focus-within {
@@ -66,6 +72,7 @@
             fill: none;
             stroke: var(--muted);
             stroke-width: 2;
+            flex-shrink: 0;
         }
 
         .search-box input {
@@ -81,7 +88,96 @@
             color: var(--muted);
         }
 
-        /* MAHSULOTLAR GRIDI */
+        /* QIDIRUV TARIXI DROPDOWN */
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .clear-history-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .search-suggestion-item {
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .history-item-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .remove-history-item {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 16px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
+        .remove-history-item:hover {
+            color: #ff3b30;
+        }
+
+        /* MAHSULOTLAR GRIDI VA SLAYDER */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -98,7 +194,6 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            cursor: pointer;
             border: 1px solid var(--border);
         }
 
@@ -134,12 +229,61 @@
             position: relative;
             border-radius: 16px;
             overflow: hidden;
+            cursor: pointer;
         }
 
-        .product-img-box img {
+        .card-slider-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-slider-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+        }
+
+        .card-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+        }
+
+        .card-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .card-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s;
+        }
+
+        .card-dot.active {
+            width: 14px;
+            border-radius: 3px;
+            background: #ffffff;
         }
 
         .badge-original {
@@ -152,6 +296,8 @@
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 6px;
+            z-index: 4;
+            pointer-events: none;
         }
 
         .product-info {
@@ -159,6 +305,7 @@
             display: flex;
             flex-direction: column;
             flex: 1;
+            cursor: pointer;
         }
 
         .price-row {
@@ -279,7 +426,7 @@
             margin-bottom: 8px;
         }
 
-        /* BOTTOM NAVIGATION (categories.html bilan bir xil) */
+        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: calc(45px + env(safe-area-inset-bottom, 0px));
@@ -363,11 +510,14 @@
 </head>
 <body>
 
-    <!-- QIDIRUV SATRI -->
+    <!-- QIDIRUV SATRI VA TARIX DROPDOWN -->
     <div class="header-search-container">
-        <div class="search-box">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="searchInput" placeholder="Saralanganlardan izlash..." onkeypress="handleSearch(event)">
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Saralanganlardan izlash..." onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+            </div>
+            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
     </div>
 
@@ -404,71 +554,249 @@
         }
 
         const PRODUCTS = [
-            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, img: "https://picsum.photos/300/300?random=1" },
-            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, img: "https://picsum.photos/300/300?random=2" },
-            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, img: "https://picsum.photos/300/300?random=3" },
-            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, img: "https://picsum.photos/300/300?random=4" },
-            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, img: "https://picsum.photos/300/300?random=5" },
-            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, img: "https://picsum.photos/300/300?random=6" },
-            { id: 7, category_id: 1, name: "Kuzgi yengil kurtka", price: "320 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 28%", rating: 4.6, comments: 64, img: "https://picsum.photos/300/300?random=7" },
-            { id: 8, category_id: 2, name: "Issiq qishki tapichka", price: "55 000 so'm", oldPrice: "90 000 so'm", discount: "↓ 38%", rating: 4.9, comments: 112, img: "https://picsum.photos/300/300?random=8" }
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, images: ["https://picsum.photos/300/300?random=2"] },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, images: ["https://picsum.photos/300/300?random=3", "https://picsum.photos/300/300?random=31"] },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, images: ["https://picsum.photos/300/300?random=4"] },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, images: ["https://picsum.photos/300/300?random=5", "https://picsum.photos/300/300?random=51"] },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, images: ["https://picsum.photos/300/300?random=6"] }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
-        function renderFavs() {
+        function renderFavs(listToRender) {
             const grid = document.getElementById('favGrid');
             let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
-            const favProducts = allProducts.filter(p => favs.includes(p.id));
+            const favProducts = listToRender || allProducts.filter(p => favs.includes(p.id));
 
             if (favProducts.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state">
                         <h3>Saralanganlar bo'sh</h3>
-                        <p>Hozircha hech qanday mahsulot qo'shmagansiz.</p>
+                        <p>Hozircha hech qanday mahsulot topilmadi.</p>
                     </div>
                 `;
                 return;
             }
 
-            grid.innerHTML = favProducts.map(p => `
-                <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
-                    <button class="heart-icon" onclick="removeFav(event, ${p.id})">
-                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    </button>
-                    <div class="product-img-box">
-                        <img src="${p.img}" alt="${p.name}">
-                        <div class="badge-original">✓ ORIGINAL</div>
-                    </div>
-                    <div class="product-info">
-                        <div class="price-row">
-                            <span class="main-price">${p.price}</span>
-                            <span class="discount-tag">${p.discount}</span>
-                        </div>
-                        <div class="old-prices">
-                            <span class="price-old">${p.oldPrice}</span>
-                        </div>
-                        <div class="product-title">${p.name}</div>
-                        
-                        <div class="product-rating">
-                            <div class="rating-box">
-                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                <span class="rating-num">${p.rating || 4.8}</span>
-                            </div>
-                            <div class="comment-box">
-                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                                <span>${p.comments || 50}</span>
-                            </div>
-                        </div>
+            grid.innerHTML = favProducts.map(p => {
+                const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
+                const hasMultipleImages = pImages.length > 1;
+                const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
 
-                        <button class="cart-btn" onclick="addToCart(event, ${p.id})">
-                            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            <span>Savatga</span>
+                return `
+                    <div class="product-card">
+                        <button class="heart-icon" onclick="removeFav(event, ${p.id})">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </button>
+                        <div class="product-img-box" onclick="goToProduct(${p.id})">
+                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})" onclick="event.stopPropagation()"` : ''}>
+                                ${loopedImages.map(imgUrl => `
+                                    <div class="card-slide"><img src="${imgUrl}" alt="${p.name}"></div>
+                                `).join('')}
+                            </div>
+                            ${hasMultipleImages ? `
+                                <div class="card-dots">
+                                    ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
+                                </div>
+                            ` : ''}
+                            <div class="badge-original">✓ ORIGINAL</div>
+                        </div>
+                        <div class="product-info" onclick="goToProduct(${p.id})">
+                            <div class="price-row">
+                                <span class="main-price">${p.price}</span>
+                                <span class="discount-tag">${p.discount}</span>
+                            </div>
+                            <div class="old-prices">
+                                <span class="price-old">${p.oldPrice}</span>
+                            </div>
+                            <div class="product-title">${p.name}</div>
+                            
+                            <div class="product-rating">
+                                <div class="rating-box">
+                                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                    <span class="rating-num">${p.rating || 4.8}</span>
+                                </div>
+                                <div class="comment-box">
+                                    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                    <span>${p.comments || 50}</span>
+                                </div>
+                            </div>
+
+                            <button class="cart-btn" onclick="addToCart(event, ${p.id})">
+                                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                                <span>Savatga</span>
+                            </button>
+                        </div>
                     </div>
+                `;
+            }).join('');
+
+            setTimeout(() => {
+                document.querySelectorAll('.card-slider-container').forEach(container => {
+                    if (container.dataset.originalLength) {
+                        const slideWidth = container.clientWidth;
+                        container.scrollLeft = slideWidth;
+                    }
+                });
+            }, 50);
+        }
+
+        function handleCardScroll(e, originalLen) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const scrollLeft = container.scrollLeft;
+
+            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            } else if (scrollLeft <= 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = originalLen * slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            }
+
+            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            const realIndex = (activeIndex + originalLen) % originalLen;
+
+            const dotsBox = container.parentElement.querySelector('.card-dots');
+            if (dotsBox) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
+        }
+
+        // QIDIRUV TARIXINI BOSHQARISH
+        function getSearchHistory() {
+            return JSON.parse(localStorage.getItem('search_history')) || [];
+        }
+
+        function saveSearchQuery(q) {
+            if (!q) return;
+            let history = getSearchHistory();
+            history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
+            history.unshift(q);
+            if (history.length > 5) history = history.slice(0, 5);
+            localStorage.setItem('search_history', JSON.stringify(history));
+        }
+
+        function showSearchHistory() {
+            const val = document.getElementById('searchInput').value.trim();
+            const dropdown = document.getElementById('searchDropdown');
+            if (val.length > 0) return;
+
+            let history = getSearchHistory();
+            if (history.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            let html = `
+                <div class="search-header-row">
+                    <span>Oxirgi qidiruvlar</span>
+                    <button class="clear-history-btn" onclick="clearAllHistory(event)">Tozalash</button>
                 </div>
-            `).join('');
+            `;
+
+            history.forEach((item, index) => {
+                html += `
+                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item}')">
+                        <div class="history-item-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>${item}</span>
+                        </div>
+                        <button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button>
+                    </div>
+                `;
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function clearAllHistory(e) {
+            e.stopPropagation();
+            localStorage.removeItem('search_history');
+            document.getElementById('searchDropdown').classList.remove('show');
+        }
+
+        function removeHistoryItem(e, index) {
+            e.stopPropagation();
+            let history = getSearchHistory();
+            history.splice(index, 1);
+            localStorage.setItem('search_history', JSON.stringify(history));
+            showSearchHistory();
+        }
+
+        function selectHistoryItem(item) {
+            document.getElementById('searchInput').value = item;
+            document.getElementById('searchDropdown').classList.remove('show');
+            saveSearchQuery(item);
+            window.location.href = `search.html?q=${encodeURIComponent(item)}`;
+        }
+
+        function handleLiveSearch(e) {
+            const val = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
+            let allProducts = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let favProducts = allProducts.filter(p => favs.includes(p.id));
+
+            if (val.length === 0) {
+                showSearchHistory();
+                renderFavs(favProducts);
+                return;
+            }
+
+            let matched = favProducts.filter(p => p.name.toLowerCase().includes(val));
+            renderFavs(matched);
+
+            let html = '';
+            if (matched.length > 0) {
+                html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${val}'); window.location.href='search.html?q=${encodeURIComponent(val)}'">
+                    <span>"${val}" bo'yicha barcha turlarni ko'rish</span>
+                    <span class="suggestion-type">Natijalar</span>
+                </div>`;
+
+                matched.forEach(p => {
+                    html += `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); saveSearchQuery('${p.name}'); window.location.href='product.html?id=${p.id}'">
+                        <span>${p.name}</span>
+                        <span class="suggestion-type">Mahsulot</span>
+                    </div>`;
+                });
+            } else {
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Saralanganlardan topilmadi...</div>`;
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                const dropdown = document.getElementById('searchDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+                if (query) {
+                    saveSearchQuery(query);
+                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                }
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        function goToProduct(id) {
+            window.location.href = `product.html?id=${id}`;
         }
 
         function removeFav(e, id) {
@@ -487,7 +815,6 @@
                 cart.push(prod);
                 localStorage.setItem('cart_products', JSON.stringify(cart));
                 updateBadges();
-                alert("Mahsulot savatchaga qo'shildi!");
             }
         }
 
@@ -496,15 +823,6 @@
             const cartBadge = document.getElementById('cartBadge');
             if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
             if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
-        }
-
-        function handleSearch(e) {
-            if (e.key === 'Enter') {
-                const query = document.getElementById('searchInput').value.trim();
-                if (query) {
-                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-                }
-            }
         }
 
         renderFavs();
