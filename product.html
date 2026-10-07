@@ -199,44 +199,6 @@
             margin-bottom: 8px;
         }
 
-        .variants-grid {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .variant-chip {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            position: relative;
-            background: #fff;
-        }
-
-        .variant-chip img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .variant-chip.selected {
-            border-color: var(--primary);
-        }
-
-        .variant-chip.out-of-stock {
-            opacity: 0.5;
-        }
-
-        .variant-chip.out-of-stock::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top right, transparent 48%, var(--danger) 49%, var(--danger) 51%, transparent 52%);
-        }
-
         .sizes-grid {
             display: flex;
             gap: 8px;
@@ -311,18 +273,12 @@
             color: var(--muted);
         }
 
-        .rating-photos-preview {
-            display: flex;
-            gap: 6px;
-        }
-
         .preview-thumb {
             width: 45px;
             height: 45px;
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border);
-            position: relative;
         }
 
         .preview-thumb img {
@@ -342,14 +298,6 @@
             background: var(--card);
             border-radius: 12px;
             border: 1px solid var(--border);
-        }
-
-        .sales-info-row svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
-            stroke: var(--primary);
-            stroke-width: 2;
         }
 
         .desc-text {
@@ -417,30 +365,16 @@
             justify-content: center;
             cursor: pointer;
             z-index: 5;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
-        .heart-icon-sm svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
-            stroke: #1f2026;
-            stroke-width: 1.8;
-            transition: all 0.2s;
-        }
-
-        .heart-icon-sm.liked svg {
-            fill: #ff3b30;
-            stroke: #ff3b30;
-        }
+        .heart-icon-sm svg { width: 18px; height: 18px; fill: none; stroke: #1f2026; stroke-width: 1.8; }
+        .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
         .product-img-box-sm {
             width: 100%;
             height: 210px;
             background: #f8f9fa;
             position: relative;
-            border-radius: 16px;
-            overflow: hidden;
             cursor: pointer;
         }
 
@@ -451,12 +385,9 @@
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
         }
 
-        .card-slider-container-sm::-webkit-scrollbar {
-            display: none;
-        }
+        .card-slider-container-sm::-webkit-scrollbar { display: none; }
 
         .card-slide-sm {
             flex: 0 0 100%;
@@ -465,143 +396,18 @@
             scroll-snap-align: start;
         }
 
-        .card-slide-sm img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .card-dots-sm {
-            position: absolute;
-            bottom: 8px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            z-index: 4;
-            pointer-events: none;
-        }
-
-        .card-dot-sm {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transition: all 0.2s;
-        }
-
-        .card-dot-sm.active {
-            width: 14px;
-            border-radius: 3px;
-            background: #ffffff;
-        }
-
-        /* YORLIQLAR (BADGES) */
-        .badge-dynamic-sm {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 6px;
-            z-index: 4;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
+        .card-slide-sm img { width: 100%; height: 100%; object-fit: cover; }
 
         .product-info-sm {
-            padding: 10px 4px 6px 4px;
+            padding: 10px 8px;
             display: flex;
             flex-direction: column;
             flex: 1;
             cursor: pointer;
         }
 
-        .price-row-sm {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .main-price-sm {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text);
-        }
-
-        .discount-tag-sm {
-            background: var(--discount-bg);
-            color: var(--discount-text);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 1px 5px;
-            border-radius: 4px;
-        }
-
-        .old-prices-sm {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--muted);
-            margin-top: 2px;
-        }
-
-        .price-old-sm {
-            text-decoration: line-through;
-        }
-
-        .product-title-sm {
-            font-size: 12px;
-            line-height: 1.3;
-            color: var(--text);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            margin-top: 6px;
-            height: 32px;
-        }
-
-        .product-rating-sm {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 11px;
-            color: var(--muted);
-            margin: 8px 0;
-        }
-
-        .rating-box-sm, .comment-box-sm {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .rating-box-sm svg {
-            width: 13px;
-            height: 13px;
-            fill: var(--star);
-        }
-
-        .comment-box-sm svg {
-            width: 14px;
-            height: 14px;
-            fill: none;
-            stroke: #8b8e99;
-            stroke-width: 2;
-        }
-
-        .rating-num-sm {
-            font-weight: 700;
-            color: var(--text);
-        }
+        .main-price-sm { font-size: 16px; font-weight: 800; color: var(--text); }
+        .product-title-sm { font-size: 12px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 6px; height: 32px; }
 
         .cart-btn-sm {
             width: 100%;
@@ -618,46 +424,6 @@
             gap: 6px;
             cursor: pointer;
             margin-top: auto;
-        }
-
-        .cart-btn-sm svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
-        .cart-counter-box-sm {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            height: 36px;
-            background: var(--bg);
-            border-radius: 10px;
-            padding: 0 6px;
-            margin-top: auto;
-            border: 1px solid var(--border);
-        }
-
-        .counter-btn-sm {
-            background: #fff;
-            border: 1px solid var(--border);
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .counter-val-sm {
-            font-size: 14px;
-            font-weight: 700;
         }
 
         /* FIXED BOTTOM BAR FOR CART */
@@ -696,14 +462,6 @@
             gap: 8px;
         }
 
-        .add-to-cart-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
         .cart-counter-box {
             display: flex;
             align-items: center;
@@ -723,15 +481,9 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .counter-val {
-            font-size: 16px;
-            font-weight: 700;
-        }
+        .counter-val { font-size: 16px; font-weight: 700; }
 
         .go-to-cart-btn {
             background: var(--primary-bg);
@@ -741,10 +493,6 @@
             border-radius: 14px;
             font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
             text-decoration: none;
         }
 
@@ -752,90 +500,19 @@
         .bottom-nav {
             position: fixed;
             bottom: calc(40px + env(safe-area-inset-bottom, 0px));
-            left: 16px;
-            right: 16px;
-            max-width: 480px;
-            margin: 0 auto;
-            height: 64px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 20px;
-            z-index: 1000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
+            display: flex; justify-content: space-around; align-items: center; border-radius: 20px; z-index: 1000;
         }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            text-decoration: none;
-            color: #808080;
-            font-size: 10px;
-            font-weight: 500;
-            width: 20%;
-            position: relative;
-            cursor: pointer;
-            padding: 8px 0;
-        }
-
-        .nav-icon-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-
-        .nav-item span {
-            pointer-events: none;
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            fill: none;
-            stroke: #808080;
-            stroke-width: 1.8;
-            transition: all 0.2s ease;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .nav-item.active svg {
-            stroke: var(--primary);
-            fill: var(--primary-bg);
-            transform: scale(1.05);
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; font-weight: 500; width: 20%; }
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: #808080; stroke-width: 1.8; }
+        .nav-item.active svg { stroke: var(--primary); fill: var(--primary-bg); }
 
         .badge-count {
-            position: absolute;
-            top: -4px;
-            right: -8px;
-            background: #000;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            min-width: 17px;
-            height: 17px;
-            border-radius: 10px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
+            position: absolute; top: -4px; right: -8px; background: #000; color: #fff; font-size: 10px; font-weight: 700; min-width: 17px; height: 17px; border-radius: 10px; display: none; align-items: center; justify-content: center; padding: 0 4px;
         }
-
-        .badge-count.show {
-            display: flex;
-        }
+        .badge-count.show { display: flex; }
     </style>
 </head>
 <body>
@@ -853,10 +530,9 @@
         <div class="product-img-box"></div>
     </div>
 
-    <div class="scrollable-content" id="mainContentArea">
+    <div class="scrollable-content">
         <div id="productDetailContainer"></div>
-
-        <div class="similar-title" id="similarTitle">O'xshash mahsulotlar</div>
+        <div class="similar-title">O'xshash mahsulotlar</div>
         <div class="similar-grid" id="similarGrid"></div>
     </div>
 
@@ -864,180 +540,53 @@
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             <span>Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
             <span>Katalog</span>
         </a>
-        <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
-            <span>Savatcha</span>
-        </a>
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
-            <span>Saralangan</span>
-        </a>
-        <a href="profil.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-            <span>Profil</span>
-        </a>
+        <a href="cart.html" class="nav-item"><div style="position:relative;"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div><span>Savatcha</span></a>
+        <a href="heart.html" class="nav-item"><div style="position:relative;"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div><span>Saralangan</span></a>
+        <a href="profil.html" class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profil</span></a>
     </nav>
 
     <script>
-        const DEFAULT_PRODUCTS = [
-            { 
-                id: 1, 
-                category_id: 1, 
-                name: "Qishki issiq qora kurtka", 
-                price: "450 000 so'm", 
-                oldPrice: "680 000 so'm", 
-                discount: "↓ 33%", 
-                badgeType: "original", 
-                rating: 4.9, 
-                comments: 124, 
-                ordersCount: "1 200+", 
-                salesInfo: "Bu haftada 89 kishi sotib oldi", 
-                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov.", 
-                images: [
-                    "https://images.unsplash.com/photo-1544441893-675973e31985?w=800&auto=format&fit=crop&q=85",
-                    "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&auto=format&fit=crop&q=85"
-                ],
-                variants: [
-                    { name: "Qishki issiq qora kurtka (Qora)", price: "450 000 so'm", img: "https://images.unsplash.com/photo-1544441893-675973e31985?w=300&auto=format&fit=crop&q=85", available: true },
-                    { name: "Qishki issiq qora kurtka (Ko'k)", price: "460 000 so'm", img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=300&auto=format&fit=crop&q=85", available: true }
-                ],
-                sizes: [38, 39, 40, 41, 42]
-            },
-            { 
-                id: 2, 
-                category_id: 1, 
-                name: "Sportivniy stilimdagi kurtka", 
-                price: "380 000 so'm", 
-                oldPrice: "500 000 so'm", 
-                discount: "↓ 24%", 
-                badgeType: "chegirma", 
-                rating: 4.8, 
-                comments: 92, 
-                ordersCount: "850+", 
-                salesInfo: "Bu haftada 54 kishi sotib oldi", 
-                desc: "Sport uslubidagi qulay va yengil kurtka.", 
-                images: [
-                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&auto=format&fit=crop&q=85",
-                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=85"
-                ],
-                variants: [
-                    { name: "Sportivniy stilimdagi kurtka (Kulrang)", price: "380 000 so'm", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&auto=format&fit=crop&q=85", available: true },
-                    { name: "Sportivniy stilimdagi kurtka (Qora)", price: "390 000 so'm", img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=85", available: true }
-                ],
-                sizes: [39, 40, 41]
-            },
-            { 
-                id: 3, 
-                category_id: 2, 
-                name: "Uy uchun yumshoq tapichka", 
-                price: "45 000 so'm", 
-                oldPrice: "80 000 so'm", 
-                discount: "↓ 43%", 
-                badgeType: "arzonlashdi", 
-                rating: 5.0, 
-                comments: 310, 
-                ordersCount: "3 400+", 
-                salesInfo: "Bu haftada 210 kishi sotib oldi", 
-                desc: "Uy uchun juda yumshoq va iliq tapichka.", 
-                images: [
-                    "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=800&auto=format&fit=crop&q=85",
-                    "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&auto=format&fit=crop&q=85"
-                ],
-                variants: [
-                    { name: "Uy uchun yumshoq tapichka (Bej)", price: "45 000 so'm", img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=300&auto=format&fit=crop&q=85", available: true },
-                    { name: "Uy uchun yumshoq tapichka (Pushti)", price: "45 000 so'm", img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=85", available: true }
-                ],
-                sizes: [36, 37, 38, 39]
-            },
-            { 
-                id: 4, 
-                category_id: 3, 
-                name: "Bahorgi qora shapka", 
-                price: "35 000 so'm", 
-                oldPrice: "60 000 so'm", 
-                discount: "↓ 41%", 
-                badgeType: "none", 
-                rating: 4.7, 
-                comments: 45, 
-                ordersCount: "400+", 
-                salesInfo: "Bu haftada 32 kishi sotib oldi", 
-                desc: "Bahorgi mavsum uchun qulay qora shapka.", 
-                images: [
-                    "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=800&auto=format&fit=crop&q=85",
-                    "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=800&auto=format&fit=crop&q=85"
-                ],
-                variants: [
-                    { name: "Bahorgi qora shapka (Qora)", price: "35 000 so'm", img: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=300&auto=format&fit=crop&q=85", available: true },
-                    { name: "Bahorgi qora shapka (Kulrang)", price: "35 000 so'm", img: "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=300&auto=format&fit=crop&q=85", available: true }
-                ],
-                sizes: [56, 57, 58]
-            },
-            { 
-                id: 5, 
-                category_id: 4, 
-                name: "Ayollar uchun zamonaviy ko'ylak", 
-                price: "220 000 so'm", 
-                oldPrice: "350 000 so'm", 
-                discount: "↓ 37%", 
-                badgeType: "arzonlashdi", 
-                rating: 4.9, 
-                comments: 178, 
-                ordersCount: "950+", 
-                salesInfo: "Bu haftada 67 kishi sotib oldi", 
-                desc: "Zamonaviy dizayndagi ayollar ko'ylagi.", 
-                images: [
-                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop&q=85",
-                    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&auto=format&fit=crop&q=85"
-                ],
-                variants: [
-                    { name: "Ayollar uchun ko'ylak (Qizil)", price: "220 000 so'm", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=300&auto=format&fit=crop&q=85", available: true },
-                    { name: "Ayollar uchun ko'ylak (Oq)", price: "230 000 so'm", img: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=300&auto=format&fit=crop&q=85", available: true }
-                ],
-                sizes: [42, 44, 46]
-            },
-            { 
-                id: 6, 
-                category_id: 5, 
-                name: "Paxtadan tayyorlangan ichki kiyimlar", 
-                price: "90 000 so'm", 
-                oldPrice: "150 000 so'm", 
-                discount: "↓ 40%", 
-                badgeType: "original", 
-                rating: 4.8, 
-                comments: 89, 
-                ordersCount: "1 500+", 
-                salesInfo: "Bu haftada 120 kishi sotib oldi", 
-                desc: "100% toza paxtadan tayyorlangan sifatli to'plam.", 
-                images: [
-                    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=85",
-                    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&auto=format&fit=crop&q=85"
-                ],
-                variants: [
-                    { name: "Paxtadan ichki kiyimlar (Oq)", price: "90 000 so'm", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=300&auto=format&fit=crop&q=85", available: true },
-                    { name: "Paxtadan ichki kiyimlar (Qora)", price: "90 000 so'm", img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=300&auto=format&fit=crop&q=85", available: true }
-                ],
-                sizes: [48, 50, 52]
-            }
+        // Barcha bo'limlar bo'yicha to'liq mahsulotlar bazasi (ID lari moslashtirilgan)
+        const ALL_PRODUCTS = [
+            // Ko'ylaklar
+            { id: 101, subcat: "Ko'ylaklar", name: "Ayollar uchun zamonaviy oq ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", rating: 4.9, comments: 178, desc: "Yuqori sifatli materialdan tayyorlangan zamonaviy ayollar ko'ylagi.", images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop&q=85"], sizes: [42, 44, 46] },
+            { id: 102, subcat: "Ko'ylaklar", name: "Kechki qora libos", price: "450 000 so'm", oldPrice: "650 000 so'm", rating: 5.0, comments: 84, desc: "Tantanali kechalar uchun mukammal qora libos.", images: ["https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&auto=format&fit=crop&q=85"], sizes: [40, 42, 44] },
+            { id: 103, subcat: "Ko'ylaklar", name: "Yozgi yengil gulli ko'ylak", price: "180 000 so'm", oldPrice: "280 000 so'm", rating: 4.7, comments: 56, desc: "Issiq kunlar uchun yengil va qulay gulli ko'ylak.", images: ["https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800&auto=format&fit=crop&q=85"], sizes: [38, 40, 42] },
+            { id: 104, subcat: "Ko'ylaklar", name: "Klassik ishbilarmon ko'ylak", price: "310 000 so'm", oldPrice: "450 000 so'm", rating: 4.8, comments: 92, desc: "Ofis va ish uchrashuvlari uchun klassik bichimdagi ko'ylak.", images: ["https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800&auto=format&fit=crop&q=85"], sizes: [42, 46, 48] },
+            { id: 105, subcat: "Ko'ylaklar", name: "Qizil tantanali ko'ylak", price: "520 000 so'm", oldPrice: "750 000 so'm", rating: 4.9, comments: 112, desc: "Diqqatni tortuvchi yorqin qizil rangli libos.", images: ["https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&auto=format&fit=crop&q=85"], sizes: [40, 42] },
+            { id: 106, subcat: "Ko'ylaklar", name: "Trikotaj kundalik ko'ylak", price: "195 000 so'm", oldPrice: "300 000 so'm", rating: 4.6, comments: 40, desc: "Kundalik kiyish uchun yumshoq trikotaj ko'ylak.", images: ["https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=800&auto=format&fit=crop&q=85"], sizes: [44, 46, 48] },
+
+            // Sumkalar
+            { id: 201, subcat: "Sumkalar", name: "Ayollar uchun elegante charm sumka", price: "280 000 so'm", oldPrice: "400 000 so'm", rating: 4.8, comments: 65, desc: "Tabiiy charmdan tayyorlangan yuqori sifatli sumka.", images: ["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 202, subcat: "Sumkalar", name: "Kichik yelka sumkasi (Clutch)", price: "190 000 so'm", oldPrice: "290 000 so'm", rating: 4.7, comments: 42, desc: "Kechki sayrlar uchun qulay kichik yelka sumkasi.", images: ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 203, subcat: "Sumkalar", name: "Kundalik shopper sumka", price: "220 000 so'm", oldPrice: "350 000 so'm", rating: 4.9, comments: 110, desc: "Bozor va kundalik xaridlar uchun sig'imli shopper.", images: ["https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 204, subcat: "Sumkalar", name: "Sport uslubidagi ruksak-sumka", price: "310 000 so'm", oldPrice: "450 000 so'm", rating: 4.6, comments: 38, desc: "Faol hayot tarzi uchun qulay ruksak.", images: ["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 205, subcat: "Sumkalar", name: "Klassik qora ish sumkasi", price: "380 000 so'm", oldPrice: "520 000 so'm", rating: 5.0, comments: 90, desc: "Hujjatlar va noutbuk uchun mo'ljallangan qora sumka.", images: ["https://images.unsplash.com/photo-1594223274512-ad4803739ffc?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 206, subcat: "Sumkalar", name: "Brendoviy zanjirli sumka", price: "410 000 so'm", oldPrice: "600 000 so'm", rating: 4.8, comments: 72, desc: "Zanjirli tutqichga ega hashamatli sumka.", images: ["https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+
+            // Ko'zoynaklar
+            { id: 301, subcat: "Ko'zoynaklar", name: "Quyoshdan saqlovchi qora ko'zoynak", price: "120 000 so'm", oldPrice: "200 000 so'm", rating: 4.9, comments: 140, desc: "Ko'zlarni ultrabinafsha nurlaridan to'liq himoya qiladi.", images: ["https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 302, subcat: "Ko'zoynaklar", name: "Kvadrat shakldagi imidj ko'zoynagi", price: "95 000 so'm", oldPrice: "160 000 so'm", rating: 4.7, comments: 88, desc: "Imij uchun zamonaviy kvadrat ko'zoynak.", images: ["https://images.unsplash.com/photo-1508296695146-257a814070b4?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 303, subcat: "Ko'zoynaklar", name: "Aviator uslubidagi quyosh ko'zoynagi", price: "150 000 so'm", oldPrice: "250 000 so'm", rating: 4.8, comments: 95, desc: "Klassik aviator dizaynidagi ko'zoynak.", images: ["https://images.unsplash.com/photo-1574345920610-0935568f677d?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 304, subcat: "Ko'zoynaklar", name: "Dumaloq dizaynli retro ko'zoynak", price: "110 000 so'm", oldPrice: "190 000 so'm", rating: 4.6, comments: 62, desc: "Retro uslubidagi estetik dumaloq ko'zoynak.", images: ["https://images.unsplash.com/photo-1577803645773-f96470509666?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 305, subcat: "Ko'zoynaklar", name: "Sportivniy velosipedchi ko'zoynagi", price: "175 000 so'm", oldPrice: "280 000 so'm", rating: 4.9, comments: 73, desc: "Sport bilan shug'ullanish uchun maxsus ko'zoynak.", images: ["https://images.unsplash.com/photo-1509695507497-903c140c49b0?w=800&auto=format&fit=crop&q=85"], sizes: [1] },
+            { id: 306, subcat: "Ko'zoynaklar", name: "Kompyuter uchun nurlar himoyali", price: "135 000 so'm", oldPrice: "220 000 so'm", rating: 4.8, comments: 110, desc: "Monitor nurlaridan ko'zni saqlovchi maxsus ko'zoynak.", images: ["https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=800&auto=format&fit=crop&q=85"], sizes: [1] }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = parseInt(urlParams.get('id')) || 1;
+        const productId = parseInt(urlParams.get('id')) || 101;
 
-        let allProducts = JSON.parse(localStorage.getItem('products')) || DEFAULT_PRODUCTS;
-        let product = allProducts.find(p => p.id === productId) || allProducts[0];
-
+        let product = ALL_PRODUCTS.find(p => p.id === productId) || ALL_PRODUCTS[0];
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
-
-        let currentSelectedVariantIndex = 0;
-        let currentSelectedSize = product.sizes ? product.sizes[0] : null;
+        let currentSelectedSize = product.sizes && product.sizes[0] !== 1 ? product.sizes[0] : null;
 
         function initPage() {
             if (favs.includes(product.id)) {
@@ -1052,82 +601,30 @@
         }
 
         function renderMainImage() {
-            const activeVariant = product.variants && product.variants[currentSelectedVariantIndex] ? product.variants[currentSelectedVariantIndex] : null;
-            let pImages = product.images && product.images.length > 0 ? [...product.images] : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=85"];
-            
-            if (activeVariant && activeVariant.img) {
-                if (!pImages.includes(activeVariant.img)) {
-                    pImages.unshift(activeVariant.img);
-                } else {
-                    pImages = [activeVariant.img, ...pImages.filter(img => img !== activeVariant.img)];
-                }
-            }
-
-            const hasMultipleImages = pImages.length > 1;
-            const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
-
             const imgWrapper = document.getElementById('imageWrapper');
             imgWrapper.innerHTML = `
                 <div class="product-img-box">
-                    <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleMainCardScroll(event, ${pImages.length})"` : ''}>
-                        ${loopedImages.map(imgUrl => `
-                            <div class="card-slide"><img src="${imgUrl}" alt="${product.name}"></div>
-                        `).join('')}
+                    <div class="card-slider-container">
+                        <div class="card-slide"><img src="${product.images[0]}" alt="${product.name}"></div>
                     </div>
-                    ${hasMultipleImages ? `
-                        <div class="card-dots-sm" id="mainCardDots">
-                            ${pImages.map((_, idx) => `<div class="card-dot-sm ${idx === 0 ? 'active' : ''}"></div>`).join('')}
-                        </div>
-                    ` : ''}
                 </div>
             `;
-
-            setTimeout(() => {
-                const mainSlider = document.querySelector('.product-img-box .card-slider-container');
-                if (mainSlider && mainSlider.dataset.originalLength) {
-                    mainSlider.scrollLeft = mainSlider.clientWidth;
-                }
-            }, 50);
         }
 
         function renderProductInfo() {
-            const activeVariant = product.variants && product.variants[currentSelectedVariantIndex] ? product.variants[currentSelectedVariantIndex] : null;
-            const displayPrice = activeVariant ? activeVariant.price : product.price;
-            const displayName = activeVariant ? activeVariant.name : product.name;
-            const isAvailable = activeVariant ? activeVariant.available : true;
-            const pImages = product.images && product.images.length > 0 ? product.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=85"];
-
             const container = document.getElementById('productDetailContainer');
-            const ratingVal = product.rating || 4.9;
-            const starCount = Math.round(ratingVal);
-
             container.innerHTML = `
                 <div class="section-card">
                     <div class="price-row">
-                        <span class="main-price" id="mainPriceVal">${displayPrice}</span>
-                        ${product.badgeType === 'chegirma' || product.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${product.discount || '↓ 20%'}</span>` : ''}
+                        <span class="main-price">${product.price}</span>
+                        <span class="discount-tag">Chegirma</span>
                     </div>
-                    <div class="old-prices">${product.oldPrice || ''}</div>
-                    <div class="out-of-stock-label" id="outOfStockLabel" style="display: ${isAvailable ? 'none' : 'block'}">Qolmagan</div>
-                    <h1 class="detail-title" id="productTitle">${displayName}</h1>
+                    <div class="old-prices">${product.oldPrice}</div>
+                    <h1 class="detail-title">${product.name}</h1>
 
-                    ${product.variants && product.variants.length > 0 ? `
+                    ${product.sizes && product.sizes.length > 1 ? `
                         <div class="option-section">
-                            <div class="option-title">Turi / Rangi:</div>
-                            <div class="variants-grid">
-                                ${product.variants.map((v, i) => `
-                                    <div class="variant-chip ${i === currentSelectedVariantIndex ? 'selected' : ''} ${!v.available ? 'out-of-stock' : ''}" 
-                                         onclick="selectVariant(${i})">
-                                        <img src="${v.img}" alt="Variant">
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-
-                    ${product.sizes && product.sizes.length > 0 ? `
-                        <div class="option-section">
-                            <div class="option-title">O'lchami: <span id="selectedSizeLabel" style="font-weight: 700; color: var(--text);">${currentSelectedSize || ''}</span></div>
+                            <div class="option-title">O'lchami:</div>
                             <div class="sizes-grid">
                                 ${product.sizes.map(size => `
                                     <div class="size-chip ${size === currentSelectedSize ? 'selected' : ''}" onclick="selectSize(${size})">
@@ -1139,76 +636,28 @@
                     ` : ''}
                 </div>
 
-                <div class="rating-card-box" onclick="window.location.href='comments.html?id=${product.id}'">
+                <div class="rating-card-box">
                     <div class="rating-left-side">
                         <div class="rating-numbers-row">
-                            <span class="rating-val">${ratingVal}</span>
+                            <span class="rating-val">${product.rating}</span>
                             <div class="stars-group">
-                                ${'<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'.repeat(starCount)}
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                             </div>
                         </div>
-                        <div class="rating-sub-text">${product.comments || 50} ta sharh · ${product.ordersCount || '100+'} ta buyurtma</div>
+                        <div class="rating-sub-text">${product.comments} ta sharh</div>
                     </div>
-                    <div class="rating-photos-preview">
-                        <div class="preview-thumb"><img src="${pImages[0]}" alt="Sharh rasmi"></div>
-                    </div>
+                    <div class="preview-thumb"><img src="${product.images[0]}" alt="Sharh"></div>
                 </div>
 
                 <div class="sales-info-row">
-                    <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <span>${product.salesInfo || "Bu haftada 150 kishi sotib oldi"}</span>
+                    <span>Bu haftada 120 kishi sotib oldi</span>
                 </div>
 
                 <div class="section-card">
                     <div class="option-title" style="font-weight: 700; color: var(--text); margin-bottom: 6px;">Tovar haqida</div>
-                    <div class="desc-text" id="descText">${product.desc || "Qisqacha ma'lumot mavjud emas."}</div>
-                    <button class="toggle-desc-btn" id="toggleDescBtn" onclick="toggleDescription()">Hammasini ko'rish</button>
+                    <div class="desc-text" id="descText">${product.desc}</div>
                 </div>
             `;
-
-            renderActionBar();
-        }
-
-        function handleMainCardScroll(e, originalLen) {
-            const container = e.target;
-            const slideWidth = container.clientWidth;
-            const scrollLeft = container.scrollLeft;
-
-            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            } else if (scrollLeft <= 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = originalLen * slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            }
-
-            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
-            const realIndex = (activeIndex + originalLen) % originalLen;
-            const dotsBox = document.getElementById('mainCardDots');
-            if (dotsBox) {
-                const dots = dotsBox.children;
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.toggle('active', i === realIndex);
-                }
-            }
-        }
-
-        function selectVariant(index) {
-            currentSelectedVariantIndex = index;
-            renderMainImage();
-            
-            const activeVariant = product.variants[index];
-            if (activeVariant) {
-                document.getElementById('mainPriceVal').textContent = activeVariant.price;
-                document.getElementById('productTitle').textContent = activeVariant.name;
-                document.getElementById('outOfStockLabel').style.display = activeVariant.available ? 'none' : 'block';
-            }
-
-            document.querySelectorAll('.variant-chip').forEach((chip, idx) => {
-                chip.classList.toggle('selected', idx === index);
-            });
             renderActionBar();
         }
 
@@ -1217,16 +666,7 @@
             document.querySelectorAll('.size-chip').forEach(chip => {
                 chip.classList.toggle('selected', parseInt(chip.textContent.trim()) === size);
             });
-            const sizeLabel = document.getElementById('selectedSizeLabel');
-            if (sizeLabel) sizeLabel.textContent = size;
             renderActionBar();
-        }
-
-        function toggleDescription() {
-            const desc = document.getElementById('descText');
-            const btn = document.getElementById('toggleDescBtn');
-            desc.classList.toggle('expanded');
-            btn.textContent = desc.classList.contains('expanded') ? "Qisqartirish" : "Hammasini ko'rish";
         }
 
         function renderActionBar() {
@@ -1236,8 +676,7 @@
             if (!cartItem) {
                 bar.innerHTML = `
                     <button class="add-to-cart-btn" onclick="addToCart()">
-                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <span>Savatga</span>
+                        <span>Savatga qo'shish</span>
                     </button>
                 `;
             } else {
@@ -1247,24 +686,13 @@
                         <span class="counter-val">${cartItem.qty || 1}</span>
                         <button class="counter-btn" onclick="changeQty(1)">+</button>
                     </div>
-                    <a href="cart.html" class="go-to-cart-btn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <span>O'tish</span>
-                    </a>
+                    <a href="cart.html" class="go-to-cart-btn">Savatchaga o'tish</a>
                 `;
             }
         }
 
         function addToCart() {
-            const activeVariant = product.variants && product.variants[currentSelectedVariantIndex] ? product.variants[currentSelectedVariantIndex] : null;
-            let itemToAdd = {
-                ...product,
-                name: activeVariant ? activeVariant.name : product.name,
-                price: activeVariant ? activeVariant.price : product.price,
-                selectedSize: currentSelectedSize,
-                qty: 1
-            };
-            cart.push(itemToAdd);
+            cart.push({ ...product, selectedSize: currentSelectedSize, qty: 1 });
             localStorage.setItem('cart_products', JSON.stringify(cart));
             renderActionBar();
             updateBadges();
@@ -1290,35 +718,59 @@
                 favs.push(product.id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            if (favs.includes(product.id)) {
-                document.getElementById('heartBtn').classList.add('liked');
-            } else {
-                document.getElementById('heartBtn').classList.remove('liked');
-            }
+            initPage();
+        }
+
+        function renderSimilar() {
+            const grid = document.getElementById('similarGrid');
+            const similar = ALL_PRODUCTS.filter(p => p.id !== product.id);
+
+            grid.innerHTML = similar.map(p => {
+                const isLiked = favs.includes(p.id) ? 'liked' : '';
+                return `
+                    <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
+                        <button class="heart-icon-sm ${isLiked}" onclick="event.stopPropagation(); toggleSimilarHeart(${p.id})">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </button>
+                        <div class="product-img-box-sm">
+                            <div class="card-slider-container-sm">
+                                <div class="card-slide-sm"><img src="${p.images[0]}" alt="${p.name}"></div>
+                            </div>
+                        </div>
+                        <div class="product-info-sm">
+                            <div class="main-price-sm">${p.price}</div>
+                            <div class="product-title-sm">${p.name}</div>
+                            <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">Savatga</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleSimilarHeart(id) {
+            if (favs.includes(id)) favs = favs.filter(i => i !== id);
+            else favs.push(id);
+            localStorage.setItem('fav_products', JSON.stringify(favs));
+            renderSimilar();
             updateBadges();
         }
 
-        function toggleSimilarHeart(e, id) {
-            e.stopPropagation();
-            if (favs.includes(id)) {
-                favs = favs.filter(item => item !== id);
-            } else {
-                favs.push(id);
+        function addSimilarToCart(id) {
+            let prod = ALL_PRODUCTS.find(p => p.id === id);
+            if (prod) {
+                cart.push({ ...prod, qty: 1 });
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateBadges();
+                alert("Savatga qo'shildi!");
             }
-            localStorage.setItem('fav_products', JSON.stringify(favs));
-            
-            const btn = e.currentTarget;
-            btn.classList.toggle('liked', favs.includes(id));
-            updateBadges();
         }
 
         function updateBadges() {
             const favBadge = document.getElementById('favBadge');
             const cartBadge = document.getElementById('cartBadge');
-            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
 
-            if (validFavs.length > 0) {
-                favBadge.textContent = validFavs.length;
+            if (favs.length > 0) {
+                favBadge.textContent = favs.length;
                 favBadge.classList.add('show');
             } else {
                 favBadge.classList.remove('show');
@@ -1330,210 +782,6 @@
                 cartBadge.classList.add('show');
             } else {
                 cartBadge.classList.remove('show');
-            }
-        }
-
-        function goToProduct(id) {
-            window.location.href = `product.html?id=${id}`;
-        }
-
-        function renderSimilar() {
-            const grid = document.getElementById('similarGrid');
-            const similar = allProducts.filter(p => p.id !== product.id);
-
-            if (similar.length === 0) {
-                document.getElementById('similarTitle').style.display = 'none';
-                return;
-            }
-
-            grid.innerHTML = similar.map(p => {
-                const isLiked = favs.includes(p.id) ? 'liked' : '';
-                const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=85"];
-                const hasMultipleImages = pImages.length > 1;
-                const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
-                const defaultSize = p.sizes ? p.sizes[0] : null;
-                const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
-
-                let badgeHtml = '';
-                if (p.badgeType === 'original') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
-                } else if (p.badgeType === 'chegirma') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada</div>`;
-                } else if (p.badgeType === 'arzonlashdi') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
-                }
-
-                let btnHtml = '';
-                if (!cartItem) {
-                    btnHtml = `
-                        <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
-                            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            <span>Savatga</span>
-                        </button>
-                    `;
-                } else {
-                    btnHtml = `
-                        <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
-                            <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
-                            <span class="counter-val-sm">${cartItem.qty || 1}</span>
-                            <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)">+</button>
-                        </div>
-                    `;
-                }
-
-                return `
-                    <div class="product-card" id="similar-card-${p.id}">
-                        <button class="heart-icon-sm ${isLiked}" onclick="toggleSimilarHeart(event, ${p.id})">
-                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        </button>
-                        <div class="product-img-box-sm" data-product-id="${p.id}">
-                            <div class="card-slider-container-sm" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleSimilarCardScroll(event, ${pImages.length})"` : ''}>
-                                ${loopedImages.map(imgUrl => `
-                                    <div class="card-slide-sm"><img src="${imgUrl}" alt="${p.name}"></div>
-                                `).join('')}
-                            </div>
-                            ${hasMultipleImages ? `
-                                <div class="card-dots-sm">
-                                    ${pImages.map((_, idx) => `<div class="card-dot-sm ${idx === 0 ? 'active' : ''}"></div>`).join('')}
-                                </div>
-                            ` : ''}
-                            ${badgeHtml}
-                        </div>
-                        <div class="product-info-sm" onclick="goToProduct(${p.id})">
-                            <div class="price-row-sm">
-                                <span class="main-price-sm">${p.price}</span>
-                                ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag-sm">${p.discount}</span>` : ''}
-                            </div>
-                            <div class="old-prices-sm">
-                                <span class="price-old-sm">${p.oldPrice}</span>
-                            </div>
-                            <div class="product-title-sm">${p.name}</div>
-                            <div class="product-rating-sm">
-                                <div class="rating-box-sm">
-                                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                    <span class="rating-num-sm">${p.rating || 4.8}</span>
-                                </div>
-                                <div class="comment-box-sm">
-                                    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                                    <span>${p.comments || 50}</span>
-                                </div>
-                            </div>
-                            <div class="card-action-container-${p.id}">
-                                ${btnHtml}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            document.querySelectorAll('.product-img-box-sm').forEach(box => {
-                let startX = 0;
-                let startY = 0;
-                box.addEventListener('pointerdown', (e) => {
-                    startX = e.clientX;
-                    startY = e.clientY;
-                });
-                box.addEventListener('pointerup', (e) => {
-                    let diffX = Math.abs(e.clientX - startX);
-                    let diffY = Math.abs(e.clientY - startY);
-                    if (diffX < 6 && diffY < 6) {
-                        const prodId = box.getAttribute('data-product-id');
-                        goToProduct(prodId);
-                    }
-                });
-            });
-
-            setTimeout(() => {
-                document.querySelectorAll('.card-slider-container-sm').forEach(container => {
-                    if (container.dataset.originalLength) {
-                        const slideWidth = container.clientWidth;
-                        container.scrollLeft = slideWidth;
-                    }
-                });
-            }, 50);
-        }
-
-        function handleSimilarCardScroll(e, originalLen) {
-            const container = e.target;
-            const slideWidth = container.clientWidth;
-            const scrollLeft = container.scrollLeft;
-
-            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            } else if (scrollLeft <= 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = originalLen * slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            }
-
-            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
-            const realIndex = (activeIndex + originalLen) % originalLen;
-            const dotsBox = container.parentElement.querySelector('.card-dots-sm');
-            if (dotsBox) {
-                const dots = dotsBox.children;
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.toggle('active', i === realIndex);
-                }
-            }
-        }
-
-        function updateSimilarCardAction(id) {
-            const actionContainer = document.querySelector(`.card-action-container-${id}`);
-            if (!actionContainer) return;
-
-            let prod = allProducts.find(p => p.id === id);
-            let defaultSize = prod.sizes ? prod.sizes[0] : null;
-            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-
-            if (!cartItem) {
-                actionContainer.innerHTML = `
-                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${id})">
-                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <span>Savatga</span>
-                    </button>
-                `;
-            } else {
-                actionContainer.innerHTML = `
-                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
-                        <button class="counter-btn-sm" onclick="changeSimilarQty(${id}, -1)">-</button>
-                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
-                        <button class="counter-btn-sm" onclick="changeSimilarQty(${id}, 1)">+</button>
-                    </div>
-                `;
-            }
-        }
-
-        function addSimilarToCart(id) {
-            let prod = allProducts.find(p => p.id === id);
-            if (prod) {
-                let defaultSize = prod.sizes ? prod.sizes[0] : null;
-                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-                if (!cartItem) {
-                    cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
-                } else {
-                    cartItem.qty = (cartItem.qty || 1) + 1;
-                }
-                localStorage.setItem('cart_products', JSON.stringify(cart));
-                updateSimilarCardAction(id);
-                updateBadges();
-            }
-        }
-
-        function changeSimilarQty(id, delta) {
-            let prod = allProducts.find(p => p.id === id);
-            if (!prod) return;
-            let defaultSize = prod.sizes ? prod.sizes[0] : null;
-            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-            if (cartItem) {
-                cartItem.qty = (cartItem.qty || 1) + delta;
-                if (cartItem.qty <= 0) {
-                    cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
-                }
-                localStorage.setItem('cart_products', JSON.stringify(cart));
-                updateSimilarCardAction(id);
-                updateBadges();
             }
         }
 
