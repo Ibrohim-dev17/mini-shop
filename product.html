@@ -17,6 +17,7 @@
             --star: #ffb800;
             --discount-bg: #f1e5ff;
             --discount-text: #7000ff;
+            --danger: #ff3b30;
         }
 
         * {
@@ -34,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER */
         .sticky-header {
             position: sticky;
             top: 0;
@@ -75,7 +75,6 @@
             stroke: #ff3b30;
         }
 
-        /* IMAGE SKELETON & LOADER */
         .product-img-wrapper {
             position: sticky;
             top: 104px;
@@ -134,33 +133,6 @@
             display: block;
         }
 
-        .card-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            z-index: 4;
-            pointer-events: none;
-        }
-
-        .card-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.2);
-            transition: all 0.2s;
-        }
-
-        .card-dot.active {
-            width: 16px;
-            border-radius: 4px;
-            background: var(--primary);
-        }
-
-        /* OFFLINE / ERROR STATE */
         .offline-container {
             display: none;
             flex-direction: column;
@@ -247,7 +219,15 @@
             font-size: 14px;
             color: var(--muted);
             text-decoration: line-through;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
+        }
+
+        .out-of-stock-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--danger);
+            margin-bottom: 8px;
+            display: none;
         }
 
         .detail-title {
@@ -256,6 +236,84 @@
             line-height: 1.4;
             color: var(--text);
             margin-bottom: 14px;
+        }
+
+        .option-section {
+            margin-top: 14px;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+        }
+
+        .option-title {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .variants-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .variant-chip {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            position: relative;
+            background: #fff;
+        }
+
+        .variant-chip img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .variant-chip.selected {
+            border-color: var(--primary);
+        }
+
+        .variant-chip.out-of-stock {
+            opacity: 0.5;
+        }
+
+        .variant-chip.out-of-stock::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top right, transparent 48%, var(--danger) 49%, var(--danger) 51%, transparent 52%);
+        }
+
+        .sizes-grid {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .size-chip {
+            min-width: 44px;
+            height: 38px;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .size-chip.selected {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+            color: var(--primary);
         }
 
         .rating-card-box {
@@ -369,7 +427,7 @@
             cursor: pointer;
         }
 
-        /* SIMILAR PRODUCTS (PRODUCTS.HTML STYLE) */
+        /* SIMILAR PRODUCTS */
         .similar-title {
             font-size: 18px;
             font-weight: 700;
@@ -513,6 +571,38 @@
             fill: none;
             stroke: currentColor;
             stroke-width: 2;
+        }
+
+        .cart-counter-box-sm {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 36px;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 0 6px;
+            margin-top: auto;
+            border: 1px solid var(--border);
+        }
+
+        .counter-btn-sm {
+            background: #fff;
+            border: 1px solid var(--border);
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .counter-val-sm {
+            font-size: 14px;
+            font-weight: 700;
         }
 
         /* FIXED BOTTOM BAR FOR CART */
@@ -749,12 +839,44 @@
 
     <script>
         const DEFAULT_PRODUCTS = [
-            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, ordersCount: "1 200+", salesInfo: "Bu haftada 89 kishi sotib oldi", desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material.", images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
-            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, ordersCount: "850+", salesInfo: "Bu haftada 54 kishi sotib oldi", desc: "Sport uslubidagi qulay va yengil kurtka.", images: ["https://picsum.photos/300/300?random=2"] },
-            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, ordersCount: "3 400+", salesInfo: "Bu haftada 210 kishi sotib oldi", desc: "Uy uchun juda yumshoq va iliq tapichka.", images: ["https://picsum.photos/300/300?random=3"] },
-            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, ordersCount: "400+", salesInfo: "Bu haftada 32 kishi sotib oldi", desc: "Bahorgi mavsum uchun qulay qora shapka.", images: ["https://picsum.photos/300/300?random=4"] },
-            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, ordersCount: "950+", salesInfo: "Bu haftada 67 kishi sotib oldi", desc: "Zamonaviy dizayndagi ayollar ko'ylagi.", images: ["https://picsum.photos/300/300?random=5"] },
-            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, ordersCount: "1 500+", salesInfo: "Bu haftada 120 kishi sotib oldi", desc: "100% toza paxtadan tayyorlangan sifatli to'plam.", images: ["https://picsum.photos/300/300?random=6"] }
+            { 
+                id: 1, 
+                category_id: 1, 
+                name: "Qishki issiq qora kurtka", 
+                price: "450 000 so'm", 
+                oldPrice: "680 000 so'm", 
+                discount: "↓ 33%", 
+                rating: 4.9, 
+                comments: 124, 
+                ordersCount: "1 200+", 
+                salesInfo: "Bu haftada 89 kishi sotib oldi", 
+                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material.", 
+                images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11"],
+                variants: [
+                    { name: "Qishki issiq qora kurtka (Qora)", price: "450 000 so'm", img: "https://picsum.photos/300/300?random=1", available: true },
+                    { name: "Qishki issiq qora kurtka (Ko'k)", price: "460 000 so'm", img: "https://picsum.photos/300/300?random=11", available: true },
+                    { name: "Qishki issiq qora kurtka (Qizil)", price: "440 000 so'm", img: "https://picsum.photos/300/300?random=12", available: false }
+                ],
+                sizes: [38, 39, 40, 41, 42]
+            },
+            { 
+                id: 2, 
+                category_id: 1, 
+                name: "Sportivniy stilimdagi kurtka", 
+                price: "380 000 so'm", 
+                oldPrice: "500 000 so'm", 
+                discount: "↓ 24%", 
+                rating: 4.8, 
+                comments: 92, 
+                ordersCount: "850+", 
+                salesInfo: "Bu haftada 54 kishi sotib oldi", 
+                desc: "Sport uslubidagi qulay va yengil kurtka.", 
+                images: ["https://picsum.photos/300/300?random=2"],
+                variants: [
+                    { name: "Sportivniy stilimdagi kurtka (Kulrang)", price: "380 000 so'm", img: "https://picsum.photos/300/300?random=2", available: true }
+                ],
+                sizes: [39, 40, 41]
+            }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -765,6 +887,9 @@
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+
+        let currentSelectedVariantIndex = 0;
+        let currentSelectedSize = product.sizes ? product.sizes[0] : null;
 
         function renderProduct() {
             if (!navigator.onLine) {
@@ -778,23 +903,18 @@
                 document.getElementById('heartBtn').classList.add('liked');
             }
 
-            const imgWrapper = document.getElementById('imageWrapper');
-            const pImages = product.images || [product.img || "https://picsum.photos/300/300"];
-            const hasMultipleImages = pImages.length > 1;
-            const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
+            const activeVariant = product.variants && product.variants[currentSelectedVariantIndex] ? product.variants[currentSelectedVariantIndex] : null;
+            const displayPrice = activeVariant ? activeVariant.price : product.price;
+            const displayName = activeVariant ? activeVariant.name : product.name;
+            const isAvailable = activeVariant ? activeVariant.available : true;
+            const displayImg = activeVariant ? activeVariant.img : (product.images ? product.images[0] : product.img);
 
+            const imgWrapper = document.getElementById('imageWrapper');
             imgWrapper.innerHTML = `
-                <div class="product-img-box" id="mainImgBox">
-                    <div class="card-slider-container" id="mainSlider" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
-                        ${loopedImages.map(imgUrl => `
-                            <div class="card-slide"><img src="${imgUrl}" alt="${product.name}" onerror="handleImgError(this)"></div>
-                        `).join('')}
+                <div class="product-img-box">
+                    <div class="card-slider-container">
+                        <div class="card-slide"><img src="${displayImg}" alt="${displayName}" onerror="handleImgError(this)"></div>
                     </div>
-                    ${hasMultipleImages ? `
-                        <div class="card-dots" id="mainDots">
-                            ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
-                        </div>
-                    ` : ''}
                 </div>
             `;
 
@@ -805,11 +925,39 @@
             container.innerHTML = `
                 <div class="section-card">
                     <div class="price-row">
-                        <span class="main-price">${product.price}</span>
+                        <span class="main-price">${displayPrice}</span>
                         <span class="discount-tag">${product.discount || '↓ 20%'}</span>
                     </div>
                     <div class="old-prices">${product.oldPrice || ''}</div>
-                    <h1 class="detail-title">${product.name}</h1>
+                    <div class="out-of-stock-label" id="outOfStockLabel" style="display: ${isAvailable ? 'none' : 'block'}">Qolmagan</div>
+                    <h1 class="detail-title" id="productTitle">${displayName}</h1>
+
+                    ${product.variants && product.variants.length > 0 ? `
+                        <div class="option-section">
+                            <div class="option-title">Turi / Rangi:</div>
+                            <div class="variants-grid">
+                                ${product.variants.map((v, i) => `
+                                    <div class="variant-chip ${i === currentSelectedVariantIndex ? 'selected' : ''} ${!v.available ? 'out-of-stock' : ''}" 
+                                         onclick="selectVariant(${i})">
+                                        <img src="${v.img}" alt="Variant">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${product.sizes && product.sizes.length > 0 ? `
+                        <div class="option-section">
+                            <div class="option-title">O'lchami: <span id="selectedSizeLabel" style="font-weight: 700; color: var(--text);">${currentSelectedSize || ''}</span></div>
+                            <div class="sizes-grid">
+                                ${product.sizes.map(size => `
+                                    <div class="size-chip ${size === currentSelectedSize ? 'selected' : ''}" onclick="selectSize(${size})">
+                                        ${size}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
 
                 <div class="rating-card-box" onclick="window.location.href='comments.html?id=${product.id}'">
@@ -823,7 +971,7 @@
                         <div class="rating-sub-text">${product.comments || 50} ta sharh · ${product.ordersCount || '100+'} ta buyurtma</div>
                     </div>
                     <div class="rating-photos-preview">
-                        <div class="preview-thumb"><img src="${pImages[0]}" alt="Sharh rasmi"></div>
+                        <div class="preview-thumb"><img src="${displayImg}" alt="Sharh rasmi"></div>
                     </div>
                 </div>
 
@@ -842,13 +990,21 @@
             renderActionBar();
             renderSimilar();
             updateBadges();
+        }
 
-            setTimeout(() => {
-                const slider = document.getElementById('mainSlider');
-                if (slider && slider.dataset.originalLength) {
-                    slider.scrollLeft = slider.clientWidth;
-                }
-            }, 50);
+        function selectVariant(index) {
+            currentSelectedVariantIndex = index;
+            renderProduct();
+        }
+
+        function selectSize(size) {
+            currentSelectedSize = size;
+            document.querySelectorAll('.size-chip').forEach(chip => {
+                chip.classList.toggle('selected', parseInt(chip.textContent.trim()) === size);
+            });
+            const sizeLabel = document.getElementById('selectedSizeLabel');
+            if (sizeLabel) sizeLabel.textContent = size;
+            renderActionBar();
         }
 
         function handleImgError(img) {
@@ -866,7 +1022,7 @@
 
         function renderActionBar() {
             const bar = document.getElementById('bottomActionBar');
-            const cartItem = cart.find(item => item.id === product.id);
+            const cartItem = cart.find(item => item.id === product.id && item.selectedSize === currentSelectedSize);
 
             if (!cartItem) {
                 bar.innerHTML = `
@@ -891,23 +1047,26 @@
         }
 
         function addToCart() {
-            let cartItem = cart.find(item => item.id === product.id);
-            if (!cartItem) {
-                cart.push({ ...product, qty: 1 });
-            } else {
-                cartItem.qty = (cartItem.qty || 1) + 1;
-            }
+            const activeVariant = product.variants && product.variants[currentSelectedVariantIndex] ? product.variants[currentSelectedVariantIndex] : null;
+            let itemToAdd = {
+                ...product,
+                name: activeVariant ? activeVariant.name : product.name,
+                price: activeVariant ? activeVariant.price : product.price,
+                selectedSize: currentSelectedSize,
+                qty: 1
+            };
+            cart.push(itemToAdd);
             localStorage.setItem('cart_products', JSON.stringify(cart));
             renderActionBar();
             updateBadges();
         }
 
         function changeQty(delta) {
-            let cartItem = cart.find(item => item.id === product.id);
+            let cartItem = cart.find(item => item.id === product.id && item.selectedSize === currentSelectedSize);
             if (cartItem) {
                 cartItem.qty = (cartItem.qty || 1) + delta;
                 if (cartItem.qty <= 0) {
-                    cart = cart.filter(item => item.id !== product.id);
+                    cart = cart.filter(item => !(item.id === product.id && item.selectedSize === currentSelectedSize));
                 }
                 localStorage.setItem('cart_products', JSON.stringify(cart));
                 renderActionBar();
@@ -960,6 +1119,27 @@
 
             grid.innerHTML = similar.map(p => {
                 const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
+                const defaultSize = p.sizes ? p.sizes[0] : null;
+                const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+
+                let btnHtml = '';
+                if (!cartItem) {
+                    btnHtml = `
+                        <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            <span>Savatga</span>
+                        </button>
+                    `;
+                } else {
+                    btnHtml = `
+                        <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                            <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                            <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                            <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)">+</button>
+                        </div>
+                    `;
+                }
+
                 return `
                     <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
                         <div class="product-img-box-sm">
@@ -980,10 +1160,7 @@
                                 </div>
                                 <div>${p.comments || 50} sharh</div>
                             </div>
-                            <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
-                                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                <span>Savatga</span>
-                            </button>
+                            ${btnHtml}
                         </div>
                     </div>
                 `;
@@ -993,39 +1170,32 @@
         function addSimilarToCart(id) {
             let prod = allProducts.find(p => p.id === id);
             if (prod) {
-                let cartItem = cart.find(item => item.id === id);
+                let defaultSize = prod.sizes ? prod.sizes[0] : null;
+                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
                 if (!cartItem) {
-                    cart.push({ ...prod, qty: 1 });
+                    cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
                 } else {
                     cartItem.qty = (cartItem.qty || 1) + 1;
                 }
                 localStorage.setItem('cart_products', JSON.stringify(cart));
+                renderSimilar();
                 updateBadges();
             }
         }
 
-        function handleCardScroll(e, originalLen) {
-            const container = e.target;
-            const slideWidth = container.clientWidth;
-            const scrollLeft = container.scrollLeft;
-
-            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            } else if (scrollLeft <= 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = originalLen * slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            }
-
-            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
-            const realIndex = (activeIndex + originalLen) % originalLen;
-            const dots = document.getElementById('mainDots')?.children;
-            if (dots) {
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.toggle('active', i === realIndex);
+        function changeSimilarQty(id, delta) {
+            let prod = allProducts.find(p => p.id === id);
+            if (!prod) return;
+            let defaultSize = prod.sizes ? prod.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+            if (cartItem) {
+                cartItem.qty = (cartItem.qty || 1) + delta;
+                if (cartItem.qty <= 0) {
+                    cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
                 }
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                renderSimilar();
+                updateBadges();
             }
         }
 
