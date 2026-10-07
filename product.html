@@ -209,15 +209,6 @@
             color: var(--text);
         }
 
-        .discount-tag {
-            background: var(--discount-bg);
-            color: var(--discount-text);
-            font-size: 12px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
         .old-prices {
             font-size: 14px;
             color: var(--muted);
@@ -552,7 +543,7 @@
             background: #ffffff;
         }
 
-        /* DINAMIK YORLIQLAR (BADGES) */
+        /* YORLIQLAR (BADGES) */
         .badge-dynamic-sm {
             position: absolute;
             bottom: 8px;
@@ -560,7 +551,7 @@
             color: #fff;
             font-size: 10px;
             font-weight: 700;
-            padding: 3px 8px;
+            padding: 4px 8px;
             border-radius: 6px;
             z-index: 4;
             pointer-events: none;
@@ -587,15 +578,6 @@
             font-size: 16px;
             font-weight: 800;
             color: var(--text);
-        }
-
-        .discount-tag-sm {
-            background: var(--discount-bg);
-            color: var(--discount-text);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 1px 5px;
-            border-radius: 4px;
         }
 
         .old-prices-sm {
@@ -1018,6 +1000,36 @@
                 salesInfo: "Bu haftada 32 kishi sotib oldi", 
                 desc: "Bahorgi mavsum uchun qulay qora shapka.", 
                 images: ["https://picsum.photos/300/300?random=4"]
+            },
+            { 
+                id: 5, 
+                category_id: 4, 
+                name: "Ayollar uchun zamonaviy ko'ylak", 
+                price: "220 000 so'm", 
+                oldPrice: "350 000 so'm", 
+                discount: "↓ 37%", 
+                badgeType: "arzonlashdi", 
+                rating: 4.9, 
+                comments: 178, 
+                ordersCount: "950+", 
+                salesInfo: "Bu haftada 67 kishi sotib oldi", 
+                desc: "Zamonaviy dizayndagi ayollar ko'ylagi.", 
+                images: ["https://picsum.photos/300/300?random=5"]
+            },
+            { 
+                id: 6, 
+                category_id: 5, 
+                name: "Paxtadan tayyorlangan ichki kiyimlar", 
+                price: "90 000 so'm", 
+                oldPrice: "150 000 so'm", 
+                discount: "↓ 40%", 
+                badgeType: "original", 
+                rating: 4.8, 
+                comments: 89, 
+                ordersCount: "1 500+", 
+                salesInfo: "Bu haftada 120 kishi sotib oldi", 
+                desc: "100% toza paxtadan tayyorlangan sifatli to'plam.", 
+                images: ["https://picsum.photos/300/300?random=6"]
             }
         ];
 
@@ -1070,7 +1082,6 @@
                 <div class="section-card">
                     <div class="price-row">
                         <span class="main-price">${displayPrice}</span>
-                        <span class="discount-tag">${product.discount || '↓ 20%'}</span>
                     </div>
                     <div class="old-prices">${product.oldPrice || ''}</div>
                     <div class="out-of-stock-label" id="outOfStockLabel" style="display: ${isAvailable ? 'none' : 'block'}">Qolmagan</div>
@@ -1331,7 +1342,6 @@
                         <div class="product-info-sm" onclick="goToProduct(${p.id})">
                             <div class="price-row-sm">
                                 <span class="main-price-sm">${p.price}</span>
-                                <span class="discount-tag-sm">${p.discount}</span>
                             </div>
                             <div class="old-prices-sm">
                                 <span class="price-old-sm">${p.oldPrice}</span>
