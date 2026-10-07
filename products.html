@@ -614,12 +614,102 @@
         const catId = urlParams.get('cat_id') || 1;
 
         const PRODUCTS = [
-            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", badgeType: "original", rating: 4.9, comments: 124, images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
-            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", badgeType: "chegirma", rating: 4.8, comments: 92, images: ["https://picsum.photos/300/300?random=2"] },
-            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", badgeType: "arzonlashdi", rating: 5.0, comments: 310, images: ["https://picsum.photos/300/300?random=3", "https://picsum.photos/300/300?random=31"] },
-            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", badgeType: "none", rating: 4.7, comments: 45, images: ["https://picsum.photos/300/300?random=4", "https://picsum.photos/300/300?random=41"] },
-            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 178, images: ["https://picsum.photos/300/300?random=5", "https://picsum.photos/300/300?random=51"] },
-            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", badgeType: "original", rating: 4.8, comments: 89, images: ["https://picsum.photos/300/300?random=6"] }
+            { 
+                id: 1, 
+                category_id: 1, 
+                name: "Qishki issiq qora kurtka", 
+                price: "450 000 so'm", 
+                oldPrice: "680 000 so'm", 
+                discount: "↓ 33%", 
+                badgeType: "original", 
+                rating: 4.9, 
+                comments: 124, 
+                images: [
+                    "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"
+                ],
+                sizes: [38, 39, 40, 41, 42]
+            },
+            { 
+                id: 2, 
+                category_id: 1, 
+                name: "Sportivniy stilimdagi kurtka", 
+                price: "380 000 so'm", 
+                oldPrice: "500 000 so'm", 
+                discount: "↓ 24%", 
+                badgeType: "chegirma", 
+                rating: 4.8, 
+                comments: 92, 
+                images: [
+                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80"
+                ],
+                sizes: [39, 40, 41]
+            },
+            { 
+                id: 3, 
+                category_id: 2, 
+                name: "Uy uchun yumshoq tapichka", 
+                price: "45 000 so'm", 
+                oldPrice: "80 000 so'm", 
+                discount: "↓ 43%", 
+                badgeType: "arzonlashdi", 
+                rating: 5.0, 
+                comments: 310, 
+                images: [
+                    "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"
+                ],
+                sizes: [36, 37, 38, 39]
+            },
+            { 
+                id: 4, 
+                category_id: 3, 
+                name: "Bahorgi qora shapka", 
+                price: "35 000 so'm", 
+                oldPrice: "60 000 so'm", 
+                discount: "↓ 41%", 
+                badgeType: "none", 
+                rating: 4.7, 
+                comments: 45, 
+                images: [
+                    "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"
+                ],
+                sizes: [56, 57, 58]
+            },
+            { 
+                id: 5, 
+                category_id: 4, 
+                name: "Ayollar uchun zamonaviy ko'ylak", 
+                price: "220 000 so'm", 
+                oldPrice: "350 000 so'm", 
+                discount: "↓ 37%", 
+                badgeType: "arzonlashdi", 
+                rating: 4.9, 
+                comments: 178, 
+                images: [
+                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"
+                ],
+                sizes: [42, 44, 46]
+            },
+            { 
+                id: 6, 
+                category_id: 5, 
+                name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", 
+                price: "90 000 so'm", 
+                oldPrice: "150 000 so'm", 
+                discount: "↓ 40%", 
+                badgeType: "original", 
+                rating: 4.8, 
+                comments: 89, 
+                images: [
+                    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80"
+                ],
+                sizes: [48, 50, 52]
+            }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
@@ -640,7 +730,7 @@
 
             grid.innerHTML = list.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
-                const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
+                const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
                 const hasMultipleImages = pImages.length > 1;
                 const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
                 const defaultSize = p.sizes ? p.sizes[0] : null;
