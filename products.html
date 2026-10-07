@@ -203,6 +203,15 @@
             color: #ff3b30;
         }
 
+        .page-title-bar {
+            padding: 12px 16px 0 16px;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -584,6 +593,7 @@
         </div>
     </div>
 
+    <div class="page-title-bar" id="pageTitle">Mahsulotlar</div>
     <div class="products-grid" id="productsGrid"></div>
 
     <nav class="bottom-nav">
@@ -612,11 +622,17 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const catId = urlParams.get('cat_id') || 1;
+        const subName = urlParams.get('sub') || '';
+
+        if (subName) {
+            document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
+        }
 
         const PRODUCTS = [
             { 
                 id: 1, 
                 category_id: 1, 
+                subcat: "Kurtkalar",
                 name: "Qishki issiq qora kurtka", 
                 price: "450 000 so'm", 
                 oldPrice: "680 000 so'm", 
@@ -633,22 +649,24 @@
             { 
                 id: 2, 
                 category_id: 1, 
-                name: "Sportivniy stilimdagi kurtka", 
-                price: "380 000 so'm", 
-                oldPrice: "500 000 so'm", 
-                discount: "↓ 24%", 
-                badgeType: "chegirma", 
-                rating: 4.8, 
-                comments: 92, 
+                subcat: "Ko'ylaklar",
+                name: "Ayollar uchun zamonaviy ko'ylak", 
+                price: "220 000 so'm", 
+                oldPrice: "350 000 so'm", 
+                discount: "↓ 37%", 
+                badgeType: "arzonlashdi", 
+                rating: 4.9, 
+                comments: 178, 
                 images: [
-                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80"
+                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"
                 ],
-                sizes: [39, 40, 41]
+                sizes: [42, 44, 46]
             },
             { 
                 id: 3, 
-                category_id: 2, 
+                category_id: 3, 
+                subcat: "Tapichka",
                 name: "Uy uchun yumshoq tapichka", 
                 price: "45 000 so'm", 
                 oldPrice: "80 000 so'm", 
@@ -664,7 +682,8 @@
             },
             { 
                 id: 4, 
-                category_id: 3, 
+                category_id: 4, 
+                subcat: "Shapkalar",
                 name: "Bahorgi qora shapka", 
                 price: "35 000 so'm", 
                 oldPrice: "60 000 so'm", 
@@ -680,23 +699,8 @@
             },
             { 
                 id: 5, 
-                category_id: 4, 
-                name: "Ayollar uchun zamonaviy ko'ylak", 
-                price: "220 000 so'm", 
-                oldPrice: "350 000 so'm", 
-                discount: "↓ 37%", 
-                badgeType: "arzonlashdi", 
-                rating: 4.9, 
-                comments: 178, 
-                images: [
-                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"
-                ],
-                sizes: [42, 44, 46]
-            },
-            { 
-                id: 6, 
-                category_id: 5, 
+                category_id: 1, 
+                subcat: "Ichki kiyimlar",
                 name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", 
                 price: "90 000 so'm", 
                 oldPrice: "150 000 so'm", 
@@ -709,6 +713,23 @@
                     "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80"
                 ],
                 sizes: [48, 50, 52]
+            },
+            { 
+                id: 6, 
+                category_id: 2, 
+                subcat: "Sportivniy",
+                name: "Sportivniy stilimdagi erkaklar kurtkasi", 
+                price: "380 000 so'm", 
+                oldPrice: "500 000 so'm", 
+                discount: "↓ 24%", 
+                badgeType: "chegirma", 
+                rating: 4.8, 
+                comments: 92, 
+                images: [
+                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80"
+                ],
+                sizes: [39, 40, 41]
             }
         ];
 
@@ -717,6 +738,15 @@
 
         function getCategoryProducts() {
             let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            
+            // Avval berilgan kichik tur (sub) bo'yicha filter qilamiz
+            if (subName) {
+                let decodedSub = decodeURIComponent(subName);
+                let filtered = products.filter(p => String(p.category_id) === String(catId) && p.subcat && p.subcat.toLowerCase() === decodedSub.toLowerCase());
+                // Agar subkategoriya bo'yicha topilsa shuni chiqaramiz, bo'lmasa umumiy cat_id bo'yicha
+                if (filtered.length > 0) return filtered;
+            }
+
             return products.filter(p => String(p.category_id) === String(catId));
         }
 
@@ -999,7 +1029,7 @@
                 favs.push(id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            
+
             const btn = e.currentTarget;
             btn.classList.toggle('liked', favs.includes(id));
             updateBadges();
@@ -1078,7 +1108,7 @@
             } else {
                 favBadge.classList.remove('show');
             }
-            
+
             let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
             if (totalCartCount > 0) {
                 cartBadge.textContent = totalCartCount;
