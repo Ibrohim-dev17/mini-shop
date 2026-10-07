@@ -192,6 +192,7 @@
             display: flex;
             flex-direction: column;
             border: 1px solid var(--border);
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
         .heart-icon-sm {
@@ -976,7 +977,20 @@
             e.stopPropagation();
             favs = favs.filter(i => i !== id);
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            renderFavs();
+            
+            // Butun sahifani qayta yuklamasdan, faqat o'sha kartani o'chiramiz
+            const card = document.getElementById(`fav-card-${id}`);
+            if (card) {
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    card.remove();
+                    // Agar hamma mahsulotlar o'chib ketsa, bo'sh holatni chiqaramiz
+                    if (favs.length === 0) {
+                        renderFavs();
+                    }
+                }, 200);
+            }
             updateBadges();
         }
 
