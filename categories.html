@@ -55,6 +55,7 @@
             color: var(--text);
             text-decoration: none;
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .back-btn svg {
@@ -160,22 +161,25 @@
             border-radius: 4px;
         }
 
-        /* IKKI USTUNLI KATALOG LAYOUTI */
+        /* IKKI USTUNLI KATALOG LAYOUTI (MUSTAQIL SCROLL) */
         .catalog-layout {
             display: flex;
             height: calc(100vh - 120px);
             position: relative;
+            overflow: hidden;
         }
 
-        /* CHAP TARAFDAGI ASOSIY KATEGORIYALAR (FAQAT YOZUVLAR, BOXSIZ) */
+        /* CHAP TARAF ASOSIY KATEGORIYALAR (KENGAYTIRILGAN VA ALOHIDA SCROLL) */
         .sidebar-categories {
-            width: 150px;
+            width: 165px;
             background: #ffffff;
             border-right: 1px solid var(--border);
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             flex-shrink: 0;
             scrollbar-width: none;
             padding: 12px 0;
+            height: 100%;
         }
 
         .sidebar-categories::-webkit-scrollbar {
@@ -183,7 +187,7 @@
         }
 
         .sidebar-item {
-            padding: 14px 12px;
+            padding: 14px 14px;
             font-size: 13px;
             font-weight: 500;
             color: #7d818c;
@@ -215,12 +219,14 @@
             border-radius: 0 4px 4px 0;
         }
 
-        /* O'NG TARAFDAGI ICHKI KATEGORIYALAR */
+        /* O'NG TARAF PANEL (ALOHIDA SCROLL) */
         .content-panel {
             flex: 1;
             padding: 16px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             background: var(--card);
+            height: 100%;
         }
 
         .panel-title {
@@ -243,7 +249,7 @@
             }
         }
 
-        /* DUMALOQ SUBKATEGoriya KARTALARI */
+        /* DUMALOQ SUBKATEGORIYA KARTALARI */
         .subcat-card {
             display: flex;
             flex-direction: column;
@@ -271,6 +277,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            flex-shrink: 0;
         }
 
         .subcat-img {
@@ -383,7 +390,7 @@
 <body>
 
     <div class="sticky-header">
-        <a href="index.html" class="back-btn" title="Orqaga">
+        <a onclick="goBack()" class="back-btn" title="Orqaga">
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </a>
         <div class="search-box-wrapper">
@@ -427,6 +434,14 @@
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
+        }
+
+        function goBack() {
+            if (document.referrer && document.referrer !== window.location.href) {
+                window.location.href = document.referrer;
+            } else {
+                window.location.href = 'index.html';
+            }
         }
 
         const CATEGORIES_DATA = [
@@ -522,7 +537,7 @@
                     ${currentCat.subcats.map(sub => `
                         <a href="products.html?cat_id=${currentCat.id}&sub=${encodeURIComponent(sub.name)}" class="subcat-card">
                             <div class="subcat-img-wrap">
-                                <img src="${sub.img}" alt="${sub.name}" class="subcat-img">
+                                <img src="${sub.img}" alt="${sub.name}" class="subcat-img" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80'">
                             </div>
                             <span class="subcat-name">${sub.name}</span>
                         </a>
