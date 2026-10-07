@@ -58,6 +58,7 @@
             color: var(--text);
             text-decoration: none;
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .back-btn svg {
@@ -204,7 +205,7 @@
         }
 
         .page-title-bar {
-            padding: 12px 16px 0 16px;
+            padding: 14px 16px 0 16px;
             font-size: 18px;
             font-weight: 800;
             color: var(--text);
@@ -628,133 +629,61 @@
             document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
         }
 
+        // Har bir subkategoriya uchun 6 tadan batafsil mahsulotlar bazasi
         const PRODUCTS = [
-            { 
-                id: 1, 
-                category_id: 1, 
-                subcat: "Kurtkalar",
-                name: "Qishki issiq qora kurtka", 
-                price: "450 000 so'm", 
-                oldPrice: "680 000 so'm", 
-                discount: "↓ 33%", 
-                badgeType: "original", 
-                rating: 4.9, 
-                comments: 124, 
-                images: [
-                    "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"
-                ],
-                sizes: [38, 39, 40, 41, 42]
-            },
-            { 
-                id: 2, 
-                category_id: 1, 
-                subcat: "Ko'ylaklar",
-                name: "Ayollar uchun zamonaviy ko'ylak", 
-                price: "220 000 so'm", 
-                oldPrice: "350 000 so'm", 
-                discount: "↓ 37%", 
-                badgeType: "arzonlashdi", 
-                rating: 4.9, 
-                comments: 178, 
-                images: [
-                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"
-                ],
-                sizes: [42, 44, 46]
-            },
-            { 
-                id: 3, 
-                category_id: 3, 
-                subcat: "Tapichka",
-                name: "Uy uchun yumshoq tapichka", 
-                price: "45 000 so'm", 
-                oldPrice: "80 000 so'm", 
-                discount: "↓ 43%", 
-                badgeType: "arzonlashdi", 
-                rating: 5.0, 
-                comments: 310, 
-                images: [
-                    "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"
-                ],
-                sizes: [36, 37, 38, 39]
-            },
-            { 
-                id: 4, 
-                category_id: 4, 
-                subcat: "Shapkalar",
-                name: "Bahorgi qora shapka", 
-                price: "35 000 so'm", 
-                oldPrice: "60 000 so'm", 
-                discount: "↓ 41%", 
-                badgeType: "none", 
-                rating: 4.7, 
-                comments: 45, 
-                images: [
-                    "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"
-                ],
-                sizes: [56, 57, 58]
-            },
-            { 
-                id: 5, 
-                category_id: 1, 
-                subcat: "Ichki kiyimlar",
-                name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", 
-                price: "90 000 so'm", 
-                oldPrice: "150 000 so'm", 
-                discount: "↓ 40%", 
-                badgeType: "original", 
-                rating: 4.8, 
-                comments: 89, 
-                images: [
-                    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80"
-                ],
-                sizes: [48, 50, 52]
-            },
-            { 
-                id: 6, 
-                category_id: 2, 
-                subcat: "Sportivniy",
-                name: "Sportivniy stilimdagi erkaklar kurtkasi", 
-                price: "380 000 so'm", 
-                oldPrice: "500 000 so'm", 
-                discount: "↓ 24%", 
-                badgeType: "chegirma", 
-                rating: 4.8, 
-                comments: 92, 
-                images: [
-                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80",
-                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80"
-                ],
-                sizes: [39, 40, 41]
-            }
+            // --- Ko'ylaklar (6 ta) ---
+            { id: 101, category_id: 1, subcat: "Ko'ylaklar", name: "Ayollar uchun zamonaviy oq ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 178, images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
+            { id: 102, category_id: 1, subcat: "Ko'ylaklar", name: "Kechki qora libos", price: "450 000 so'm", oldPrice: "650 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 5.0, comments: 84, images: ["https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1502716119720-b23a93e5fb1b?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
+            { id: 103, category_id: 1, subcat: "Ko'ylaklar", name: "Yozgi yengil gulli ko'ylak", price: "180 000 so'm", oldPrice: "280 000 so'm", discount: "↓ 35%", badgeType: "chegirma", rating: 4.7, comments: 56, images: ["https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80"], sizes: [38, 40, 42] },
+            { id: 104, category_id: 1, subcat: "Ko'ylaklar", name: "Klassik ishbilarmon ko'ylak", price: "310 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 31%", badgeType: "arzonlashdi", rating: 4.8, comments: 92, images: ["https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"], sizes: [42, 46, 48] },
+            { id: 105, category_id: 1, subcat: "Ko'ylaklar", name: "Qizil tantanali ko'ylak", price: "520 000 so'm", oldPrice: "750 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 4.9, comments: 112, images: ["https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42] },
+            { id: 106, category_id: 1, subcat: "Ko'ylaklar", name: "Trikotaj kundalik ko'ylak", price: "195 000 so'm", oldPrice: "300 000 so'm", discount: "↓ 35%", badgeType: "chegirma", rating: 4.6, comments: 40, images: ["https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=600&auto=format&fit=crop&q=80"], sizes: [44, 46, 48] },
+
+            // --- Kurtkalar (Ayollar uchun) (6 ta) ---
+            { id: 107, category_id: 1, subcat: "Kurtkalar", name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", badgeType: "original", rating: 4.9, comments: 124, images: ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41] },
+            { id: 108, category_id: 1, subcat: "Kurtkalar", name: "Bej rangli uzun palto-kurtka", price: "550 000 so'm", oldPrice: "800 000 so'm", discount: "↓ 31%", badgeType: "arzonlashdi", rating: 4.8, comments: 77, images: ["https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
+            { id: 109, category_id: 1, subcat: "Kurtkalar", name: "Qisqa charm kurtka (ko'k)", price: "390 000 so'm", oldPrice: "560 000 so'm", discount: "↓ 30%", badgeType: "chegirma", rating: 4.7, comments: 65, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"], sizes: [38, 40, 42] },
+            { id: 110, category_id: 1, subcat: "Kurtkalar", name: "Pushti sportivniy duxovka kurtka", price: "410 000 so'm", oldPrice: "590 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 4.9, comments: 88, images: ["https://images.unsplash.com/photo-1548883354-7622d03aca27?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
+            { id: 111, category_id: 1, subcat: "Kurtkalar", name: "Klassik qora bolonka kurtka", price: "340 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 32%", badgeType: "arzonlashdi", rating: 4.6, comments: 43, images: ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [42, 46] },
+            { id: 112, category_id: 1, subcat: "Kurtkalar", name: "Oversize uslubdagi dimi kurtka", price: "480 000 so'm", oldPrice: "700 000 so'm", discount: "↓ 31%", badgeType: "chegirma", rating: 4.8, comments: 55, images: ["https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44, 46] },
+
+            // --- Ko'zoynaklar (Aksessuarlar) (6 ta) ---
+            { id: 113, category_id: 4, subcat: "Ko'zoynaklar", name: "Quyoshdan saqlovchi qora ko'zoynak", price: "120 000 so'm", oldPrice: "200 000 so'm", discount: "↓ 40%", badgeType: "original", rating: 4.9, comments: 140, images: ["https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+            { id: 114, category_id: 4, subcat: "Ko'zoynaklar", name: "Kvadrat shakldagi imidj ko'zoynagi", price: "95 000 so'm", oldPrice: "160 000 so'm", discount: "↓ 41%", badgeType: "arzonlashdi", rating: 4.7, comments: 88, images: ["https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+            { id: 115, category_id: 4, subcat: "Ko'zoynaklar", name: "Aviator uslubidagi quyosh ko'zoynagi", price: "150 000 so'm", oldPrice: "250 000 so'm", discount: "↓ 40%", badgeType: "chegirma", rating: 4.8, comments: 95, images: ["https://images.unsplash.com/photo-1574345920610-0935568f677d?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+            { id: 116, category_id: 4, subcat: "Ko'zoynaklar", name: "Dumaloq dizaynli retro ko'zoynak", price: "110 000 so'm", oldPrice: "190 000 so'm", discount: "↓ 42%", badgeType: "original", rating: 4.6, comments: 62, images: ["https://images.unsplash.com/photo-1577803645773-f96470509666?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+            { id: 117, category_id: 4, subcat: "Ko'zoynaklar", name: "Sportivniy velosipedchi ko'zoynagi", price: "175 000 so'm", oldPrice: "280 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 73, images: ["https://images.unsplash.com/photo-1509695507497-903c140c49b0?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1574345920610-0935568f677d?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+            { id: 118, category_id: 4, subcat: "Ko'zoynaklar", name: "Kompyuter uchun nurlar himoyali ko'zoynak", price: "135 000 so'm", oldPrice: "220 000 so'm", discount: "↓ 38%", badgeType: "chegirma", rating: 4.8, comments: 110, images: ["https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+
+            // --- Shapkalar (Aksessuarlar) (6 ta) ---
+            { id: 119, category_id: 4, subcat: "Shapkalar", name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", badgeType: "none", rating: 4.7, comments: 45, images: ["https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"], sizes: [56, 57, 58] },
+            { id: 120, category_id: 4, subcat: "Shapkalar", name: "Yozgi quyosh qalpog'i (Kepka)", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", badgeType: "original", rating: 4.8, comments: 89, images: ["https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"], sizes: [56, 58] },
+            { id: 121, category_id: 4, subcat: "Shapkalar", name: "Qishki jun quloqchinli shapka", price: "75 000 so'm", oldPrice: "120 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 104, images: ["https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80"], sizes: [57, 58, 59] },
+            { id: 122, category_id: 4, subcat: "Shapkalar", name: "Stilniy panama (shlyapa)", price: "60 000 so'm", oldPrice: "100 000 so'm", discount: "↓ 40%", badgeType: "chegirma", rating: 4.6, comments: 51, images: ["https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&auto=format&fit=crop&q=80"], sizes: [56, 57] },
+            { id: 123, category_id: 4, subcat: "Shapkalar", name: "Sportivniy brend kepka", price: "55 000 so'm", oldPrice: "90 000 so'm", discount: "↓ 38%", badgeType: "original", rating: 4.7, comments: 76, images: ["https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&auto=format&fit=crop&q=80"], sizes: [56, 57, 58] },
+            { id: 124, category_id: 4, subcat: "Shapkalar", name: "Klassik qora bere", price: "50 000 so'm", oldPrice: "85 000 so'm", discount: "↓ 41%", badgeType: "arzonlashdi", rating: 4.8, comments: 43, images: ["https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80"], sizes: [55, 56, 57] }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
         function getCategoryProducts() {
-            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let allProd = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
             
-            // Avval berilgan kichik tur (sub) bo'yicha filter qilamiz
             if (subName) {
-                let decodedSub = decodeURIComponent(subName);
-                let filtered = products.filter(p => String(p.category_id) === String(catId) && p.subcat && p.subcat.toLowerCase() === decodedSub.toLowerCase());
-                // Agar subkategoriya bo'yicha topilsa shuni chiqaramiz, bo'lmasa umumiy cat_id bo'yicha
+                let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
+                let filtered = allProd.filter(p => p.subcat && p.subcat.trim().toLowerCase() === decodedSub);
                 if (filtered.length > 0) return filtered;
             }
 
-            return products.filter(p => String(p.category_id) === String(catId));
+            return allProd.filter(p => String(p.category_id) === String(catId));
         }
 
         function renderProducts(list) {
             const grid = document.getElementById('productsGrid');
 
             if (list.length === 0) {
-                grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: var(--muted);">Bunday mahsulot topilmadi.</div>`;
+                grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px; color: var(--muted);">Bu bo'limda hozircha mahsulotlar yo'q.</div>`;
                 return;
             }
 
