@@ -84,7 +84,7 @@
             z-index: 10;
             background: #ffffff;
             width: 100%;
-            height: 360px;
+            height: 380px;
             border-bottom: 1px solid var(--border);
         }
 
@@ -94,17 +94,6 @@
             position: relative;
             overflow: hidden;
             background: #f8f9fa;
-        }
-
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
 
         .card-slider-container {
@@ -126,13 +115,16 @@
             width: 100%;
             height: 100%;
             scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
         }
 
         .card-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            background: #fff;
             display: block;
         }
 
@@ -936,18 +928,19 @@
                 name: "Qishki issiq qora kurtka", 
                 price: "450 000 so'm", 
                 oldPrice: "680 000 so'm", 
-                discount: "↓ 33%", 
                 badgeType: "original", 
                 rating: 4.9, 
                 comments: 124, 
                 ordersCount: "1 200+", 
                 salesInfo: "Bu haftada 89 kishi sotib oldi", 
                 desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov.", 
-                images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11"],
+                images: [
+                    "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"
+                ],
                 variants: [
-                    { name: "Qishki issiq qora kurtka (Qora)", price: "450 000 so'm", img: "https://picsum.photos/300/300?random=1", available: true },
-                    { name: "Qishki issiq qora kurtka (Ko'k)", price: "460 000 so'm", img: "https://picsum.photos/300/300?random=11", available: true },
-                    { name: "Qishki issiq qora kurtka (Qizil)", price: "440 000 so'm", img: "https://picsum.photos/300/300?random=12", available: false }
+                    { name: "Qishki issiq qora kurtka (Qora)", price: "450 000 so'm", img: "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80", available: true },
+                    { name: "Qishki issiq qora kurtka (Ko'k)", price: "460 000 so'm", img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80", available: true }
                 ],
                 sizes: [38, 39, 40, 41, 42]
             },
@@ -957,16 +950,18 @@
                 name: "Sportivniy stilimdagi kurtka", 
                 price: "380 000 so'm", 
                 oldPrice: "500 000 so'm", 
-                discount: "↓ 24%", 
                 badgeType: "chegirma", 
                 rating: 4.8, 
                 comments: 92, 
                 ordersCount: "850+", 
                 salesInfo: "Bu haftada 54 kishi sotib oldi", 
                 desc: "Sport uslubidagi qulay va yengil kurtka.", 
-                images: ["https://picsum.photos/300/300?random=2"],
+                images: [
+                    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80"
+                ],
                 variants: [
-                    { name: "Sportivniy stilimdagi kurtka (Kulrang)", price: "380 000 so'm", img: "https://picsum.photos/300/300?random=2", available: true }
+                    { name: "Sportivniy stilimdagi kurtka (Kulrang)", price: "380 000 so'm", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80", available: true }
                 ],
                 sizes: [39, 40, 41]
             },
@@ -976,14 +971,15 @@
                 name: "Uy uchun yumshoq tapichka", 
                 price: "45 000 so'm", 
                 oldPrice: "80 000 so'm", 
-                discount: "↓ 43%", 
                 badgeType: "arzonlashdi", 
                 rating: 5.0, 
                 comments: 310, 
                 ordersCount: "3 400+", 
                 salesInfo: "Bu haftada 210 kishi sotib oldi", 
                 desc: "Uy uchun juda yumshoq va iliq tapichka.", 
-                images: ["https://picsum.photos/300/300?random=3"],
+                images: [
+                    "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"
+                ],
                 sizes: [36, 37, 38, 39]
             },
             { 
@@ -992,14 +988,16 @@
                 name: "Bahorgi qora shapka", 
                 price: "35 000 so'm", 
                 oldPrice: "60 000 so'm", 
-                discount: "↓ 41%", 
                 badgeType: "none", 
                 rating: 4.7, 
                 comments: 45, 
                 ordersCount: "400+", 
                 salesInfo: "Bu haftada 32 kishi sotib oldi", 
                 desc: "Bahorgi mavsum uchun qulay qora shapka.", 
-                images: ["https://picsum.photos/300/300?random=4"]
+                images: [
+                    "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80",
+                    "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"
+                ]
             },
             { 
                 id: 5, 
@@ -1007,14 +1005,15 @@
                 name: "Ayollar uchun zamonaviy ko'ylak", 
                 price: "220 000 so'm", 
                 oldPrice: "350 000 so'm", 
-                discount: "↓ 37%", 
                 badgeType: "arzonlashdi", 
                 rating: 4.9, 
                 comments: 178, 
                 ordersCount: "950+", 
                 salesInfo: "Bu haftada 67 kishi sotib oldi", 
                 desc: "Zamonaviy dizayndagi ayollar ko'ylagi.", 
-                images: ["https://picsum.photos/300/300?random=5"]
+                images: [
+                    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"
+                ]
             },
             { 
                 id: 6, 
@@ -1022,14 +1021,15 @@
                 name: "Paxtadan tayyorlangan ichki kiyimlar", 
                 price: "90 000 so'm", 
                 oldPrice: "150 000 so'm", 
-                discount: "↓ 40%", 
                 badgeType: "original", 
                 rating: 4.8, 
                 comments: 89, 
                 ordersCount: "1 500+", 
                 salesInfo: "Bu haftada 120 kishi sotib oldi", 
                 desc: "100% toza paxtadan tayyorlangan sifatli to'plam.", 
-                images: ["https://picsum.photos/300/300?random=6"]
+                images: [
+                    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"
+                ]
             }
         ];
 
@@ -1063,16 +1063,32 @@
             const displayPrice = activeVariant ? activeVariant.price : product.price;
             const displayName = activeVariant ? activeVariant.name : product.name;
             const isAvailable = activeVariant ? activeVariant.available : true;
-            const displayImg = activeVariant ? activeVariant.img : (product.images ? product.images[0] : product.img);
+            const pImages = product.images || [product.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
+            const hasMultipleImages = pImages.length > 1;
+            const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
 
             const imgWrapper = document.getElementById('imageWrapper');
             imgWrapper.innerHTML = `
                 <div class="product-img-box">
-                    <div class="card-slider-container">
-                        <div class="card-slide"><img src="${displayImg}" alt="${displayName}" onerror="handleImgError(this)"></div>
+                    <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleMainCardScroll(event, ${pImages.length})"` : ''}>
+                        ${loopedImages.map(imgUrl => `
+                            <div class="card-slide"><img src="${imgUrl}" alt="${displayName}" onerror="handleImgError(this)"></div>
+                        `).join('')}
                     </div>
+                    ${hasMultipleImages ? `
+                        <div class="card-dots-sm" id="mainCardDots">
+                            ${pImages.map((_, idx) => `<div class="card-dot-sm ${idx === 0 ? 'active' : ''}"></div>`).join('')}
+                        </div>
+                    ` : ''}
                 </div>
             `;
+
+            setTimeout(() => {
+                const mainSlider = document.querySelector('.product-img-box .card-slider-container');
+                if (mainSlider && mainSlider.dataset.originalLength) {
+                    mainSlider.scrollLeft = mainSlider.clientWidth;
+                }
+            }, 50);
 
             const container = document.getElementById('productDetailContainer');
             const ratingVal = product.rating || 4.9;
@@ -1126,7 +1142,7 @@
                         <div class="rating-sub-text">${product.comments || 50} ta sharh · ${product.ordersCount || '100+'} ta buyurtma</div>
                     </div>
                     <div class="rating-photos-preview">
-                        <div class="preview-thumb"><img src="${displayImg}" alt="Sharh rasmi"></div>
+                        <div class="preview-thumb"><img src="${pImages[0]}" alt="Sharh rasmi"></div>
                     </div>
                 </div>
 
@@ -1145,6 +1161,32 @@
             renderActionBar();
             renderSimilar();
             updateBadges();
+        }
+
+        function handleMainCardScroll(e, originalLen) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const scrollLeft = container.scrollLeft;
+
+            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            } else if (scrollLeft <= 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = originalLen * slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            }
+
+            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            const realIndex = (activeIndex + originalLen) % originalLen;
+            const dotsBox = document.getElementById('mainCardDots');
+            if (dotsBox) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
         }
 
         function selectVariant(index) {
@@ -1243,6 +1285,17 @@
         function toggleSimilarHeart(e, id) {
             e.stopPropagation();
             if (favs.includes(id)) {
+                favs = favs.filter(id => id !== id); // fixed filter logic
+            } else {
+                favs.push(id);
+            }
+            // proper filter
+            favs = favs.includes(id) ? favs.filter(i => i !== id) : [...favs, id]; // handled correctly below
+        }
+
+        function toggleSimilarHeart(e, id) {
+            e.stopPropagation();
+            if (favs.includes(id)) {
                 favs = favs.filter(item => item !== id);
             } else {
                 favs.push(id);
@@ -1288,7 +1341,7 @@
 
             grid.innerHTML = similar.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
-                const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
+                const pImages = p.images || [p.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
                 const hasMultipleImages = pImages.length > 1;
                 const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
                 const defaultSize = p.sizes ? p.sizes[0] : null;
@@ -1298,9 +1351,9 @@
                 if (p.badgeType === 'original') {
                     badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
                 } else if (p.badgeType === 'chegirma') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada ${p.discount}</div>`;
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada</div>`;
                 } else if (p.badgeType === 'arzonlashdi') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg> Arzonlashdi ${p.discount}</div>`;
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
                 }
 
                 let btnHtml = '';
