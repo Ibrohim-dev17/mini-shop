@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 140px;
+            padding-bottom: 160px;
             overflow-x: hidden;
         }
 
@@ -131,7 +131,7 @@
         .card-slide img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             background: #fff;
             display: block;
         }
@@ -430,7 +430,7 @@
             cursor: pointer;
         }
 
-        /* SIMILAR PRODUCTS (INDEX / PRODUCTS STYLE) */
+        /* SIMILAR PRODUCTS (INDEX STYLE) */
         .similar-title {
             font-size: 18px;
             font-weight: 700;
@@ -442,6 +442,8 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             padding: 0 12px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .product-card {
@@ -491,15 +493,63 @@
             height: 210px;
             background: #f8f9fa;
             position: relative;
+            border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
         }
 
-        .product-img-box-sm img {
+        .card-slider-container-sm {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-slider-container-sm::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card-slide-sm {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+        }
+
+        .card-slide-sm img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+
+        .card-dots-sm {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .card-dot-sm {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s;
+        }
+
+        .card-dot-sm.active {
+            width: 14px;
+            border-radius: 3px;
+            background: #ffffff;
         }
 
         .badge-original-sm {
@@ -517,7 +567,7 @@
         }
 
         .product-info-sm {
-            padding: 10px 8px;
+            padding: 10px 4px 6px 4px;
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -546,10 +596,16 @@
         }
 
         .old-prices-sm {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             font-size: 12px;
             color: var(--muted);
-            text-decoration: line-through;
             margin-top: 2px;
+        }
+
+        .price-old-sm {
+            text-decoration: line-through;
         }
 
         .product-title-sm {
@@ -583,6 +639,11 @@
             width: 13px;
             height: 13px;
             fill: var(--star);
+        }
+
+        .rating-num-sm {
+            font-weight: 700;
+            color: var(--text);
         }
 
         .cart-btn-sm {
@@ -642,10 +703,10 @@
             font-weight: 700;
         }
 
-        /* FIXED BOTTOM BAR FOR CART (YUQORIROQGA CHIQARILDI) */
+        /* FIXED BOTTOM BAR FOR CART (YUQORIROQQA CHIQARILDI) */
         .bottom-action-bar {
             position: fixed;
-            bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(90px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -653,7 +714,7 @@
             background: #ffffff;
             padding: 10px;
             border-radius: 20px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
             border: 1px solid var(--border);
             z-index: 1050;
             display: flex;
@@ -733,7 +794,7 @@
         /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
-            bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(15px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -938,6 +999,8 @@
 
             if (favs.includes(product.id)) {
                 document.getElementById('heartBtn').classList.add('liked');
+            } else {
+                document.getElementById('heartBtn').classList.remove('liked');
             }
 
             const activeVariant = product.variants && product.variants[currentSelectedVariantIndex] ? product.variants[currentSelectedVariantIndex] : null;
@@ -1112,15 +1175,13 @@
         }
 
         function toggleMainHeart() {
-            const btn = document.getElementById('heartBtn');
             if (favs.includes(product.id)) {
                 favs = favs.filter(id => id !== product.id);
-                btn.classList.remove('liked');
             } else {
                 favs.push(product.id);
-                btn.classList.add('liked');
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
+            renderProduct();
             updateBadges();
         }
 
@@ -1169,6 +1230,8 @@
             grid.innerHTML = similar.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
                 const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
+                const hasMultipleImages = pImages.length > 1;
+                const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
                 const defaultSize = p.sizes ? p.sizes[0] : null;
                 const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
 
@@ -1195,29 +1258,91 @@
                         <button class="heart-icon-sm ${isLiked}" onclick="toggleSimilarHeart(event, ${p.id})">
                             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </button>
-                        <div class="product-img-box-sm" onclick="window.location.href='product.html?id=${p.id}'">
-                            <img src="${pImages[0]}" alt="${p.name}">
+                        <div class="product-img-box-sm" data-product-id="${p.id}">
+                            <div class="card-slider-container-sm" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleSimilarCardScroll(event, ${pImages.length})"` : ''}>
+                                ${loopedImages.map(imgUrl => `
+                                    <div class="card-slide-sm"><img src="${imgUrl}" alt="${p.name}"></div>
+                                `).join('')}
+                            </div>
+                            ${hasMultipleImages ? `
+                                <div class="card-dots-sm">
+                                    ${pImages.map((_, idx) => `<div class="card-dot-sm ${idx === 0 ? 'active' : ''}"></div>`).join('')}
+                                </div>
+                            ` : ''}
                             <div class="badge-original-sm">✓ ORIGINAL</div>
                         </div>
-                        <div class="product-info-sm" onclick="window.location.href='product.html?id=${p.id}'">
+                        <div class="product-info-sm" onclick="goToProduct(${p.id})">
                             <div class="price-row-sm">
                                 <span class="main-price-sm">${p.price}</span>
                                 <span class="discount-tag-sm">${p.discount}</span>
                             </div>
-                            <div class="old-prices-sm">${p.oldPrice}</div>
+                            <div class="old-prices-sm">
+                                <span class="price-old-sm">${p.oldPrice}</span>
+                            </div>
                             <div class="product-title-sm">${p.name}</div>
                             <div class="product-rating-sm">
                                 <div class="rating-box-sm">
                                     <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                    <span style="font-weight:700; color:var(--text);">${p.rating || 4.8}</span>
+                                    <span class="rating-num-sm">${p.rating || 4.8}</span>
                                 </div>
-                                <div>${p.comments || 50} sharh</div>
                             </div>
                             ${btnHtml}
                         </div>
                     </div>
                 `;
             }).join('');
+
+            document.querySelectorAll('.product-img-box-sm').forEach(box => {
+                let startX = 0;
+                let startY = 0;
+                box.addEventListener('pointerdown', (e) => {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                });
+                box.addEventListener('pointerup', (e) => {
+                    let diffX = Math.abs(e.clientX - startX);
+                    let diffY = Math.abs(e.clientY - startY);
+                    if (diffX < 6 && diffY < 6) {
+                        const prodId = box.getAttribute('data-product-id');
+                        goToProduct(prodId);
+                    }
+                });
+            });
+
+            setTimeout(() => {
+                document.querySelectorAll('.card-slider-container-sm').forEach(container => {
+                    if (container.dataset.originalLength) {
+                        const slideWidth = container.clientWidth;
+                        container.scrollLeft = slideWidth;
+                    }
+                });
+            }, 50);
+        }
+
+        function handleSimilarCardScroll(e, originalLen) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const scrollLeft = container.scrollLeft;
+
+            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            } else if (scrollLeft <= 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = originalLen * slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            }
+
+            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            const realIndex = (activeIndex + originalLen) % originalLen;
+            const dotsBox = container.parentElement.querySelector('.card-dots-sm');
+            if (dotsBox) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
         }
 
         function addSimilarToCart(id) {
