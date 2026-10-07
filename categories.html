@@ -27,8 +27,9 @@
         body {
             background-color: var(--card);
             color: var(--text);
-            padding-bottom: 120px;
-            overflow-x: hidden;
+            padding-bottom: 100px;
+            overflow: hidden;
+            height: 100vh;
         }
 
         .sticky-header {
@@ -36,7 +37,7 @@
             top: 0;
             background: var(--card);
             z-index: 999;
-            padding: 50px 16px 12px 16px;
+            padding: 45px 16px 10px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -47,8 +48,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 10px;
             background: var(--bg);
             border: 1px solid var(--border);
@@ -59,8 +60,8 @@
         }
 
         .back-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             stroke: var(--text);
             stroke-width: 2;
             fill: none;
@@ -92,22 +93,25 @@
             color: var(--text);
         }
 
+        /* IKKI USTUNLI MUSTAQIL SCROLL LAYOUT */
         .catalog-layout {
             display: flex;
-            height: calc(100vh - 120px);
-            position: relative;
+            height: calc(100vh - 165px);
+            width: 100%;
             overflow: hidden;
+            background: var(--bg);
         }
 
+        /* CHAP TARAF MATNLI PANEL (MUSTAQIL SCROLL) */
         .sidebar-categories {
-            width: 145px;
+            width: 135px;
             background: #ffffff;
             border-right: 1px solid var(--border);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             flex-shrink: 0;
             scrollbar-width: none;
-            padding: 12px 0;
+            padding: 8px 0 100px 0;
             height: 100%;
         }
 
@@ -116,41 +120,41 @@
         }
 
         .sidebar-item {
-            padding: 14px 10px;
+            padding: 16px 12px;
             font-size: 13px;
             font-weight: 500;
             color: #7d818c;
             cursor: pointer;
-            transition: all 0.2s ease;
-            line-height: 1.35;
+            transition: all 0.15s ease;
+            line-height: 1.3;
             position: relative;
         }
 
         .sidebar-item.active {
-            color: var(--primary);
+            color: var(--text);
             font-weight: 700;
-            background: transparent;
+            background: var(--bg);
         }
 
         .sidebar-item.active::before {
             content: '';
             position: absolute;
             left: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0;
+            bottom: 0;
             width: 4px;
-            height: 20px;
             background: var(--primary);
-            border-radius: 0 4px 4px 0;
         }
 
+        /* O'NG TARAF RASMLI PANEL (MUSTAQIL SCROLL, CHETGA CHIQMAYDI) */
         .content-panel {
             flex: 1;
-            padding: 12px;
+            padding: 14px 12px 100px 12px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             background: var(--card);
             height: 100%;
+            box-sizing: border-box;
         }
 
         .panel-title {
@@ -163,7 +167,13 @@
         .subcats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px 8px;
+            width: 100%;
+        }
+
+        @media (max-width: 380px) {
+            .sidebar-categories { width: 120px; }
+            .subcats-grid { gap: 10px 4px; }
         }
 
         .subcat-card {
@@ -174,11 +184,12 @@
             cursor: pointer;
             text-decoration: none;
             color: var(--text);
+            width: 100%;
         }
 
         .subcat-img-wrap {
-            width: 66px;
-            height: 66px;
+            width: 62px;
+            height: 62px;
             border-radius: 50%;
             background: var(--bg);
             overflow: hidden;
@@ -187,7 +198,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             flex-shrink: 0;
         }
 
@@ -209,14 +219,15 @@
             width: 100%;
         }
 
+        /* PASTKI NAVIGATSIYA */
         .bottom-nav {
             position: fixed;
-            bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(15px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
             margin: 0 auto;
-            height: 64px;
+            height: 60px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             display: flex;
@@ -225,6 +236,7 @@
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
 
         .nav-item {
@@ -245,8 +257,8 @@
         }
 
         .nav-item svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
@@ -273,7 +285,6 @@
             justify-content: center;
             padding: 0 4px;
         }
-
         .badge-count.show { display: flex; }
     </style>
 </head>
@@ -323,7 +334,7 @@
         const CATEGORIES_DATA = [
             {
                 id: 1,
-                name: "Ayollar kiyimlari",
+                name: "Women's Clothing",
                 subcats: [
                     { name: "Ko'ylaklar", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
                     { name: "Kurtkalar", img: "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
@@ -335,42 +346,45 @@
             },
             {
                 id: 2,
-                name: "Erkaklar kiyimlari",
+                name: "Home & Kitchen",
                 subcats: [
-                    { name: "Kurtkalar", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Sportivniy", img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Ichki kiyimlar", img: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Koylaklar", img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Shvestarlar", img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=200&auto=format&fit=crop&q=80" }
+                    { name: "Tapichka", img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
+                    { name: "To'qima buyumlar", img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Idish-tovoqlar", img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&auto=format&fit=crop&q=80" }
                 ]
             },
             {
                 id: 3,
-                name: "Oyoq kiyimlar",
+                name: "Kid's Fashion",
                 subcats: [
-                    { name: "Tapichka", img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Krossovkalar", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Tuflilar", img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Qishki etiklar", img: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&auto=format&fit=crop&q=80" }
+                    { name: "O'yinchoqlar", img: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Bolalar kiyimlari", img: "https://images.unsplash.com/photo-1522771930-78848d9293e8?w=200&auto=format&fit=crop&q=80" }
                 ]
             },
             {
                 id: 4,
-                name: "Aksessuarlar",
+                name: "Men's Clothing",
                 subcats: [
-                    { name: "Shapkalar", img: "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Sumkalar", img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Soatlar", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Ko'zoynaklar", img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&auto=format&fit=crop&q=80" }
+                    { name: "Kurtkalar", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Sportivniy", img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Koylaklar", img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" }
                 ]
             },
             {
                 id: 5,
-                name: "Uy uchun",
+                name: "Beauty & Health",
                 subcats: [
-                    { name: "Tapichka", img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
-                    { name: "To'qima buyumlar", img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Idish-tovoqlar", img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&auto=format&fit=crop&q=80" }
+                    { name: "Kosmetika", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Parfyuriya", img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Accessories",
+                subcats: [
+                    { name: "Shapkalar", img: "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Sumkalar", img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Ko'zoynaklar", img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&auto=format&fit=crop&q=80" }
                 ]
             }
         ];
