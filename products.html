@@ -73,7 +73,6 @@
             background: var(--bg);
             border-radius: 10px;
             padding: 8px 12px;
-            gap: 8px;
         }
 
         .search-box input {
@@ -128,7 +127,6 @@
             justify-content: center;
             cursor: pointer;
             z-index: 5;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
         .heart-icon-sm svg { width: 18px; height: 18px; fill: none; stroke: #1f2026; stroke-width: 1.8; }
@@ -162,19 +160,6 @@
 
         .card-slide img { width: 100%; height: 100%; object-fit: cover; }
 
-        .badge-dynamic-sm {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 6px;
-            z-index: 4;
-            pointer-events: none;
-        }
-
         .product-info {
             padding: 10px 8px;
             display: flex;
@@ -183,22 +168,8 @@
             cursor: pointer;
         }
 
-        .price-row { display: flex; align-items: center; gap: 6px; }
         .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
-        .discount-tag { background: var(--discount-bg); color: var(--discount-text); font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
-        .old-prices { font-size: 12px; color: var(--muted); text-decoration: line-through; margin-top: 2px; }
         .product-title { font-size: 12px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 6px; height: 32px; }
-
-        .product-rating {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 11px;
-            color: var(--muted);
-            margin: 6px 0;
-        }
-        .rating-box { display: flex; align-items: center; gap: 3px; font-weight: 700; color: var(--text); }
-        .rating-box svg { width: 13px; height: 13px; fill: var(--star); }
 
         .cart-btn-sm {
             width: 100%;
@@ -216,36 +187,6 @@
             cursor: pointer;
             margin-top: auto;
         }
-        .cart-btn-sm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
-
-        .cart-counter-box-sm {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            height: 36px;
-            background: var(--bg);
-            border-radius: 10px;
-            padding: 0 6px;
-            margin-top: auto;
-            border: 1px solid var(--border);
-        }
-
-        .counter-btn-sm {
-            background: #fff;
-            border: 1px solid var(--border);
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .counter-val-sm { font-size: 14px; font-weight: 700; }
 
         .bottom-nav {
             position: fixed;
@@ -254,15 +195,10 @@
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
             display: flex; justify-content: space-around; align-items: center; border-radius: 20px; z-index: 1000;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; font-weight: 500; width: 20%; position: relative; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; font-weight: 500; width: 20%; }
         .nav-item.active { color: var(--primary); font-weight: 600; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: #808080; stroke-width: 1.8; }
         .nav-item.active svg { stroke: var(--primary); fill: var(--primary-bg); }
-
-        .badge-count {
-            position: absolute; top: -4px; right: -8px; background: #000; color: #fff; font-size: 10px; font-weight: 700; min-width: 17px; height: 17px; border-radius: 10px; display: none; align-items: center; justify-content: center; padding: 0 4px;
-        }
-        .badge-count.show { display: flex; }
     </style>
 </head>
 <body>
@@ -273,8 +209,7 @@
         </a>
         <div class="search-box-wrapper">
             <div class="search-box">
-                <svg width="18" height="18" fill="none" stroke="var(--muted)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulot nomidan izlash..." oninput="handleSearchInput(event)">
+                <input type="text" id="searchInput" placeholder="Mahsulot nomidan izlash...">
             </div>
         </div>
     </div>
@@ -291,18 +226,9 @@
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
             <span>Katalog</span>
         </a>
-        <a href="cart.html" class="nav-item">
-            <div style="position:relative;"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
-            <span>Savatcha</span>
-        </a>
-        <a href="heart.html" class="nav-item">
-            <div style="position:relative;"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
-            <span>Saralangan</span>
-        </a>
-        <a href="profil.html" class="nav-item">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>Profil</span>
-        </a>
+        <a href="cart.html" class="nav-item"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span>Savatcha</span></a>
+        <a href="heart.html" class="nav-item"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><span>Saralangan</span></a>
+        <a href="profil.html" class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profil</span></a>
     </nav>
 
     <script>
@@ -313,172 +239,30 @@
             document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
         }
 
-        // Barcha turkumlar bo'yicha aniq 6 tadan maxsus mahsulotlar bazasi
         const PRODUCTS = [
-            // --- AYOLLAR KIYIMLARI ---
             // Ko'ylaklar (6 ta)
-            { id: 101, subcat: "Ko'ylaklar", name: "Ayollar uchun zamonaviy oq ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 178, images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
-            { id: 102, subcat: "Ko'ylaklar", name: "Kechki qora libos", price: "450 000 so'm", oldPrice: "650 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 5.0, comments: 84, images: ["https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-            { id: 103, subcat: "Ko'ylaklar", name: "Yozgi yengil gulli ko'ylak", price: "180 000 so'm", oldPrice: "280 000 so'm", discount: "↓ 35%", badgeType: "chegirma", rating: 4.7, comments: 56, images: ["https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop&q=80"], sizes: [38, 40, 42] },
-            { id: 104, subcat: "Ko'ylaklar", name: "Klassik ishbilarmon ko'ylak", price: "310 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 31%", badgeType: "original", rating: 4.8, comments: 92, images: ["https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&auto=format&fit=crop&q=80"], sizes: [42, 46, 48] },
-            { id: 105, subcat: "Ko'ylaklar", name: "Qizil tantanali ko'ylak", price: "520 000 so'm", oldPrice: "750 000 so'm", discount: "↓ 30%", badgeType: "chegirma", rating: 4.9, comments: 112, images: ["https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42] },
-            { id: 106, subcat: "Ko'ylaklar", name: "Trikotaj kundalik ko'ylak", price: "195 000 so'm", oldPrice: "300 000 so'm", discount: "↓ 35%", badgeType: "arzonlashdi", rating: 4.6, comments: 40, images: ["https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=600&auto=format&fit=crop&q=80"], sizes: [44, 46, 48] },
-
-            // Kurtkalar (Ayollar) (6 ta)
-            { id: 111, subcat: "Kurtkalar", name: "Ayollar qishki uzun kurtkasi", price: "550 000 so'm", oldPrice: "800 000 so'm", discount: "↓ 31%", badgeType: "original", rating: 4.9, comments: 140, images: ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
-            { id: 112, subcat: "Kurtkalar", name: "Qisqa oq bomber kurtka", price: "340 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 32%", badgeType: "chegirma", rating: 4.7, comments: 64, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42] },
-            { id: 113, subcat: "Kurtkalar", name: "Klassik plash-kurtka", price: "420 000 so'm", oldPrice: "600 000 so'm", discount: "↓ 30%", badgeType: "arzonlashdi", rating: 4.8, comments: 75, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44] },
-            { id: 114, subcat: "Kurtkalar", name: "Charm qora kurtka (Ramones)", price: "490 000 so'm", oldPrice: "700 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 5.0, comments: 210, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [38, 40, 42] },
-            { id: 115, subcat: "Kurtkalar", name: "Oversize jinsi kurtka", price: "280 000 so'm", oldPrice: "400 000 so'm", discount: "↓ 30%", badgeType: "chegirma", rating: 4.6, comments: 53, images: ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44] },
-            { id: 116, subcat: "Kurtkalar", name: "Sportivniy yengil vetrovka", price: "230 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 34%", badgeType: "arzonlashdi", rating: 4.7, comments: 41, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-
-            // Ichki kiyimlar (6 ta)
-            { id: 121, subcat: "Ichki kiyimlar", name: "Paxtali ayollar to'plami 3talik", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", badgeType: "original", rating: 4.8, comments: 120, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
-            { id: 122, subcat: "Ichki kiyimlar", name: "Kruzhechniy nafis byustgalter", price: "110 000 so'm", oldPrice: "180 000 so'm", discount: "↓ 38%", badgeType: "chegirma", rating: 4.9, comments: 95, images: ["https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80"], sizes: [38, 40, 42] },
-            { id: 123, subcat: "Ichki kiyimlar", name: "Uyqu uchun ipag libos", price: "160 000 so'm", oldPrice: "250 000 so'm", discount: "↓ 36%", badgeType: "arzonlashdi", rating: 4.7, comments: 68, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44] },
-            { id: 124, subcat: "Ichki kiyimlar", name: "Modelirovka qiluvchi korset", price: "140 000 so'm", oldPrice: "220 000 so'm", discount: "↓ 36%", badgeType: "original", rating: 4.6, comments: 50, images: ["https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-            { id: 125, subcat: "Ichki kiyimlar", name: "Bej rangli klassik truss", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", badgeType: "chegirma", rating: 4.9, comments: 180, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
-            { id: 126, subcat: "Ichki kiyimlar", name: "Sportivniy top-byustgalter", price: "75 000 so'm", oldPrice: "120 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.8, comments: 85, images: ["https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&auto=format&fit=crop&q=80"], sizes: [38, 40, 42] },
-
-            // Jinsilar (Ayollar) (6 ta)
-            { id: 131, subcat: "Jinsilar", name: "Mom-fit yuqori belli jinsi", price: "240 000 so'm", oldPrice: "380 000 so'm", discount: "↓ 36%", badgeType: "original", rating: 4.8, comments: 155, images: ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44, 46] },
-            { id: 132, subcat: "Jinsilar", name: "Skinny toraytirilgan jinsi", price: "210 000 so'm", oldPrice: "330 000 so'm", discount: "↓ 36%", badgeType: "chegirma", rating: 4.7, comments: 92, images: ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-            { id: 133, subcat: "Jinsilar", name: "Wide-leg keng paqur jinsi", price: "270 000 so'm", oldPrice: "400 000 so'm", discount: "↓ 32%", badgeType: "arzonlashdi", rating: 4.9, comments: 130, images: ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
-            { id: 134, subcat: "Jinsilar", name: "Yirtiq dizaynli yoshlar jinsisi", price: "250 000 so'm", oldPrice: "390 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.6, comments: 74, images: ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-            { id: 135, subcat: "Jinsilar", name: "Qora klassik strech jinsi", price: "230 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.8, comments: 110, images: ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46, 48] },
-            { id: 136, subcat: "Jinsilar", name: "Oq yozgi jinsi shim", price: "220 000 so'm", oldPrice: "340 000 so'm", discount: "↓ 35%", badgeType: "arzonlashdi", rating: 4.7, comments: 60, images: ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-
-            // Futbolkalar (Ayollar) (6 ta)
-            { id: 141, subcat: "Futbolkalar", name: "100% paxta oq futbolka", price: "75 000 so'm", oldPrice: "130 000 so'm", discount: "↓ 42%", badgeType: "original", rating: 4.9, comments: 340, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44, 46] },
-            { id: 142, subcat: "Futbolkalar", name: "Printerli qora oversize futbolka", price: "85 000 so'm", oldPrice: "140 000 so'm", discount: "↓ 39%", badgeType: "chegirma", rating: 4.8, comments: 215, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46] },
-            { id: 143, subcat: "Futbolkalar", name: "Chiziqli yozgi polo futbolka", price: "95 000 so'm", oldPrice: "160 000 so'm", discount: "↓ 40%", badgeType: "arzonlashdi", rating: 4.7, comments: 98, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-            { id: 144, subcat: "Futbolkalar", name: "V-bo'yinli basic futbolka", price: "70 000 so'm", oldPrice: "120 000 so'm", discount: "↓ 41%", badgeType: "original", rating: 4.8, comments: 160, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [42, 44, 46, 48] },
-            { id: 145, subcat: "Futbolkalar", name: "Pushti rangli qisqartirilgan top", price: "65 000 so'm", oldPrice: "110 000 so'm", discount: "↓ 40%", badgeType: "chegirma", rating: 4.6, comments: 88, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42] },
-            { id: 146, subcat: "Futbolkalar", name: "Sportivniy qora mayka", price: "60 000 so'm", oldPrice: "100 000 so'm", discount: "↓ 40%", badgeType: "arzonlashdi", rating: 4.7, comments: 72, images: ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"], sizes: [40, 42, 44] },
-
-            // --- ERKAKLAR KIYIMLARI ---
-            // Erkaklar kurtkalari (6 ta)
-            { id: 201, subcat: "Erkaklar kurtkalari", name: "Erkaklar qishki qora pufok kurtkasi", price: "480 000 so'm", oldPrice: "700 000 so'm", discount: "↓ 31%", badgeType: "original", rating: 4.9, comments: 180, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 202, subcat: "Erkaklar kurtkalari", name: "Klassik erkaklar paltosi", price: "620 000 so'm", oldPrice: "900 000 so'm", discount: "↓ 31%", badgeType: "chegirma", rating: 4.8, comments: 95, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52, 54] },
-            { id: 203, subcat: "Erkaklar kurtkalari", name: "Erkaklar charm kurtkasi", price: "530 000 so'm", oldPrice: "780 000 so'm", discount: "↓ 32%", badgeType: "arzonlashdi", rating: 5.0, comments: 142, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52] },
-            { id: 204, subcat: "Erkaklar kurtkalari", name: "Sportivniy утепленный vetrovka", price: "390 000 so'm", oldPrice: "560 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 4.7, comments: 84, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 205, subcat: "Erkaklar kurtkalari", name: "Kapushonli jinsi kurtka", price: "340 000 so'm", oldPrice: "490 000 so'm", discount: "↓ 30%", badgeType: "chegirma", rating: 4.6, comments: 62, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52] },
-            { id: 206, subcat: "Erkaklar kurtkalari", name: "Kuzgi yengil bomber", price: "310 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 31%", badgeType: "arzonlashdi", rating: 4.8, comments: 77, images: ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52] },
-
-            // Sportivniy (Erkaklar) (6 ta)
-            { id: 211, subcat: "Sportivniy", name: "Erkaklar sportivniy kostyumi", price: "320 000 so'm", oldPrice: "480 000 so'm", discount: "↓ 33%", badgeType: "original", rating: 4.9, comments: 240, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 212, subcat: "Sportivniy", name: "Fisகூlaturaviy qora sport ishtoni", price: "150 000 so'm", oldPrice: "240 000 so'm", discount: "↓ 37%", badgeType: "chegirma", rating: 4.7, comments: 130, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52] },
-            { id: 213, subcat: "Sportivniy", name: "Kapushonli sport xudi (Hoodie)", price: "190 000 so'm", oldPrice: "290 000 so'm", discount: "↓ 34%", badgeType: "arzonlashdi", rating: 4.8, comments: 175, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52, 54] },
-            { id: 214, subcat: "Sportivniy", name: "Olimpiyka zamsli ko'ylagi", price: "210 000 so'm", oldPrice: "320 000 so'm", discount: "↓ 34%", badgeType: "original", rating: 4.6, comments: 88, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52] },
-            { id: 215, subcat: "Sportivniy", name: "Yugurish uchun yengil sport ishtoni", price: "130 000 so'm", oldPrice: "200 000 so'm", discount: "↓ 35%", badgeType: "chegirma", rating: 4.7, comments: 94, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 216, subcat: "Sportivniy", name: "Fisகூla uchun zaryadli sport to'plami", price: "350 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 30%", badgeType: "arzonlashdi", rating: 4.9, comments: 110, images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52, 54] },
-
-            // Erkaklar ko'ylaklari (6 ta)
-            { id: 221, subcat: "Erkaklar ko'ylaklari", name: "Klassik oq erkaklar ko'ylagi", price: "180 000 so'm", oldPrice: "280 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.8, comments: 190, images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 222, subcat: "Erkaklar ko'ylaklari", name: "Qafasli (vafli) kundalik ko'ylak", price: "160 000 so'm", oldPrice: "250 000 so'm", discount: "↓ 36%", badgeType: "chegirma", rating: 4.7, comments: 115, images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52, 54] },
-            { id: 223, subcat: "Erkaklar ko'ylaklari", name: "Paxtadan yozgi uzun yeng ko'ylak", price: "170 000 so'm", oldPrice: "270 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 88, images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52] },
-            { id: 224, subcat: "Erkaklar ko'ylaklari", name: "Kalta yengli klassik ko'ylak", price: "140 000 so'm", oldPrice: "220 000 so'm", discount: "↓ 36%", badgeType: "original", rating: 4.6, comments: 72, images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 225, subcat: "Erkaklar ko'ylaklari", name: "Qora rangli rasmiy ko'ylak", price: "190 000 so'm", oldPrice: "290 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.8, comments: 130, images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52, 54] },
-            { id: 226, subcat: "Erkaklar ko'ylaklari", name: "Mavsumiy iliq flanel ko'ylak", price: "210 000 so'm", oldPrice: "320 000 so'm", discount: "↓ 34%", badgeType: "arzonlashdi", rating: 4.9, comments: 145, images: ["https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-
-            // Erkaklar jinsilari (6 ta)
-            { id: 231, subcat: "Erkaklar jinsilari", name: "Erkaklar uchun klassik ko'k jinsi", price: "260 000 so'm", oldPrice: "400 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.8, comments: 210, images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54, 56] },
-            { id: 232, subcat: "Erkaklar jinsilari", name: "Toraytirilgan qora jinsi shim", price: "250 000 so'm", oldPrice: "390 000 so'm", discount: "↓ 35%", badgeType: "chegirma", rating: 4.7, comments: 165, images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 233, subcat: "Erkaklar jinsilari", name: "To'g'ridan-to'g'ri bichimli jinsi", price: "270 000 so'm", oldPrice: "410 000 so'm", discount: "↓ 34%", badgeType: "arzonlashdi", rating: 4.9, comments: 140, images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52, 54, 56] },
-            { id: 234, subcat: "Erkaklar jinsilari", name: "Cho'ntaklari ko'p cargo jinsi", price: "290 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.6, comments: 98, images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52, 54] },
-            { id: 235, subcat: "Erkaklar jinsilari", name: "Yumshoq strech qulay jinsi", price: "280 000 so'm", oldPrice: "420 000 so'm", discount: "↓ 33%", badgeType: "chegirma", rating: 4.8, comments: 112, images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80"], sizes: [50, 52, 54] },
-            { id: 236, subcat: "Erkaklar jinsilari", name: "Ochiq rangli yozgi jinsi shim", price: "240 000 so'm", oldPrice: "370 000 so'm", discount: "↓ 35%", badgeType: "arzonlashdi", rating: 4.7, comments: 85, images: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80"], sizes: [48, 50, 52] },
-
-            // --- OYOQ KIYIMLAR ---
-            // Tapichka (6 ta)
-            { id: 301, subcat: "Tapichka", name: "Uy uchun yumshoq issiq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", badgeType: "original", rating: 5.0, comments: 310, images: ["https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"], sizes: [36, 37, 38, 39, 40] },
-            { id: 302, subcat: "Tapichka", name: "Massaj qiluvchi rezina tapichka", price: "55 000 so'm", oldPrice: "95 000 so'm", discount: "↓ 42%", badgeType: "chegirma", rating: 4.8, comments: 185, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42] },
-            { id: 303, subcat: "Tapichka", name: "Qalin taglikli plyaj shlepanetsi", price: "65 000 so'm", oldPrice: "110 000 so'm", discount: "↓ 40%", badgeType: "arzonlashdi", rating: 4.7, comments: 140, images: ["https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"], sizes: [37, 38, 39, 40, 41] },
-            { id: 304, subcat: "Tapichka", name: "Hayvoncha dizaynli uy tapichkasi", price: "70 000 so'm", oldPrice: "120 000 so'm", discount: "↓ 41%", badgeType: "original", rating: 4.9, comments: 220, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [36, 37, 38, 39] },
-            { id: 305, subcat: "Tapichka", name: "Hammom uchun suv o'tkazmaydigan", price: "40 000 so'm", oldPrice: "70 000 so'm", discount: "↓ 42%", badgeType: "chegirma", rating: 4.6, comments: 95, images: ["https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42] },
-            { id: 306, subcat: "Tapichka", name: "Erkaklar uchun uy shlepanetsi", price: "50 000 so'm", oldPrice: "85 000 so'm", discount: "↓ 41%", badgeType: "arzonlashdi", rating: 4.8, comments: 130, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [40, 41, 42, 43, 44] },
-
-            // Krossovkalar (6 ta)
-            { id: 311, subcat: "Krossovkalar", name: "Sport yugurish krossovkalari", price: "290 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.9, comments: 280, images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42, 43] },
-            { id: 312, subcat: "Krossovkalar", name: "Kundalik oq brend krossovka", price: "250 000 so'm", oldPrice: "380 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.8, comments: 210, images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], sizes: [39, 40, 41, 42, 43, 44] },
-            { id: 313, subcat: "Krossovkalar", name: "Qalin taglikli zamonaviy krossovka", price: "340 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 32%", badgeType: "arzonlashdi", rating: 4.7, comments: 145, images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42] },
-            { id: 314, subcat: "Krossovkalar", name: "Basketbol uslubidagi krossovka", price: "370 000 so'm", oldPrice: "550 000 so'm", discount: "↓ 32%", badgeType: "original", rating: 5.0, comments: 190, images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], sizes: [40, 41, 42, 43, 44, 45] },
-            { id: 315, subcat: "Krossovkalar", name: "Yengil to'rli yozgi krossovka", price: "220 000 so'm", oldPrice: "340 000 so'm", discount: "↓ 35%", badgeType: "chegirma", rating: 4.6, comments: 115, images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42] },
-            { id: 316, subcat: "Krossovkalar", name: "Fizkultura uchun qora krossovka", price: "270 000 so'm", oldPrice: "410 000 so'm", discount: "↓ 34%", badgeType: "arzonlashdi", rating: 4.8, comments: 160, images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], sizes: [39, 40, 41, 42, 43] },
-
-            // Tuflilar (6 ta)
-            { id: 321, subcat: "Tuflilar", name: "Erkaklar uchun klassik charm tuflisi", price: "380 000 so'm", oldPrice: "550 000 so'm", discount: "↓ 31%", badgeType: "original", rating: 4.9, comments: 140, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [40, 41, 42, 43, 44] },
-            { id: 322, subcat: "Tuflilar", name: "Ayollar uchun baland poshnali tuflicha", price: "310 000 so'm", oldPrice: "460 000 so'm", discount: "↓ 32%", badgeType: "chegirma", rating: 4.8, comments: 110, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [36, 37, 38, 39, 40] },
-            { id: 323, subcat: "Tuflilar", name: "Kofe rangli mokasin tuflisi", price: "240 000 so'm", oldPrice: "360 000 so'm", discount: "↓ 33%", badgeType: "arzonlashdi", rating: 4.7, comments: 85, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [40, 41, 42, 43] },
-            { id: 324, subcat: "Tuflilar", name: "Laklangan tantanali tufli", price: "420 000 so'm", oldPrice: "600 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 4.9, comments: 95, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [41, 42, 43, 44] },
-            { id: 325, subcat: "Tuflilar", name: "Qulay past poshnali ayollar tuflisi", price: "230 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.6, comments: 64, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [36, 37, 38, 39] },
-            { id: 326, subcat: "Tuflilar", name: "Ofis uchun qora yengil tufli", price: "290 000 so'm", oldPrice: "430 000 so'm", discount: "↓ 32%", badgeType: "arzonlashdi", rating: 4.8, comments: 78, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [40, 41, 42, 43] },
-
-            // Qishki etiklar (6 ta)
-            { id: 331, subcat: "Qishki etiklar", name: "Qishki qalin mo'ynali etik", price: "520 000 so'm", oldPrice: "750 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 4.9, comments: 165, images: ["https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42, 43] },
-            { id: 332, subcat: "Qishki etiklar", name: "Erkaklar uchun qalin traktor taglik etik", price: "580 000 so'm", oldPrice: "850 000 so'm", discount: "↓ 31%", badgeType: "chegirma", rating: 4.8, comments: 130, images: ["https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&auto=format&fit=crop&q=80"], sizes: [40, 41, 42, 43, 44, 45] },
-            { id: 333, subcat: "Qishki etiklar", name: "Ayollar baland qishki etikchasi", price: "490 000 so'm", oldPrice: "700 000 so'm", discount: "↓ 30%", badgeType: "arzonlashdi", rating: 4.7, comments: 110, images: ["https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&auto=format&fit=crop&q=80"], sizes: [36, 37, 38, 39, 40] },
-            { id: 334, subcat: "Qishki etiklar", name: "Suv o'tkazmaydigan termik etik", price: "450 000 so'm", oldPrice: "650 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 5.0, comments: 145, images: ["https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&auto=format&fit=crop&q=80"], sizes: [39, 40, 41, 42, 43] },
-            { id: 335, subcat: "Qishki etiklar", name: "Zamshdan ishlangan qishki botinka", price: "430 000 so'm", oldPrice: "620 000 so'm", discount: "↓ 30%", badgeType: "chegirma", rating: 4.6, comments: 88, images: ["https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42] },
-            { id: 336, subcat: "Qishki etiklar", name: "Bolalar va o'smirlar qishki etigi", price: "370 000 so'm", oldPrice: "540 000 so'm", discount: "↓ 31%", badgeType: "arzonlashdi", rating: 4.8, comments: 92, images: ["https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&auto=format&fit=crop&q=80"], sizes: [35, 36, 37, 38, 39] },
-
-            // --- AKSESSUARLAR ---
-            // Shapkalar (6 ta)
-            { id: 401, subcat: "Shapkalar", name: "Bahorgi qulay qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", badgeType: "original", rating: 4.7, comments: 145, images: ["https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 402, subcat: "Shapkalar", name: "Qishki to'qima pomidorkali shapka", price: "45 000 so'm", oldPrice: "75 000 so'm", discount: "↓ 40%", badgeType: "chegirma", rating: 4.9, comments: 210, images: ["https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 403, subcat: "Shapkalar", name: "Sportivniy beysbolka (Kepka)", price: "55 000 so'm", oldPrice: "90 000 so'm", discount: "↓ 38%", badgeType: "arzonlashdi", rating: 4.8, comments: 180, images: ["https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 404, subcat: "Shapkalar", name: "Yozgi quyoshdan saqlovchi panama", price: "60 000 so'm", oldPrice: "100 000 so'm", discount: "↓ 40%", badgeType: "original", rating: 4.6, comments: 95, images: ["https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 405, subcat: "Shapkalar", name: "Klassik qora beretka", price: "50 000 so'm", oldPrice: "85 000 so'm", discount: "↓ 41%", badgeType: "chegirma", rating: 4.7, comments: 78, images: ["https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 406, subcat: "Shapkalar", name: "Iliq flisli balaklava", price: "65 000 so'm", oldPrice: "110 000 so'm", discount: "↓ 40%", badgeType: "arzonlashdi", rating: 4.9, comments: 112, images: ["https://images.unsplash.com/photo-1534215754734-18e55d134346?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+            { id: 101, subcat: "Ko'ylaklar", name: "Ayollar uchun zamonaviy oq ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"] },
+            { id: 102, subcat: "Ko'ylaklar", name: "Kechki qora libos", price: "450 000 so'm", oldPrice: "650 000 so'm", images: ["https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80"] },
+            { id: 103, subcat: "Ko'ylaklar", name: "Yozgi yengil gulli ko'ylak", price: "180 000 so'm", oldPrice: "280 000 so'm", images: ["https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop&q=80"] },
+            { id: 104, subcat: "Ko'ylaklar", name: "Klassik ishbilarmon ko'ylak", price: "310 000 so'm", oldPrice: "450 000 so'm", images: ["https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&auto=format&fit=crop&q=80"] },
+            { id: 105, subcat: "Ko'ylaklar", name: "Qizil tantanali ko'ylak", price: "520 000 so'm", oldPrice: "750 000 so'm", images: ["https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80"] },
+            { id: 106, subcat: "Ko'ylaklar", name: "Trikotaj kundalik ko'ylak", price: "195 000 so'm", oldPrice: "300 000 so'm", images: ["https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=600&auto=format&fit=crop&q=80"] },
 
             // Sumkalar (6 ta)
-            { id: 411, subcat: "Sumkalar", name: "Ayollar uchun elegante charm sumka", price: "280 000 so'm", oldPrice: "400 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 4.8, comments: 165, images: ["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 412, subcat: "Sumkalar", name: "Kichik yelka sumkasi (Clutch)", price: "190 000 so'm", oldPrice: "290 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.7, comments: 98, images: ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 413, subcat: "Sumkalar", name: "Kundalik shopper sumka", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 210, images: ["https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 414, subcat: "Sumkalar", name: "Sport uslubidagi ruksak-sumka", price: "310 000 so'm", oldPrice: "450 000 so'm", discount: "↓ 31%", badgeType: "original", rating: 4.6, comments: 120, images: ["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 415, subcat: "Sumkalar", name: "Klassik qora ish sumkasi", price: "380 000 so'm", oldPrice: "520 000 so'm", discount: "↓ 27%", badgeType: "chegirma", rating: 5.0, comments: 180, images: ["https://images.unsplash.com/photo-1594223274512-ad4803739ffc?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 416, subcat: "Sumkalar", name: "Brendoviy zanjirli sumka", price: "410 000 so'm", oldPrice: "600 000 so'm", discount: "↓ 31%", badgeType: "arzonlashdi", rating: 4.8, comments: 145, images: ["https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-
-            // Soatlar (6 ta)
-            { id: 421, subcat: "Soatlar", name: "Smart soat X8 Ultra (Smart watch)", price: "250 000 so'm", oldPrice: "400 000 so'm", discount: "↓ 37%", badgeType: "original", rating: 4.9, comments: 380, images: ["https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 422, subcat: "Soatlar", name: "Erkaklar uchun metall kassa qo'l soati", price: "180 000 so'm", oldPrice: "280 000 so'm", discount: "↓ 35%", badgeType: "chegirma", rating: 4.7, comments: 150, images: ["https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 423, subcat: "Soatlar", name: "Ayollar uchun nafis zargarlik soati", price: "160 000 so'm", oldPrice: "250 000 so'm", discount: "↓ 36%", badgeType: "arzonlashdi", rating: 4.8, comments: 125, images: ["https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 424, subcat: "Soatlar", name: "Sportivniy elektron qo'l soati", price: "130 000 so'm", oldPrice: "200 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.6, comments: 110, images: ["https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 425, subcat: "Soatlar", name: "Charm remashkali klassik soat", price: "210 000 so'm", oldPrice: "320 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.8, comments: 94, images: ["https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 426, subcat: "Soatlar", name: "Fitness bilakuzuk (Fitness bracelet)", price: "190 000 so'm", oldPrice: "300 000 so'm", discount: "↓ 36%", badgeType: "arzonlashdi", rating: 4.9, comments: 220, images: ["https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
+            { id: 201, subcat: "Sumkalar", name: "Ayollar uchun elegante charm sumka", price: "280 000 so'm", oldPrice: "400 000 so'm", images: ["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&auto=format&fit=crop&q=80"] },
+            { id: 202, subcat: "Sumkalar", name: "Kichik yelka sumkasi (Clutch)", price: "190 000 so'm", oldPrice: "290 000 so'm", images: ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&auto=format&fit=crop&q=80"] },
+            { id: 203, subcat: "Sumkalar", name: "Kundalik shopper sumka", price: "220 000 so'm", oldPrice: "350 000 so'm", images: ["https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&auto=format&fit=crop&q=80"] },
+            { id: 204, subcat: "Sumkalar", name: "Sport uslubidagi ruksak-sumka", price: "310 000 so'm", oldPrice: "450 000 so'm", images: ["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&auto=format&fit=crop&q=80"] },
+            { id: 205, subcat: "Sumkalar", name: "Klassik qora ish sumkasi", price: "380 000 so'm", oldPrice: "520 000 so'm", images: ["https://images.unsplash.com/photo-1594223274512-ad4803739ffc?w=600&auto=format&fit=crop&q=80"] },
+            { id: 206, subcat: "Sumkalar", name: "Brendoviy zanjirli sumka", price: "410 000 so'm", oldPrice: "600 000 so'm", images: ["https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&auto=format&fit=crop&q=80"] },
 
             // Ko'zoynaklar (6 ta)
-            { id: 431, subcat: "Ko'zoynaklar", name: "Quyoshdan saqlovchi qora ko'zoynak", price: "120 000 so'm", oldPrice: "200 000 so'm", discount: "↓ 40%", badgeType: "original", rating: 4.9, comments: 195, images: ["https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 432, subcat: "Ko'zoynaklar", name: "Kvadrat shakldagi imidj ko'zoynagi", price: "95 000 so'm", oldPrice: "160 000 so'm", discount: "↓ 40%", badgeType: "chegirma", rating: 4.7, comments: 130, images: ["https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 433, subcat: "Ko'zoynaklar", name: "Aviator uslubidagi quyosh ko'zoynagi", price: "150 000 so'm", oldPrice: "250 000 so'm", discount: "↓ 40%", badgeType: "arzonlashdi", rating: 4.8, comments: 160, images: ["https://images.unsplash.com/photo-1574345920610-0935568f677d?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 434, subcat: "Ko'zoynaklar", name: "Dumaloq dizaynli retro ko'zoynak", price: "110 000 so'm", oldPrice: "190 000 so'm", discount: "↓ 42%", badgeType: "original", rating: 4.6, comments: 85, images: ["https://images.unsplash.com/photo-1577803645773-f96470509666?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 435, subcat: "Ko'zoynaklar", name: "Sportivniy velosipedchi ko'zoynagi", price: "175 000 so'm", oldPrice: "280 000 so'm", discount: "↓ 37%", badgeType: "chegirma", rating: 4.9, comments: 110, images: ["https://images.unsplash.com/photo-1509695507497-903c140c49b0?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 436, subcat: "Ko'zoynaklar", name: "Kompyuter uchun nurlar himoyali", price: "135 000 so'm", oldPrice: "220 000 so'm", discount: "↓ 38%", badgeType: "arzonlashdi", rating: 4.8, comments: 155, images: ["https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-
-            // --- UY UCHUN ---
-            // Uy tapichkalari (6 ta)
-            { id: 501, subcat: "Uy tapichkalari", name: "Juda yumshoq uy tapichkasi", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", badgeType: "original", rating: 5.0, comments: 240, images: ["https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"], sizes: [36, 37, 38, 39, 40] },
-            { id: 502, subcat: "Uy tapichkalari", name: "Iliq qishki uy etigi", price: "75 000 so'm", oldPrice: "130 000 so'm", discount: "↓ 42%", badgeType: "chegirma", rating: 4.9, comments: 180, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [37, 38, 39, 40, 41] },
-            { id: 503, subcat: "Uy tapichkalari", name: "Erkaklar uchun qalin uy shlepanetsi", price: "55 000 so'm", oldPrice: "95 000 so'm", discount: "↓ 42%", badgeType: "arzonlashdi", rating: 4.8, comments: 120, images: ["https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"], sizes: [40, 41, 42, 43, 44] },
-            { id: 504, subcat: "Uy tapichkalari", name: "Ortopedik uy poyabzali", price: "85 000 so'm", oldPrice: "140 000 so'm", discount: "↓ 39%", badgeType: "original", rating: 4.7, comments: 95, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42] },
-            { id: 505, subcat: "Uy tapichkalari", name: "Mato qoplamali qulay tapichka", price: "40 000 so'm", oldPrice: "70 000 so'm", discount: "↓ 42%", badgeType: "chegirma", rating: 4.6, comments: 88, images: ["https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"], sizes: [36, 37, 38, 39] },
-            { id: 506, subcat: "Uy tapichkalari", name: "Anti-slip silikon taglikli tapichka", price: "60 000 so'm", oldPrice: "100 000 so'm", discount: "↓ 40%", badgeType: "arzonlashdi", rating: 4.8, comments: 110, images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&auto=format&fit=crop&q=80"], sizes: [38, 39, 40, 41, 42] },
-
-            // To'qima buyumlar (6 ta)
-            { id: 511, subcat: "To'qima buyumlar", name: "Ikki kishilik yumshoq yopinchiq (Pled)", price: "180 000 so'm", oldPrice: "280 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.9, comments: 210, images: ["https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 512, subcat: "To'qima buyumlar", name: "Paxtali choyshablar to'plami (Postel)", price: "250 000 so'm", oldPrice: "380 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.8, comments: 175, images: ["https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 513, subcat: "To'qima buyumlar", name: "Anatomik yostiq (Ortho pillow)", price: "120 000 so'm", oldPrice: "190 000 so'm", discount: "↓ 36%", badgeType: "arzonlashdi", rating: 4.9, comments: 290, images: ["https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 514, subcat: "To'qima buyumlar", name: "Vanna uchun qalin 2talik sochiq", price: "95 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 36%", badgeType: "original", rating: 4.7, comments: 140, images: ["https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 515, subcat: "To'qima buyumlar", name: "Dizaynli oshxona dasturxoni", price: "70 000 so'm", oldPrice: "120 000 so'm", discount: "↓ 41%", badgeType: "chegirma", rating: 4.6, comments: 85, images: ["https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 516, subcat: "To'qima buyumlar", name: "Yotoqxona uchun yumshoq gilamcha", price: "150 000 so'm", oldPrice: "240 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.8, comments: 112, images: ["https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-
-            // Idish-tovoqlar (6 ta)
-            { id: 521, subcat: "Idish-tovoqlar", name: "Zanglamaydigan po'latdan qozon to'plami", price: "450 000 so'm", oldPrice: "650 000 so'm", discount: "↓ 30%", badgeType: "original", rating: 4.9, comments: 185, images: ["https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 522, subcat: "Idish-tovoqlar", name: "Keramika choynak va piyola set", price: "190 000 so'm", oldPrice: "290 000 so'm", discount: "↓ 34%", badgeType: "chegirma", rating: 4.8, comments: 140, images: ["https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 523, subcat: "Idish-tovoqlar", name: "Granit qoplamali tovada", price: "160 000 so'm", oldPrice: "250 000 so'm", discount: "↓ 36%", badgeType: "arzonlashdi", rating: 4.9, comments: 230, images: ["https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 524, subcat: "Idish-tovoqlar", name: "Oshxona pichoqlari 5talik to'plami", price: "130 000 so'm", oldPrice: "200 000 so'm", discount: "↓ 35%", badgeType: "original", rating: 4.7, comments: 110, images: ["https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 525, subcat: "Idish-tovoqlar", name: "Shisha idishlar va bankalar seti", price: "110 000 so'm", oldPrice: "180 000 so'm", discount: "↓ 38%", badgeType: "chegirma", rating: 4.6, comments: 78, images: ["https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&auto=format&fit=crop&q=80"], sizes: [1] },
-            { id: 526, subcat: "Idish-tovoqlar", name: "Chiroyli desert tarelkalar to'plami", price: "140 000 so'm", oldPrice: "220 000 so'm", discount: "↓ 36%", badgeType: "arzonlashdi", rating: 4.8, comments: 95, images: ["https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&auto=format&fit=crop&q=80"], sizes: [1] }
+            { id: 301, subcat: "Ko'zoynaklar", name: "Quyoshdan saqlovchi qora ko'zoynak", price: "120 000 so'm", oldPrice: "200 000 so'm", images: ["https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80"] },
+            { id: 302, subcat: "Ko'zoynaklar", name: "Kvadrat shakldagi imidj ko'zoynagi", price: "95 000 so'm", oldPrice: "160 000 so'm", images: ["https://images.unsplash.com/photo-1508296695146-257a814070b4?w=600&auto=format&fit=crop&q=80"] },
+            { id: 303, subcat: "Ko'zoynaklar", name: "Aviator uslubidagi quyosh ko'zoynagi", price: "150 000 so'm", oldPrice: "250 000 so'm", images: ["https://images.unsplash.com/photo-1574345920610-0935568f677d?w=600&auto=format&fit=crop&q=80"] },
+            { id: 304, subcat: "Ko'zoynaklar", name: "Dumaloq dizaynli retro ko'zoynak", price: "110 000 so'm", oldPrice: "190 000 so'm", images: ["https://images.unsplash.com/photo-1577803645773-f96470509666?w=600&auto=format&fit=crop&q=80"] },
+            { id: 305, subcat: "Ko'zoynaklar", name: "Sportivniy velosipedchi ko'zoynagi", price: "175 000 so'm", oldPrice: "280 000 so'm", images: ["https://images.unsplash.com/photo-1509695507497-903c140c49b0?w=600&auto=format&fit=crop&q=80"] },
+            { id: 306, subcat: "Ko'zoynaklar", name: "Kompyuter uchun nurlar himoyali", price: "135 000 so'm", oldPrice: "220 000 so'm", images: ["https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&auto=format&fit=crop&q=80"] }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
@@ -502,36 +286,6 @@
 
             grid.innerHTML = list.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
-                const defaultSize = p.sizes ? p.sizes[0] : null;
-                const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
-
-                let badgeHtml = '';
-                if (p.badgeType === 'original') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
-                } else if (p.badgeType === 'chegirma') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada</div>`;
-                } else if (p.badgeType === 'arzonlashdi') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
-                }
-
-                let btnHtml = '';
-                if (!cartItem) {
-                    btnHtml = `
-                        <button class="cart-btn-sm" onclick="event.stopPropagation(); addProductToCart(${p.id})">
-                            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                            <span>Savatga</span>
-                        </button>
-                    `;
-                } else {
-                    btnHtml = `
-                        <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
-                            <button class="counter-btn-sm" onclick="changeProductQty(${p.id}, -1)">-</button>
-                            <span class="counter-val-sm">${cartItem.qty || 1}</span>
-                            <button class="counter-btn-sm" onclick="changeProductQty(${p.id}, 1)">+</button>
-                        </div>
-                    `;
-                }
-
                 return `
                     <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
                         <button class="heart-icon-sm ${isLiked}" onclick="event.stopPropagation(); toggleHeart(${p.id})">
@@ -541,25 +295,11 @@
                             <div class="card-slider-container">
                                 <div class="card-slide"><img src="${p.images[0]}" alt="${p.name}"></div>
                             </div>
-                            ${badgeHtml}
                         </div>
                         <div class="product-info">
-                            <div class="price-row">
-                                <span class="main-price">${p.price}</span>
-                                ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${p.discount}</span>` : ''}
-                            </div>
-                            <div class="old-prices">${p.oldPrice}</div>
+                            <div class="main-price">${p.price}</div>
                             <div class="product-title">${p.name}</div>
-                            <div class="product-rating">
-                                <div class="rating-box">
-                                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                    <span>${p.rating}</span>
-                                </div>
-                                <span style="color: var(--muted);">${p.comments} ta sharh</span>
-                            </div>
-                            <div id="card-action-${p.id}">
-                                ${btnHtml}
-                            </div>
+                            <button class="cart-btn-sm" onclick="event.stopPropagation(); addToCart(${p.id})">Savatga</button>
                         </div>
                     </div>
                 `;
@@ -571,87 +311,18 @@
             else favs.push(id);
             localStorage.setItem('fav_products', JSON.stringify(favs));
             renderProducts(getCategoryProducts());
-            updateBadges();
         }
 
-        function updateCardAction(id) {
-            const container = document.getElementById(`card-action-${id}`);
-            if (!container) return;
-
-            let prod = PRODUCTS.find(p => p.id === id);
-            let defaultSize = prod && prod.sizes ? prod.sizes[0] : null;
-            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-
-            if (!cartItem) {
-                container.innerHTML = `
-                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addProductToCart(${id})">
-                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <span>Savatga</span>
-                    </button>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
-                        <button class="counter-btn-sm" onclick="changeProductQty(${id}, -1)">-</button>
-                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
-                        <button class="counter-btn-sm" onclick="changeProductQty(${id}, 1)">+</button>
-                    </div>
-                `;
-            }
-        }
-
-        function addProductToCart(id) {
+        function addToCart(id) {
             let prod = PRODUCTS.find(p => p.id === id);
             if (prod) {
-                let defaultSize = prod.sizes ? prod.sizes[0] : null;
-                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-                if (!cartItem) {
-                    cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
-                } else {
-                    cartItem.qty = (cartItem.qty || 1) + 1;
-                }
+                cart.push({ ...prod, qty: 1 });
                 localStorage.setItem('cart_products', JSON.stringify(cart));
-                updateCardAction(id);
-                updateBadges();
+                alert("Savatga qo'shildi!");
             }
         }
 
-        function changeProductQty(id, delta) {
-            let prod = PRODUCTS.find(p => p.id === id);
-            if (!prod) return;
-            let defaultSize = prod.sizes ? prod.sizes[0] : null;
-            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-            if (cartItem) {
-                cartItem.qty = (cartItem.qty || 1) + delta;
-                if (cartItem.qty <= 0) {
-                    cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
-                }
-                localStorage.setItem('cart_products', JSON.stringify(cart));
-                updateCardAction(id);
-                updateBadges();
-            }
-        }
-
-        function handleSearchInput(e) {
-            const val = e.target.value.trim().toLowerCase();
-            const currentList = getCategoryProducts();
-            if (!val) {
-                renderProducts(currentList);
-                return;
-            }
-            const filtered = currentList.filter(p => p.name.toLowerCase().includes(val));
-            renderProducts(filtered);
-        }
-
-        function updateBadges() {
-            const favBadge = document.getElementById('favBadge');
-            const cartBadge = document.getElementById('cartBadge');
-
-            if (favs.length > 0) {
-                favBadge.textContent = favs.length;
-                favBadge.classList.add('show');
-            } else {
-                favBadge.classList.remove('show');
-            }
-
-            let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0
+        renderProducts(getCategoryProducts());
+    </script>
+</body>
+</html>
