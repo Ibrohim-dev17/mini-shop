@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 140px;
+            padding-bottom: 170px;
             overflow-x: hidden;
         }
 
@@ -563,6 +563,9 @@
             border-radius: 6px;
             z-index: 4;
             pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
 
         .product-info-sm {
@@ -710,10 +713,10 @@
             font-weight: 700;
         }
 
-        /* FIXED BOTTOM BAR FOR CART */
+        /* FIXED BOTTOM BAR FOR CART (YUKORIROQQA CHIQARILDI) */
         .bottom-action-bar {
             position: fixed;
-            bottom: calc(85px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(95px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -1014,6 +1017,36 @@
                 salesInfo: "Bu haftada 32 kishi sotib oldi", 
                 desc: "Bahorgi mavsum uchun qulay qora shapka.", 
                 images: ["https://picsum.photos/300/300?random=4"]
+            },
+            { 
+                id: 5, 
+                category_id: 4, 
+                name: "Ayollar uchun zamonaviy ko'ylak", 
+                price: "220 000 so'm", 
+                oldPrice: "350 000 so'm", 
+                discount: "↓ 37%", 
+                badgeType: "arzonlashdi", 
+                rating: 4.9, 
+                comments: 178, 
+                ordersCount: "950+", 
+                salesInfo: "Bu haftada 67 kishi sotib oldi", 
+                desc: "Zamonaviy dizayndagi ayollar ko'ylagi.", 
+                images: ["https://picsum.photos/300/300?random=5"]
+            },
+            { 
+                id: 6, 
+                category_id: 5, 
+                name: "Paxtadan tayyorlangan ichki kiyimlar", 
+                price: "90 000 so'm", 
+                oldPrice: "150 000 so'm", 
+                discount: "↓ 40%", 
+                badgeType: "original", 
+                rating: 4.8, 
+                comments: 89, 
+                ordersCount: "1 500+", 
+                salesInfo: "Bu haftada 120 kishi sotib oldi", 
+                desc: "100% toza paxtadan tayyorlangan sifatli to'plam.", 
+                images: ["https://picsum.photos/300/300?random=6"]
             }
         ];
 
@@ -1264,7 +1297,7 @@
 
         function renderSimilar() {
             const grid = document.getElementById('similarGrid');
-            const similar = allProducts.filter(p => p.id !== product.id).slice(0, 6);
+            const similar = allProducts.filter(p => p.id !== product.id);
 
             if (similar.length === 0) {
                 document.getElementById('similarTitle').style.display = 'none';
@@ -1283,9 +1316,9 @@
                 if (p.badgeType === 'original') {
                     badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
                 } else if (p.badgeType === 'chegirma') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Olov chegirma</div>`;
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada ${p.discount}</div>`;
                 } else if (p.badgeType === 'arzonlashdi') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg> Arzonlashdi ${p.discount}</div>`;
                 }
 
                 let btnHtml = '';
