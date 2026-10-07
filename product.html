@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 170px;
+            padding-bottom: 200px;
             overflow-x: hidden;
         }
 
@@ -199,6 +199,15 @@
             font-size: 24px;
             font-weight: 800;
             color: var(--text);
+        }
+
+        .discount-tag {
+            background: var(--discount-bg);
+            color: var(--discount-text);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
         }
 
         .old-prices {
@@ -572,6 +581,15 @@
             color: var(--text);
         }
 
+        .discount-tag-sm {
+            background: var(--discount-bg);
+            color: var(--discount-text);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+
         .old-prices-sm {
             display: flex;
             align-items: center;
@@ -688,10 +706,10 @@
             font-weight: 700;
         }
 
-        /* FIXED BOTTOM BAR FOR CART */
+        /* FIXED BOTTOM BAR FOR CART - NAVIGATIONDAN ANIQ TEPADA VA XAVFSIZ MASofada */
         .bottom-action-bar {
             position: fixed;
-            bottom: calc(95px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(85px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -776,10 +794,10 @@
             text-decoration: none;
         }
 
-        /* BOTTOM NAVIGATION */
+        /* BOTTOM NAVIGATION - 40PX TEPAROQQA SURILDI */
         .bottom-nav {
             position: fixed;
-            bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(40px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -928,6 +946,7 @@
                 name: "Qishki issiq qora kurtka", 
                 price: "450 000 so'm", 
                 oldPrice: "680 000 so'm", 
+                discount: "↓ 33%", 
                 badgeType: "original", 
                 rating: 4.9, 
                 comments: 124, 
@@ -950,6 +969,7 @@
                 name: "Sportivniy stilimdagi kurtka", 
                 price: "380 000 so'm", 
                 oldPrice: "500 000 so'm", 
+                discount: "↓ 24%", 
                 badgeType: "chegirma", 
                 rating: 4.8, 
                 comments: 92, 
@@ -971,6 +991,7 @@
                 name: "Uy uchun yumshoq tapichka", 
                 price: "45 000 so'm", 
                 oldPrice: "80 000 so'm", 
+                discount: "↓ 43%", 
                 badgeType: "arzonlashdi", 
                 rating: 5.0, 
                 comments: 310, 
@@ -988,6 +1009,7 @@
                 name: "Bahorgi qora shapka", 
                 price: "35 000 so'm", 
                 oldPrice: "60 000 so'm", 
+                discount: "↓ 41%", 
                 badgeType: "none", 
                 rating: 4.7, 
                 comments: 45, 
@@ -1005,6 +1027,7 @@
                 name: "Ayollar uchun zamonaviy ko'ylak", 
                 price: "220 000 so'm", 
                 oldPrice: "350 000 so'm", 
+                discount: "↓ 37%", 
                 badgeType: "arzonlashdi", 
                 rating: 4.9, 
                 comments: 178, 
@@ -1021,6 +1044,7 @@
                 name: "Paxtadan tayyorlangan ichki kiyimlar", 
                 price: "90 000 so'm", 
                 oldPrice: "150 000 so'm", 
+                discount: "↓ 40%", 
                 badgeType: "original", 
                 rating: 4.8, 
                 comments: 89, 
@@ -1098,6 +1122,7 @@
                 <div class="section-card">
                     <div class="price-row">
                         <span class="main-price">${displayPrice}</span>
+                        ${product.badgeType === 'chegirma' || product.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${product.discount || '↓ 20%'}</span>` : ''}
                     </div>
                     <div class="old-prices">${product.oldPrice || ''}</div>
                     <div class="out-of-stock-label" id="outOfStockLabel" style="display: ${isAvailable ? 'none' : 'block'}">Qolmagan</div>
@@ -1285,17 +1310,6 @@
         function toggleSimilarHeart(e, id) {
             e.stopPropagation();
             if (favs.includes(id)) {
-                favs = favs.filter(id => id !== id); // fixed filter logic
-            } else {
-                favs.push(id);
-            }
-            // proper filter
-            favs = favs.includes(id) ? favs.filter(i => i !== id) : [...favs, id]; // handled correctly below
-        }
-
-        function toggleSimilarHeart(e, id) {
-            e.stopPropagation();
-            if (favs.includes(id)) {
                 favs = favs.filter(item => item !== id);
             } else {
                 favs.push(id);
@@ -1395,6 +1409,7 @@
                         <div class="product-info-sm" onclick="goToProduct(${p.id})">
                             <div class="price-row-sm">
                                 <span class="main-price-sm">${p.price}</span>
+                                ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag-sm">${p.discount}</span>` : ''}
                             </div>
                             <div class="old-prices-sm">
                                 <span class="price-old-sm">${p.oldPrice}</span>
