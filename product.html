@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 160px;
+            padding-bottom: 180px;
             overflow-x: hidden;
         }
 
@@ -58,8 +58,11 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            background: #f4f5f7;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
             color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .icon-btn svg {
@@ -68,14 +71,6 @@
             fill: none;
             stroke: currentColor;
             stroke-width: 2;
-        }
-
-        /* YURAK TUGMASI ORQASIGA SHAFFOF DOIRA */
-        #heartBtn {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .icon-btn.liked svg {
@@ -435,7 +430,7 @@
             cursor: pointer;
         }
 
-        /* SIMILAR PRODUCTS */
+        /* SIMILAR PRODUCTS (PRODUCTS.HTML STYLE) */
         .similar-title {
             font-size: 18px;
             font-weight: 700;
@@ -457,7 +452,38 @@
             display: flex;
             flex-direction: column;
             border: 1px solid var(--border);
+        }
+
+        .heart-icon-sm {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            z-index: 5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .heart-icon-sm svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: #1f2026;
+            stroke-width: 1.8;
+            transition: all 0.2s;
+        }
+
+        .heart-icon-sm.liked svg {
+            fill: #ff3b30;
+            stroke: #ff3b30;
         }
 
         .product-img-box-sm {
@@ -466,6 +492,7 @@
             background: #f8f9fa;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .product-img-box-sm img {
@@ -486,6 +513,7 @@
             padding: 3px 8px;
             border-radius: 6px;
             z-index: 4;
+            pointer-events: none;
         }
 
         .product-info-sm {
@@ -493,6 +521,7 @@
             display: flex;
             flex-direction: column;
             flex: 1;
+            cursor: pointer;
         }
 
         .price-row-sm {
@@ -624,9 +653,9 @@
             background: #ffffff;
             padding: 10px;
             border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             border: 1px solid var(--border);
-            z-index: 1000;
+            z-index: 1050;
             display: flex;
             gap: 10px;
             align-items: center;
@@ -1095,6 +1124,18 @@
             updateBadges();
         }
 
+        function toggleSimilarHeart(e, id) {
+            e.stopPropagation();
+            if (favs.includes(id)) {
+                favs = favs.filter(item => item !== id);
+            } else {
+                favs.push(id);
+            }
+            localStorage.setItem('fav_products', JSON.stringify(favs));
+            renderSimilar();
+            updateBadges();
+        }
+
         function updateBadges() {
             const favBadge = document.getElementById('favBadge');
             const cartBadge = document.getElementById('cartBadge');
@@ -1126,6 +1167,7 @@
             }
 
             grid.innerHTML = similar.map(p => {
+                const isLiked = favs.includes(p.id) ? 'liked' : '';
                 const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
                 const defaultSize = p.sizes ? p.sizes[0] : null;
                 const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
@@ -1149,12 +1191,15 @@
                 }
 
                 return `
-                    <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
-                        <div class="product-img-box-sm">
+                    <div class="product-card">
+                        <button class="heart-icon-sm ${isLiked}" onclick="toggleSimilarHeart(event, ${p.id})">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </button>
+                        <div class="product-img-box-sm" onclick="window.location.href='product.html?id=${p.id}'">
                             <img src="${pImages[0]}" alt="${p.name}">
                             <div class="badge-original-sm">✓ ORIGINAL</div>
                         </div>
-                        <div class="product-info-sm">
+                        <div class="product-info-sm" onclick="window.location.href='product.html?id=${p.id}'">
                             <div class="price-row-sm">
                                 <span class="main-price-sm">${p.price}</span>
                                 <span class="discount-tag-sm">${p.discount}</span>
