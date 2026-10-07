@@ -95,7 +95,7 @@
             border-radius: 12px;
             margin-top: 6px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
             z-index: 1000;
             display: none;
@@ -473,6 +473,28 @@
             }
         ];
 
+        // Barcha mahsulotlar bazasi (qidiruv uchun)
+        const ALL_PRODUCTS_DB = [
+            { id: 101, name: "Ayollar uchun zamonaviy oq ko'ylak", subcat: "Ko'ylaklar" },
+            { id: 102, name: "Kechki qora libos", subcat: "Ko'ylaklar" },
+            { id: 103, name: "Yozgi yengil gulli ko'ylak", subcat: "Ko'ylaklar" },
+            { id: 104, name: "Klassik ishbilarmon ko'ylak", subcat: "Ko'ylaklar" },
+            { id: 105, name: "Qizil tantanali ko'ylak", subcat: "Ko'ylaklar" },
+            { id: 106, name: "Trikotaj kundalik ko'ylak", subcat: "Ko'ylaklar" },
+            { id: 201, name: "Ayollar uchun elegante charm sumka", subcat: "Sumkalar" },
+            { id: 202, name: "Kichik yelka sumkasi (Clutch)", subcat: "Sumkalar" },
+            { id: 203, name: "Kundalik shopper sumka", subcat: "Sumkalar" },
+            { id: 204, name: "Sport uslubidagi ruksak-sumka", subcat: "Sumkalar" },
+            { id: 205, name: "Klassik qora ish sumkasi", subcat: "Sumkalar" },
+            { id: 206, name: "Brendoviy zanjirli sumka", subcat: "Sumkalar" },
+            { id: 301, name: "Quyoshdan saqlovchi qora ko'zoynak", subcat: "Ko'zoynaklar" },
+            { id: 302, name: "Kvadrat shakldagi imidj ko'zoynagi", subcat: "Ko'zoynaklar" },
+            { id: 303, name: "Aviator uslubidagi quyosh ko'zoynagi", subcat: "Ko'zoynaklar" },
+            { id: 304, name: "Dumaloq dizaynli retro ko'zoynak", subcat: "Ko'zoynaklar" },
+            { id: 305, name: "Sportivniy velosipedchi ko'zoynagi", subcat: "Ko'zoynaklar" },
+            { id: 306, name: "Kompyuter uchun nurlar himoyali", subcat: "Ko'zoynaklar" }
+        ];
+
         let activeCatId = parseInt(localStorage.getItem('active_cat_id')) || 1;
 
         function renderCatalog() {
@@ -576,22 +598,63 @@
             window.location.href = `search.html?q=${encodeURIComponent(item)}`;
         }
 
+        // BARCHA KATEGORIYA VA MAHSULOTLAR ICHIDAN TEZKOR (LIVE) QIDIRISH
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
 
             if (val.length === 0) {
                 showSearchHistory();
-                dropdown.classList.remove('show');
                 return;
             }
 
-            let html = `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='search.html?q=${encodeURIComponent(val)}'">
-                <span>"${val}" bo'yicha qidirish</span>
-                <span class="suggestion-type">Natija</span>
-            </div>`;
+            let matchedSubcats = [];
+            let matchedProducts = [];
+
+            // Barcha asosiy va kichik kategoriyalardan qidirish
+            CATEGORIES_DATA.forEach(cat => {
+                cat.subcats.forEach(sub => {
+                    if (sub.name.toLowerCase().includes(val) || cat.name.toLowerCase().includes(val)) {
+                        matchedSubcats.push({ catId: cat.id, subName: sub.name, catName: cat.name });
+                    }
+                });
+            });
+
+            // Barcha mahsulotlar bazasidan qidirish
+            matchedProducts = ALL_PRODUCTS_DB.filter(p => p.name.toLowerCase().includes(val));
+
+            let html = '';
+
+            if (matchedSubcats.length > 0 || matchedProducts.length > 0) {
+                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='search.html?q=${encodeURIComponent(val)}'">
+                    <span>"${val}" bo'yicha barcha natijalarni ko'rish</span>
+                    <span class="suggestion-type">Qidirish</span>
+                </div>`;
+
+                matchedSubcats.forEach(item => {
+                    html += `<div class="search-suggestion-item" onclick="selectSubcatFromSearch(${item.catId}, '${item.subName}')">
+                        <span>${item.subName} <small style="color:var(--muted)">(${item.catName})</small></span>
+                        <span class="suggestion-type">Turkum</span>
+                    </div>`;
+                });
+
+                matchedProducts.forEach(prod => {
+                    html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${prod.name}'); window.location.href='product.html?id=${prod.id}'">
+                        <span>${prod.name}</span>
+                        <span class="suggestion-type">Mahsulot</span>
+                    </div>`;
+                });
+            } else {
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Hech narsa topilmadi...</div>`;
+            }
+
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
+        }
+
+        function selectSubcatFromSearch(catId, subName) {
+            localStorage.setItem('active_cat_id', catId);
+            window.location.href = `products.html?cat_id=${catId}&sub=${encodeURIComponent(subName)}`;
         }
 
         function handleSearch(e) {
