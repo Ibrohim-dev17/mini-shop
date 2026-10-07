@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 180px;
+            padding-bottom: 140px;
             overflow-x: hidden;
         }
 
@@ -430,7 +430,7 @@
             cursor: pointer;
         }
 
-        /* SIMILAR PRODUCTS (INDEX STYLE) */
+        /* SIMILAR PRODUCTS */
         .similar-title {
             font-size: 18px;
             font-weight: 700;
@@ -552,11 +552,10 @@
             background: #ffffff;
         }
 
-        .badge-original-sm {
+        .badge-dynamic-sm {
             position: absolute;
             bottom: 8px;
             left: 8px;
-            background: #00c853;
             color: #fff;
             font-size: 10px;
             font-weight: 700;
@@ -711,10 +710,10 @@
             font-weight: 700;
         }
 
-        /* FIXED BOTTOM BAR FOR CART (YUKORIROQGA CHIQARILDI) */
+        /* FIXED BOTTOM BAR FOR CART */
         .bottom-action-bar {
             position: fixed;
-            bottom: calc(115px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(85px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -722,7 +721,7 @@
             background: #ffffff;
             padding: 10px;
             border-radius: 20px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
             border: 1px solid var(--border);
             z-index: 1050;
             display: flex;
@@ -802,7 +801,7 @@
         /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
-            bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(10px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -952,11 +951,12 @@
                 price: "450 000 so'm", 
                 oldPrice: "680 000 so'm", 
                 discount: "↓ 33%", 
+                badgeType: "original", 
                 rating: 4.9, 
                 comments: 124, 
                 ordersCount: "1 200+", 
                 salesInfo: "Bu haftada 89 kishi sotib oldi", 
-                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov. Yuqori sifatli shamol o'tkazmaydigan material.", 
+                desc: "Qishki issiq qora kurtka sovuq ob-havo uchun mukammal tanlov.", 
                 images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11"],
                 variants: [
                     { name: "Qishki issiq qora kurtka (Qora)", price: "450 000 so'm", img: "https://picsum.photos/300/300?random=1", available: true },
@@ -972,6 +972,7 @@
                 price: "380 000 so'm", 
                 oldPrice: "500 000 so'm", 
                 discount: "↓ 24%", 
+                badgeType: "chegirma", 
                 rating: 4.8, 
                 comments: 92, 
                 ordersCount: "850+", 
@@ -990,6 +991,7 @@
                 price: "45 000 so'm", 
                 oldPrice: "80 000 so'm", 
                 discount: "↓ 43%", 
+                badgeType: "arzonlashdi", 
                 rating: 5.0, 
                 comments: 310, 
                 ordersCount: "3 400+", 
@@ -1005,40 +1007,13 @@
                 price: "35 000 so'm", 
                 oldPrice: "60 000 so'm", 
                 discount: "↓ 41%", 
+                badgeType: "none", 
                 rating: 4.7, 
                 comments: 45, 
                 ordersCount: "400+", 
                 salesInfo: "Bu haftada 32 kishi sotib oldi", 
                 desc: "Bahorgi mavsum uchun qulay qora shapka.", 
                 images: ["https://picsum.photos/300/300?random=4"]
-            },
-            { 
-                id: 5, 
-                category_id: 4, 
-                name: "Ayollar uchun zamonaviy ko'ylak", 
-                price: "220 000 so'm", 
-                oldPrice: "350 000 so'm", 
-                discount: "↓ 37%", 
-                rating: 4.9, 
-                comments: 178, 
-                ordersCount: "950+", 
-                salesInfo: "Bu haftada 67 kishi sotib oldi", 
-                desc: "Zamonaviy dizayndagi ayollar ko'ylagi.", 
-                images: ["https://picsum.photos/300/300?random=5"]
-            },
-            { 
-                id: 6, 
-                category_id: 5, 
-                name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", 
-                price: "90 000 so'm", 
-                oldPrice: "150 000 so'm", 
-                discount: "↓ 40%", 
-                rating: 4.8, 
-                comments: 89, 
-                ordersCount: "1 500+", 
-                salesInfo: "Bu haftada 120 kishi sotib oldi", 
-                desc: "100% toza paxtadan tayyorlangan sifatli to'plam.", 
-                images: ["https://picsum.photos/300/300?random=6"]
             }
         ];
 
@@ -1304,6 +1279,15 @@
                 const defaultSize = p.sizes ? p.sizes[0] : null;
                 const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
 
+                let badgeHtml = '';
+                if (p.badgeType === 'original') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
+                } else if (p.badgeType === 'chegirma') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Olov chegirma</div>`;
+                } else if (p.badgeType === 'arzonlashdi') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
+                }
+
                 let btnHtml = '';
                 if (!cartItem) {
                     btnHtml = `
@@ -1338,7 +1322,7 @@
                                     ${pImages.map((_, idx) => `<div class="card-dot-sm ${idx === 0 ? 'active' : ''}"></div>`).join('')}
                                 </div>
                             ` : ''}
-                            <div class="badge-original-sm">✓ ORIGINAL</div>
+                            ${badgeHtml}
                         </div>
                         <div class="product-info-sm" onclick="goToProduct(${p.id})">
                             <div class="price-row-sm">
