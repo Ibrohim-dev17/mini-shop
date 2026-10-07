@@ -25,54 +25,25 @@
         }
 
         body {
-            background-color: var(--card);
+            background-color: var(--bg);
             color: var(--text);
             padding-bottom: 120px;
             overflow: hidden;
             height: 100vh;
         }
 
-        .sticky-header {
+        .header-search-container {
+            padding: 50px 16px 12px 16px;
+            background: #ffffff;
             position: sticky;
             top: 0;
-            background: var(--card);
             z-index: 999;
-            padding: 50px 16px 12px 16px;
             border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .back-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            text-decoration: none;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-
-        .back-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--text);
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
         }
 
         .search-box-wrapper {
             position: relative;
             width: 100%;
-            flex: 1;
         }
 
         .search-box {
@@ -82,6 +53,23 @@
             border-radius: 10px;
             padding: 8px 12px;
             gap: 8px;
+            border: 1px solid transparent;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
+        .search-box svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+            flex-shrink: 0;
         }
 
         .search-box input {
@@ -93,11 +81,104 @@
             color: var(--text);
         }
 
+        .search-box input::placeholder {
+            color: var(--muted);
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .clear-history-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .search-suggestion-item {
+            padding: 12px 14px;
+            font-size: 13px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .history-item-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .remove-history-item {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 16px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
+        .remove-history-item:hover {
+            color: #ff3b30;
+        }
+
         .catalog-layout {
             display: flex;
-            height: calc(100vh - 120px);
+            height: calc(100vh - 130px);
             position: relative;
             overflow: hidden;
+            background: var(--bg);
         }
 
         .sidebar-categories {
@@ -147,7 +228,7 @@
 
         .content-panel {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             background: var(--card);
@@ -164,7 +245,7 @@
         .subcats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px 8px;
         }
 
         .subcat-card {
@@ -210,7 +291,6 @@
             width: 100%;
         }
 
-        /* AVVALGI NAVIGATSIYA PANELI (ASL HOLATIDA) */
         .bottom-nav {
             position: fixed;
             bottom: calc(40px + env(safe-area-inset-bottom, 0px));
@@ -244,6 +324,7 @@
             position: relative;
             cursor: pointer;
             padding: 8px 0;
+            touch-action: manipulation;
         }
 
         .nav-icon-wrap {
@@ -300,15 +381,13 @@
 </head>
 <body>
 
-    <div class="sticky-header">
-        <a onclick="history.back()" class="back-btn" title="Orqaga">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </a>
+    <div class="header-search-container">
         <div class="search-box-wrapper">
             <div class="search-box">
-                <svg width="18" height="18" fill="none" stroke="var(--muted)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash...">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
             </div>
+            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
     </div>
 
@@ -357,7 +436,7 @@
                 id: 2,
                 name: "Erkaklar kiyimlari",
                 subcats: [
-                    { name: "Erkaklar kurtkalar", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
+                    { name: "Erkaklar kurtkalari", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
                     { name: "Sportivniy", img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
                     { name: "Erkaklar ko'ylaklari", img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
                     { name: "Erkaklar jinsilari", img: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&auto=format&fit=crop&q=80" }
@@ -394,7 +473,7 @@
             }
         ];
 
-        let activeCatId = 1;
+        let activeCatId = parseInt(localStorage.getItem('active_cat_id')) || 1;
 
         function renderCatalog() {
             const sidebar = document.getElementById('sidebarCategories');
@@ -412,7 +491,7 @@
                 <div class="panel-title">${currentCat.name}</div>
                 <div class="subcats-grid">
                     ${currentCat.subcats.map(sub => `
-                        <a href="products.html?sub=${encodeURIComponent(sub.name)}" class="subcat-card">
+                        <a href="products.html?cat_id=${currentCat.id}&sub=${encodeURIComponent(sub.name)}" class="subcat-card" onclick="localStorage.setItem('active_cat_id', ${currentCat.id})">
                             <div class="subcat-img-wrap">
                                 <img src="${sub.img}" alt="${sub.name}" class="subcat-img">
                             </div>
@@ -425,8 +504,115 @@
 
         function selectCategory(id) {
             activeCatId = id;
+            localStorage.setItem('active_cat_id', id);
             renderCatalog();
         }
+
+        function getSearchHistory() {
+            return JSON.parse(localStorage.getItem('search_history')) || [];
+        }
+
+        function saveSearchQuery(q) {
+            if (!q) return;
+            let history = getSearchHistory();
+            history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
+            history.unshift(q);
+            if (history.length > 5) history = history.slice(0, 5);
+            localStorage.setItem('search_history', JSON.stringify(history));
+        }
+
+        function showSearchHistory() {
+            const val = document.getElementById('searchInput').value.trim();
+            const dropdown = document.getElementById('searchDropdown');
+            if (val.length > 0) return;
+
+            let history = getSearchHistory();
+            if (history.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            let html = `
+                <div class="search-header-row">
+                    <span>Oxirgi qidiruvlar</span>
+                    <button class="clear-history-btn" onclick="clearAllHistory(event)">Tozalash</button>
+                </div>
+            `;
+
+            history.forEach((item, index) => {
+                html += `
+                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item}')">
+                        <div class="history-item-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>${item}</span>
+                        </div>
+                        <button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button>
+                    </div>
+                `;
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function clearAllHistory(e) {
+            e.stopPropagation();
+            localStorage.removeItem('search_history');
+            document.getElementById('searchDropdown').classList.remove('show');
+        }
+
+        function removeHistoryItem(e, index) {
+            e.stopPropagation();
+            let history = getSearchHistory();
+            history.splice(index, 1);
+            localStorage.setItem('search_history', JSON.stringify(history));
+            showSearchHistory();
+        }
+
+        function selectHistoryItem(item) {
+            document.getElementById('searchInput').value = item;
+            document.getElementById('searchDropdown').classList.remove('show');
+            saveSearchQuery(item);
+            window.location.href = `search.html?q=${encodeURIComponent(item)}`;
+        }
+
+        function handleLiveSearch(e) {
+            const val = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
+
+            if (val.length === 0) {
+                showSearchHistory();
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            let html = `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='search.html?q=${encodeURIComponent(val)}'">
+                <span>"${val}" bo'yicha qidirish</span>
+                <span class="suggestion-type">Natija</span>
+            </div>`;
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                const dropdown = document.getElementById('searchDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+                if (query) {
+                    saveSearchQuery(query);
+                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                }
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
 
         renderCatalog();
     </script>
