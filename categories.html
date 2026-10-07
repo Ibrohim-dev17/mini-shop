@@ -81,23 +81,6 @@
             border-radius: 10px;
             padding: 8px 12px;
             gap: 8px;
-            border: 1px solid transparent;
-            width: 100%;
-            transition: border-color 0.2s;
-        }
-
-        .search-box:focus-within {
-            border-color: var(--primary);
-            background: #ffffff;
-        }
-
-        .search-box svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
-            stroke: var(--muted);
-            stroke-width: 2;
-            flex-shrink: 0;
         }
 
         .search-box input {
@@ -109,59 +92,6 @@
             color: var(--text);
         }
 
-        .search-box input::placeholder {
-            color: var(--muted);
-        }
-
-        .search-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-top: 6px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            max-height: 280px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-        }
-
-        .search-dropdown.show {
-            display: block;
-        }
-
-        .search-suggestion-item {
-            padding: 10px 14px;
-            font-size: 13px;
-            color: var(--text);
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .search-suggestion-item:last-child {
-            border-bottom: none;
-        }
-
-        .search-suggestion-item:hover, .search-suggestion-item:active {
-            background: var(--primary-bg);
-            color: var(--primary);
-        }
-
-        .suggestion-type {
-            font-size: 11px;
-            color: var(--muted);
-            background: var(--bg);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        /* IKKI USTUNLI KATALOG LAYOUTI (MUSTAQIL SCROLL) */
         .catalog-layout {
             display: flex;
             height: calc(100vh - 120px);
@@ -169,9 +99,8 @@
             overflow: hidden;
         }
 
-        /* CHAP TARAF ASOSIY KATEGORIYALAR (KENGAYTIRILGAN VA ALOHIDA SCROLL) */
         .sidebar-categories {
-            width: 165px;
+            width: 145px;
             background: #ffffff;
             border-right: 1px solid var(--border);
             overflow-y: auto;
@@ -187,7 +116,7 @@
         }
 
         .sidebar-item {
-            padding: 14px 14px;
+            padding: 14px 10px;
             font-size: 13px;
             font-weight: 500;
             color: #7d818c;
@@ -195,10 +124,6 @@
             transition: all 0.2s ease;
             line-height: 1.35;
             position: relative;
-        }
-
-        .sidebar-item:hover {
-            color: var(--text);
         }
 
         .sidebar-item.active {
@@ -219,10 +144,9 @@
             border-radius: 0 4px 4px 0;
         }
 
-        /* O'NG TARAF PANEL (ALOHIDA SCROLL) */
         .content-panel {
             flex: 1;
-            padding: 16px;
+            padding: 12px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             background: var(--card);
@@ -233,23 +157,15 @@
             font-size: 16px;
             font-weight: 800;
             color: var(--text);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .subcats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
+            gap: 10px;
         }
 
-        @media (max-width: 420px) {
-            .subcats-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 12px;
-            }
-        }
-
-        /* DUMALOQ SUBKATEGORIYA KARTALARI */
         .subcat-card {
             display: flex;
             flex-direction: column;
@@ -258,16 +174,11 @@
             cursor: pointer;
             text-decoration: none;
             color: var(--text);
-            transition: transform 0.15s;
-        }
-
-        .subcat-card:active {
-            transform: scale(0.95);
         }
 
         .subcat-img-wrap {
-            width: 72px;
-            height: 72px;
+            width: 66px;
+            height: 66px;
             border-radius: 50%;
             background: var(--bg);
             overflow: hidden;
@@ -276,7 +187,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             flex-shrink: 0;
         }
 
@@ -289,7 +200,7 @@
         .subcat-name {
             font-size: 11px;
             font-weight: 500;
-            line-height: 1.25;
+            line-height: 1.2;
             color: var(--text);
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -308,14 +219,12 @@
             height: 64px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 20px;
             z-index: 1000;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
 
         .nav-item {
@@ -328,21 +237,11 @@
             font-size: 10px;
             font-weight: 500;
             width: 20%;
-            position: relative;
-            cursor: pointer;
-            padding: 8px 0;
         }
 
-        .nav-icon-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-
-        .nav-item span {
-            pointer-events: none;
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
         }
 
         .nav-item svg {
@@ -351,18 +250,11 @@
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
-            transition: all 0.2s ease;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-            font-weight: 600;
         }
 
         .nav-item.active svg {
             stroke: var(--primary);
             fill: var(--primary-bg);
-            transform: scale(1.05);
         }
 
         .badge-count {
@@ -382,23 +274,20 @@
             padding: 0 4px;
         }
 
-        .badge-count.show {
-            display: flex;
-        }
+        .badge-count.show { display: flex; }
     </style>
 </head>
 <body>
 
     <div class="sticky-header">
-        <a onclick="goBack()" class="back-btn" title="Orqaga">
+        <a onclick="history.back()" class="back-btn" title="Orqaga">
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </a>
         <div class="search-box-wrapper">
             <div class="search-box">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+                <svg width="18" height="18" fill="none" stroke="var(--muted)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash...">
             </div>
-            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
     </div>
 
@@ -409,41 +298,28 @@
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             <span>Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item active">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
             <span>Katalog</span>
         </a>
         <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
+            <div style="position:relative;"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span>Savatcha</span>
         </a>
         <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <div style="position:relative;"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
             <span>Saralangan</span>
         </a>
         <a href="profil.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <span>Profil</span>
         </a>
     </nav>
 
     <script>
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-        }
-
-        function goBack() {
-            if (document.referrer && document.referrer !== window.location.href) {
-                window.location.href = document.referrer;
-            } else {
-                window.location.href = 'index.html';
-            }
-        }
-
         const CATEGORIES_DATA = [
             {
                 id: 1,
@@ -496,24 +372,6 @@
                     { name: "To'qima buyumlar", img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&auto=format&fit=crop&q=80" },
                     { name: "Idish-tovoqlar", img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&auto=format&fit=crop&q=80" }
                 ]
-            },
-            {
-                id: 6,
-                name: "Bolalar tovarlari",
-                subcats: [
-                    { name: "O'yinchoqlar", img: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Bolalar kiyimlari", img: "https://images.unsplash.com/photo-1522771930-78848d9293e8?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Maktab jihozlari", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=200&auto=format&fit=crop&q=80" }
-                ]
-            },
-            {
-                id: 7,
-                name: "Elektronika",
-                subcats: [
-                    { name: "Smartfonlar", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Quloqchinlar", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Zaryadlovchilar", img: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=200&auto=format&fit=crop&q=80" }
-                ]
             }
         ];
 
@@ -535,9 +393,9 @@
                 <div class="panel-title">${currentCat.name}</div>
                 <div class="subcats-grid">
                     ${currentCat.subcats.map(sub => `
-                        <a href="products.html?cat_id=${currentCat.id}&sub=${encodeURIComponent(sub.name)}" class="subcat-card">
+                        <a href="products.html?sub=${encodeURIComponent(sub.name)}" class="subcat-card">
                             <div class="subcat-img-wrap">
-                                <img src="${sub.img}" alt="${sub.name}" class="subcat-img" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80'">
+                                <img src="${sub.img}" alt="${sub.name}" class="subcat-img">
                             </div>
                             <span class="subcat-name">${sub.name}</span>
                         </a>
@@ -549,58 +407,6 @@
         function selectCategory(id) {
             activeCatId = id;
             renderCatalog();
-        }
-
-        function handleLiveSearch(e) {
-            const query = e.target.value.trim().toLowerCase();
-            const dropdown = document.getElementById('searchDropdown');
-
-            if (query.length === 0) {
-                dropdown.classList.remove('show');
-                dropdown.innerHTML = '';
-                return;
-            }
-
-            let html = `<div class="search-suggestion-item" onclick="document.getElementById('searchDropdown').classList.remove('show'); window.location.href='search.html?q=${encodeURIComponent(query)}'">
-                <span>"${query}" bo'yicha qidirish</span>
-                <span class="suggestion-type">Natijalar</span>
-            </div>`;
-
-            dropdown.innerHTML = html;
-            dropdown.classList.add('show');
-        }
-
-        function handleSearch(e) {
-            if (e.key === 'Enter') {
-                const query = document.getElementById('searchInput').value.trim();
-                const dropdown = document.getElementById('searchDropdown');
-                if (dropdown) dropdown.classList.remove('show');
-                if (query) {
-                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-                }
-            }
-        }
-
-        document.addEventListener('click', (e) => {
-            const wrapper = document.querySelector('.search-box-wrapper');
-            const dropdown = document.getElementById('searchDropdown');
-            if (wrapper && !wrapper.contains(e.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-
-        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
-        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
-
-        if (favs.length > 0) { 
-            document.getElementById('favBadge').textContent = favs.length; 
-            document.getElementById('favBadge').classList.add('show'); 
-        }
-
-        let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-        if (totalCartCount > 0) { 
-            document.getElementById('cartBadge').textContent = totalCartCount; 
-            document.getElementById('cartBadge').classList.add('show'); 
         }
 
         renderCatalog();
