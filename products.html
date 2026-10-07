@@ -222,32 +222,34 @@
             border: 1px solid var(--border);
         }
 
-        .heart-icon {
+        .heart-icon-sm {
             position: absolute;
             top: 10px;
             right: 10px;
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: transparent;
-            border: none;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
-        .heart-icon svg {
-            width: 22px;
-            height: 22px;
+        .heart-icon-sm svg {
+            width: 18px;
+            height: 18px;
             fill: none;
             stroke: #1f2026;
             stroke-width: 1.8;
             transition: all 0.2s;
         }
 
-        .heart-icon.liked svg {
+        .heart-icon-sm.liked svg {
             fill: #ff3b30;
             stroke: #ff3b30;
         }
@@ -316,18 +318,20 @@
             background: #ffffff;
         }
 
-        .badge-original {
+        .badge-dynamic-sm {
             position: absolute;
             bottom: 8px;
             left: 8px;
-            background: #00c853;
             color: #fff;
             font-size: 10px;
             font-weight: 700;
-            padding: 3px 8px;
+            padding: 4px 8px;
             border-radius: 6px;
             z-index: 4;
             pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 3px;
         }
 
         .product-info {
@@ -418,7 +422,7 @@
             color: var(--text);
         }
 
-        .cart-btn {
+        .cart-btn-sm {
             width: 100%;
             height: 36px;
             background: var(--primary-bg);
@@ -435,12 +439,44 @@
             margin-top: auto;
         }
 
-        .cart-btn svg {
+        .cart-btn-sm svg {
             width: 18px;
             height: 18px;
             fill: none;
             stroke: currentColor;
             stroke-width: 2;
+        }
+
+        .cart-counter-box-sm {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 36px;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 0 6px;
+            margin-top: auto;
+            border: 1px solid var(--border);
+        }
+
+        .counter-btn-sm {
+            background: #fff;
+            border: 1px solid var(--border);
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .counter-val-sm {
+            font-size: 14px;
+            font-weight: 700;
         }
 
         .bottom-nav {
@@ -578,12 +614,12 @@
         const catId = urlParams.get('cat_id') || 1;
 
         const PRODUCTS = [
-            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", rating: 4.9, comments: 124, images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
-            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", rating: 4.8, comments: 92, images: ["https://picsum.photos/300/300?random=2"] },
-            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", rating: 5.0, comments: 310, images: ["https://picsum.photos/300/300?random=3", "https://picsum.photos/300/300?random=31", "https://picsum.photos/300/300?random=32", "https://picsum.photos/300/300?random=33"] },
-            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", rating: 4.7, comments: 45, images: ["https://picsum.photos/300/300?random=4"] },
-            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", rating: 4.9, comments: 178, images: ["https://picsum.photos/300/300?random=5", "https://picsum.photos/300/300?random=51"] },
-            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", rating: 4.8, comments: 89, images: ["https://picsum.photos/300/300?random=6"] }
+            { id: 1, category_id: 1, name: "Qishki issiq qora kurtka", price: "450 000 so'm", oldPrice: "680 000 so'm", discount: "↓ 33%", badgeType: "original", rating: 4.9, comments: 124, images: ["https://picsum.photos/300/300?random=1", "https://picsum.photos/300/300?random=11", "https://picsum.photos/300/300?random=12"] },
+            { id: 2, category_id: 1, name: "Sportivniy stilimdagi kurtka", price: "380 000 so'm", oldPrice: "500 000 so'm", discount: "↓ 24%", badgeType: "chegirma", rating: 4.8, comments: 92, images: ["https://picsum.photos/300/300?random=2"] },
+            { id: 3, category_id: 2, name: "Uy uchun yumshoq tapichka", price: "45 000 so'm", oldPrice: "80 000 so'm", discount: "↓ 43%", badgeType: "arzonlashdi", rating: 5.0, comments: 310, images: ["https://picsum.photos/300/300?random=3", "https://picsum.photos/300/300?random=31"] },
+            { id: 4, category_id: 3, name: "Bahorgi qora shapka", price: "35 000 so'm", oldPrice: "60 000 so'm", discount: "↓ 41%", badgeType: "none", rating: 4.7, comments: 45, images: ["https://picsum.photos/300/300?random=4", "https://picsum.photos/300/300?random=41"] },
+            { id: 5, category_id: 4, name: "Ayollar uchun zamonaviy ko'ylak", price: "220 000 so'm", oldPrice: "350 000 so'm", discount: "↓ 37%", badgeType: "arzonlashdi", rating: 4.9, comments: 178, images: ["https://picsum.photos/300/300?random=5", "https://picsum.photos/300/300?random=51"] },
+            { id: 6, category_id: 5, name: "Paxtadan tayyorlangan ichki kiyimlar to'plami", price: "90 000 so'm", oldPrice: "150 000 so'm", discount: "↓ 40%", badgeType: "original", rating: 4.8, comments: 89, images: ["https://picsum.photos/300/300?random=6"] }
         ];
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
@@ -607,10 +643,39 @@
                 const pImages = p.images || [p.img || "https://picsum.photos/300/300"];
                 const hasMultipleImages = pImages.length > 1;
                 const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
+                const defaultSize = p.sizes ? p.sizes[0] : null;
+                const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+
+                let badgeHtml = '';
+                if (p.badgeType === 'original') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
+                } else if (p.badgeType === 'chegirma') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada</div>`;
+                } else if (p.badgeType === 'arzonlashdi') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
+                }
+
+                let btnHtml = '';
+                if (!cartItem) {
+                    btnHtml = `
+                        <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            <span>Savatga</span>
+                        </button>
+                    `;
+                } else {
+                    btnHtml = `
+                        <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                            <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                            <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                            <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)">+</button>
+                        </div>
+                    `;
+                }
 
                 return `
-                    <div class="product-card">
-                        <button class="heart-icon ${isLiked}" onclick="toggleHeart(event, ${p.id})">
+                    <div class="product-card" id="product-card-${p.id}">
+                        <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
                             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </button>
                         <div class="product-img-box" data-product-id="${p.id}">
@@ -624,12 +689,12 @@
                                     ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
                                 </div>
                             ` : ''}
-                            <div class="badge-original">✓ ORIGINAL</div>
+                            ${badgeHtml}
                         </div>
                         <div class="product-info" onclick="goToProduct(${p.id})">
                             <div class="price-row">
                                 <span class="main-price">${p.price}</span>
-                                <span class="discount-tag">${p.discount}</span>
+                                ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${p.discount}</span>` : ''}
                             </div>
                             <div class="old-prices">
                                 <span class="price-old">${p.oldPrice}</span>
@@ -647,10 +712,9 @@
                                 </div>
                             </div>
 
-                            <button class="cart-btn" onclick="addToCart(event, ${p.id})">
-                                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                <span>Savatga</span>
-                            </button>
+                            <div class="card-action-container-${p.id}">
+                                ${btnHtml}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -845,17 +909,69 @@
                 favs.push(id);
             }
             localStorage.setItem('fav_products', JSON.stringify(favs));
-            renderProducts(getCategoryProducts());
+            
+            const btn = e.currentTarget;
+            btn.classList.toggle('liked', favs.includes(id));
             updateBadges();
         }
 
-        function addToCart(e, id) {
-            e.stopPropagation();
+        function updateCardAction(id) {
+            const actionContainer = document.querySelector(`.card-action-container-${id}`);
+            if (!actionContainer) return;
+
             let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
-            const prod = products.find(p => p.id === id);
+            let prod = products.find(p => p.id === id);
+            let defaultSize = prod && prod.sizes ? prod.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+
+            if (!cartItem) {
+                actionContainer.innerHTML = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>Savatga</span>
+                    </button>
+                `;
+            } else {
+                actionContainer.innerHTML = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${id}, 1)">+</button>
+                    </div>
+                `;
+            }
+        }
+
+        function addSimilarToCart(id) {
+            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let prod = products.find(p => p.id === id);
             if (prod) {
-                cart.push(prod);
+                let defaultSize = prod.sizes ? prod.sizes[0] : null;
+                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+                if (!cartItem) {
+                    cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
+                } else {
+                    cartItem.qty = (cartItem.qty || 1) + 1;
+                }
                 localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateCardAction(id);
+                updateBadges();
+            }
+        }
+
+        function changeSimilarQty(id, delta) {
+            let products = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+            let prod = products.find(p => p.id === id);
+            if (!prod) return;
+            let defaultSize = prod.sizes ? prod.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+            if (cartItem) {
+                cartItem.qty = (cartItem.qty || 1) + delta;
+                if (cartItem.qty <= 0) {
+                    cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
+                }
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateCardAction(id);
                 updateBadges();
             }
         }
@@ -872,8 +988,10 @@
             } else {
                 favBadge.classList.remove('show');
             }
-            if (cart.length > 0) {
-                cartBadge.textContent = cart.length;
+            
+            let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+            if (totalCartCount > 0) {
+                cartBadge.textContent = totalCartCount;
                 cartBadge.classList.add('show');
             } else {
                 cartBadge.classList.remove('show');
