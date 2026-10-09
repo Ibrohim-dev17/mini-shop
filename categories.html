@@ -473,7 +473,7 @@
             }
         ];
 
-        // Barcha mahsulotlar bazasi (qidiruv uchun)
+        // Mahsulotlar bazasi (qidiruv uchun)
         const ALL_PRODUCTS_DB = [
             { id: 101, name: "Ayollar uchun zamonaviy oq ko'ylak", subcat: "Ko'ylaklar" },
             { id: 102, name: "Kechki qora libos", subcat: "Ko'ylaklar" },
@@ -595,10 +595,10 @@
             document.getElementById('searchInput').value = item;
             document.getElementById('searchDropdown').classList.remove('show');
             saveSearchQuery(item);
-            window.location.href = `search.html?q=${encodeURIComponent(item)}`;
+            window.location.href = `products.html?q=${encodeURIComponent(item)}`;
         }
 
-        // BARCHA KATEGORIYA VA MAHSULOTLAR ICHIDAN TEZKOR (LIVE) QIDIRISH
+        // Barcha kategoriya, kichik kategoriya va mahsulotlar bo'yicha tezkort qidirish
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -608,29 +608,43 @@
                 return;
             }
 
+            let matchedMainCats = [];
             let matchedSubcats = [];
             let matchedProducts = [];
 
-            // Barcha asosiy va kichik kategoriyalardan qidirish
+            // 1. Asosiy kategoriyalardan qidirish
             CATEGORIES_DATA.forEach(cat => {
+                if (cat.name.toLowerCase().includes(val)) {
+                    matchedMainCats.push({ catId: cat.id, catName: cat.name });
+                }
+                // 2. Kichik kategoriyalardan qidirish
                 cat.subcats.forEach(sub => {
-                    if (sub.name.toLowerCase().includes(val) || cat.name.toLowerCase().includes(val)) {
+                    if (sub.name.toLowerCase().includes(val)) {
                         matchedSubcats.push({ catId: cat.id, subName: sub.name, catName: cat.name });
                     }
                 });
             });
 
-            // Barcha mahsulotlar bazasidan qidirish
+            // 3. Mahsulotlar bazasidan qidirish
             matchedProducts = ALL_PRODUCTS_DB.filter(p => p.name.toLowerCase().includes(val));
 
             let html = '';
 
-            if (matchedSubcats.length > 0 || matchedProducts.length > 0) {
-                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='search.html?q=${encodeURIComponent(val)}'">
+            if (matchedMainCats.length > 0 || matchedSubcats.length > 0 || matchedProducts.length > 0) {
+                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='products.html?q=${encodeURIComponent(val)}'">
                     <span>"${val}" bo'yicha barcha natijalarni ko'rish</span>
                     <span class="suggestion-type">Qidirish</span>
                 </div>`;
 
+                // Asosiy kategoriyalar
+                matchedMainCats.forEach(item => {
+                    html += `<div class="search-suggestion-item" onclick="selectCategoryFromSearch(${item.catId})">
+                        <span>${item.catName}</span>
+                        <span class="suggestion-type">Bo'lim</span>
+                    </div>`;
+                });
+
+                // Kichik kategoriyalar
                 matchedSubcats.forEach(item => {
                     html += `<div class="search-suggestion-item" onclick="selectSubcatFromSearch(${item.catId}, '${item.subName}')">
                         <span>${item.subName} <small style="color:var(--muted)">(${item.catName})</small></span>
@@ -638,6 +652,7 @@
                     </div>`;
                 });
 
+                // Mahsulotlar
                 matchedProducts.forEach(prod => {
                     html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${prod.name}'); window.location.href='product.html?id=${prod.id}'">
                         <span>${prod.name}</span>
@@ -652,6 +667,13 @@
             dropdown.classList.add('show');
         }
 
+        function selectCategoryFromSearch(catId) {
+            localStorage.setItem('active_cat_id', catId);
+            document.getElementById('searchDropdown').classList.remove('show');
+            selectCategory(catId);
+            document.getElementById('searchInput').value = '';
+        }
+
         function selectSubcatFromSearch(catId, subName) {
             localStorage.setItem('active_cat_id', catId);
             window.location.href = `products.html?cat_id=${catId}&sub=${encodeURIComponent(subName)}`;
@@ -664,7 +686,7 @@
                 if (dropdown) dropdown.classList.remove('show');
                 if (query) {
                     saveSearchQuery(query);
-                    window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                    window.location.href = `products.html?q=${encodeURIComponent(query)}`;
                 }
             }
         }
