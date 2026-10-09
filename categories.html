@@ -151,6 +151,8 @@
             background: var(--bg);
             padding: 2px 6px;
             border-radius: 4px;
+            flex-shrink: 0;
+            margin-left: 8px;
         }
 
         .history-item-left {
@@ -473,26 +475,148 @@
             }
         ];
 
-        // Mahsulotlar bazasi (qidiruv uchun)
+        // products.html dagi barcha mahsulotlar to'liq ro'yxati (har qanday so'zni qidirish uchun)
         const ALL_PRODUCTS_DB = [
-            { id: 101, name: "Ayollar uchun zamonaviy oq ko'ylak", subcat: "Ko'ylaklar" },
-            { id: 102, name: "Kechki qora libos", subcat: "Ko'ylaklar" },
-            { id: 103, name: "Yozgi yengil gulli ko'ylak", subcat: "Ko'ylaklar" },
-            { id: 104, name: "Klassik ishbilarmon ko'ylak", subcat: "Ko'ylaklar" },
-            { id: 105, name: "Qizil tantanali ko'ylak", subcat: "Ko'ylaklar" },
-            { id: 106, name: "Trikotaj kundalik ko'ylak", subcat: "Ko'ylaklar" },
-            { id: 201, name: "Ayollar uchun elegante charm sumka", subcat: "Sumkalar" },
-            { id: 202, name: "Kichik yelka sumkasi (Clutch)", subcat: "Sumkalar" },
-            { id: 203, name: "Kundalik shopper sumka", subcat: "Sumkalar" },
-            { id: 204, name: "Sport uslubidagi ruksak-sumka", subcat: "Sumkalar" },
-            { id: 205, name: "Klassik qora ish sumkasi", subcat: "Sumkalar" },
-            { id: 206, name: "Brendoviy zanjirli sumka", subcat: "Sumkalar" },
-            { id: 301, name: "Quyoshdan saqlovchi qora ko'zoynak", subcat: "Ko'zoynaklar" },
-            { id: 302, name: "Kvadrat shakldagi imidj ko'zoynagi", subcat: "Ko'zoynaklar" },
-            { id: 303, name: "Aviator uslubidagi quyosh ko'zoynagi", subcat: "Ko'zoynaklar" },
-            { id: 304, name: "Dumaloq dizaynli retro ko'zoynak", subcat: "Ko'zoynaklar" },
-            { id: 305, name: "Sportivniy velosipedchi ko'zoynagi", subcat: "Ko'zoynaklar" },
-            { id: 306, name: "Kompyuter uchun nurlar himoyali", subcat: "Ko'zoynaklar" }
+            // Ko'ylaklar
+            { id: 101, name: "Ayollar uchun zamonaviy oq ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
+            { id: 102, name: "Kechki qora libos", category_id: 1, subcat: "Ko'ylaklar" },
+            { id: 103, name: "Yozgi yengil gulli ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
+            { id: 104, name: "Klassik ishbilarmon ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
+            { id: 105, name: "Qizil tantanali ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
+            { id: 106, name: "Trikotaj kundalik ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
+            // Kurtkalar
+            { id: 107, name: "Qishki issiq qora kurtka", category_id: 1, subcat: "Kurtkalar" },
+            { id: 108, name: "Bej rangli uzun palto-kurtka", category_id: 1, subcat: "Kurtkalar" },
+            { id: 109, name: "Qisqa charm kurtka (ko'k)", category_id: 1, subcat: "Kurtkalar" },
+            { id: 110, name: "Pushti sportivniy duxovka kurtka", category_id: 1, subcat: "Kurtkalar" },
+            { id: 111, name: "Klassik qora bolonka kurtka", category_id: 1, subcat: "Kurtkalar" },
+            { id: 112, name: "Oversize uslubdagi demi kurtka", category_id: 1, subcat: "Kurtkalar" },
+            // Ichki kiyimlar
+            { id: 113, name: "Ayollar uchun paxtali to'plam", category_id: 1, subcat: "Ichki kiyimlar" },
+            { id: 114, name: "Kruzhevnoy nafis komplekt", category_id: 1, subcat: "Ichki kiyimlar" },
+            { id: 115, name: "Kundalik bejiyos byustgalter", category_id: 1, subcat: "Ichki kiyimlar" },
+            { id: 116, name: "Sportivniy top-byustgalter", category_id: 1, subcat: "Ichki kiyimlar" },
+            { id: 117, name: "Sets-trusiki (3 talik to'plam)", category_id: 1, subcat: "Ichki kiyimlar" },
+            { id: 118, name: "Ipak uy xalati va ichki kiyim", category_id: 1, subcat: "Ichki kiyimlar" },
+            // Jinsilar
+            { id: 119, name: "Mom fit ko'k jinsi shim", category_id: 1, subcat: "Jinsilar" },
+            { id: 120, name: "Klassik qora streytch jinsi", category_id: 1, subcat: "Jinsilar" },
+            { id: 121, name: "Wide leg keng bichimli jinsi", category_id: 1, subcat: "Jinsilar" },
+            { id: 122, name: "Oq yozgi ingichka jinsi shim", category_id: 1, subcat: "Jinsilar" },
+            { id: 123, name: "Boyfriend uslubidagi yirtiq jinsi", category_id: 1, subcat: "Jinsilar" },
+            { id: 124, name: "High waist baland bel jinsi", category_id: 1, subcat: "Jinsilar" },
+            // Futbolkalar
+            { id: 125, name: "Oq bazaviy paxtali futbolka", category_id: 1, subcat: "Futbolkalar" },
+            { id: 126, name: "Qora oversize printli futbolka", category_id: 1, subcat: "Futbolkalar" },
+            { id: 127, name: "Pushti rangli yozgi polo futbolka", category_id: 1, subcat: "Futbolkalar" },
+            { id: 128, name: "Chiziqli navy stilidagi futbolka", category_id: 1, subcat: "Futbolkalar" },
+            { id: 129, name: "Bej rangli trikotaj crop-top futbolka", category_id: 1, subcat: "Futbolkalar" },
+            { id: 130, name: "Klassik kulrang sport futbolkasi", category_id: 1, subcat: "Futbolkalar" },
+            // Erkaklar kurtkalari
+            { id: 201, name: "Erkaklar uchun qishki qora kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
+            { id: 202, name: "Klassik jigar rang charm kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
+            { id: 203, name: "Sportivniy duxovka kurtka (ko'k)", category_id: 2, subcat: "Erkaklar kurtkalari" },
+            { id: 204, name: "Erkaklar uchun uzun palto", category_id: 2, subcat: "Erkaklar kurtkalari" },
+            { id: 205, name: "Haki rangli parka kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
+            { id: 206, name: "Yengil bomber kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
+            // Sportivniy
+            { id: 207, name: "Erkaklar uchun qora sport kostyumi", category_id: 2, subcat: "Sportivniy" },
+            { id: 208, name: "Kulrang fleece sportivniy", category_id: 2, subcat: "Sportivniy" },
+            { id: 209, name: "Brendoviy yugurish kostyumi", category_id: 2, subcat: "Sportivniy" },
+            { id: 210, name: "Paxtali sport shim va xudi", category_id: 2, subcat: "Sportivniy" },
+            { id: 211, name: "Kantli qora sport shimi", category_id: 2, subcat: "Sportivniy" },
+            { id: 212, name: "Ochiq ko'k rangli sport xudi", category_id: 2, subcat: "Sportivniy" },
+            // Erkaklar ko'ylaklari
+            { id: 213, name: "Klassik oq erkaklar ko'ylagi", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
+            { id: 214, name: "Havo rang ishbilarmon ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
+            { id: 215, name: "Kletkali kundalik ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
+            { id: 216, name: "Qora rangli zamonaviy ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
+            { id: 217, name: "Yozgi koton yengil ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
+            { id: 218, name: "Stilniy lin ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
+            // Erkaklar jinsilari
+            { id: 219, name: "Erkaklar uchun klassik ko'k jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
+            { id: 220, name: "Qora toraytirilgan slim jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
+            { id: 221, name: "Ochiq rangli yozgi jinsi shim", category_id: 2, subcat: "Erkaklar jinsilari" },
+            { id: 222, name: "Qulay streytch qora jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
+            { id: 223, name: "Jibakli qalin qishki jinsi shim", category_id: 2, subcat: "Erkaklar jinsilari" },
+            { id: 224, name: "Zarg'aldoq ip naqshli jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
+            // Tapichka
+            { id: 301, name: "Uy uchun yumshoq pelush tapichka", category_id: 3, subcat: "Tapichka" },
+            { id: 302, name: "Rezinali yozgi plyaj tapichkasi", category_id: 3, subcat: "Tapichka" },
+            { id: 303, name: "Ortopedik qulay uy shippagi", category_id: 3, subcat: "Tapichka" },
+            { id: 304, name: "Maza qilib yurish uchun maxsus shippak", category_id: 3, subcat: "Tapichka" },
+            { id: 305, name: "Qishki yopiq junli tapichka", category_id: 3, subcat: "Tapichka" },
+            { id: 306, name: "Massaj qiluvchi rezina tapichka", category_id: 3, subcat: "Tapichka" },
+            // Krossovkalar
+            { id: 307, name: "Sport uchun zamonaviy krossovka", category_id: 3, subcat: "Krossovkalar" },
+            { id: 308, name: "Oq rangli universal ked-krossovka", category_id: 3, subcat: "Krossovkalar" },
+            { id: 309, name: "Qora yugurish krossovkasi", category_id: 3, subcat: "Krossovkalar" },
+            { id: 310, name: "Qalin taglikli stilniy krossovka", category_id: 3, subcat: "Krossovkalar" },
+            { id: 311, name: "Basketbol uslubidagi krossovka", category_id: 3, subcat: "Krossovkalar" },
+            { id: 312, name: "Yengil to'rli yozgi krossovka", category_id: 3, subcat: "Krossovkalar" },
+            // Tuflilar
+            { id: 313, name: "Klassik qora erkaklar tuflisi", category_id: 3, subcat: "Tuflilar" },
+            { id: 314, name: "Ayollar uchun nafis poshnali tufli", category_id: 3, subcat: "Tuflilar" },
+            { id: 315, name: "Laklangan tantanali tufli", category_id: 3, subcat: "Tuflilar" },
+            { id: 316, name: "Past poshnali kundalik qulay tufli", category_id: 3, subcat: "Tuflilar" },
+            { id: 317, name: "Mokasina uslubidagi yumshoq tufli", category_id: 3, subcat: "Tuflilar" },
+            { id: 318, name: "Oksford uslubidagi charm tufli", category_id: 3, subcat: "Tuflilar" },
+            // Qishki etiklar
+            { id: 319, name: "Qishki issiq mo'ynali etik", category_id: 3, subcat: "Qishki etiklar" },
+            { id: 320, name: "Erkaklar uchun qalin taglik botinkasi", category_id: 3, subcat: "Qishki etiklar" },
+            { id: 321, name: "Ayollar uchun zamsh qishki etik", category_id: 3, subcat: "Qishki etiklar" },
+            { id: 322, name: "Suv o'tkazmaydigan termobotinka", category_id: 3, subcat: "Qishki etiklar" },
+            { id: 323, name: "Qisqartirilgan qishki botinka", category_id: 3, subcat: "Qishki etiklar" },
+            { id: 324, name: "Trekking turistik qishki etik", category_id: 3, subcat: "Qishki etiklar" },
+            // Shapkalar
+            { id: 401, name: "Bahorgi qora shapka", category_id: 4, subcat: "Shapkalar" },
+            { id: 402, name: "Yozgi quyosh qalpog'i (Kepka)", category_id: 4, subcat: "Shapkalar" },
+            { id: 403, name: "Qishki jun quloqchinli shapka", category_id: 4, subcat: "Shapkalar" },
+            { id: 404, name: "Stilniy panama (shlyapa)", category_id: 4, subcat: "Shapkalar" },
+            { id: 405, name: "Sportivniy brend kepka", category_id: 4, subcat: "Shapkalar" },
+            { id: 406, name: "Klassik qora bere", category_id: 4, subcat: "Shapkalar" },
+            // Sumkalar
+            { id: 407, name: "Ayollar uchun elegante charm sumka", category_id: 4, subcat: "Sumkalar" },
+            { id: 408, name: "Kichik yelka sumkasi (Clutch)", category_id: 4, subcat: "Sumkalar" },
+            { id: 409, name: "Kundalik shopper sumka", category_id: 4, subcat: "Sumkalar" },
+            { id: 410, name: "Sport uslubidagi ruksak-sumka", category_id: 4, subcat: "Sumkalar" },
+            { id: 411, name: "Klassik qora ish sumkasi", category_id: 4, subcat: "Sumkalar" },
+            { id: 412, name: "Brendoviy zanjirli sumka", category_id: 4, subcat: "Sumkalar" },
+            // Soatlar
+            { id: 413, name: "Smart qo'l soati (Smart Watch)", category_id: 4, subcat: "Soatlar" },
+            { id: 414, name: "Klassik metall tasmali qo'l soati", category_id: 4, subcat: "Soatlar" },
+            { id: 415, name: "Ayollar uchun nafis tillarang soat", category_id: 4, subcat: "Soatlar" },
+            { id: 416, name: "Sport uslubidagi elektron soat", category_id: 4, subcat: "Soatlar" },
+            { id: 417, name: "Charm tasmali erkaklar soati", category_id: 4, subcat: "Soatlar" },
+            { id: 418, name: "Minimalistik dizaynli qo'l soati", category_id: 4, subcat: "Soatlar" },
+            // Ko'zoynaklar
+            { id: 419, name: "Quyoshdan saqlovchi qora ko'zoynak", category_id: 4, subcat: "Ko'zoynaklar" },
+            { id: 420, name: "Kvadrat shakldagi imidj ko'zoynagi", category_id: 4, subcat: "Ko'zoynaklar" },
+            { id: 421, name: "Aviator uslubidagi quyosh ko'zoynagi", category_id: 4, subcat: "Ko'zoynaklar" },
+            { id: 422, name: "Dumaloq dizaynli retro ko'zoynak", category_id: 4, subcat: "Ko'zoynaklar" },
+            { id: 423, name: "Sportivniy velosipedchi ko'zoynagi", category_id: 4, subcat: "Ko'zoynaklar" },
+            { id: 424, name: "Kompyuter uchun nurlar himoyali ko'zoynak", category_id: 4, subcat: "Ko'zoynaklar" },
+            // Uy tapichkalari
+            { id: 501, name: "Uy uchun pelushli issiq tapichka", category_id: 5, subcat: "Uy tapichkalari" },
+            { id: 502, name: "Erkaklar uchun yumshoq uy shippagi", category_id: 5, subcat: "Uy tapichkalari" },
+            { id: 503, name: "Bolalar va kattalar uchun qiziqarli tapichka", category_id: 5, subcat: "Uy tapichkalari" },
+            { id: 504, name: "Yengil ipak uy shippagi", category_id: 5, subcat: "Uy tapichkalari" },
+            { id: 505, name: "Ortopedik uy poyabzali", category_id: 5, subcat: "Uy tapichkalari" },
+            { id: 506, name: "Qalin taglikli qishki uy shippagi", category_id: 5, subcat: "Uy tapichkalari" },
+            // To'qima buyumlar
+            { id: 507, name: "Yumshoq yotoq yopinchig'i (Pled)", category_id: 5, subcat: "To'qima buyumlar" },
+            { id: 508, name: "Paxtali choyshablar to'plami (Postel)", category_id: 5, subcat: "To'qima buyumlar" },
+            { id: 509, name: "Dekorativ yostiqlar to'plami", category_id: 5, subcat: "To'qima buyumlar" },
+            { id: 510, name: "Oshxona uchun sochiqlar to'plami", category_id: 5, subcat: "To'qima buyumlar" },
+            { id: 511, name: "Hammom uchun katta paxta sochiq", category_id: 5, subcat: "To'qima buyumlar" },
+            { id: 512, name: "Stilniy stol yopig'i (Skatert)", category_id: 5, subcat: "To'qima buyumlar" },
+            // Idish-tovoqlar
+            { id: 513, name: "Keramika piyola va kosalar to'plami", category_id: 5, subcat: "Idish-tovoqlar" },
+            { id: 514, name: "Zanglamaydigan po'latdan kastrulkalar to'plami", category_id: 5, subcat: "Idish-tovoqlar" },
+            { id: 515, name: "Granit qoplamali yopishmaydigan tovada", category_id: 5, subcat: "Idish-tovoqlar" },
+            { id: 516, name: "Shisha stakanlar to'plami (6 talik)", category_id: 5, subcat: "Idish-tovoqlar" },
+            { id: 517, name: "Choynak va finjonlar to'plami", category_id: 5, subcat: "Idish-tovoqlar" },
+            { id: 518, name: "Oshxona pichoqlari jamlanmasi", category_id: 5, subcat: "Idish-tovoqlar" }
         ];
 
         let activeCatId = parseInt(localStorage.getItem('active_cat_id')) || 1;
@@ -598,7 +722,7 @@
             window.location.href = `products.html?q=${encodeURIComponent(item)}`;
         }
 
-        // Barcha kategoriya, kichik kategoriya va mahsulotlar bo'yicha tezkort qidirish
+        // Barcha kategoriya, kichik kategoriya va jami mahsulotlar bo'yicha to'liq qidirish
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -625,7 +749,7 @@
                 });
             });
 
-            // 3. Mahsulotlar bazasidan qidirish
+            // 3. Jami mahsulotlar bazasidan to'liq qidirish (masalan: "havo", "kurtka", "qora" va hokazo)
             matchedProducts = ALL_PRODUCTS_DB.filter(p => p.name.toLowerCase().includes(val));
 
             let html = '';
@@ -652,8 +776,8 @@
                     </div>`;
                 });
 
-                // Mahsulotlar
-                matchedProducts.forEach(prod => {
+                // Mahsulotlar (barcha kategoriya ichidagilar)
+                matchedProducts.slice(0, 10).forEach(prod => {
                     html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${prod.name}'); window.location.href='product.html?id=${prod.id}'">
                         <span>${prod.name}</span>
                         <span class="suggestion-type">Mahsulot</span>
