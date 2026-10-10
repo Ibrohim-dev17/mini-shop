@@ -36,19 +36,21 @@
             overflow-x: hidden;
         }
 
-        /* Telegram header ostida qolib ketmasligi uchun yuqoridan joy tashlaymiz */
+        /* Telegram "× Yopish" tugmasi ostida qolib ketmasligi uchun pastroqqa tushirildi */
         .sticky-header {
             position: sticky;
             top: 0;
             background: #ffffff;
             z-index: 999;
             padding: 12px 16px;
+            margin-top: 48px; /* Telegram header tugmasi uchun joy */
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 12px;
             max-width: 1300px;
-            margin: 0 auto;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .back-btn {
@@ -231,7 +233,6 @@
             stroke: #ff3b30;
         }
 
-        /* Planshet va kompyuterlarda rasmlar uzunroq (vertikal) ko'rinishi uchun */
         .product-img-box {
             width: 100%;
             height: 230px;
@@ -243,9 +244,7 @@
         }
 
         @media (min-width: 768px) {
-            .product-img-box {
-                height: 270px;
-            }
+            .product-img-box { height: 270px; }
         }
 
         .card-slider-container {
@@ -399,18 +398,23 @@
         .comment-box svg { width: 14px; height: 14px; fill: none; stroke: #8b8e99; stroke-width: 2; }
         .rating-num { font-weight: 700; color: var(--text); }
 
+        /* Chiroyli yangi olov ikonka va badge */
         .last-item-badge {
             display: flex;
             align-items: center;
             gap: 3px;
-            color: #ff6b00;
+            color: #ff4500;
             font-weight: 700;
             font-size: 11px;
-            background: #fff3ed;
+            background: #fff2ee;
             padding: 2px 6px;
             border-radius: 6px;
         }
-        .last-item-badge svg { width: 12px; height: 12px; fill: #ff6b00; }
+        .last-item-badge svg {
+            width: 13px;
+            height: 13px;
+            fill: #ff4500;
+        }
 
         .cart-btn-sm {
             width: 100%;
@@ -430,19 +434,29 @@
         }
         .cart-btn-sm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
 
+        /* "Kelganda xabar qilish" tugmasi oddiy va bosiladigan rangda */
         .notify-btn-sm {
             width: 100%;
             height: 36px;
-            background: #f4f5f7;
-            color: var(--muted);
+            background: #f1f2f6;
+            color: #555869;
             border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             margin-top: auto;
+            transition: all 0.2s;
         }
-        .notify-btn-sm:hover { border-color: var(--primary); color: var(--primary); }
+        .notify-btn-sm:hover {
+            background: #e2e4ed;
+            color: var(--text);
+        }
+        .notify-btn-sm.active-notified {
+            background: #e1fef0;
+            color: #00875a;
+            border-color: #00c853;
+        }
 
         .cart-counter-box-sm {
             display: flex;
@@ -535,7 +549,7 @@
 </head>
 <body>
 
-    <!-- Telegram headeri ostida qolmasligi uchun ustki qism sozlandi -->
+    <!-- Telegram Yopish tugmasidan pastga tushirildi -->
     <div class="sticky-header">
         <a href="categories.html" class="back-btn" title="Orqaga">
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -583,6 +597,7 @@
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+        let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
 
         function initPage() {
             if (typeof allProducts === 'undefined' || allProducts.length === 0) {
@@ -638,6 +653,7 @@
                 let stock = p.stock !== undefined ? p.stock : 10;
                 let isOut = stock <= 0;
                 let isLast = stock === 1;
+                let isNotified = notifiedList.includes(p.id);
 
                 let badgeHtml = '';
                 if (p.badgeType === 'original') {
@@ -660,7 +676,11 @@
 
                 let btnHtml = '';
                 if (isOut) {
-                    btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); alert('Mahsulot kelganda sizga xabar beriladi!')">Kelganda xabar qilish</button>`;
+                    if (isNotified) {
+                        btnHtml = `<button class="notify-btn-sm active-notified" disabled>✓ Xabar beriladi</button>`;
+                    } else {
+                        btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); setNotify(${p.id})">Kelganda xabar qilish</button>`;
+                    }
                 } else if (!cartItem) {
                     btnHtml = `
                         <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
@@ -721,7 +741,7 @@
                                 </div>
                                 ${isLast ? `
                                     <div class="last-item-badge">
-                                        <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                                        <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                         <span>Oxirgisi</span>
                                     </div>
                                 ` : ''}
@@ -743,6 +763,14 @@
                     }
                 });
             }, 50);
+        }
+
+        function setNotify(id) {
+            if (!notifiedList.includes(id)) {
+                notifiedList.push(id);
+                localStorage.setItem('notified_products', JSON.stringify(notifiedList));
+                renderProducts(allProducts);
+            }
         }
 
         function handleCardScroll(e, originalLen) {
