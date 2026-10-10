@@ -735,13 +735,11 @@
                 document.getElementById('pageTitle').textContent = `${t.products_title}: "${searchQueryParam}"`;
                 
                 let q = searchQueryParam.toLowerCase();
-                // 1. Aniq topilgan mahsulotlar va ularning kategoriyasidagilar
                 let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(q) || getLocalized(p.subcat).toLowerCase().includes(q));
                 
                 let categoryIds = [...new Set(exactMatches.map(p => p.category_id))];
                 let sameCategoryProducts = allProducts.filter(p => categoryIds.includes(p.category_id) && !exactMatches.includes(p));
 
-                // 2. Boshqa kategoriyalardan "Siz uchun tavsiyalar" (tasodifiy 50tagacha to'ldirish)
                 let recommendations = allProducts.filter(p => !exactMatches.includes(p) && !sameCategoryProducts.includes(p));
                 recommendations.sort(() => Math.random() - 0.5);
 
@@ -978,7 +976,7 @@
         function selectHistoryItem(item) {
             const input = document.getElementById('searchInput');
             input.value = item;
-            input.blur(); // klaviaturani yopish
+            input.blur();
             document.getElementById('searchDropdown').classList.remove('show');
             saveSearchQuery(item);
             window.location.href = `products.html?q=${encodeURIComponent(item)}`;
@@ -1028,7 +1026,7 @@
             const dropdown = document.getElementById('searchDropdown');
             if (dropdown) dropdown.classList.remove('show');
             const input = document.getElementById('searchInput');
-            if (input) input.blur(); // klaviaturani va fokusni yopish
+            if (input) input.blur();
             saveSearchQuery(query);
             window.location.href = `products.html?q=${encodeURIComponent(query)}`;
         }
@@ -1042,7 +1040,7 @@
             }
         }
 
-        // Ekranning istalgan joyiga tekkanda qidiruv dropdowni va fokus/klaviaturani yopish
+        // Ekranning istalgan joyiga tekkanda, sahifani surganda yoki teginish bo'lganda dropdown va klaviaturani yopish
         document.addEventListener('click', (e) => {
             const wrapper = document.querySelector('.search-box-wrapper');
             const dropdown = document.getElementById('searchDropdown');
@@ -1056,6 +1054,18 @@
         window.addEventListener('scroll', () => {
             const dropdown = document.getElementById('searchDropdown');
             if (dropdown) dropdown.classList.remove('show');
+            const input = document.getElementById('searchInput');
+            if (input) input.blur();
+        });
+
+        window.addEventListener('touchstart', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                if (dropdown) dropdown.classList.remove('show');
+                const input = document.getElementById('searchInput');
+                if (input) input.blur();
+            }
         });
 
         function toggleNotify(id) {
