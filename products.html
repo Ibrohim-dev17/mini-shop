@@ -615,7 +615,7 @@
 <body>
 
     <div class="sticky-header">
-        <a href="javascript:history.back()" class="back-btn" title="Orqaga">
+        <a href="categories.html" class="back-btn" title="Orqaga">
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </a>
         <div class="search-box-wrapper">
@@ -725,7 +725,7 @@
         function initPage() {
             applyTranslations();
             if (typeof allProducts === 'undefined' || allProducts.length === 0) {
-                setTimeout(initPage, 100);
+                setTimeout(initPage, 50);
                 return;
             }
 
@@ -749,8 +749,10 @@
                 if (subName) {
                     let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
                     document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
+                    // Subkategoriya bo'yicha aniq filtrlash
                     currentProductsList = allProducts.filter(p => getLocalized(p.subcat).trim().toLowerCase() === decodedSub);
                 } else if (catId) {
+                    // Kategoriya ID bo'yicha aniq filtrlash
                     currentProductsList = allProducts.filter(p => String(p.category_id) === String(catId));
                 } else {
                     currentProductsList = allProducts;
@@ -906,7 +908,7 @@
                         ` : ''}
                     </div>
                 </div>
-                <div class="card-action-container">
+                <div class="card-action-container card-action-container-${p.id}">
                     ${btnHtml}
                 </div>
             `;
@@ -1040,7 +1042,6 @@
             }
         }
 
-        // Ekranning istalgan joyiga tekkanda, sahifani surganda yoki teginish bo'lganda dropdown va klaviaturani yopish
         document.addEventListener('click', (e) => {
             const wrapper = document.querySelector('.search-box-wrapper');
             const dropdown = document.getElementById('searchDropdown');
@@ -1075,7 +1076,7 @@
                 notifiedList.push(id);
             }
             localStorage.setItem('notified_products', JSON.stringify(notifiedList));
-            updateCardInfoOnly(id);
+            updateCardActionUI(id);
         }
 
         function handleCardScroll(e, originalLen) {
@@ -1130,7 +1131,7 @@
                         cartItem.qty += 1;
                     }
                     localStorage.setItem('cart_products', JSON.stringify(cart));
-                    updateCardInfoOnly(id);
+                    updateCardActionUI(id);
                     updateBadges();
                 } else {
                     alert("Omborda yetarli mahsulot qolmagan!");
@@ -1156,9 +1157,52 @@
                     cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
                 }
                 localStorage.setItem('cart_products', JSON.stringify(cart));
-                updateCardInfoOnly(id);
+                updateCardActionUI(id);
                 updateBadges();
             }
+        }
+
+        function updateCardActionUI(id) {
+            const actionContainer = document.querySelector(`.card-action-container-${id}`);
+            if (!actionContainer) {
+                updateCardInfoOnly(id);
+                return;
+            }
+
+            const p = allProducts.find(item => item.id === id);
+            if (!p) return;
+
+            const defaultSize = p.sizes ? p.sizes[0] : null;
+            const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+            let stock = p.stock !== undefined ? p.stock : 10;
+            let isOut = stock <= 0;
+            let isNotified = notifiedList.includes(id);
+
+            let btnHtml = '';
+            if (isOut) {
+                if (isNotified) {
+                    btnHtml = `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`;
+                } else {
+                    btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
+                }
+            } else if (!cartItem) {
+                btnHtml = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>${t.cart_btn}</span>
+                    </button>
+                `;
+            } else {
+                let maxReached = cartItem.qty >= stock;
+                btnHtml = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                    </div>
+                `;
+            }
+            actionContainer.innerHTML = btnHtml;
         }
 
         function updateBadges() {
