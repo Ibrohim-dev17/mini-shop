@@ -32,23 +32,26 @@
         body {
             background-color: var(--bg);
             color: var(--text);
+            padding-top: 75px; /* Fixed header ostida qolib ketmasligi uchun */
             padding-bottom: 120px;
             overflow-x: hidden;
         }
 
-        /* Telegram Yopish tugmasidan pastda, sahifaning yuqori qismida joylashadi */
+        /* Qidiruv paneli ekranning eng yuqori qismida qotib turadi */
         .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             background: #ffffff;
-            z-index: 99;
+            z-index: 1000;
             padding: 12px 16px;
-            margin-top: 50px; /* Telegram yopish tugmasi uchun joy */
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 12px;
             max-width: 1300px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
         }
 
         .back-btn {
@@ -117,7 +120,6 @@
             color: var(--text);
         }
 
-        /* Qidiruv tarixi va natijalar dropdown menyusi */
         .search-dropdown {
             position: absolute;
             top: 100%;
@@ -237,33 +239,29 @@
             border: 1px solid var(--border);
         }
 
-        /* Yurak tugmasi: shaffof shisha foni bilan, rasm ham ko'rinadi */
+        /* Yurak tugmasi: o'ta shaffof fon va aniq ko'rinadigan rasm */
         .heart-icon-sm {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 5;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: transform 0.15s ease;
-        }
-        .heart-icon-sm:active {
-            transform: scale(0.9);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
         .heart-icon-sm svg {
-            width: 18px;
-            height: 18px;
+            width: 17px;
+            height: 17px;
             fill: none;
             stroke: #1f2026;
             stroke-width: 2;
@@ -440,7 +438,7 @@
         .comment-box svg { width: 14px; height: 14px; fill: none; stroke: #8b8e99; stroke-width: 2; }
         .rating-num { font-weight: 700; color: var(--text); }
 
-        /* Haqiqiy olov shaklidagi yangi SVG ikonka */
+        /* Haqiqiy alanga ko'rinishidagi yangi olov SVG ikonka */
         .last-item-badge {
             display: flex;
             align-items: center;
@@ -453,8 +451,8 @@
             border-radius: 6px;
         }
         .last-item-badge svg {
-            width: 14px;
-            height: 14px;
+            width: 13px;
+            height: 13px;
             fill: #ff3d00;
         }
 
@@ -629,11 +627,18 @@
         const catId = urlParams.get('cat_id') || '';
         const subName = urlParams.get('sub') || '';
         const searchQueryParam = urlParams.get('q') || '';
+        const currentLang = localStorage.getItem('selected_lang') || 'uz';
 
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
         let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
         let searchHistory = JSON.parse(localStorage.getItem('search_history')) || [];
+
+        function getLocalized(field) {
+            if (!field) return '';
+            if (typeof field === 'object') return field[currentLang] || field['uz'] || '';
+            return field;
+        }
 
         function initPage() {
             if (typeof allProducts === 'undefined' || allProducts.length === 0) {
@@ -654,11 +659,18 @@
                 let q = searchQueryParam.toLowerCase();
                 document.getElementById('searchInput').value = searchQueryParam;
                 document.getElementById('pageTitle').textContent = `Qidiruv: "${searchQueryParam}"`;
-                list = allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.subcat && p.subcat.toLowerCase().includes(q)));
+                list = allProducts.filter(p => {
+                    let n = getLocalized(p.name).toLowerCase();
+                    let s = getLocalized(p.subcat).toLowerCase();
+                    return n.includes(q) || s.includes(q);
+                });
             } else if (subName) {
                 let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
                 document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
-                list = allProducts.filter(p => p.subcat && p.subcat.trim().toLowerCase() === decodedSub);
+                list = allProducts.filter(p => {
+                    let s = getLocalized(p.subcat).trim().toLowerCase();
+                    return s === decodedSub;
+                });
             } else if (catId) {
                 list = allProducts.filter(p => String(p.category_id) === String(catId));
                 document.getElementById('pageTitle').textContent = "Bo'lim mahsulotlari";
@@ -686,6 +698,7 @@
                 const defaultSize = p.sizes ? p.sizes[0] : null;
                 const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
 
+                const prodName = getLocalized(p.name);
                 let stock = p.stock !== undefined ? p.stock : 10;
                 let isOut = stock <= 0;
                 let isLast = stock === 1;
@@ -743,7 +756,7 @@
                         <div class="product-img-box" onclick="goToProduct(${p.id})">
                             <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
                                 ${loopedImages.map(imgUrl => `
-                                    <div class="card-slide"><img src="${imgUrl}" alt="${p.name}"></div>
+                                    <div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>
                                 `).join('')}
                             </div>
                             ${hasMultipleImages ? `
@@ -762,7 +775,7 @@
                                     <span class="price-old">${p.oldPrice}</span>
                                 </div>
                             ` : ''}
-                            <div class="product-title" title="${p.name}">${p.name}</div>
+                            <div class="product-title" title="${prodName}">${prodName}</div>
                             
                             <div class="product-rating">
                                 <div class="rating-left">
@@ -777,7 +790,7 @@
                                 </div>
                                 ${isLast ? `
                                     <div class="last-item-badge">
-                                        <svg viewBox="0 0 24 24"><path d="M12 2c0 3-4 5-4 9a4 4 0 108 0c0-4-4-6-4-9z"/><path d="M12 15a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>
+                                        <svg viewBox="0 0 24 24"><path d="M12 23c-4.97 0-9-3.58-9-8 0-3.5 2.5-6.5 4.5-9 .5-.6 1.5-.2 1.5.6 0 1.5.8 2.8 2 3.4 0-3.2 2-6 3.5-8.5.3-.5 1-.6 1.4-.2 2.6 2.6 5.1 6.1 5.1 9.7 0 4.42-4.03 8-9 8z"/></svg>
                                         <span>Oxirgisi</span>
                                     </div>
                                 ` : ''}
@@ -801,7 +814,6 @@
             }, 50);
         }
 
-        // Qidiruv va Live Search logikasi
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -810,7 +822,11 @@
                 return;
             }
 
-            let matches = allProducts.filter(p => p.name.toLowerCase().includes(val) || (p.subcat && p.subcat.toLowerCase().includes(val)));
+            let matches = allProducts.filter(p => {
+                let n = getLocalized(p.name).toLowerCase();
+                let s = getLocalized(p.subcat).toLowerCase();
+                return n.includes(val) || s.includes(val);
+            });
             
             if (matches.length === 0) {
                 dropdown.innerHTML = `<div class="search-suggestion-item" style="color:var(--muted); justify-content:center;">Hech narsa topilmadi</div>`;
@@ -818,15 +834,18 @@
                 return;
             }
 
-            dropdown.innerHTML = matches.slice(0, 6).map(p => `
-                <div class="search-suggestion-item" onclick="selectSearchItem('${p.name.replace(/'/g, "\\'")}')">
-                    <div class="history-item-left">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <span>${p.name}</span>
+            dropdown.innerHTML = matches.slice(0, 6).map(p => {
+                const prodName = getLocalized(p.name);
+                return `
+                    <div class="search-suggestion-item" onclick="selectSearchItem('${prodName.replace(/'/g, "\\'")}')">
+                        <div class="history-item-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <span>${prodName}</span>
+                        </div>
+                        <span style="font-size:11px; font-weight:700; color:var(--primary);">${p.price}</span>
                     </div>
-                    <span style="font-size:11px; font-weight:700; color:var(--primary);">${p.price}</span>
-                </div>
-            `).join('');
+                `;
+            }).join('');
             dropdown.classList.add('show');
         }
 
