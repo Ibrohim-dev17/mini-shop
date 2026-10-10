@@ -220,7 +220,7 @@
         <a href="#" class="menu-item" id="menuOrders">Mening buyurtmalarim <span>›</span></a>
         <a href="heart.html" class="menu-item" id="menuFavs">Saralanganlar <span>›</span></a>
         <a href="#" class="menu-item" id="menuPoints">Yetkazib berish punktlari <span>›</span></a>
-        
+
         <!-- Tilni o'zgartirish tugmasi qo'shilgan qism -->
         <div class="menu-item">
             <span id="langLabel">Tilni tanlang</span>
@@ -284,38 +284,42 @@
 
         // 1. Profil va Til ma'lumotlarini bazadan o'qib kelish
         async function loadProfile() {
+            let savedLang = localStorage.getItem('selected_lang');
+            
             try {
-                let response = await fetch('/api/profile'); // Backenddagi profilingiz yo'li
-                let user = await response.json();
-                
-                // Ma'lumotlarni chiqarish
-                document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
-                document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
-                
-                // Til tugmasining faolligini belgilash
-                setLanguageUI(user.language || 'uz');
+                let response = await fetch('/api/profile');
+                if (response.ok) {
+                    let user = await response.json();
+                    document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
+                    document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
+                    
+                    if (!savedLang && user.language) {
+                        savedLang = user.language;
+                        localStorage.setItem('selected_lang', savedLang);
+                    }
+                }
             } catch (error) {
-                console.error("Profilni yuklashda xatolik:", error);
-                setLanguageUI('uz'); // Xatolik bo'lsa default o'zbekcha
+                console.error("Profilni yuklashda tarmoq xatoligi (lokal ishlatilmoqda):", error);
             }
+
+            // Agar bazadan kelmasa yoki localStorage da bo'lsa shuni ishlatamiz
+            setLanguageUI(savedLang || 'uz');
         }
 
-        // 2. Tilni o'zgartirib backendga (database.json ga) saqlash
+        // 2. Tilni o'zgartirib backendga va localStorage ga saqlash
         async function changeLanguage(lang) {
+            // Avval darhol brauzer xotirasiga saqlaymiz va UI ni yangilaymiz
+            localStorage.setItem('selected_lang', lang);
+            setLanguageUI(lang);
+
             try {
-                let response = await fetch('/api/profile', {
-                    method: 'PUT', // yoki POST (backendga qarab)
+                await fetch('/api/profile', {
+                    method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ language: lang })
                 });
-
-                if (response.ok) {
-                    setLanguageUI(lang);
-                    // products.html ga o'tganda o'zgargan tilni ko'rishi uchun sahifani yangilaymiz
-                    location.reload(); 
-                }
             } catch (error) {
-                console.error("Tilni o'zgartirishda xatolik:", error);
+                console.error("Backendga saqlashda xatolik:", error);
             }
         }
 
@@ -325,9 +329,9 @@
             const btnRu = document.getElementById('btnRu');
 
             if (lang === 'ru') {
-                btnRu.classList.add('active');
-                btnUz.classList.remove('active');
-                
+                if (btnRu) btnRu.classList.add('active');
+                if (btnUz) btnUz.classList.remove('active');
+
                 // Profil sahifasining o'zi uchun ruscha tarjimalar
                 document.getElementById('pageTitle').textContent = "Профиль";
                 document.getElementById('menuOrders').innerHTML = "Мои заказы <span>›</span>";
@@ -341,9 +345,9 @@
                 document.getElementById('navCart').textContent = "Корзина";
                 document.getElementById('navProfile').textContent = "Профиль";
             } else {
-                btnUz.classList.add('active');
-                btnRu.classList.remove('active');
-                
+                if (btnUz) btnUz.classList.add('active');
+                if (btnRu) btnRu.classList.remove('active');
+
                 // O'zbekcha tarjimalar
                 document.getElementById('pageTitle').textContent = "Profil";
                 document.getElementById('menuOrders').innerHTML = "Mening buyurtmalarim <span>›</span>";
