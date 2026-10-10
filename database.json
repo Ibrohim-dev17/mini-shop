@@ -378,5 +378,11 @@
   ],
   "categories": [],
   "orders": [],
-  "users": []
+  "users": [
+    {
+      "id": 1,
+      "name": "Sotuvchi",
+      "language": "uz"
+    }
+  ]
 }
