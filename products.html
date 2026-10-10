@@ -694,10 +694,14 @@
             }
         };
 
-        const currentLang = localStorage.getItem('selected_lang') || 'uz';
-        const t = translations[currentLang];
+        // Profil.html dan tanlangan tilni dinamik o'qib olish
+        let currentLang = localStorage.getItem('selected_lang') || 'uz';
+        let t = translations[currentLang];
 
         function applyTranslations() {
+            currentLang = localStorage.getItem('selected_lang') || 'uz';
+            t = translations[currentLang];
+
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.textContent = t[key];
@@ -735,10 +739,10 @@
             if (searchQueryParam) {
                 searchInput.value = searchQueryParam;
                 document.getElementById('pageTitle').textContent = `${t.products_title}: "${searchQueryParam}"`;
-                
+
                 let q = searchQueryParam.toLowerCase();
                 let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(q) || getLocalized(p.subcat).toLowerCase().includes(q));
-                
+
                 let categoryIds = [...new Set(exactMatches.map(p => p.category_id))];
                 let sameCategoryProducts = allProducts.filter(p => categoryIds.includes(p.category_id) && !exactMatches.includes(p));
 
@@ -900,7 +904,7 @@
                             </div>
                             <div class="comment-box">
                                 <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                                <span>${p.comments || 50}</span>
+                                <span class="comments-num">${p.comments || 50}</span>
                             </div>
                         </div>
                         ${isLast ? `
@@ -1149,7 +1153,7 @@
             let stock = prod.stock !== undefined ? prod.stock : 10;
             let defaultSize = prod.sizes ? prod.sizes[0] : null;
             let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-            
+
             if (cartItem) {
                 let newQty = cartItem.qty + delta;
                 if (newQty > stock) {
@@ -1239,6 +1243,14 @@
             sessionStorage.removeItem('products_scroll');
             history.back();
         }
+
+        // Boshqa sahifadan (profil.html) qaytganda til o'zgargan bo'lsa yangilash
+        window.addEventListener('pageshow', (event) => {
+            const savedLang = localStorage.getItem('selected_lang') || 'uz';
+            if (savedLang !== currentLang) {
+                initPage();
+            }
+        });
 
         window.addEventListener('DOMContentLoaded', () => {
             initPage();
