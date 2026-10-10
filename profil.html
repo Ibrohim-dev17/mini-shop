@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Profil - Uzum Market</title>
+    <title>Mahsulotlar - Uzum Market</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="data.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -13,6 +15,10 @@
             --text: #1f2026;
             --muted: #8b8e99;
             --border: #e2e5eb;
+            --star: #ffb800;
+            --discount-bg: #f1e5ff;
+            --discount-text: #7000ff;
+            --danger: #ff3b30;
         }
 
         * {
@@ -26,116 +32,549 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 80px;
+            padding-bottom: 120px;
             overflow-x: hidden;
         }
 
-        .header-title {
-            background: #ffffff;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: 700;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
+        .sticky-header {
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
             z-index: 999;
-        }
-
-        .profile-card {
-            background: var(--card);
-            margin: 16px;
-            padding: 20px;
-            border-radius: 16px;
+            padding: 12px 16px;
+            margin-top: 44px;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .profile-avatar {
-            width: 60px;
+        .sticky-header::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
             height: 60px;
-            border-radius: 50%;
-            background: var(--primary-bg);
-            color: var(--primary);
-            font-size: 24px;
-            font-weight: 700;
+            background: #ffffff;
+            z-index: -1;
+        }
+
+        .back-btn {
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            flex-shrink: 0;
+            cursor: pointer;
         }
 
-        .profile-info h3 {
-            font-size: 16px;
-            font-weight: 700;
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            width: 100%;
+            flex: 1;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 8px 12px;
+            gap: 8px;
+            border: 1px solid transparent;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
+        .search-box svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--muted);
+            stroke-width: 2;
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            width: 100%;
             color: var(--text);
         }
 
-        .profile-info p {
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 6px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            background: #fafafc;
+        }
+
+        .clear-history-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .search-suggestion-item {
+            padding: 12px 14px;
             font-size: 13px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+        }
+
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion-item:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .history-item-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .remove-history-item {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 16px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
+        .remove-history-item:hover {
+            color: #ff3b30;
+        }
+
+        .page-title-bar {
+            padding: 125px 16px 10px 16px;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text);
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 12px 16px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        }
+        @media (min-width: 1024px) {
+            .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        }
+        @media (min-width: 1280px) {
+            .products-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+
+        .product-card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+        }
+
+        .heart-icon-sm {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .heart-icon-sm svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: #1f2026;
+            stroke-width: 2;
+            transition: all 0.2s;
+        }
+
+        .heart-icon-sm.liked svg {
+            fill: #ff3b30;
+            stroke: #ff3b30;
+        }
+
+        .product-img-box {
+            width: 100%;
+            height: 220px;
+            background: #f8f9fa;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        @media (min-width: 768px) {
+            .product-img-box { height: 260px; }
+        }
+        @media (min-width: 1024px) {
+            .product-img-box { height: 280px; }
+        }
+
+        .card-slider-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-slider-container::-webkit-scrollbar { display: none; }
+
+        .card-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            scroll-snap-align: start;
+        }
+
+        .card-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .card-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s;
+        }
+
+        .card-dot.active {
+            width: 14px;
+            border-radius: 3px;
+            background: #ffffff;
+        }
+
+        .badge-dynamic-sm {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            z-index: 4;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .product-info {
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .product-info-top {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .main-price {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .main-price.out-of-stock {
+            color: var(--danger);
+            font-size: 14px;
+        }
+
+        .discount-tag {
+            background: var(--discount-bg);
+            color: var(--discount-text);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+
+        .old-prices {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
             color: var(--muted);
             margin-top: 2px;
         }
 
-        .menu-list {
-            background: var(--card);
-            margin: 0 16px;
-            border-radius: 16px;
-            overflow: hidden;
-        }
+        .price-old { text-decoration: line-through; }
 
-        .menu-item {
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            text-decoration: none;
+        .product-title {
+            font-size: 13px;
+            line-height: 1.3;
             color: var(--text);
-            font-size: 14px;
-            font-weight: 500;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 6px;
+            height: 34px;
+            cursor: pointer;
         }
 
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-
-        .lang-switcher {
+        .product-rating {
             display: flex;
-            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--muted);
+            margin: 8px 0;
         }
 
-        .lang-btn {
-            padding: 6px 12px;
+        .rating-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rating-box, .comment-box {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .rating-box svg { width: 13px; height: 13px; fill: var(--star); }
+        .comment-box svg { width: 14px; height: 14px; fill: none; stroke: #8b8e99; stroke-width: 2; }
+        .rating-num { font-weight: 700; color: var(--text); }
+
+        .last-item-badge {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            color: #ff3d00;
+            font-weight: 700;
+            font-size: 11px;
+            background: #fff2ee;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+        .last-item-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .card-action-container {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .cart-btn-sm {
+            width: 100%;
+            height: 36px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            border: none;
+            border-radius: 10px;
             font-size: 13px;
             font-weight: 600;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             cursor: pointer;
-            transition: all 0.2s ease;
+        }
+        .cart-btn-sm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+        .notify-btn-sm {
+            width: 100%;
+            height: 36px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            border: none;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .notify-btn-sm.active-notified {
+            background: #00c853;
+            color: #ffffff;
+            cursor: pointer;
         }
 
-        .lang-btn.active {
-            background: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
+        .cart-counter-box-sm {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 36px;
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 0 6px;
+            border: 1px solid var(--border);
         }
+
+        .counter-btn-sm {
+            background: #fff;
+            border: 1px solid var(--border);
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .counter-btn-sm:disabled { opacity: 0.4; cursor: not-allowed; }
+        .counter-val-sm { font-size: 14px; font-weight: 700; }
 
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
             height: 64px;
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
             z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
+
+        @media (min-width: 1024px) { .bottom-nav { max-width: 550px; } }
 
         .nav-item {
             display: flex;
@@ -148,40 +587,21 @@
             font-weight: 500;
             width: 20%;
             position: relative;
+            cursor: pointer;
+            padding: 8px 0;
         }
 
-        .nav-icon-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            fill: none;
-            stroke: #808080;
-            stroke-width: 1.8;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .nav-item.active svg {
-            stroke: var(--primary);
-            fill: var(--primary-bg);
-            transform: scale(1.05);
-        }
+        .nav-icon-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: #808080; stroke-width: 1.8; transition: all 0.2s ease; }
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+        .nav-item.active svg { stroke: var(--primary); fill: var(--primary-bg); transform: scale(1.05); }
 
         .badge-count {
             position: absolute;
             top: -4px;
             right: -8px;
-            background: #000000;
-            color: #ffffff;
+            background: #000;
+            color: #fff;
             font-size: 10px;
             font-weight: 700;
             min-width: 17px;
@@ -192,150 +612,660 @@
             justify-content: center;
             padding: 0 4px;
         }
-
-        .badge-count.show {
-            display: flex;
-        }
+        .badge-count.show { display: flex; }
     </style>
 </head>
 <body>
 
-    <div class="header-title" id="pageTitle">Profil</div>
-
-    <div class="profile-card">
-        <div class="profile-avatar" id="userAvatar">U</div>
-        <div class="profile-info">
-            <h3 id="userName">Foydalanuvchi</h3>
-            <p id="userPhone">+998 90 123 45 67</p>
-        </div>
-    </div>
-
-    <div class="menu-list">
-        <a href="#" class="menu-item" id="menuOrders">Mening buyurtmalarim <span>›</span></a>
-        <a href="heart.html" class="menu-item" id="menuFavs">Saralanganlar <span>›</span></a>
-        <a href="#" class="menu-item" id="menuPoints">Yetkazib berish punktlari <span>›</span></a>
-
-        <div class="menu-item">
-            <span id="langLabel">Tilni tanlang</span>
-            <div class="lang-switcher">
-                <button class="lang-btn" id="btnUz" onclick="changeLanguage('uz')">O'zbekcha</button>
-                <button class="lang-btn" id="btnRu" onclick="changeLanguage('ru')">Русский</button>
+    <div class="sticky-header">
+        <button onclick="goBack()" class="back-btn" title="Orqaga">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="search-box-wrapper">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)" autocomplete="off">
             </div>
+            <div class="search-dropdown" id="searchDropdown"></div>
         </div>
-
-        <a href="#" class="menu-item" style="color: #ff3b30;" id="menuLogout">Chiqish</a>
     </div>
+
+    <div class="page-title-bar" id="pageTitle" data-i18n="products_title">Mahsulotlar</div>
+    <div class="products-grid" id="productsGrid"></div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-            <span id="navHome">Bosh sahifa</span>
+            <span data-i18n="nav_home">Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
-            <span id="navCatalog">Katalog</span>
-        </a>
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
-            <span id="navFavs">Saralanganlar</span>
+            <span data-i18n="nav_catalog">Katalog</span>
         </a>
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
-            <span id="navCart">Savatcha</span>
+            <span data-i18n="nav_cart">Savatcha</span>
         </a>
-        <a href="profil.html" class="nav-item active">
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span data-i18n="nav_fav">Saralangan</span>
+        </a>
+        <a href="profil.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-            <span id="navProfile">Profil</span>
+            <span data-i18n="nav_profile">Profil</span>
         </a>
     </nav>
 
     <script>
+        const translations = {
+            uz: {
+                products_title: "Mahsulotlar",
+                search_placeholder: "Mahsulotlar va turkumlar izlash...",
+                cart_btn: "Savatga",
+                notify_btn: "Kelganda xabar qilish",
+                notify_active: "✓ Xabar beriladi",
+                last_item: "Oxirgisi",
+                out_of_stock: "Qolmadi",
+                history_title: "Oxirgi qidiruvlar",
+                clear_history: "Tozalash",
+                no_results: "Hech narsa topilmadi...",
+                nav_home: "Bosh sahifa",
+                nav_catalog: "Katalog",
+                nav_cart: "Savatcha",
+                nav_fav: "Saralangan",
+                nav_profile: "Profil"
+            },
+            ru: {
+                products_title: "Товары",
+                search_placeholder: "Поиск товаров и категорий...",
+                cart_btn: "В корзину",
+                notify_btn: "Сообщить о поступлении",
+                notify_active: "✓ Сообщим",
+                last_item: "Последний",
+                out_of_stock: "Нет в наличии",
+                history_title: "История поиска",
+                clear_history: "Очистить",
+                no_results: "Ничего не найдено...",
+                nav_home: "Главная",
+                nav_catalog: "Каталог",
+                nav_cart: "Корзина",
+                nav_fav: "Избранное",
+                nav_profile: "Профиль"
+            }
+        };
+
+        let currentLang = 'uz';
+        let t = translations[currentLang];
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const catId = urlParams.get('cat_id') || '';
+        const subName = urlParams.get('sub') || '';
+        const searchQueryParam = urlParams.get('q') || '';
+
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+        let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
+        let currentProductsList = [];
 
-        function updateBadges() {
-            const favBadge = document.getElementById('favBadge');
-            const cartBadge = document.getElementById('cartBadge');
-            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
-            if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
+        function getLocalized(field) {
+            if (!field) return '';
+            if (typeof field === 'object') return field[currentLang] || field['uz'] || '';
+            return field;
         }
-        updateBadges();
 
-        // 1. Profil va Tilni database.json / backend dan o'qib olish
-        async function loadProfile() {
+        // Backend (database.json) orqali tilni olib kelib sahifani ishga tushirish
+        async function fetchLanguageAndInit() {
             try {
                 let response = await fetch('/api/profile');
                 if (response.ok) {
                     let user = await response.json();
-                    document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
-                    document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
-                    
-                    // Backenddagi database.json dan kelgan tilni qo'llash
-                    setLanguageUI(user.language || 'uz');
+                    if (user.language) {
+                        currentLang = user.language;
+                        t = translations[currentLang] || translations['uz'];
+                    }
                 }
             } catch (error) {
-                console.error("Profil ma'lumotlarini olishda xatolik:", error);
-                setLanguageUI('uz');
+                console.error("Tilni bazadan olishda xatolik:", error);
             }
+
+            initPage();
         }
 
-        // 2. Tilni o'zgartirganda to'g'ridan-to'g'ri backendga (database.json ga) yuborish
-        async function changeLanguage(lang) {
-            try {
-                let response = await fetch('/api/profile', {
-                    method: 'PUT', // yoki POST (backend sozlamasiga qarab)
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ language: lang })
-                });
-
-                if (response.ok) {
-                    setLanguageUI(lang);
-                    location.reload(); // Sahifani yangilab bazadagi ma'lumotni to'liq yuklash
-                }
-            } catch (error) {
-                console.error("Tilni saqlashda xatolik:", error);
+        function initPage() {
+            applyTranslations();
+            if (typeof allProducts === 'undefined' || allProducts.length === 0) {
+                setTimeout(initPage, 50);
+                return;
             }
-        }
 
-        // Interfeys matnlarini tanlangan tilga moslash
-        function setLanguageUI(lang) {
-            const btnUz = document.getElementById('btnUz');
-            const btnRu = document.getElementById('btnRu');
+            const searchInput = document.getElementById('searchInput');
+            if (searchQueryParam) {
+                searchInput.value = searchQueryParam;
+                document.getElementById('pageTitle').textContent = `${t.products_title}: "${searchQueryParam}"`;
 
-            if (lang === 'ru') {
-                if (btnRu) btnRu.classList.add('active');
-                if (btnUz) btnUz.classList.remove('active');
+                let q = searchQueryParam.toLowerCase();
+                let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(q) || getLocalized(p.subcat).toLowerCase().includes(q));
 
-                document.getElementById('pageTitle').textContent = "Профиль";
-                document.getElementById('menuOrders').innerHTML = "Мои заказы <span>›</span>";
-                document.getElementById('menuFavs').innerHTML = "Избранное <span>›</span>";
-                document.getElementById('menuPoints').innerHTML = "Пункты выдачи <span>›</span>";
-                document.getElementById('langLabel').textContent = "Язык интерфейса";
-                document.getElementById('menuLogout').textContent = "Выйти";
-                document.getElementById('navHome').textContent = "Главная";
-                document.getElementById('navCatalog').textContent = "Каталог";
-                document.getElementById('navFavs').textContent = "Избранное";
-                document.getElementById('navCart').textContent = "Корзина";
-                document.getElementById('navProfile').textContent = "Профиль";
+                let categoryIds = [...new Set(exactMatches.map(p => p.category_id))];
+                let sameCategoryProducts = allProducts.filter(p => categoryIds.includes(p.category_id) && !exactMatches.includes(p));
+
+                let recommendations = allProducts.filter(p => !exactMatches.includes(p) && !sameCategoryProducts.includes(p));
+                recommendations.sort(() => Math.random() - 0.5);
+
+                currentProductsList = [...exactMatches, ...sameCategoryProducts, ...recommendations].slice(0, 50);
             } else {
-                if (btnUz) btnUz.classList.add('active');
-                if (btnRu) btnRu.classList.remove('active');
+                searchInput.value = '';
+                if (subName) {
+                    let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
+                    document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
+                    currentProductsList = allProducts.filter(p => getLocalized(p.subcat).trim().toLowerCase() === decodedSub);
+                } else if (catId) {
+                    currentProductsList = allProducts.filter(p => String(p.category_id) === String(catId));
+                } else {
+                    currentProductsList = allProducts;
+                }
+            }
 
-                document.getElementById('pageTitle').textContent = "Profil";
-                document.getElementById('menuOrders').innerHTML = "Mening buyurtmalarim <span>›</span>";
-                document.getElementById('menuFavs').innerHTML = "Saralanganlar <span>›</span>";
-                document.getElementById('menuPoints').innerHTML = "Yetkazib berish punktlari <span>›</span>";
-                document.getElementById('langLabel').textContent = "Tilni tanlang";
-                document.getElementById('menuLogout').textContent = "Chiqish";
-                document.getElementById('navHome').textContent = "Bosh sahifa";
-                document.getElementById('navCatalog').textContent = "Katalog";
-                document.getElementById('navFavs').textContent = "Saralanganlar";
-                document.getElementById('navCart').textContent = "Savatcha";
-                document.getElementById('navProfile').textContent = "Profil";
+            renderProducts(currentProductsList);
+            updateBadges();
+
+            const savedScroll = sessionStorage.getItem('products_scroll');
+            if (savedScroll) {
+                window.scrollTo(0, parseInt(savedScroll));
+                sessionStorage.removeItem('products_scroll');
             }
         }
 
-        loadProfile();
+        function renderProducts(list) {
+            const grid = document.getElementById('productsGrid');
+
+            if (list.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--muted);">${t.no_results}</div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(p => {
+                const isLiked = favs.includes(p.id) ? 'liked' : '';
+                const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
+                const hasMultipleImages = pImages.length > 1;
+                const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
+                const prodName = getLocalized(p.name);
+
+                let badgeHtml = '';
+                if (p.badgeType === 'original') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
+                } else if (p.badgeType === 'chegirma') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada</div>`;
+                } else if (p.badgeType === 'arzonlashdi') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
+                }
+
+                return `
+                    <div class="product-card" id="product-card-${p.id}">
+                        <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </button>
+                        <div class="product-img-box" onclick="goToProduct(${p.id})">
+                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
+                                ${loopedImages.map(imgUrl => `
+                                    <div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>
+                                `).join('')}
+                            </div>
+                            ${hasMultipleImages ? `
+                                <div class="card-dots">
+                                    ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
+                                </div>
+                            ` : ''}
+                            ${badgeHtml}
+                        </div>
+                        <div class="product-info" id="product-info-${p.id}"></div>
+                    </div>
+                `;
+            }).join('');
+
+            list.forEach(p => {
+                updateCardInfoOnly(p.id);
+            });
+
+            setTimeout(() => {
+                document.querySelectorAll('.card-slider-container').forEach(container => {
+                    if (container.dataset.originalLength) {
+                        const slideWidth = container.clientWidth;
+                        container.scrollLeft = slideWidth;
+                    }
+                });
+            }, 50);
+        }
+
+        function updateCardInfoOnly(id) {
+            const infoContainer = document.getElementById(`product-info-${id}`);
+            if (!infoContainer) return;
+
+            const p = allProducts.find(item => item.id === id);
+            if (!p) return;
+
+            const defaultSize = p.sizes ? p.sizes[0] : null;
+            const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+            const prodName = getLocalized(p.name);
+            let stock = p.stock !== undefined ? p.stock : 10;
+            let isOut = stock <= 0;
+            let isLast = stock === 1;
+            let isNotified = notifiedList.includes(p.id);
+
+            let priceHtml = '';
+            if (isOut) {
+                priceHtml = `<span class="main-price out-of-stock">${t.out_of_stock}</span>`;
+            } else {
+                priceHtml = `
+                    <span class="main-price">${p.price}</span>
+                    ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${p.discount}</span>` : ''}
+                `;
+            }
+
+            let btnHtml = '';
+            if (isOut) {
+                if (isNotified) {
+                    btnHtml = `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`;
+                } else {
+                    btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
+                }
+            } else if (!cartItem) {
+                btnHtml = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>${t.cart_btn}</span>
+                    </button>
+                `;
+            } else {
+                let maxReached = cartItem.qty >= stock;
+                btnHtml = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                    </div>
+                `;
+            }
+
+            infoContainer.innerHTML = `
+                <div class="product-info-top">
+                    <div class="price-row" onclick="goToProduct(${p.id})">
+                        ${priceHtml}
+                    </div>
+                    ${!isOut ? `
+                        <div class="old-prices" onclick="goToProduct(${p.id})">
+                            <span class="price-old">${p.oldPrice}</span>
+                        </div>
+                    ` : ''}
+                    <div class="product-title" onclick="goToProduct(${p.id})" title="${prodName}">${prodName}</div>
+                    
+                    <div class="product-rating">
+                        <div class="rating-left" onclick="goToProduct(${p.id})">
+                            <div class="rating-box">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                <span class="rating-num">${p.rating || 4.8}</span>
+                            </div>
+                            <div class="comment-box">
+                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                <span>${p.comments || 50}</span>
+                            </div>
+                        </div>
+                        ${isLast ? `
+                            <div class="last-item-badge">
+                                <svg viewBox="0 0 512 512" width="14" height="14">
+                                    <path fill="#ff3d00" d="M192 480c-70.7 0-128-57.3-128-128 0-48.4 27.2-90.3 67.2-111.4 5.3-2.8 11.8.6 12.8 6.5 5.2 32.1 23.3 60.1 48.9 78.4 4.1 2.9 9.9-.1 10.2-5.1 2-35.3-11.4-74.8-40.2-118.4C145.4 179.8 192 110.1 192 48c0-8.8 10.7-13.1 16.9-6.9 72.8 72.8 111.1 168.1 87.4 256.4 1.4-.9 2.8-1.9 4.1-2.9 33.7-25.9 55.6-67.6 55.6-114.6 0-8.8 10.7-13.1 16.9-6.9 65 65 91.1 155.1 68.3 234.9C425.4 430.4 316.5 480 192 480z"/>
+                                    <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
+                                </svg>
+                                <span>${t.last_item}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+                <div class="card-action-container card-action-container-${p.id}">
+                    ${btnHtml}
+                </div>
+            `;
+        }
+
+        function getSearchHistory() {
+            return JSON.parse(localStorage.getItem('search_history')) || [];
+        }
+
+        function saveSearchQuery(q) {
+            if (!q) return;
+            let history = getSearchHistory();
+            history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
+            history.unshift(q);
+            if (history.length > 5) history = history.slice(0, 5);
+            localStorage.setItem('search_history', JSON.stringify(history));
+        }
+
+        function showSearchHistory() {
+            const val = document.getElementById('searchInput').value.trim();
+            const dropdown = document.getElementById('searchDropdown');
+            if (val.length > 0) return;
+
+            let history = getSearchHistory();
+            if (history.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            let html = `
+                <div class="search-header-row">
+                    <span>${t.history_title}</span>
+                    <button class="clear-history-btn" onclick="clearAllHistory(event)">${t.clear_history}</button>
+                </div>
+            `;
+
+            history.forEach((item, index) => {
+                html += `
+                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item.replace(/'/g, "\\'")}')">
+                        <div class="history-item-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>${item}</span>
+                        </div>
+                        <button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button>
+                    </div>
+                `;
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function clearAllHistory(e) {
+            e.stopPropagation();
+            localStorage.removeItem('search_history');
+            document.getElementById('searchDropdown').classList.remove('show');
+        }
+
+        function removeHistoryItem(e, index) {
+            e.stopPropagation();
+            let history = getSearchHistory();
+            history.splice(index, 1);
+            localStorage.setItem('search_history', JSON.stringify(history));
+            showSearchHistory();
+        }
+
+        function selectHistoryItem(item) {
+            const input = document.getElementById('searchInput');
+            input.value = item;
+            input.blur();
+            document.getElementById('searchDropdown').classList.remove('show');
+            saveSearchQuery(item);
+            window.location.href = `products.html?q=${encodeURIComponent(item)}`;
+        }
+
+        function handleLiveSearch(e) {
+            const val = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
+
+            if (val.length === 0) {
+                showSearchHistory();
+                return;
+            }
+
+            let matches = allProducts.filter(p => {
+                let n = getLocalized(p.name).toLowerCase();
+                let s = getLocalized(p.subcat).toLowerCase();
+                return n.includes(val) || s.includes(val);
+            });
+
+            let html = '';
+            if (matches.length > 0) {
+                html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${val.replace(/'/g, "\\'")}')">
+                    <span>"${val}" bo'yicha barcha natijalarni ko'rish</span>
+                    <span class="suggestion-type">Qidirish</span>
+                </div>`;
+
+                matches.slice(0, 8).forEach(prod => {
+                    let prodName = getLocalized(prod.name);
+                    html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${prodName.replace(/'/g, "\\'")}')">
+                        <div class="history-item-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <span>${prodName}</span>
+                        </div>
+                        <span class="suggestion-type">Mahsulot</span>
+                    </div>`;
+                });
+            } else {
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">${t.no_results}</div>`;
+            }
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function closeSearchAndGo(query) {
+            const dropdown = document.getElementById('searchDropdown');
+            if (dropdown) dropdown.classList.remove('show');
+            const input = document.getElementById('searchInput');
+            if (input) input.blur();
+            saveSearchQuery(query);
+            window.location.href = `products.html?q=${encodeURIComponent(query)}`;
+        }
+
+        function handleSearch(e) {
+            if (e.key === 'Enter') {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) {
+                    closeSearchAndGo(query);
+                }
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                if (dropdown) dropdown.classList.remove('show');
+                const input = document.getElementById('searchInput');
+                if (input) input.blur();
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            const dropdown = document.getElementById('searchDropdown');
+            if (dropdown) dropdown.classList.remove('show');
+        });
+
+        window.addEventListener('touchstart', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                if (dropdown) dropdown.classList.remove('show');
+                const input = document.getElementById('searchInput');
+                if (input) input.blur();
+            }
+        });
+
+        function toggleNotify(id) {
+            if (notifiedList.includes(id)) {
+                notifiedList = notifiedList.filter(item => item !== id);
+            } else {
+                notifiedList.push(id);
+            }
+            localStorage.setItem('notified_products', JSON.stringify(notifiedList));
+            updateCardActionUI(id);
+        }
+
+        function handleCardScroll(e, originalLen) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const scrollLeft = container.scrollLeft;
+            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            } else if (scrollLeft <= 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = originalLen * slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            }
+            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            const realIndex = (activeIndex + originalLen) % originalLen;
+            const dotsBox = container.parentElement.querySelector('.card-dots');
+            if (dotsBox) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
+        }
+
+        function toggleHeart(e, id) {
+            e.stopPropagation();
+            if (favs.includes(id)) {
+                favs = favs.filter(item => item !== id);
+            } else {
+                favs.push(id);
+            }
+            localStorage.setItem('fav_products', JSON.stringify(favs));
+            const btn = e.currentTarget;
+            btn.classList.toggle('liked', favs.includes(id));
+            updateBadges();
+        }
+
+        function addSimilarToCart(id) {
+            let prod = allProducts.find(p => p.id === id);
+            if (prod) {
+                let stock = prod.stock !== undefined ? prod.stock : 10;
+                let defaultSize = prod.sizes ? prod.sizes[0] : null;
+                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+                let currentQty = cartItem ? cartItem.qty : 0;
+
+                if (currentQty < stock) {
+                    if (!cartItem) {
+                        cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
+                    } else {
+                        cartItem.qty += 1;
+                    }
+                    localStorage.setItem('cart_products', JSON.stringify(cart));
+                    updateCardActionUI(id);
+                    updateBadges();
+                } else {
+                    alert("Omborda yetarli mahsulot qolmagan!");
+                }
+            }
+        }
+
+        function changeSimilarQty(id, delta) {
+            let prod = allProducts.find(p => p.id === id);
+            if (!prod) return;
+            let stock = prod.stock !== undefined ? prod.stock : 10;
+            let defaultSize = prod.sizes ? prod.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+
+            if (cartItem) {
+                let newQty = cartItem.qty + delta;
+                if (newQty > stock) {
+                    alert("Ombordagi mavjud miqdordan oshira olmaysiz!");
+                    return;
+                }
+                cartItem.qty = newQty;
+                if (cartItem.qty <= 0) {
+                    cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
+                }
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateCardActionUI(id);
+                updateBadges();
+            }
+        }
+
+        function updateCardActionUI(id) {
+            const actionContainer = document.querySelector(`.card-action-container-${id}`);
+            if (!actionContainer) {
+                updateCardInfoOnly(id);
+                return;
+            }
+
+            const p = allProducts.find(item => item.id === id);
+            if (!p) return;
+
+            const defaultSize = p.sizes ? p.sizes[0] : null;
+            const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+            let stock = p.stock !== undefined ? p.stock : 10;
+            let isOut = stock <= 0;
+            let isNotified = notifiedList.includes(id);
+
+            let btnHtml = '';
+            if (isOut) {
+                if (isNotified) {
+                    btnHtml = `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`;
+                } else {
+                    btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
+                }
+            } else if (!cartItem) {
+                btnHtml = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>${t.cart_btn}</span>
+                    </button>
+                `;
+            } else {
+                let maxReached = cartItem.qty >= stock;
+                btnHtml = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                    </div>
+                `;
+            }
+            actionContainer.innerHTML = btnHtml;
+        }
+
+        function updateBadges() {
+            const favBadge = document.getElementById('favBadge');
+            const cartBadge = document.getElementById('cartBadge');
+            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
+
+            if (validFavs.length > 0) {
+                favBadge.textContent = validFavs.length;
+                favBadge.classList.add('show');
+            } else {
+                favBadge.classList.remove('show');
+            }
+
+            let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+            if (totalCartCount > 0) {
+                cartBadge.textContent = totalCartCount;
+                cartBadge.classList.add('show');
+            } else {
+                cartBadge.classList.remove('show');
+            }
+        }
+
+        function goToProduct(id) {
+            sessionStorage.setItem('products_scroll', window.scrollY);
+            window.location.href = `product.html?id=${id}`;
+        }
+
+        function goBack() {
+            sessionStorage.removeItem('products_scroll');
+            history.back();
+        }
+
+        // Sahifa har safar ochilganda backenddan tilni qayta tekshirib yangilaydi
+        window.addEventListener('pageshow', (event) => {
+            fetchLanguageAndInit();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchLanguageAndInit();
+        });
     </script>
 </body>
 </html>
