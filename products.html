@@ -729,18 +729,23 @@
                 return;
             }
 
-            // Sahifaga kirganda qidiruv inputini bo'sh turishini ta'minlash (orqaga qaytganda ham)
             const searchInput = document.getElementById('searchInput');
             if (searchQueryParam) {
                 searchInput.value = searchQueryParam;
                 document.getElementById('pageTitle').textContent = `${t.products_title}: "${searchQueryParam}"`;
                 
-                let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(searchQueryParam.toLowerCase()));
-                let relatedKeyword = searchQueryParam.toLowerCase().split(' ').pop(); 
-                let similarMatches = allProducts.filter(p => !exactMatches.includes(p) && (getLocalized(p.name).toLowerCase().includes(relatedKeyword) || getLocalized(p.subcat).toLowerCase().includes(searchQueryParam.toLowerCase())));
+                let q = searchQueryParam.toLowerCase();
+                // 1. Aniq topilgan mahsulotlar va ularning kategoriyasidagilar
+                let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(q) || getLocalized(p.subcat).toLowerCase().includes(q));
                 
-                similarMatches.sort(() => Math.random() - 0.5);
-                currentProductsList = [...exactMatches, ...similarMatches].slice(0, 50);
+                let categoryIds = [...new Set(exactMatches.map(p => p.category_id))];
+                let sameCategoryProducts = allProducts.filter(p => categoryIds.includes(p.category_id) && !exactMatches.includes(p));
+
+                // 2. Boshqa kategoriyalardan "Siz uchun tavsiyalar" (tasodifiy 50tagacha to'ldirish)
+                let recommendations = allProducts.filter(p => !exactMatches.includes(p) && !sameCategoryProducts.includes(p));
+                recommendations.sort(() => Math.random() - 0.5);
+
+                currentProductsList = [...exactMatches, ...sameCategoryProducts, ...recommendations].slice(0, 50);
             } else {
                 searchInput.value = '';
                 if (subName) {
@@ -971,7 +976,9 @@
         }
 
         function selectHistoryItem(item) {
-            document.getElementById('searchInput').value = item;
+            const input = document.getElementById('searchInput');
+            input.value = item;
+            input.blur(); // klaviaturani yopish
             document.getElementById('searchDropdown').classList.remove('show');
             saveSearchQuery(item);
             window.location.href = `products.html?q=${encodeURIComponent(item)}`;
@@ -1018,8 +1025,10 @@
         }
 
         function closeSearchAndGo(query) {
-            document.getElementById('searchDropdown').classList.remove('show');
-            document.getElementById('searchInput').blur();
+            const dropdown = document.getElementById('searchDropdown');
+            if (dropdown) dropdown.classList.remove('show');
+            const input = document.getElementById('searchInput');
+            if (input) input.blur(); // klaviaturani va fokusni yopish
             saveSearchQuery(query);
             window.location.href = `products.html?q=${encodeURIComponent(query)}`;
         }
@@ -1033,12 +1042,14 @@
             }
         }
 
-        // Ekranni istalgan joyiga tekkanda yoki sahifani surganda qidiruv tarixi / dropdown yopilishi
+        // Ekranning istalgan joyiga tekkanda qidiruv dropdowni va fokus/klaviaturani yopish
         document.addEventListener('click', (e) => {
             const wrapper = document.querySelector('.search-box-wrapper');
             const dropdown = document.getElementById('searchDropdown');
             if (wrapper && !wrapper.contains(e.target)) {
-                dropdown.classList.remove('show');
+                if (dropdown) dropdown.classList.remove('show');
+                const input = document.getElementById('searchInput');
+                if (input) input.blur();
             }
         });
 
