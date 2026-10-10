@@ -297,9 +297,10 @@
             stroke: #ff3b30;
         }
 
+        /* Barcha ekranlarda rasm proporsiyasi to'g'ri chiqishi uchun moslashuvchan balandlik */
         .product-img-box {
             width: 100%;
-            height: 230px;
+            height: 220px;
             background: #f8f9fa;
             position: relative;
             border-radius: 16px;
@@ -308,7 +309,10 @@
         }
 
         @media (min-width: 768px) {
-            .product-img-box { height: 270px; }
+            .product-img-box { height: 260px; }
+        }
+        @media (min-width: 1024px) {
+            .product-img-box { height: 280px; }
         }
 
         .card-slider-container {
@@ -615,9 +619,9 @@
 <body>
 
     <div class="sticky-header">
-        <a href="categories.html" class="back-btn" title="Orqaga">
+        <button onclick="goBack()" class="back-btn" title="Orqaga">
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </a>
+        </button>
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -713,7 +717,6 @@
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
         let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
-        let searchHistory = JSON.parse(localStorage.getItem('search_history')) || [];
         let currentProductsList = [];
 
         function getLocalized(field) {
@@ -749,10 +752,8 @@
                 if (subName) {
                     let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
                     document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
-                    // Subkategoriya bo'yicha aniq filtrlash
                     currentProductsList = allProducts.filter(p => getLocalized(p.subcat).trim().toLowerCase() === decodedSub);
                 } else if (catId) {
-                    // Kategoriya ID bo'yicha aniq filtrlash
                     currentProductsList = allProducts.filter(p => String(p.category_id) === String(catId));
                 } else {
                     currentProductsList = allProducts;
@@ -761,6 +762,13 @@
 
             renderProducts(currentProductsList);
             updateBadges();
+
+            // Avvalgi scroll pozitsiyasini tiklash
+            const savedScroll = sessionStorage.getItem('products_scroll');
+            if (savedScroll) {
+                window.scrollTo(0, parseInt(savedScroll));
+                sessionStorage.removeItem('products_scroll');
+            }
         }
 
         function renderProducts(list) {
@@ -1055,8 +1063,6 @@
         window.addEventListener('scroll', () => {
             const dropdown = document.getElementById('searchDropdown');
             if (dropdown) dropdown.classList.remove('show');
-            const input = document.getElementById('searchInput');
-            if (input) input.blur();
         });
 
         window.addEventListener('touchstart', (e) => {
@@ -1227,7 +1233,19 @@
         }
 
         function goToProduct(id) {
+            sessionStorage.setItem('products_scroll', window.scrollY);
             window.location.href = `product.html?id=${id}`;
+        }
+
+        function goBack() {
+            sessionStorage.removeItem('products_scroll');
+            if (document.referrer && document.referrer.includes('categories.html')) {
+                window.location.href = 'categories.html';
+            } else if (searchQueryParam || subName) {
+                window.location.href = 'categories.html';
+            } else {
+                history.back();
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
