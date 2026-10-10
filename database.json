@@ -1,0 +1,8 @@
+{
+  "products": [
+    { "id": 1, "name": "Namuna mahsulot", "price": 10000 }
+  ],
+  "categories": [],
+  "orders": [],
+  "users": []
+}
