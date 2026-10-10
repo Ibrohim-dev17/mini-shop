@@ -384,6 +384,12 @@
             display: flex;
             flex-direction: column;
             flex: 1;
+            justify-content: space-between;
+        }
+
+        .product-info-top {
+            display: flex;
+            flex-direction: column;
         }
 
         .price-row {
@@ -478,6 +484,11 @@
             height: 14px;
         }
 
+        .card-action-container {
+            margin-top: auto;
+            width: 100%;
+        }
+
         .cart-btn-sm {
             width: 100%;
             height: 36px;
@@ -492,7 +503,6 @@
             justify-content: center;
             gap: 6px;
             cursor: pointer;
-            margin-top: auto;
         }
         .cart-btn-sm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
 
@@ -506,13 +516,12 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: auto;
             transition: all 0.2s;
         }
         .notify-btn-sm.active-notified {
             background: #00c853;
             color: #ffffff;
-            cursor: default;
+            cursor: pointer;
         }
 
         .cart-counter-box-sm {
@@ -524,7 +533,6 @@
             background: var(--bg);
             border-radius: 10px;
             padding: 0 6px;
-            margin-top: auto;
             border: 1px solid var(--border);
         }
 
@@ -613,7 +621,7 @@
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)" autocomplete="off">
             </div>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
@@ -721,36 +729,29 @@
                 return;
             }
 
-            cart = cart.map(item => {
-                let liveProd = allProducts.find(p => p.id === item.id);
-                let stock = liveProd && liveProd.stock !== undefined ? liveProd.stock : 99;
-                if (item.qty > stock) item.qty = stock;
-                return item;
-            }).filter(item => item.qty > 0);
-            localStorage.setItem('cart_products', JSON.stringify(cart));
-
+            // Sahifaga kirganda qidiruv inputini bo'sh turishini ta'minlash (orqaga qaytganda ham)
+            const searchInput = document.getElementById('searchInput');
             if (searchQueryParam) {
-                let q = searchQueryParam.toLowerCase();
-                document.getElementById('searchInput').value = searchQueryParam;
+                searchInput.value = searchQueryParam;
                 document.getElementById('pageTitle').textContent = `${t.products_title}: "${searchQueryParam}"`;
                 
-                // Aniq qidirilgan mahsulot birinchi chiqishi, keyin esa o'xshashlari (jami 50tagacha) chiqishi
-                let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(q));
-                let relatedKeyword = q.split(' ')[q.split(' ').length - 1]; // oxirgi so'z (masalan: ko'zoynak)
-                let similarMatches = allProducts.filter(p => !exactMatches.includes(p) && (getLocalized(p.name).toLowerCase().includes(relatedKeyword) || getLocalized(p.subcat).toLowerCase().includes(q)));
+                let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(searchQueryParam.toLowerCase()));
+                let relatedKeyword = searchQueryParam.toLowerCase().split(' ').pop(); 
+                let similarMatches = allProducts.filter(p => !exactMatches.includes(p) && (getLocalized(p.name).toLowerCase().includes(relatedKeyword) || getLocalized(p.subcat).toLowerCase().includes(searchQueryParam.toLowerCase())));
                 
+                similarMatches.sort(() => Math.random() - 0.5);
                 currentProductsList = [...exactMatches, ...similarMatches].slice(0, 50);
-            } else if (subName) {
-                let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
-                document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
-                currentProductsList = allProducts.filter(p => {
-                    let s = getLocalized(p.subcat).trim().toLowerCase();
-                    return s === decodedSub;
-                });
-            } else if (catId) {
-                currentProductsList = allProducts.filter(p => String(p.category_id) === String(catId));
             } else {
-                currentProductsList = allProducts;
+                searchInput.value = '';
+                if (subName) {
+                    let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
+                    document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
+                    currentProductsList = allProducts.filter(p => getLocalized(p.subcat).trim().toLowerCase() === decodedSub);
+                } else if (catId) {
+                    currentProductsList = allProducts.filter(p => String(p.category_id) === String(catId));
+                } else {
+                    currentProductsList = allProducts;
+                }
             }
 
             renderProducts(currentProductsList);
@@ -846,7 +847,7 @@
             let btnHtml = '';
             if (isOut) {
                 if (isNotified) {
-                    btnHtml = `<button class="notify-btn-sm active-notified">${t.notify_active}</button>`;
+                    btnHtml = `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`;
                 } else {
                     btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
                 }
@@ -869,45 +870,45 @@
             }
 
             infoContainer.innerHTML = `
-                <div class="price-row" onclick="goToProduct(${p.id})">
-                    ${priceHtml}
-                </div>
-                ${!isOut ? `
-                    <div class="old-prices" onclick="goToProduct(${p.id})">
-                        <span class="price-old">${p.oldPrice}</span>
+                <div class="product-info-top">
+                    <div class="price-row" onclick="goToProduct(${p.id})">
+                        ${priceHtml}
                     </div>
-                ` : ''}
-                <div class="product-title" onclick="goToProduct(${p.id})" title="${prodName}">${prodName}</div>
-                
-                <div class="product-rating">
-                    <div class="rating-left" onclick="goToProduct(${p.id})">
-                        <div class="rating-box">
-                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <span class="rating-num">${p.rating || 4.8}</span>
-                        </div>
-                        <div class="comment-box">
-                            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                            <span>${p.comments || 50}</span>
-                        </div>
-                    </div>
-                    ${isLast ? `
-                        <div class="last-item-badge">
-                            <svg viewBox="0 0 512 512" width="14" height="14">
-                                <path fill="#ff3d00" d="M192 480c-70.7 0-128-57.3-128-128 0-48.4 27.2-90.3 67.2-111.4 5.3-2.8 11.8.6 12.8 6.5 5.2 32.1 23.3 60.1 48.9 78.4 4.1 2.9 9.9-.1 10.2-5.1 2-35.3-11.4-74.8-40.2-118.4C145.4 179.8 192 110.1 192 48c0-8.8 10.7-13.1 16.9-6.9 72.8 72.8 111.1 168.1 87.4 256.4 1.4-.9 2.8-1.9 4.1-2.9 33.7-25.9 55.6-67.6 55.6-114.6 0-8.8 10.7-13.1 16.9-6.9 65 65 91.1 155.1 68.3 234.9C425.4 430.4 316.5 480 192 480z"/>
-                                <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
-                            </svg>
-                            <span>${t.last_item}</span>
+                    ${!isOut ? `
+                        <div class="old-prices" onclick="goToProduct(${p.id})">
+                            <span class="price-old">${p.oldPrice}</span>
                         </div>
                     ` : ''}
+                    <div class="product-title" onclick="goToProduct(${p.id})" title="${prodName}">${prodName}</div>
+                    
+                    <div class="product-rating">
+                        <div class="rating-left" onclick="goToProduct(${p.id})">
+                            <div class="rating-box">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                <span class="rating-num">${p.rating || 4.8}</span>
+                            </div>
+                            <div class="comment-box">
+                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                <span>${p.comments || 50}</span>
+                            </div>
+                        </div>
+                        ${isLast ? `
+                            <div class="last-item-badge">
+                                <svg viewBox="0 0 512 512" width="14" height="14">
+                                    <path fill="#ff3d00" d="M192 480c-70.7 0-128-57.3-128-128 0-48.4 27.2-90.3 67.2-111.4 5.3-2.8 11.8.6 12.8 6.5 5.2 32.1 23.3 60.1 48.9 78.4 4.1 2.9 9.9-.1 10.2-5.1 2-35.3-11.4-74.8-40.2-118.4C145.4 179.8 192 110.1 192 48c0-8.8 10.7-13.1 16.9-6.9 72.8 72.8 111.1 168.1 87.4 256.4 1.4-.9 2.8-1.9 4.1-2.9 33.7-25.9 55.6-67.6 55.6-114.6 0-8.8 10.7-13.1 16.9-6.9 65 65 91.1 155.1 68.3 234.9C425.4 430.4 316.5 480 192 480z"/>
+                                    <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
+                                </svg>
+                                <span>${t.last_item}</span>
+                            </div>
+                        ` : ''}
+                    </div>
                 </div>
-
-                <div class="card-action-container-${p.id}">
+                <div class="card-action-container">
                     ${btnHtml}
                 </div>
             `;
         }
 
-        // Qidiruv va tarix logikasi (categories.html kabi, narxlarsiz)
         function getSearchHistory() {
             return JSON.parse(localStorage.getItem('search_history')) || [];
         }
@@ -1032,6 +1033,7 @@
             }
         }
 
+        // Ekranni istalgan joyiga tekkanda yoki sahifani surganda qidiruv tarixi / dropdown yopilishi
         document.addEventListener('click', (e) => {
             const wrapper = document.querySelector('.search-box-wrapper');
             const dropdown = document.getElementById('searchDropdown');
@@ -1040,12 +1042,19 @@
             }
         });
 
+        window.addEventListener('scroll', () => {
+            const dropdown = document.getElementById('searchDropdown');
+            if (dropdown) dropdown.classList.remove('show');
+        });
+
         function toggleNotify(id) {
-            if (!notifiedList.includes(id)) {
+            if (notifiedList.includes(id)) {
+                notifiedList = notifiedList.filter(item => item !== id);
+            } else {
                 notifiedList.push(id);
-                localStorage.setItem('notified_products', JSON.stringify(notifiedList));
-                updateCardInfoOnly(id);
             }
+            localStorage.setItem('notified_products', JSON.stringify(notifiedList));
+            updateCardInfoOnly(id);
         }
 
         function handleCardScroll(e, originalLen) {
