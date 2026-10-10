@@ -36,21 +36,25 @@
             overflow-x: hidden;
         }
 
-        /* Categories.html uslubidagi qidiruv paneli va tepasini yopish */
-        .header-search-container {
-            padding: 50px 16px 12px 16px;
-            background: #ffffff;
+        .sticky-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
+            background: #ffffff;
             z-index: 999;
+            padding: 12px 16px;
+            margin-top: 44px;
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
             max-width: 1300px;
-            margin: 0 auto;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .header-search-container::before {
+        .sticky-header::before {
             content: '';
             position: absolute;
             top: -60px;
@@ -61,9 +65,35 @@
             z-index: -1;
         }
 
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
         .search-box-wrapper {
             position: relative;
             width: 100%;
+            flex: 1;
         }
 
         .search-box {
@@ -74,8 +104,8 @@
             padding: 8px 12px;
             gap: 8px;
             border: 1px solid transparent;
-            transition: border-color 0.2s;
             width: 100%;
+            transition: border-color 0.2s;
         }
 
         .search-box:focus-within {
@@ -99,10 +129,6 @@
             font-size: 14px;
             width: 100%;
             color: var(--text);
-        }
-
-        .search-box input::placeholder {
-            color: var(--muted);
         }
 
         .search-dropdown {
@@ -201,7 +227,7 @@
         }
 
         .page-title-bar {
-            padding: 130px 16px 10px 16px;
+            padding: 125px 16px 10px 16px;
             font-size: 20px;
             font-weight: 800;
             color: var(--text);
@@ -436,7 +462,6 @@
         .comment-box svg { width: 14px; height: 14px; fill: none; stroke: #8b8e99; stroke-width: 2; }
         .rating-num { font-weight: 700; color: var(--text); }
 
-        /* UXWing dan olingan aniq ikki qavatli olov SVG ikonka */
         .last-item-badge {
             display: flex;
             align-items: center;
@@ -487,6 +512,7 @@
         .notify-btn-sm.active-notified {
             background: #00c853;
             color: #ffffff;
+            cursor: default;
         }
 
         .cart-counter-box-sm {
@@ -580,7 +606,10 @@
 </head>
 <body>
 
-    <div class="header-search-container">
+    <div class="sticky-header">
+        <a href="javascript:history.back()" class="back-btn" title="Orqaga">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </a>
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -598,7 +627,7 @@
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
             <span data-i18n="nav_home">Bosh sahifa</span>
         </a>
-        <a href="categories.html" class="nav-item active">
+        <a href="categories.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span data-i18n="nav_catalog">Katalog</span>
         </a>
@@ -623,7 +652,7 @@
                 search_placeholder: "Mahsulotlar va turkumlar izlash...",
                 cart_btn: "Savatga",
                 notify_btn: "Kelganda xabar qilish",
-                notify_active: "✓ Xabar beriladi (Bekor qilish)",
+                notify_active: "✓ Xabar beriladi",
                 last_item: "Oxirgisi",
                 out_of_stock: "Qolmadi",
                 history_title: "Oxirgi qidiruvlar",
@@ -640,7 +669,7 @@
                 search_placeholder: "Поиск товаров и категорий...",
                 cart_btn: "В корзину",
                 notify_btn: "Сообщить о поступлении",
-                notify_active: "✓ Сообщим (Отменить)",
+                notify_active: "✓ Сообщим",
                 last_item: "Последний",
                 out_of_stock: "Нет в наличии",
                 history_title: "История поиска",
@@ -704,11 +733,13 @@
                 let q = searchQueryParam.toLowerCase();
                 document.getElementById('searchInput').value = searchQueryParam;
                 document.getElementById('pageTitle').textContent = `${t.products_title}: "${searchQueryParam}"`;
-                currentProductsList = allProducts.filter(p => {
-                    let n = getLocalized(p.name).toLowerCase();
-                    let s = getLocalized(p.subcat).toLowerCase();
-                    return n.includes(q) || s.includes(q);
-                });
+                
+                // Aniq qidirilgan mahsulot birinchi chiqishi, keyin esa o'xshashlari (jami 50tagacha) chiqishi
+                let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(q));
+                let relatedKeyword = q.split(' ')[q.split(' ').length - 1]; // oxirgi so'z (masalan: ko'zoynak)
+                let similarMatches = allProducts.filter(p => !exactMatches.includes(p) && (getLocalized(p.name).toLowerCase().includes(relatedKeyword) || getLocalized(p.subcat).toLowerCase().includes(q)));
+                
+                currentProductsList = [...exactMatches, ...similarMatches].slice(0, 50);
             } else if (subName) {
                 let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
                 document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
@@ -815,7 +846,7 @@
             let btnHtml = '';
             if (isOut) {
                 if (isNotified) {
-                    btnHtml = `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`;
+                    btnHtml = `<button class="notify-btn-sm active-notified">${t.notify_active}</button>`;
                 } else {
                     btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
                 }
@@ -876,7 +907,7 @@
             `;
         }
 
-        // Qidiruv va tarix logikasi (categories.html kabi)
+        // Qidiruv va tarix logikasi (categories.html kabi, narxlarsiz)
         function getSearchHistory() {
             return JSON.parse(localStorage.getItem('search_history')) || [];
         }
@@ -962,19 +993,19 @@
 
             let html = '';
             if (matches.length > 0) {
-                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='products.html?q=${encodeURIComponent(val)}'">
+                html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${val.replace(/'/g, "\\'")}')">
                     <span>"${val}" bo'yicha barcha natijalarni ko'rish</span>
                     <span class="suggestion-type">Qidirish</span>
                 </div>`;
 
                 matches.slice(0, 8).forEach(prod => {
                     let prodName = getLocalized(prod.name);
-                    html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${prodName.replace(/'/g, "\\'")}'); window.location.href='product.html?id=${prod.id}'">
+                    html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${prodName.replace(/'/g, "\\'")}')">
                         <div class="history-item-left">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             <span>${prodName}</span>
                         </div>
-                        <span style="font-size:11px; font-weight:700; color:var(--primary);">${prod.price}</span>
+                        <span class="suggestion-type">Mahsulot</span>
                     </div>`;
                 });
             } else {
@@ -985,14 +1016,18 @@
             dropdown.classList.add('show');
         }
 
+        function closeSearchAndGo(query) {
+            document.getElementById('searchDropdown').classList.remove('show');
+            document.getElementById('searchInput').blur();
+            saveSearchQuery(query);
+            window.location.href = `products.html?q=${encodeURIComponent(query)}`;
+        }
+
         function handleSearch(e) {
             if (e.key === 'Enter') {
                 const query = document.getElementById('searchInput').value.trim();
-                const dropdown = document.getElementById('searchDropdown');
-                if (dropdown) dropdown.classList.remove('show');
                 if (query) {
-                    saveSearchQuery(query);
-                    window.location.href = `products.html?q=${encodeURIComponent(query)}`;
+                    closeSearchAndGo(query);
                 }
             }
         }
@@ -1006,13 +1041,11 @@
         });
 
         function toggleNotify(id) {
-            if (notifiedList.includes(id)) {
-                notifiedList = notifiedList.filter(item => item !== id);
-            } else {
+            if (!notifiedList.includes(id)) {
                 notifiedList.push(id);
+                localStorage.setItem('notified_products', JSON.stringify(notifiedList));
+                updateCardInfoOnly(id);
             }
-            localStorage.setItem('notified_products', JSON.stringify(notifiedList));
-            updateCardInfoOnly(id);
         }
 
         function handleCardScroll(e, originalLen) {
