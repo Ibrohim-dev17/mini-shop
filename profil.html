@@ -99,6 +99,30 @@
             border-bottom: none;
         }
 
+        /* Tilni tanlash uchun dizayn */
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
         /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
@@ -182,22 +206,31 @@
 </head>
 <body>
 
-    <div class="header-title">Profil</div>
+    <div class="header-title" id="pageTitle">Profil</div>
 
     <div class="profile-card">
-        <div class="profile-avatar">U</div>
+        <div class="profile-avatar" id="userAvatar">U</div>
         <div class="profile-info">
-            <h3>Foydalanuvchi</h3>
-            <p>+998 90 123 45 67</p>
+            <h3 id="userName">Foydalanuvchi</h3>
+            <p id="userPhone">+998 90 123 45 67</p>
         </div>
     </div>
 
     <div class="menu-list">
-        <a href="#" class="menu-item">Mening buyurtmalarim <span>›</span></a>
-        <a href="heart.html" class="menu-item">Saralanganlar <span>›</span></a>
-        <a href="#" class="menu-item">Yetkazib berish punktlari <span>›</span></a>
-        <a href="#" class="menu-item">Sozlamalar <span>›</span></a>
-        <a href="#" class="menu-item" style="color: #ff3b30;">Chiqish</a>
+        <a href="#" class="menu-item" id="menuOrders">Mening buyurtmalarim <span>›</span></a>
+        <a href="heart.html" class="menu-item" id="menuFavs">Saralanganlar <span>›</span></a>
+        <a href="#" class="menu-item" id="menuPoints">Yetkazib berish punktlari <span>›</span></a>
+        
+        <!-- Tilni o'zgartirish tugmasi qo'shilgan qism -->
+        <div class="menu-item">
+            <span id="langLabel">Tilni tanlang</span>
+            <div class="lang-switcher">
+                <button class="lang-btn" id="btnUz" onclick="changeLanguage('uz')">O'zbekcha</button>
+                <button class="lang-btn" id="btnRu" onclick="changeLanguage('ru')">Русский</button>
+            </div>
+        </div>
+
+        <a href="#" class="menu-item" style="color: #ff3b30;" id="menuLogout">Chiqish</a>
     </div>
 
     <!-- BOTTOM NAVIGATION -->
@@ -206,37 +239,38 @@
             <div class="nav-icon-wrap">
                 <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             </div>
-            <span>Bosh sahifa</span>
+            <span id="navHome">Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
             <div class="nav-icon-wrap">
                 <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
             </div>
-            <span>Katalog</span>
+            <span id="navCatalog">Katalog</span>
         </a>
         <a href="heart.html" class="nav-item">
             <div class="nav-icon-wrap">
                 <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                 <div class="badge-count" id="favBadge">0</div>
             </div>
-            <span>Saralanganlar</span>
+            <span id="navFavs">Saralanganlar</span>
         </a>
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap">
                 <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                 <div class="badge-count" id="cartBadge">0</div>
             </div>
-            <span>Savatcha</span>
+            <span id="navCart">Savatcha</span>
         </a>
         <a href="profil.html" class="nav-item active">
             <div class="nav-icon-wrap">
                 <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
-            <span>Profil</span>
+            <span id="navProfile">Profil</span>
         </a>
     </nav>
 
     <script>
+        // Savatcha va saralanganlar badge logikasi
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
@@ -246,8 +280,87 @@
             if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
             if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
         }
-
         updateBadges();
+
+        // 1. Profil va Til ma'lumotlarini bazadan o'qib kelish
+        async function loadProfile() {
+            try {
+                let response = await fetch('/api/profile'); // Backenddagi profilingiz yo'li
+                let user = await response.json();
+                
+                // Ma'lumotlarni chiqarish
+                document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
+                document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
+                
+                // Til tugmasining faolligini belgilash
+                setLanguageUI(user.language || 'uz');
+            } catch (error) {
+                console.error("Profilni yuklashda xatolik:", error);
+                setLanguageUI('uz'); // Xatolik bo'lsa default o'zbekcha
+            }
+        }
+
+        // 2. Tilni o'zgartirib backendga (database.json ga) saqlash
+        async function changeLanguage(lang) {
+            try {
+                let response = await fetch('/api/profile', {
+                    method: 'PUT', // yoki POST (backendga qarab)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ language: lang })
+                });
+
+                if (response.ok) {
+                    setLanguageUI(lang);
+                    // products.html ga o'tganda o'zgargan tilni ko'rishi uchun sahifani yangilaymiz
+                    location.reload(); 
+                }
+            } catch (error) {
+                console.error("Tilni o'zgartirishda xatolik:", error);
+            }
+        }
+
+        // Tugmalar holatini boshqarish va matnlarni tarjima qilish
+        function setLanguageUI(lang) {
+            const btnUz = document.getElementById('btnUz');
+            const btnRu = document.getElementById('btnRu');
+
+            if (lang === 'ru') {
+                btnRu.classList.add('active');
+                btnUz.classList.remove('active');
+                
+                // Profil sahifasining o'zi uchun ruscha tarjimalar
+                document.getElementById('pageTitle').textContent = "Профиль";
+                document.getElementById('menuOrders').innerHTML = "Мои заказы <span>›</span>";
+                document.getElementById('menuFavs').innerHTML = "Избранное <span>›</span>";
+                document.getElementById('menuPoints').innerHTML = "Пункты выдачи <span>›</span>";
+                document.getElementById('langLabel').textContent = "Язык интерфейса";
+                document.getElementById('menuLogout').textContent = "Выйти";
+                document.getElementById('navHome').textContent = "Главная";
+                document.getElementById('navCatalog').textContent = "Каталог";
+                document.getElementById('navFavs').textContent = "Избранное";
+                document.getElementById('navCart').textContent = "Корзина";
+                document.getElementById('navProfile').textContent = "Профиль";
+            } else {
+                btnUz.classList.add('active');
+                btnRu.classList.remove('active');
+                
+                // O'zbekcha tarjimalar
+                document.getElementById('pageTitle').textContent = "Profil";
+                document.getElementById('menuOrders').innerHTML = "Mening buyurtmalarim <span>›</span>";
+                document.getElementById('menuFavs').innerHTML = "Saralanganlar <span>›</span>";
+                document.getElementById('menuPoints').innerHTML = "Yetkazib berish punktlari <span>›</span>";
+                document.getElementById('langLabel').textContent = "Tilni tanlang";
+                document.getElementById('menuLogout').textContent = "Chiqish";
+                document.getElementById('navHome').textContent = "Bosh sahifa";
+                document.getElementById('navCatalog').textContent = "Katalog";
+                document.getElementById('navFavs').textContent = "Saralanganlar";
+                document.getElementById('navCart').textContent = "Savatcha";
+                document.getElementById('navProfile').textContent = "Profil";
+            }
+        }
+
+        // Sahifa ochilishi bilan profildagi til va ma'lumotlarni yuklash
+        loadProfile();
     </script>
 </body>
 </html>
