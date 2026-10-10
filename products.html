@@ -36,25 +36,21 @@
             overflow-x: hidden;
         }
 
-        .sticky-header {
+        /* Categories.html uslubidagi qidiruv paneli va tepasini yopish */
+        .header-search-container {
+            padding: 50px 16px 12px 16px;
+            background: #ffffff;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: #ffffff;
             z-index: 999;
-            padding: 12px 16px;
-            margin-top: 44px;
             border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
             max-width: 1300px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
         }
 
-        .sticky-header::before {
+        .header-search-container::before {
             content: '';
             position: absolute;
             top: -60px;
@@ -65,35 +61,9 @@
             z-index: -1;
         }
 
-        .back-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            text-decoration: none;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-
-        .back-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--text);
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
         .search-box-wrapper {
             position: relative;
             width: 100%;
-            flex: 1;
         }
 
         .search-box {
@@ -104,8 +74,8 @@
             padding: 8px 12px;
             gap: 8px;
             border: 1px solid transparent;
-            width: 100%;
             transition: border-color 0.2s;
+            width: 100%;
         }
 
         .search-box:focus-within {
@@ -131,6 +101,10 @@
             color: var(--text);
         }
 
+        .search-box input::placeholder {
+            color: var(--muted);
+        }
+
         .search-dropdown {
             position: absolute;
             top: 100%;
@@ -140,7 +114,7 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             margin-top: 6px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
             max-height: 350px;
             overflow-y: auto;
             z-index: 1000;
@@ -151,7 +125,7 @@
             display: block;
         }
 
-        .search-history-header {
+        .search-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -163,17 +137,17 @@
             background: #fafafc;
         }
 
-        .clear-all-history {
-            color: var(--primary);
-            cursor: pointer;
+        .clear-history-btn {
             background: none;
             border: none;
-            font-size: 12px;
+            color: var(--primary);
             font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
         }
 
         .search-suggestion-item {
-            padding: 11px 14px;
+            padding: 12px 14px;
             font-size: 13px;
             color: var(--text);
             border-bottom: 1px solid var(--border);
@@ -184,36 +158,50 @@
             background: #fff;
         }
 
+        .search-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
         .search-suggestion-item:hover {
             background: var(--primary-bg);
             color: var(--primary);
+        }
+
+        .suggestion-type {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-left: 8px;
         }
 
         .history-item-left {
             display: flex;
             align-items: center;
             gap: 8px;
+            flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        .remove-history-btn {
+        .remove-history-item {
             background: none;
             border: none;
             color: var(--muted);
             font-size: 16px;
+            padding: 4px 8px;
             cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 4px;
         }
-        .remove-history-btn:hover {
-            color: var(--danger);
-            background: #ffebee;
+
+        .remove-history-item:hover {
+            color: #ff3b30;
         }
 
         .page-title-bar {
-            padding: 125px 16px 10px 16px;
+            padding: 130px 16px 10px 16px;
             font-size: 20px;
             font-weight: 800;
             color: var(--text);
@@ -448,7 +436,7 @@
         .comment-box svg { width: 14px; height: 14px; fill: none; stroke: #8b8e99; stroke-width: 2; }
         .rating-num { font-weight: 700; color: var(--text); }
 
-        /* UXWing dan olingan aniq haqiqiy olov SVG ikonka */
+        /* UXWing dan olingan aniq ikki qavatli olov SVG ikonka */
         .last-item-badge {
             display: flex;
             align-items: center;
@@ -592,14 +580,11 @@
 </head>
 <body>
 
-    <div class="sticky-header">
-        <a href="categories.html" class="back-btn" title="Orqaga">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </a>
+    <div class="header-search-container">
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulot nomidan izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
             </div>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
@@ -635,7 +620,7 @@
         const translations = {
             uz: {
                 products_title: "Mahsulotlar",
-                search_placeholder: "Mahsulot nomidan izlash...",
+                search_placeholder: "Mahsulotlar va turkumlar izlash...",
                 cart_btn: "Savatga",
                 notify_btn: "Kelganda xabar qilish",
                 notify_active: "✓ Xabar beriladi (Bekor qilish)",
@@ -652,7 +637,7 @@
             },
             ru: {
                 products_title: "Товары",
-                search_placeholder: "Поиск товаров...",
+                search_placeholder: "Поиск товаров и категорий...",
                 cart_btn: "В корзину",
                 notify_btn: "Сообщить о поступлении",
                 notify_active: "✓ Сообщим (Отменить)",
@@ -783,9 +768,7 @@
                             ` : ''}
                             ${badgeHtml}
                         </div>
-                        <div class="product-info" id="product-info-${p.id}">
-                            <!-- Dinamik qism -->
-                        </div>
+                        <div class="product-info" id="product-info-${p.id}"></div>
                     </div>
                 `;
             }).join('');
@@ -878,7 +861,6 @@
                     </div>
                     ${isLast ? `
                         <div class="last-item-badge">
-                            <!-- UXWing dan olingan aniq haqiqiy olov SVG ikonka -->
                             <svg viewBox="0 0 512 512" width="14" height="14">
                                 <path fill="#ff3d00" d="M192 480c-70.7 0-128-57.3-128-128 0-48.4 27.2-90.3 67.2-111.4 5.3-2.8 11.8.6 12.8 6.5 5.2 32.1 23.3 60.1 48.9 78.4 4.1 2.9 9.9-.1 10.2-5.1 2-35.3-11.4-74.8-40.2-118.4C145.4 179.8 192 110.1 192 48c0-8.8 10.7-13.1 16.9-6.9 72.8 72.8 111.1 168.1 87.4 256.4 1.4-.9 2.8-1.9 4.1-2.9 33.7-25.9 55.6-67.6 55.6-114.6 0-8.8 10.7-13.1 16.9-6.9 65 65 91.1 155.1 68.3 234.9C425.4 430.4 316.5 480 192 480z"/>
                                 <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
@@ -894,10 +876,80 @@
             `;
         }
 
+        // Qidiruv va tarix logikasi (categories.html kabi)
+        function getSearchHistory() {
+            return JSON.parse(localStorage.getItem('search_history')) || [];
+        }
+
+        function saveSearchQuery(q) {
+            if (!q) return;
+            let history = getSearchHistory();
+            history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
+            history.unshift(q);
+            if (history.length > 5) history = history.slice(0, 5);
+            localStorage.setItem('search_history', JSON.stringify(history));
+        }
+
+        function showSearchHistory() {
+            const val = document.getElementById('searchInput').value.trim();
+            const dropdown = document.getElementById('searchDropdown');
+            if (val.length > 0) return;
+
+            let history = getSearchHistory();
+            if (history.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+
+            let html = `
+                <div class="search-header-row">
+                    <span>${t.history_title}</span>
+                    <button class="clear-history-btn" onclick="clearAllHistory(event)">${t.clear_history}</button>
+                </div>
+            `;
+
+            history.forEach((item, index) => {
+                html += `
+                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item.replace(/'/g, "\\'")}')">
+                        <div class="history-item-left">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>${item}</span>
+                        </div>
+                        <button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button>
+                    </div>
+                `;
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+
+        function clearAllHistory(e) {
+            e.stopPropagation();
+            localStorage.removeItem('search_history');
+            document.getElementById('searchDropdown').classList.remove('show');
+        }
+
+        function removeHistoryItem(e, index) {
+            e.stopPropagation();
+            let history = getSearchHistory();
+            history.splice(index, 1);
+            localStorage.setItem('search_history', JSON.stringify(history));
+            showSearchHistory();
+        }
+
+        function selectHistoryItem(item) {
+            document.getElementById('searchInput').value = item;
+            document.getElementById('searchDropdown').classList.remove('show');
+            saveSearchQuery(item);
+            window.location.href = `products.html?q=${encodeURIComponent(item)}`;
+        }
+
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
-            if (!val) {
+
+            if (val.length === 0) {
                 showSearchHistory();
                 return;
             }
@@ -907,95 +959,49 @@
                 let s = getLocalized(p.subcat).toLowerCase();
                 return n.includes(val) || s.includes(val);
             });
-            
-            if (matches.length === 0) {
-                dropdown.innerHTML = `<div class="search-suggestion-item" style="color:var(--muted); justify-content:center;">${t.no_results}</div>`;
-                dropdown.classList.add('show');
-                return;
-            }
 
-            dropdown.innerHTML = matches.slice(0, 8).map(p => {
-                const prodName = getLocalized(p.name);
-                return `
-                    <div class="search-suggestion-item" onclick="selectSearchItem('${prodName.replace(/'/g, "\\'")}')">
+            let html = '';
+            if (matches.length > 0) {
+                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='products.html?q=${encodeURIComponent(val)}'">
+                    <span>"${val}" bo'yicha barcha natijalarni ko'rish</span>
+                    <span class="suggestion-type">Qidirish</span>
+                </div>`;
+
+                matches.slice(0, 8).forEach(prod => {
+                    let prodName = getLocalized(prod.name);
+                    html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${prodName.replace(/'/g, "\\'")}'); window.location.href='product.html?id=${prod.id}'">
                         <div class="history-item-left">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             <span>${prodName}</span>
                         </div>
-                        <span style="font-size:11px; font-weight:700; color:var(--primary);">${p.price}</span>
-                    </div>
-                `;
-            }).join('');
-            dropdown.classList.add('show');
-        }
-
-        function showSearchHistory() {
-            const dropdown = document.getElementById('searchDropdown');
-            if (searchHistory.length === 0) {
-                dropdown.classList.remove('show');
-                return;
+                        <span style="font-size:11px; font-weight:700; color:var(--primary);">${prod.price}</span>
+                    </div>`;
+                });
+            } else {
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">${t.no_results}</div>`;
             }
 
-            dropdown.innerHTML = `
-                <div class="search-history-header">
-                    <span>${t.history_title}</span>
-                    <button class="clear-all-history" onclick="clearAllHistory(event)">${t.clear_history}</button>
-                </div>
-                ${searchHistory.map((item, index) => `
-                    <div class="search-suggestion-item" onclick="selectSearchItem('${item.replace(/'/g, "\\'")}')">
-                        <div class="history-item-left">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            <span>${item}</span>
-                        </div>
-                        <button class="remove-history-btn" onclick="removeHistoryItem(event, ${index})">&times;</button>
-                    </div>
-                `).join('')}
-            `;
+            dropdown.innerHTML = html;
             dropdown.classList.add('show');
         }
 
         function handleSearch(e) {
             if (e.key === 'Enter') {
-                const query = e.target.value.trim();
+                const query = document.getElementById('searchInput').value.trim();
+                const dropdown = document.getElementById('searchDropdown');
+                if (dropdown) dropdown.classList.remove('show');
                 if (query) {
-                    if (!searchHistory.includes(query)) {
-                        searchHistory.unshift(query);
-                        if (searchHistory.length > 5) searchHistory.pop();
-                        localStorage.setItem('search_history', JSON.stringify(searchHistory));
-                    }
+                    saveSearchQuery(query);
                     window.location.href = `products.html?q=${encodeURIComponent(query)}`;
                 }
             }
         }
 
-        function selectSearchItem(query) {
-            document.getElementById('searchInput').value = query;
-            if (!searchHistory.includes(query)) {
-                searchHistory.unshift(query);
-                if (searchHistory.length > 5) searchHistory.pop();
-                localStorage.setItem('search_history', JSON.stringify(searchHistory));
-            }
-            window.location.href = `products.html?q=${encodeURIComponent(query)}`;
-        }
-
-        function removeHistoryItem(e, index) {
-            e.stopPropagation();
-            searchHistory.splice(index, 1);
-            localStorage.setItem('search_history', JSON.stringify(searchHistory));
-            showSearchHistory();
-        }
-
-        function clearAllHistory(e) {
-            e.stopPropagation();
-            searchHistory = [];
-            localStorage.removeItem('search_history');
-            document.getElementById('searchDropdown').classList.remove('show');
-        }
-
-        document.addEventListener('click', function(e) {
-            const searchBox = document.querySelector('.search-box-wrapper');
-            if (searchBox && !searchBox.contains(e.target)) {
-                document.getElementById('searchDropdown').classList.remove('show');
+        document.addEventListener('click', (e) => {
+            const wrapper = document.querySelector('.search-box-wrapper');
+            const dropdown = document.getElementById('searchDropdown');
+            if (wrapper && !wrapper.contains(e.target)) {
+                dropdown.classList.remove('show');
             }
         });
 
