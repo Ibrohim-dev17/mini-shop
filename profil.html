@@ -99,7 +99,6 @@
             border-bottom: none;
         }
 
-        /* Tilni tanlash uchun dizayn */
         .lang-switcher {
             display: flex;
             gap: 8px;
@@ -123,7 +122,6 @@
             border-color: var(--primary);
         }
 
-        /* BOTTOM NAVIGATION */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -132,7 +130,6 @@
             height: 64px;
             background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -149,7 +146,6 @@
             color: #808080;
             font-size: 10px;
             font-weight: 500;
-            transition: all 0.2s ease;
             width: 20%;
             position: relative;
         }
@@ -167,7 +163,6 @@
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
-            transition: all 0.2s ease;
         }
 
         .nav-item.active {
@@ -196,7 +191,6 @@
             align-items: center;
             justify-content: center;
             padding: 0 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .badge-count.show {
@@ -221,7 +215,6 @@
         <a href="heart.html" class="menu-item" id="menuFavs">Saralanganlar <span>›</span></a>
         <a href="#" class="menu-item" id="menuPoints">Yetkazib berish punktlari <span>›</span></a>
 
-        <!-- Tilni o'zgartirish tugmasi qo'shilgan qism -->
         <div class="menu-item">
             <span id="langLabel">Tilni tanlang</span>
             <div class="lang-switcher">
@@ -233,44 +226,30 @@
         <a href="#" class="menu-item" style="color: #ff3b30;" id="menuLogout">Chiqish</a>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
             <span id="navHome">Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
             <span id="navCatalog">Katalog</span>
         </a>
         <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <div class="badge-count" id="favBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
             <span id="navFavs">Saralanganlar</span>
         </a>
         <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                <div class="badge-count" id="cartBadge">0</div>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
             <span id="navCart">Savatcha</span>
         </a>
         <a href="profil.html" class="nav-item active">
-            <div class="nav-icon-wrap">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            </div>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
             <span id="navProfile">Profil</span>
         </a>
     </nav>
 
     <script>
-        // Savatcha va saralanganlar badge logikasi
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
 
@@ -282,10 +261,8 @@
         }
         updateBadges();
 
-        // 1. Profil va Til ma'lumotlarini bazadan o'qib kelish
+        // 1. Profil va Tilni database.json / backend dan o'qib olish
         async function loadProfile() {
-            let savedLang = localStorage.getItem('selected_lang');
-            
             try {
                 let response = await fetch('/api/profile');
                 if (response.ok) {
@@ -293,37 +270,34 @@
                     document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
                     document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
                     
-                    if (!savedLang && user.language) {
-                        savedLang = user.language;
-                        localStorage.setItem('selected_lang', savedLang);
-                    }
+                    // Backenddagi database.json dan kelgan tilni qo'llash
+                    setLanguageUI(user.language || 'uz');
                 }
             } catch (error) {
-                console.error("Profilni yuklashda tarmoq xatoligi (lokal ishlatilmoqda):", error);
+                console.error("Profil ma'lumotlarini olishda xatolik:", error);
+                setLanguageUI('uz');
             }
-
-            // Agar bazadan kelmasa yoki localStorage da bo'lsa shuni ishlatamiz
-            setLanguageUI(savedLang || 'uz');
         }
 
-        // 2. Tilni o'zgartirib backendga va localStorage ga saqlash
+        // 2. Tilni o'zgartirganda to'g'ridan-to'g'ri backendga (database.json ga) yuborish
         async function changeLanguage(lang) {
-            // Avval darhol brauzer xotirasiga saqlaymiz va UI ni yangilaymiz
-            localStorage.setItem('selected_lang', lang);
-            setLanguageUI(lang);
-
             try {
-                await fetch('/api/profile', {
-                    method: 'PUT',
+                let response = await fetch('/api/profile', {
+                    method: 'PUT', // yoki POST (backend sozlamasiga qarab)
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ language: lang })
                 });
+
+                if (response.ok) {
+                    setLanguageUI(lang);
+                    location.reload(); // Sahifani yangilab bazadagi ma'lumotni to'liq yuklash
+                }
             } catch (error) {
-                console.error("Backendga saqlashda xatolik:", error);
+                console.error("Tilni saqlashda xatolik:", error);
             }
         }
 
-        // Tugmalar holatini boshqarish va matnlarni tarjima qilish
+        // Interfeys matnlarini tanlangan tilga moslash
         function setLanguageUI(lang) {
             const btnUz = document.getElementById('btnUz');
             const btnRu = document.getElementById('btnRu');
@@ -332,7 +306,6 @@
                 if (btnRu) btnRu.classList.add('active');
                 if (btnUz) btnUz.classList.remove('active');
 
-                // Profil sahifasining o'zi uchun ruscha tarjimalar
                 document.getElementById('pageTitle').textContent = "Профиль";
                 document.getElementById('menuOrders').innerHTML = "Мои заказы <span>›</span>";
                 document.getElementById('menuFavs').innerHTML = "Избранное <span>›</span>";
@@ -348,7 +321,6 @@
                 if (btnUz) btnUz.classList.add('active');
                 if (btnRu) btnRu.classList.remove('active');
 
-                // O'zbekcha tarjimalar
                 document.getElementById('pageTitle').textContent = "Profil";
                 document.getElementById('menuOrders').innerHTML = "Mening buyurtmalarim <span>›</span>";
                 document.getElementById('menuFavs').innerHTML = "Saralanganlar <span>›</span>";
@@ -363,7 +335,6 @@
             }
         }
 
-        // Sahifa ochilishi bilan profildagi til va ma'lumotlarni yuklash
         loadProfile();
     </script>
 </body>
