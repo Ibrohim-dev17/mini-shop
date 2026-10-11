@@ -16,6 +16,29 @@
       "product_id": 201
     }
   ],
+  "stories": [
+    {
+      "title": { "uz": "Super Aksiya", "ru": "Супер Акция" },
+      "img": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80",
+      "product_id": 101
+    },
+    {
+      "title": { "uz": "Yangi Mavsum", "ru": "Новый Сезон" },
+      "img": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80",
+      "product_id": 107
+    },
+    {
+      "title": { "uz": "Chegirmalar", "ru": "Скидки" },
+      "img": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80",
+      "product_id": 201
+    },
+    {
+      "title": { "uz": "Top Ommabop", "ru": "Топ Популярное" },
+      "img": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80",
+      "product_id": 307
+    }
+  ],
+  "flash_sale_end": "2026-12-31T23:59:59",
   "products": [
     { 
       "id": 101, 
