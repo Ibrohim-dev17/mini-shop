@@ -15,6 +15,16 @@
             --border: #e2e5eb;
         }
 
+        [data-theme="dark"] {
+            --primary: #9b4dff;
+            --primary-bg: #221638;
+            --bg: #121316;
+            --card: #1c1d22;
+            --text: #f4f5f7;
+            --muted: #999cb0;
+            --border: #2a2c33;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -26,12 +36,12 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 80px;
+            padding-bottom: 120px;
             overflow-x: hidden;
         }
 
         .header-title {
-            background: #ffffff;
+            background: var(--card);
             padding: 16px;
             font-size: 18px;
             font-weight: 700;
@@ -49,6 +59,7 @@
             display: flex;
             align-items: center;
             gap: 16px;
+            border: 1px solid var(--border);
         }
 
         .profile-avatar {
@@ -78,9 +89,10 @@
 
         .menu-list {
             background: var(--card);
-            margin: 0 16px;
+            margin: 0 16px 16px 16px;
             border-radius: 16px;
             overflow: hidden;
+            border: 1px solid var(--border);
         }
 
         .menu-item {
@@ -93,6 +105,7 @@
             color: var(--text);
             font-size: 14px;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .menu-item:last-child {
@@ -122,20 +135,76 @@
             border-color: var(--primary);
         }
 
+        /* Switch toggle (Tungi rejim uchun) */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border);
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Pastki navigatsiya (categories.html bilan bir xil uslubda) */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
             height: 64px;
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
             z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
+
+        [data-theme="dark"] .bottom-nav {
+            background: rgba(28, 29, 34, 0.95);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        @media (min-width: 1024px) { .bottom-nav { max-width: 550px; } }
 
         .nav-item {
             display: flex;
@@ -148,6 +217,9 @@
             font-weight: 500;
             width: 20%;
             position: relative;
+            cursor: pointer;
+            padding: 8px 0;
+            touch-action: manipulation;
         }
 
         .nav-icon-wrap {
@@ -155,7 +227,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: none;
         }
+
+        .nav-item span { pointer-events: none; }
 
         .nav-item svg {
             width: 24px;
@@ -163,6 +238,7 @@
             fill: none;
             stroke: #808080;
             stroke-width: 1.8;
+            transition: all 0.2s ease;
         }
 
         .nav-item.active {
@@ -180,8 +256,8 @@
             position: absolute;
             top: -4px;
             right: -8px;
-            background: #000000;
-            color: #ffffff;
+            background: #000;
+            color: #fff;
             font-size: 10px;
             font-weight: 700;
             min-width: 17px;
@@ -193,9 +269,7 @@
             padding: 0 4px;
         }
 
-        .badge-count.show {
-            display: flex;
-        }
+        .badge-count.show { display: flex; }
     </style>
 </head>
 <body>
@@ -215,6 +289,15 @@
         <a href="heart.html" class="menu-item" id="menuFavs">Saralanganlar <span>›</span></a>
         <a href="#" class="menu-item" id="menuPoints">Yetkazib berish punktlari <span>›</span></a>
 
+        <!-- Tungi rejimni o'zgartirish tugmasi -->
+        <div class="menu-item" onclick="toggleTheme()">
+            <span id="themeLabel">🌙 Tungi rejim</span>
+            <label class="switch" onclick="event.stopPropagation()">
+                <input type="checkbox" id="themeCheckbox" onchange="toggleTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
         <div class="menu-item">
             <span id="langLabel">Tilni tanlang</span>
             <div class="lang-switcher">
@@ -229,50 +312,88 @@
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-            <span id="navHome">Bosh sahifa</span>
+            <span id="navHome" data-i18n="nav_home">Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
-            <span id="navCatalog">Katalog</span>
-        </a>
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
-            <span id="navFavs">Saralanganlar</span>
+            <span id="navCatalog" data-i18n="nav_catalog">Katalog</span>
         </a>
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
-            <span id="navCart">Savatcha</span>
+            <span id="navCart" data-i18n="nav_cart">Savatcha</span>
+        </a>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span id="navFavs" data-i18n="nav_fav">Saralangan</span>
         </a>
         <a href="profil.html" class="nav-item active">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-            <span id="navProfile">Profil</span>
+            <span id="navProfile" data-i18n="nav_profile">Profil</span>
         </a>
     </nav>
 
     <script>
-        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
-        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
-
         function updateBadges() {
+            let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+            let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
             const favBadge = document.getElementById('favBadge');
             const cartBadge = document.getElementById('cartBadge');
-            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else { favBadge.classList.remove('show'); }
-            if (cart.length > 0) { cartBadge.textContent = cart.length; cartBadge.classList.add('show'); } else { cartBadge.classList.remove('show'); }
+
+            if (favs.length > 0) {
+                favBadge.textContent = favs.length;
+                favBadge.classList.add('show');
+            } else {
+                favBadge.classList.remove('show');
+            }
+
+            let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+            if (totalCartCount > 0) {
+                cartBadge.textContent = totalCartCount;
+                cartBadge.classList.add('show');
+            } else {
+                cartBadge.classList.remove('show');
+            }
         }
-        updateBadges();
+
+        // Tungi rejimni boshqarish
+        function initTheme() {
+            const savedTheme = localStorage.getItem('site_theme') || 'light';
+            const checkbox = document.getElementById('themeCheckbox');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (checkbox) checkbox.checked = true;
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                if (checkbox) checkbox.checked = false;
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const checkbox = document.getElementById('themeCheckbox');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('site_theme', 'light');
+                if (checkbox) checkbox.checked = false;
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('site_theme', 'dark');
+                if (checkbox) checkbox.checked = true;
+            }
+        }
 
         async function loadProfile() {
-            // Har doim localStorage birinchi o'rinda turadi
+            initTheme();
+            updateBadges();
             let currentLang = localStorage.getItem('selected_lang') || 'uz';
-            
+
             try {
                 let response = await fetch('/api/profile');
                 if (response.ok) {
                     let user = await response.json();
                     document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
                     document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
-                    
-                    // Agar localStorage bo'sh bo'lsagina serverdagi tilni olamiz
+
                     if (!localStorage.getItem('selected_lang') && user.language) {
                         currentLang = user.language;
                         localStorage.setItem('selected_lang', currentLang);
@@ -313,12 +434,13 @@
                 document.getElementById('menuOrders').innerHTML = "Мои заказы <span>›</span>";
                 document.getElementById('menuFavs').innerHTML = "Избранное <span>›</span>";
                 document.getElementById('menuPoints').innerHTML = "Пункты выдачи <span>›</span>";
+                document.getElementById('themeLabel').textContent = "🌙 Ночной режим";
                 document.getElementById('langLabel').textContent = "Язык интерфейса";
                 document.getElementById('menuLogout').textContent = "Выйти";
                 document.getElementById('navHome').textContent = "Главная";
                 document.getElementById('navCatalog').textContent = "Каталог";
-                document.getElementById('navFavs').textContent = "Избранное";
                 document.getElementById('navCart').textContent = "Корзина";
+                document.getElementById('navFavs').textContent = "Избранное";
                 document.getElementById('navProfile').textContent = "Профиль";
             } else {
                 if (btnUz) btnUz.classList.add('active');
@@ -328,17 +450,18 @@
                 document.getElementById('menuOrders').innerHTML = "Mening buyurtmalarim <span>›</span>";
                 document.getElementById('menuFavs').innerHTML = "Saralanganlar <span>›</span>";
                 document.getElementById('menuPoints').innerHTML = "Yetkazib berish punktlari <span>›</span>";
+                document.getElementById('themeLabel').textContent = "🌙 Tungi rejim";
                 document.getElementById('langLabel').textContent = "Tilni tanlang";
                 document.getElementById('menuLogout').textContent = "Chiqish";
                 document.getElementById('navHome').textContent = "Bosh sahifa";
                 document.getElementById('navCatalog').textContent = "Katalog";
-                document.getElementById('navFavs').textContent = "Saralanganlar";
                 document.getElementById('navCart').textContent = "Savatcha";
+                document.getElementById('navFavs').textContent = "Saralangan";
                 document.getElementById('navProfile').textContent = "Profil";
             }
         }
 
-        loadProfile();
+        window.addEventListener('DOMContentLoaded', loadProfile);
     </script>
 </body>
 </html>
