@@ -1,67 +1,70 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
+app.use(express.static(path.join(__dirname))); // Frontend fayllar turgan papka
 
-// Barcha frontend sahifalarni (HTML, CSS, JS) to'g'ridan-to'g'ri o'qish uchun
-app.use(express.static(__dirname));
+const dbPath = path.join(__dirname, 'database.json');
 
-// Ma'lumotlar bazasi fayli yo'li
-const DB_FILE = path.join(__dirname, 'database.json');
-
-// Bazani o'qish funksiyasi
-const readDatabase = () => {
-    if (!fs.existsSync(DB_FILE)) {
-        const initialData = { 
+// Bazani xavfsiz o'qish va xatolik bo'lsa avtomatik tiklash/yangilash
+function readDatabase() {
+    try {
+        if (!fs.existsSync(dbPath)) {
+            const defaultData = { 
+                products: [], 
+                categories: [], 
+                orders: [], 
+                users: [{ id: 1, name: "Sotuvchi", language: "uz" }] 
+            };
+            fs.writeFileSync(dbPath, JSON.stringify(defaultData, null, 2));
+            return defaultData;
+        }
+        const data = fs.readFileSync(dbPath, 'utf8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.error("database.json faylida xatolik topildi, baza yangilanmoqda:", error);
+        const freshData = { 
             products: [], 
             categories: [], 
             orders: [], 
-            users: [] 
+            users: [{ id: 1, name: "Sotuvchi", language: "uz" }] 
         };
-        fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2));
+        fs.writeFileSync(dbPath, JSON.stringify(freshData, null, 2));
+        return freshData;
     }
-    const data = fs.readFileSync(DB_FILE, 'utf8');
-    return JSON.parse(data);
-};
+}
 
-// Bazaga yozish funksiyasi
-const writeDatabase = (data) => {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-};
-
-// --- API YO'LLARI (BACKEND) ---
-
-// 1. Hamma mahsulotlarni olish
-app.get('/api/products', (req, res) => {
-    const db = readDatabase();
-    res.json(db.products);
+// 1. Profil va joriy tilni olish
+app.get('/api/profile', (req, res) => {
+    let db = readDatabase();
+    let user = db.users && db.users[0] ? db.users[0] : { id: 1, name: "Sotuvchi", language: "uz" };
+    res.json(user);
 });
 
-// 2. Yangi mahsulot qo'shish (Admin panel uchun)
-app.post('/api/products', (req, res) => {
-    const db = readDatabase();
-    const newProduct = { id: Date.now(), ...req.body };
-    db.products.push(newProduct);
-    writeDatabase(db);
-    res.json({ success: true, product: newProduct });
+// 2. Tilni o'zgartirganda database.json ga yozib yangilash
+app.put('/api/profile', (req, res) => {
+    try {
+        let db = readDatabase();
+        let newLang = req.body.language;
+
+        if (!db.users || db.users.length === 0) {
+            db.users = [{ id: 1, name: "Sotuvchi", language: "uz" }];
+        }
+
+        if (newLang) {
+            db.users[0].language = newLang;
+            fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
+        }
+
+        res.json({ success: true, language: db.users[0].language });
+    } catch (error) {
+        console.error("database.json ga yozishda xatolik:", error);
+        res.status(500).json({ success: false, error: "Server xatoligi" });
+    }
 });
 
-// 3. Buyurtma berish (Sotilganlarni hisoblash uchun)
-app.post('/api/orders', (req, res) => {
-    const db = readDatabase();
-    const newOrder = { id: Date.now(), date: new Date(), ...req.body };
-    db.orders.push(newOrder);
-    writeDatabase(db);
-    res.json({ success: true, order: newOrder });
-});
-
-// Serverni ishga tushirish
-app.listen(PORT, () => {
-    console.log(`Server ishlamoqda: port ${PORT}`);
+app.listen(3000, () => {
+    console.log("Server 3000-portda ishga tushdi!");
 });
