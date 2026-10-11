@@ -723,7 +723,9 @@
 
         function getLocalized(field) {
             if (!field) return '';
-            if (typeof field === 'object') return field[currentLang] || field['uz'] || '';
+            if (typeof field === 'object') {
+                return field[currentLang] || field['uz'] || Object.values(field)[0] || '';
+            }
             return field;
         }
 
@@ -739,7 +741,7 @@
                     }
                 }
             } catch (error) {
-                console.error("Backenddan tilni o'qishda xatolik (localStorage ishlatilmoqda):", error);
+                console.warn("Backend xatosi, localStorage tiliga tayanilmoqda:", error);
             }
             initPage();
         }
@@ -771,7 +773,11 @@
                 if (subName) {
                     let decodedSub = decodeURIComponent(subName).trim().toLowerCase();
                     document.getElementById('pageTitle').textContent = decodeURIComponent(subName);
-                    currentProductsList = allProducts.filter(p => getLocalized(p.subcat).trim().toLowerCase() === decodedSub);
+                    currentProductsList = allProducts.filter(p => {
+                        let subUz = (p.subcat && p.subcat.uz) ? p.subcat.uz.trim().toLowerCase() : '';
+                        let subRu = (p.subcat && p.subcat.ru) ? p.subcat.ru.trim().toLowerCase() : '';
+                        return subUz === decodedSub || subRu === decodedSub || getLocalized(p.subcat).trim().toLowerCase() === decodedSub;
+                    });
                 } else if (catId) {
                     currentProductsList = allProducts.filter(p => String(p.category_id) === String(catId));
                 } else {
