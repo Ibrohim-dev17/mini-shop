@@ -37,15 +37,19 @@
 
         .sticky-header { position: fixed; top: 0; left: 0; right: 0; background: var(--card); z-index: 999; padding: 12px 16px; margin-top: 45px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; max-width: 1300px; margin-left: auto; margin-right: auto; }
         .sticky-header::before { content: ''; position: absolute; top: -60px; left: 0; right: 0; height: 60px; background: var(--card); z-index: -1; }
-        
+
         .search-box-wrapper { position: relative; width: 100%; flex: 1; }
-        .search-box { display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 8px 12px; gap: 8px; border: 1px solid var(--border); width: 100%; }
+        .search-box { display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 8px 12px; gap: 8px; border: 1px solid var(--border); width: 100%; position: relative; z-index: 1001; }
         .search-box:focus-within { border-color: var(--primary); }
         .search-box svg { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
         .search-box input { border: none; outline: none; background: transparent; font-size: 14px; width: 100%; color: var(--text); }
         .search-box input::placeholder { color: var(--muted); }
 
-        .search-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-top: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); max-height: 350px; overflow-y: auto; z-index: 1000; display: none; }
+        /* Qidiruv dropdown paneli va fonni qoplovchi qatlam */
+        .search-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 998; display: none; }
+        .search-backdrop.show { display: block; }
+
+        .search-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-top: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); max-height: 350px; overflow-y: auto; z-index: 1002; display: none; }
         .search-dropdown.show { display: block; }
         .search-header-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; font-size: 12px; font-weight: 700; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--bg); }
         .clear-history-btn { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; font-size: 12px; }
@@ -63,7 +67,7 @@
         .story-img, .story-video { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card); background: #000; }
         .story-title { font-size: 11px; font-weight: 500; color: var(--text); max-width: 70px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Bannerlar (5s avtomatik aylanish va qo'lda surish) */
+        /* Bannerlar */
         .banner-carousel-container { width: 100%; position: relative; overflow: hidden; padding: 12px 0 4px 0; max-width: 1300px; margin: 0 auto; touch-action: pan-y; }
         .banner-track { display: flex; padding-left: 10vw; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .banner-slide { flex: 0 0 80vw; margin-right: 10px; height: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); background: var(--border); cursor: pointer; }
@@ -122,7 +126,7 @@
         .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
         .price-old { text-decoration: line-through; }
         .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
-        
+
         .product-rating { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin: 8px 0; gap: 4px; }
         .rating-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
         .rating-box, .comment-box { display: flex; align-items: center; gap: 2px; }
@@ -130,7 +134,6 @@
         .comment-box svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
         .rating-num { font-weight: 700; color: var(--text); }
 
-        /* Savat SVG ikonchasi razmeri to'g'irlandi */
         .cart-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
         .cart-btn-sm svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
 
@@ -157,6 +160,8 @@
 </head>
 <body>
 
+    <div class="search-backdrop" id="searchBackdrop" onclick="closeSearchDropdown()"></div>
+
     <div class="sticky-header">
         <div class="search-box-wrapper">
             <div class="search-box">
@@ -169,13 +174,11 @@
 
     <div class="stories-container" id="storiesContainer"></div>
 
-    <!-- Bannerlar (5s avtomatik va qo'lda aylanish) -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
     <div class="banner-dots" id="bannerDots"></div>
 
-    <!-- Hafta aksiyalari bloki (Skidki nedeli) -->
     <div id="weeklySaleContainer"></div>
 
     <div class="categories-scroll-wrapper">
@@ -318,7 +321,6 @@
             `).join('');
         }
 
-        // Har 5 sekundda o'zi aylanadigan va qo'lda suriladigan banner
         function renderBanners() {
             const track = document.getElementById('bannerTrack');
             const dotsContainer = document.getElementById('bannerDots');
@@ -414,7 +416,7 @@
         function renderCategoriesTrack() {
             const track = document.getElementById('categoriesTrack');
             let sortedCats = [...(dbData.categories || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
-            
+
             track.innerHTML = `
                 <div class="cat-text-pill ${activeCatId === 'all' ? 'active' : ''}" onclick="selectCategory('all')">Barchasi</div>
                 ${sortedCats.map(cat => `
@@ -637,14 +639,13 @@
             updateCardInfoOnly(id);
         }
 
-        // “Siz ko'rgansiz” bloki: boshqa mahsulot kartochkalari bilan 100% bir xil dizaynda chiqadi
         function renderRecentProducts() {
             let recentIds = JSON.parse(localStorage.getItem('recent_products')) || [];
             if (recentIds.length === 0) return;
             document.getElementById('recentTitle').style.display = 'block';
             let recentList = dbData.products.filter(p => recentIds.includes(p.id));
             const grid = document.getElementById('recentProductsGrid');
-            
+
             grid.innerHTML = recentList.map(p => {
                 const isLiked = favs.includes(p.id) ? 'liked' : '';
                 const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
@@ -698,7 +699,7 @@
             window.location.href = `product.html?id=${id}`;
         }
 
-        // Qidiruv mantiqi
+        // Qidiruv va klaviatura boshqaruvi
         function getSearchHistory() { return JSON.parse(localStorage.getItem('search_history')) || []; }
         function saveSearchQuery(q) {
             if (!q) return;
@@ -708,9 +709,13 @@
             if (history.length > 5) history = history.slice(0, 5);
             localStorage.setItem('search_history', JSON.stringify(history));
         }
+
         function showSearchHistory() {
             const val = document.getElementById('searchInput').value.trim();
             const dropdown = document.getElementById('searchDropdown');
+            const backdrop = document.getElementById('searchBackdrop');
+            backdrop.classList.add('show');
+
             if (val.length > 0) return;
             let history = getSearchHistory();
             if (history.length === 0) { dropdown.classList.remove('show'); return; }
@@ -721,17 +726,27 @@
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
         }
-        function clearAllHistory(e) { e.stopPropagation(); localStorage.removeItem('search_history'); document.getElementById('searchDropdown').classList.remove('show'); }
+
+        function closeSearchDropdown() {
+            document.getElementById('searchDropdown').classList.remove('show');
+            document.getElementById('searchBackdrop').classList.remove('show');
+            document.getElementById('searchInput').blur();
+        }
+
+        function clearAllHistory(e) { e.stopPropagation(); localStorage.removeItem('search_history'); closeSearchDropdown(); }
         function removeHistoryItem(e, index) { e.stopPropagation(); let history = getSearchHistory(); history.splice(index, 1); localStorage.setItem('search_history', JSON.stringify(history)); showSearchHistory(); }
         function selectHistoryItem(item) {
             document.getElementById('searchInput').value = item;
-            document.getElementById('searchDropdown').classList.remove('show');
+            closeSearchDropdown();
             saveSearchQuery(item);
             window.location.href = `products.html?q=${encodeURIComponent(item)}`;
         }
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
+            const backdrop = document.getElementById('searchBackdrop');
+            backdrop.classList.add('show');
+
             if (val.length === 0) { showSearchHistory(); return; }
             let matches = dbData.products.filter(p => getLocalized(p.name).toLowerCase().includes(val) || getLocalized(p.subcat).toLowerCase().includes(val));
             let html = `<div class="search-suggestion-item" onclick="closeSearchAndGo('${val}')"><span>"${val}" ${t.search_all_label}</span><span class="suggestion-type">${t.search_type}</span></div>`;
