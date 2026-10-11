@@ -694,10 +694,13 @@
             }
         };
 
-        let currentLang = 'uz';
-        let t = translations[currentLang];
+        let currentLang = localStorage.getItem('selected_lang') || 'uz';
+        let t = translations[currentLang] || translations['uz'];
 
         function applyTranslations() {
+            currentLang = localStorage.getItem('selected_lang') || 'uz';
+            t = translations[currentLang] || translations['uz'];
+
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.textContent = t[key];
@@ -731,11 +734,12 @@
                     let user = await response.json();
                     if (user.language) {
                         currentLang = user.language;
+                        localStorage.setItem('selected_lang', currentLang);
                         t = translations[currentLang] || translations['uz'];
                     }
                 }
             } catch (error) {
-                console.error("Tilni bazadan olishda xatolik:", error);
+                console.error("Backenddan tilni o'qishda xatolik (localStorage ishlatilmoqda):", error);
             }
             initPage();
         }
