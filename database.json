@@ -1,4 +1,7 @@
 {
+  "settings": {
+    "theme": "light"
+  },
   "products": [
     { 
       "id": 101, 
