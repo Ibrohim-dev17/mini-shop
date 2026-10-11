@@ -262,35 +262,42 @@
         updateBadges();
 
         async function loadProfile() {
+            let currentLang = localStorage.getItem('selected_lang');
             try {
                 let response = await fetch('/api/profile');
                 if (response.ok) {
                     let user = await response.json();
                     document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
                     document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
-                    setLanguageUI(user.language || 'uz');
+                    if (user.language) {
+                        currentLang = user.language;
+                        localStorage.setItem('selected_lang', currentLang);
+                    }
                 }
             } catch (error) {
-                console.error("Profilni yuklashda xatolik:", error);
-                setLanguageUI('uz');
+                console.error("Profilni yuklashda tarmoq xatoligi:", error);
             }
+            setLanguageUI(currentLang || 'uz');
         }
 
         async function changeLanguage(lang) {
+            // 1. Darhol brauzer xotirasiga yozamiz va UI ni yangilaymiz (tugma ishlashini kafolatlaydi)
+            localStorage.setItem('selected_lang', lang);
+            setLanguageUI(lang);
+
+            // 2. Fon rejimida serverga (database.json ga) yuboramiz
             try {
-                let response = await fetch('/api/profile', {
+                await fetch('/api/profile', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ language: lang })
                 });
-
-                if (response.ok) {
-                    setLanguageUI(lang);
-                    location.reload();
-                }
             } catch (error) {
-                console.error("Tilni saqlashda xatolik:", error);
+                console.error("Serverga saqlashda xatolik (lokal davom etadi):", error);
             }
+
+            // Sahifani yangilab barcha sahifalarga ta'sir qilishini ta'minlaymiz
+            location.reload();
         }
 
         function setLanguageUI(lang) {
