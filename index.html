@@ -66,21 +66,14 @@
         .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
         .dot.active { width: 22px; border-radius: 10px; background: var(--primary); }
 
-        /* Filtr chipslari (Barchasi, Aksiya va h.k.) */
-        .filter-chips { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 12px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
-        .filter-chips::-webkit-scrollbar { display: none; }
-        .chip { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
-        .chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
-        .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-        /* Dinamik matnli yozuvli kategoriyalar (Banner kabi o'ngga-chapga suriladigan) */
+        /* Matnli kategoriyalar (Admin panel tartibi bo'yicha) */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
         .categories-scroll-wrapper::-webkit-scrollbar { display: none; }
         .categories-track { display: flex; gap: 10px; width: max-content; }
         .cat-text-pill { background: var(--card); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .cat-text-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Subkategoriyalar doira shaklida */
+        /* Dinamik subkategoriyalar doira shaklida */
         .subcats-row { display: flex; gap: 12px; overflow-x: auto; padding: 4px 16px 12px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
         .subcats-row::-webkit-scrollbar { display: none; }
         .subcat-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; width: 64px; text-decoration: none; color: var(--text); }
@@ -88,15 +81,21 @@
         .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* Skrinshotingizdagi kabi Skidki nedeli bloki */
+        /* “Barchasi” tanlanganda chiqadigan quyi filtr chipslari */
+        .sub-filter-chips { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 12px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
+        .sub-filter-chips::-webkit-scrollbar { display: none; }
+        .sub-chip { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .sub-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* Haftalik aksiya bloki */
         .weekly-sale-section { background: #7000ff; border-radius: 20px; padding: 16px; max-width: 1300px; margin: 16px auto; color: #fff; }
         .weekly-sale-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .weekly-sale-title { font-size: 18px; font-weight: 800; }
-        .weekly-sale-all { font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 2px; }
+        .weekly-sale-all { font-size: 14px; font-weight: 600; cursor: pointer; }
         .weekly-sale-track { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
         .weekly-sale-track::-webkit-scrollbar { display: none; }
 
-        /* Mahsulot kartochkalari */
+        /* Mahsulotlar gridi */
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; max-width: 1300px; margin: 0 auto; }
         @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
@@ -110,8 +109,6 @@
 
         .product-img-box { width: 100%; height: 180px; background: var(--bg); position: relative; overflow: hidden; cursor: pointer; }
         .product-img-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Taymer va oylik to'lov badjlari mahsulot ichida */
         .prod-timer-badge { position: absolute; bottom: 8px; left: 8px; background: #7000ff; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 6px; display: flex; align-items: center; gap: 3px; z-index: 3; }
         .installment-badge { background: #ffeb3b; color: #000; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block; margin: 4px 0; }
 
@@ -125,7 +122,7 @@
         .cart-counter-box-sm { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 34px; background: var(--bg); border-radius: 10px; padding: 0 4px; border: 1px solid var(--border); }
         .counter-btn-sm { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 24px; height: 24px; border-radius: 6px; font-weight: 700; cursor: pointer; }
 
-        /* Pastki navigatsiya */
+        /* Navigatsiya */
         .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); display: flex; justify-content: space-around; align-items: center; border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; }
         .nav-item.active { color: var(--primary); font-weight: 600; }
@@ -146,50 +143,25 @@
         </div>
     </div>
 
-    <!-- Stories -->
     <div class="stories-container" id="storiesContainer"></div>
 
-    <!-- Bannerlar -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
     <div class="banner-dots" id="bannerDots"></div>
 
-    <!-- Filtr chipslari -->
-    <div class="filter-chips">
-        <div class="chip active" onclick="setMainFilter('all', this)">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            Barchasi
-        </div>
-        <div class="chip" onclick="setMainFilter('chegirma', this)">
-            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg>
-            Aksiya
-        </div>
-        <div class="chip" onclick="setMainFilter('top', this)">
-            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            Ko'p ko'rilganlar
-        </div>
-        <div class="chip" onclick="setMainFilter('cheap', this)">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            Arzon narx
-        </div>
-    </div>
-
-    <!-- Admin paneldan tartiblanadigan matnli kategoriyalar (o'ngga-chapga suriladi) -->
+    <!-- Admin paneldan tartiblanadigan matnli kategoriyalar -->
     <div class="categories-scroll-wrapper">
         <div class="categories-track" id="categoriesTrack"></div>
     </div>
 
-    <!-- Tanlangan kategoriya subkategoriyalari (Doira shaklida) -->
-    <div class="subcats-row" id="subcatsRow"></div>
+    <!-- “Barchasi” turganda tagida chiqadigan filtrlar, kategoriya turganda subkategoriyalar doirasi -->
+    <div id="dynamicSubOrFilters"></div>
 
-    <!-- Admin paneldan yoqiladigan Skidki nedeli (Aksiyalar) bloki -->
     <div id="weeklySaleContainer"></div>
 
-    <!-- Mahsulotlar Gridi -->
     <div class="products-grid" id="productsGrid"></div>
 
-    <!-- Siz ko'rgansiz bloki -->
     <h2 class="section-title" id="recentTitle" style="display:none; padding: 0 16px; margin: 16px 0 10px 0; max-width:1300px; margin-left:auto; margin-right:auto; font-size:16px; font-weight:700;">Siz ko'rgansiz</h2>
     <div class="products-grid" id="recentProductsGrid"></div>
 
@@ -224,7 +196,7 @@
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
         let activeCatId = 'all';
-        let activeMainFilter = 'all';
+        let activeSubFilter = 'all';
 
         async function init() {
             try {
@@ -268,7 +240,6 @@
             track.innerHTML = banners.map(b => `<div class="banner-slide" onclick="location.href='product.html?id=${b.product_id}'"><img src="${b.img}"></div>`).join('');
         }
 
-        // Admin panel tartibi bo'yicha matnli kategoriyalar
         function renderCategoriesTrack() {
             const track = document.getElementById('categoriesTrack');
             let sortedCats = [...(dbData.categories || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -279,27 +250,49 @@
                     <div class="cat-text-pill ${activeCatId === cat.id ? 'active' : ''}" onclick="selectCategory(${cat.id})">${getLoc(cat.name)}</div>
                 `).join('')}
             `;
-            renderSubcategories();
+            renderSubOrFiltersArea();
         }
 
         function selectCategory(id) {
             activeCatId = id;
+            activeSubFilter = 'all';
             renderCategoriesTrack();
             renderMainContent();
         }
 
-        function renderSubcategories() {
-            const row = document.getElementById('subcatsRow');
-            if (activeCatId === 'all') { row.style.display = 'none'; return; }
-            row.style.display = 'flex';
-            let cat = dbData.categories.find(c => c.id === activeCatId);
-            if (!cat || !cat.subcats) { row.innerHTML = ''; return; }
-            row.innerHTML = cat.subcats.map(sub => `
-                <div class="subcat-item" onclick="filterBySub('${getLoc(sub.name)}')">
-                    <div class="subcat-circle"><img src="${sub.img}"></div>
-                    <span class="subcat-name">${getLoc(sub.name)}</span>
-                </div>
-            `).join('');
+        function renderSubOrFiltersArea() {
+            const area = document.getElementById('dynamicSubOrFilters');
+            if (activeCatId === 'all') {
+                // “Barchasi” deganda tagida chiqadigan qo'shimcha filtrlar
+                area.innerHTML = `
+                    <div class="sub-filter-chips">
+                        <div class="sub-chip ${activeSubFilter === 'all' ? 'active' : ''}" onclick="setSubFilter('all', this)">Barchasi</div>
+                        <div class="sub-chip ${activeSubFilter === 'top' ? 'active' : ''}" onclick="setSubFilter('top', this)">Ko'p ko'rilganlar</div>
+                        <div class="sub-chip ${activeSubFilter === 'cheap' ? 'active' : ''}" onclick="setSubFilter('cheap', this)">Arzon narx</div>
+                        <div class="sub-chip ${activeSubFilter === 'popular' ? 'active' : ''}" onclick="setSubFilter('popular', this)">Ko'p sotilganlar</div>
+                    </div>
+                `;
+            } else {
+                let cat = dbData.categories.find(c => c.id === activeCatId);
+                if (!cat || !cat.subcats) { area.innerHTML = ''; return; }
+                area.innerHTML = `
+                    <div class="subcats-row">
+                        ${cat.subcats.map(sub => `
+                            <div class="subcat-item" onclick="filterBySub('${getLoc(sub.name)}')">
+                                <div class="subcat-circle"><img src="${sub.img}"></div>
+                                <span class="subcat-name">${getLoc(sub.name)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        function setSubFilter(filterType, el) {
+            document.querySelectorAll('.sub-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            activeSubFilter = filterType;
+            renderMainContent();
         }
 
         function filterBySub(subName) {
@@ -307,14 +300,12 @@
             renderProductsGrid(filtered);
         }
 
-        // Admin paneldan yoqiladigan Haftalik aksiya bloki (Skrinshotingizdagi kabi)
         function renderWeeklySales() {
             const container = document.getElementById('weeklySaleContainer');
             let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
             if (!section || !section.product_ids) { container.innerHTML = ''; return; }
 
             let promoProds = dbData.products.filter(p => section.product_ids.includes(p.id));
-
             container.innerHTML = `
                 <div class="weekly-sale-section">
                     <div class="weekly-sale-header">
@@ -326,31 +317,39 @@
                     </div>
                 </div>
             `;
-            startTimers();
         }
 
-        function setMainFilter(type, el) {
-            document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            activeMainFilter = type;
-            renderMainContent();
+        // Har kuni yangilanadigan Random 50ta mahsulot mantiqi
+        function getDailyRandomProducts(allProds) {
+            let todayStr = new Date().toDateString();
+            let savedDate = localStorage.getItem('random_prods_date');
+            let savedIds = JSON.parse(localStorage.getItem('random_prods_ids') || '[]');
+
+            if (savedDate === todayStr && savedIds.length > 0) {
+                return allProds.filter(p => savedIds.includes(p.id));
+            } else {
+                let shuffled = [...allProds].sort(() => 0.5 - Math.random()).slice(0, 50);
+                localStorage.setItem('random_prods_date', todayStr);
+                localStorage.setItem('random_prods_ids', JSON.stringify(shuffled.map(p => p.id)));
+                return shuffled;
+            }
         }
 
         function renderMainContent() {
             let prods = [...dbData.products];
+            
             if (activeCatId !== 'all') {
                 prods = prods.filter(p => p.category_id === activeCatId);
-            }
-
-            if (activeMainFilter === 'chegirma') {
-                prods = prods.filter(p => p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi');
-            } else if (activeMainFilter === 'top') {
-                prods.sort((a, b) => b.rating - a.rating);
-            } else if (activeMainFilter === 'cheap') {
-                prods.sort((a, b) => parseInt(a.price.replace(/\D/g,'')) - parseInt(b.price.replace(/\D/g,'')));
-            } else if (activeCatId === 'all' && activeMainFilter === 'all') {
-                // Barchasi deganda random 50ta chiqarish
-                prods = prods.sort(() => 0.5 - Math.random()).slice(0, 50);
+            } else {
+                if (activeSubFilter === 'all') {
+                    prods = getDailyRandomProducts(dbData.products);
+                } else if (activeSubFilter === 'top') {
+                    prods.sort((a, b) => b.rating - a.rating);
+                } else if (activeSubFilter === 'cheap') {
+                    prods.sort((a, b) => parseInt(a.price.replace(/\D/g,'')) - parseInt(b.price.replace(/\D/g,'')));
+                } else if (activeSubFilter === 'popular') {
+                    prods.sort((a, b) => b.comments - a.comments);
+                }
             }
             renderProductsGrid(prods);
         }
@@ -367,7 +366,7 @@
                     </div>
                     <div class="product-img-box">
                         <img src="${img}">
-                        ${isPromo ? `<div class="prod-timer-badge">⏰ <span class="timer-countdown">39:54:33</span></div>` : ''}
+                        ${isPromo ? `<div class="prod-timer-badge">⏰ 39:54:33</div>` : ''}
                     </div>
                     <div class="product-info">
                         <div>
@@ -445,10 +444,6 @@
             if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else favBadge.classList.remove('show');
             let totalCart = cart.reduce((s, i) => s + i.qty, 0);
             if (totalCart > 0) { cartBadge.textContent = totalCart; cartBadge.classList.add('show'); } else cartBadge.classList.remove('show');
-        }
-
-        function startTimers() {
-            // Taymer funksiyasi
         }
 
         window.addEventListener('DOMContentLoaded', init);
