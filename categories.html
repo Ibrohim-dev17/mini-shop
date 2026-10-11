@@ -28,22 +28,43 @@
             background-color: var(--bg);
             color: var(--text);
             padding-bottom: 120px;
-            overflow: hidden;
+            overflow-x: hidden;
             height: 100vh;
         }
 
-        .header-search-container {
-            padding: 50px 16px 12px 16px;
-            background: #ffffff;
-            position: sticky;
+        .sticky-header {
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
             z-index: 999;
+            padding: 12px 16px;
+            margin-top: 55px; /* Qidiruv paneli biroz pastroqqa tushirildi */
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sticky-header::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #ffffff;
+            z-index: -1;
         }
 
         .search-box-wrapper {
             position: relative;
             width: 100%;
+            flex: 1;
         }
 
         .search-box {
@@ -180,39 +201,76 @@
             color: #ff3b30;
         }
 
-        .catalog-layout {
+        /* Asosiy qism - Chap va o'ng panellar bir-biriga ta'sir qilmaydi */
+        .catalog-container {
+            max-width: 1300px;
+            margin: 125px auto 0 auto;
+            padding: 12px 16px;
             display: flex;
-            height: calc(100vh - 130px);
-            position: relative;
+            gap: 16px;
+            height: calc(100vh - 135px);
             overflow: hidden;
-            background: var(--bg);
+        }
+
+        @media (max-width: 768px) {
+            .catalog-container {
+                flex-direction: column;
+                padding: 8px 12px;
+                gap: 12px;
+                height: calc(100vh - 120px);
+            }
         }
 
         .sidebar-categories {
-            width: 155px;
+            width: 260px;
             background: #ffffff;
-            border-right: 1px solid var(--border);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             flex-shrink: 0;
-            scrollbar-width: none;
-            padding: 12px 0;
+            padding: 8px;
             height: 100%;
+            scrollbar-width: none;
         }
 
-        .sidebar-categories::-webkit-scrollbar {
-            display: none;
+        .sidebar-categories::-webkit-scrollbar { display: none; }
+
+        @media (max-width: 768px) {
+            .sidebar-categories {
+                width: 100%;
+                height: auto;
+                max-height: 60px;
+                display: flex;
+                overflow-x: auto;
+                gap: 6px;
+                padding: 6px;
+                white-space: nowrap;
+                border-radius: 12px;
+                flex-shrink: 0;
+            }
         }
 
         .sidebar-item {
-            padding: 14px 12px;
+            padding: 12px 14px;
             font-size: 13px;
             font-weight: 500;
             color: #7d818c;
             cursor: pointer;
             transition: all 0.2s ease;
             line-height: 1.35;
+            border-radius: 10px;
             position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-item {
+                display: inline-block;
+                padding: 8px 14px;
+                background: var(--bg);
+                flex-shrink: 0;
+            }
+            .sidebar-item.active::before { display: none; }
         }
 
         .sidebar-item.active {
@@ -228,22 +286,24 @@
             top: 50%;
             transform: translateY(-50%);
             width: 4px;
-            height: 22px;
+            height: 20px;
             background: var(--primary);
             border-radius: 0 4px 4px 0;
         }
 
         .content-panel {
             flex: 1;
-            padding: 16px;
+            padding: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            background: var(--card);
             height: 100%;
         }
 
         .panel-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--text);
             margin-bottom: 16px;
@@ -252,11 +312,14 @@
         .subcats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px 10px;
+            gap: 20px 16px;
         }
 
         @media (min-width: 768px) {
             .subcats-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .subcats-grid { grid-template-columns: repeat(5, 1fr); }
         }
 
         .subcat-card {
@@ -270,18 +333,22 @@
         }
 
         .subcat-img-wrap {
-            width: 72px;
-            height: 72px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: var(--bg);
             overflow: hidden;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04);
             flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .subcat-img-wrap { width: 90px; height: 90px; }
         }
 
         .subcat-img {
@@ -291,9 +358,9 @@
         }
 
         .subcat-name {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 500;
-            line-height: 1.25;
+            line-height: 1.3;
             color: var(--text);
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -321,6 +388,8 @@
             z-index: 1000;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
+
+        @media (min-width: 1024px) { .bottom-nav { max-width: 550px; } }
 
         .nav-item {
             display: flex;
@@ -390,7 +459,7 @@
 </head>
 <body>
 
-    <div class="header-search-container">
+    <div class="sticky-header">
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -400,7 +469,7 @@
         </div>
     </div>
 
-    <div class="catalog-layout">
+    <div class="catalog-container">
         <div class="sidebar-categories" id="sidebarCategories"></div>
         <div class="content-panel" id="contentPanel"></div>
     </div>
@@ -464,61 +533,9 @@
             }
         };
 
-        const CATEGORIES_DATA = [
-            {
-                id: 1,
-                name: { uz: "Ayollar kiyimlari", ru: "Женская одежда" },
-                subcats: [
-                    { name: { uz: "Ko'ylaklar", ru: "Платья" }, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Kurtkalar", ru: "Куртки" }, img: "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Ichki kiyimlar", ru: "Нижнее белье" }, img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Jinsilar", ru: "Джинсы" }, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Futbolkalar", ru: "Футболки" }, img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" }
-                ]
-            },
-            {
-                id: 2,
-                name: { uz: "Erkaklar kiyimlari", ru: "Мужская одежда" },
-                subcats: [
-                    { name: { uz: "Erkaklar kurtkalari", ru: "Мужские куртки" }, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Sportivniy", ru: "Спортивные костюмы" }, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Erkaklar ko'ylaklari", ru: "Мужские рубашки" }, img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Erkaklar jinsilari", ru: "Мужские джинсы" }, img: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&auto=format&fit=crop&q=80" }
-                ]
-            },
-            {
-                id: 3,
-                name: { uz: "Oyoq kiyimlar", ru: "Обувь" },
-                subcats: [
-                    { name: { uz: "Tapichka", ru: "Тапочки" }, img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Krossovkalar", ru: "Кроссовки" }, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Tuflilar", ru: "Туфли" }, img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Qishki etiklar", ru: "Зимние ботинки" }, img: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&auto=format&fit=crop&q=80" }
-                ]
-            },
-            {
-                id: 4,
-                name: { uz: "Aksessuarlar", ru: "Аксессуары" },
-                subcats: [
-                    { name: { uz: "Shapkalar", ru: "Шапки" }, img: "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Sumkalar", ru: "Сумки" }, img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Soatlar", ru: "Часы" }, img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Ko'zoynaklar", ru: "Очки" }, img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&auto=format&fit=crop&q=80" }
-                ]
-            },
-            {
-                id: 5,
-                name: { uz: "Uy uchun", ru: "Товары для дома" },
-                subcats: [
-                    { name: { uz: "Uy tapichkalari", ru: "Домашние тапочки" }, img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "To'qima buyumlar", ru: "Текстиль" }, img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&auto=format&fit=crop&q=80" },
-                    { name: { uz: "Idish-tovoqlar", ru: "Посуда" }, img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&auto=format&fit=crop&q=80" }
-                ]
-            }
-        ];
-
         let currentLang = localStorage.getItem('selected_lang') || 'uz';
         let t = translations[currentLang] || translations['uz'];
+        let categoriesData = [];
         let allProducts = [];
         let activeCatId = parseInt(localStorage.getItem('active_cat_id')) || 1;
 
@@ -552,11 +569,14 @@
             return '';
         }
 
-        async function fetchProductsAndInit() {
+        async function fetchDatabaseAndInit() {
+            currentLang = localStorage.getItem('selected_lang') || 'uz';
+
             try {
                 let res = await fetch('/api/products');
                 if (res.ok) {
                     let db = await res.json();
+                    categoriesData = db.categories || [];
                     allProducts = db.products || [];
                 }
             } catch (err) {
@@ -564,12 +584,14 @@
                     let resDb = await fetch('database.json');
                     if (resDb.ok) {
                         let db = await resDb.json();
+                        categoriesData = db.categories || [];
                         allProducts = db.products || [];
                     }
                 } catch (e) {
-                    console.error("Bazadan mahsulotlarni o'qib bo'lmadi:", e);
+                    console.error("Bazadan ma'lumotlarni o'qib bo'lmadi:", e);
                 }
             }
+
             renderCatalog();
             updateBadges();
         }
@@ -579,13 +601,15 @@
             const sidebar = document.getElementById('sidebarCategories');
             const panel = document.getElementById('contentPanel');
 
-            sidebar.innerHTML = CATEGORIES_DATA.map(c => `
+            if (!categoriesData || categoriesData.length === 0) return;
+
+            sidebar.innerHTML = categoriesData.map(c => `
                 <div class="sidebar-item ${c.id === activeCatId ? 'active' : ''}" onclick="selectCategory(${c.id})">
                     ${getLocalized(c.name)}
                 </div>
             `).join('');
 
-            const currentCat = CATEGORIES_DATA.find(c => c.id === activeCatId) || CATEGORIES_DATA[0];
+            const currentCat = categoriesData.find(c => c.id === activeCatId) || categoriesData[0];
 
             panel.innerHTML = `
                 <div class="panel-title">${getLocalized(currentCat.name)}</div>
@@ -679,7 +703,6 @@
             window.location.href = `products.html?q=${encodeURIComponent(item)}`;
         }
 
-        // Qidiruv faqat joriy tilda ishlaydi
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -693,7 +716,7 @@
             let matchedSubcats = [];
             let matchedProducts = [];
 
-            CATEGORIES_DATA.forEach(cat => {
+            categoriesData.forEach(cat => {
                 let catNameStr = getStrictLocalized(cat.name).toLowerCase();
                 if (catNameStr.includes(val)) {
                     matchedMainCats.push({ catId: cat.id, catName: getLocalized(cat.name) });
@@ -761,7 +784,7 @@
         }
 
         function handleSearch(e) {
-            if (e.key === 'Enter') {
+            e.key === 'Enter' && (()=>{
                 const query = document.getElementById('searchInput').value.trim();
                 const dropdown = document.getElementById('searchDropdown');
                 if (dropdown) dropdown.classList.remove('show');
@@ -769,14 +792,14 @@
                     saveSearchQuery(query);
                     window.location.href = `products.html?q=${encodeURIComponent(query)}`;
                 }
-            }
+            })();
         }
 
         document.addEventListener('click', (e) => {
             const wrapper = document.querySelector('.search-box-wrapper');
             const dropdown = document.getElementById('searchDropdown');
             if (wrapper && !wrapper.contains(e.target)) {
-                dropdown.classList.remove('show');
+                if (dropdown) dropdown.classList.remove('show');
             }
         });
 
@@ -802,13 +825,8 @@
             }
         }
 
-        window.addEventListener('pageshow', () => {
-            fetchProductsAndInit();
-        });
-
-        window.addEventListener('DOMContentLoaded', () => {
-            fetchProductsAndInit();
-        });
+        window.addEventListener('pageshow', fetchDatabaseAndInit);
+        window.addEventListener('DOMContentLoaded', fetchDatabaseAndInit);
     </script>
 </body>
 </html>
