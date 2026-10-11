@@ -20,6 +20,18 @@
             --danger: #ff3b30;
         }
 
+        [data-theme="dark"] {
+            --primary: #9b4dff;
+            --primary-bg: #221638;
+            --bg: #121316;
+            --card: #1c1d22;
+            --text: #f4f5f7;
+            --muted: #999cb0;
+            --border: #2a2c33;
+            --discount-bg: #2e1a47;
+            --discount-text: #b17dff;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -40,10 +52,10 @@
             top: 0;
             left: 0;
             right: 0;
-            background: #ffffff;
+            background: var(--card);
             z-index: 999;
             padding: 12px 16px;
-            margin-top: 44px;
+            margin-top: 55px; /* Qidiruv paneli biroz pastroqqa tushirildi */
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -60,7 +72,7 @@
             left: 0;
             right: 0;
             height: 60px;
-            background: #ffffff;
+            background: var(--card);
             z-index: -1;
         }
 
@@ -102,14 +114,13 @@
             border-radius: 10px;
             padding: 8px 12px;
             gap: 8px;
-            border: 1px solid transparent;
+            border: 1px solid var(--border);
             width: 100%;
             transition: border-color 0.2s;
         }
 
         .search-box:focus-within {
             border-color: var(--primary);
-            background: #ffffff;
         }
 
         .search-box svg {
@@ -128,6 +139,10 @@
             font-size: 14px;
             width: 100%;
             color: var(--text);
+        }
+
+        .search-box input::placeholder {
+            color: var(--muted);
         }
 
         .search-dropdown {
@@ -159,7 +174,7 @@
             font-weight: 700;
             color: var(--muted);
             border-bottom: 1px solid var(--border);
-            background: #fafafc;
+            background: var(--bg);
         }
 
         .clear-history-btn {
@@ -180,7 +195,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #fff;
+            background: var(--card);
         }
 
         .search-suggestion-item:last-child {
@@ -226,7 +241,7 @@
         }
 
         .page-title-bar {
-            padding: 125px 16px 10px 16px;
+            padding: 130px 16px 10px 16px;
             font-size: 20px;
             font-weight: 800;
             color: var(--text);
@@ -270,7 +285,7 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -282,6 +297,11 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
+        [data-theme="dark"] .heart-icon-sm {
+            background: rgba(28, 29, 34, 0.6);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
         .heart-icon-sm svg {
             width: 17px;
             height: 17px;
@@ -289,6 +309,10 @@
             stroke: #1f2026;
             stroke-width: 2;
             transition: all 0.2s;
+        }
+
+        [data-theme="dark"] .heart-icon-sm svg {
+            stroke: #f4f5f7;
         }
 
         .heart-icon-sm.liked svg {
@@ -299,7 +323,7 @@
         .product-img-box {
             width: 100%;
             height: 220px;
-            background: #f8f9fa;
+            background: var(--bg);
             position: relative;
             border-radius: 16px;
             overflow: hidden;
@@ -470,7 +494,7 @@
         }
 
         .rating-box svg { width: 13px; height: 13px; fill: var(--star); flex-shrink: 0; }
-        .comment-box svg { width: 13px; height: 13px; fill: none; stroke: #8b8e99; stroke-width: 2; flex-shrink: 0; }
+        .comment-box svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
         .rating-num { font-weight: 700; color: var(--text); }
 
         .last-item-badge {
@@ -486,6 +510,11 @@
             white-space: nowrap;
             flex-shrink: 0;
         }
+
+        [data-theme="dark"] .last-item-badge {
+            background: #3b1d12;
+        }
+
         .last-item-badge svg {
             width: 12px;
             height: 12px;
@@ -545,7 +574,8 @@
         }
 
         .counter-btn-sm {
-            background: #fff;
+            background: var(--card);
+            color: var(--text);
             border: 1px solid var(--border);
             width: 26px;
             height: 26px;
@@ -558,7 +588,7 @@
             justify-content: center;
         }
         .counter-btn-sm:disabled { opacity: 0.4; cursor: not-allowed; }
-        .counter-val-sm { font-size: 14px; font-weight: 700; }
+        .counter-val-sm { font-size: 14px; font-weight: 700; color: var(--text); }
 
         .bottom-nav {
             position: fixed;
@@ -570,6 +600,7 @@
             height: 64px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -577,6 +608,11 @@
             border-radius: 20px;
             z-index: 1000;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .bottom-nav {
+            background: rgba(28, 29, 34, 0.95);
+            border-color: rgba(255, 255, 255, 0.08);
         }
 
         @media (min-width: 1024px) { .bottom-nav { max-width: 550px; } }
@@ -596,7 +632,8 @@
             padding: 8px 0;
         }
 
-        .nav-icon-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+        .nav-icon-wrap { position: relative; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        .nav-item span { pointer-events: none; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: #808080; stroke-width: 1.8; transition: all 0.2s ease; }
         .nav-item.active { color: var(--primary); font-weight: 600; }
         .nav-item.active svg { stroke: var(--primary); fill: var(--primary-bg); transform: scale(1.05); }
@@ -717,9 +754,16 @@
         let t = translations[currentLang] || translations['uz'];
         let allProducts = [];
 
-        function applyTranslations() {
+        function applyThemeAndTranslations() {
             currentLang = localStorage.getItem('selected_lang') || 'uz';
             t = translations[currentLang] || translations['uz'];
+
+            let siteTheme = localStorage.getItem('site_theme') || 'light';
+            if (siteTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
@@ -739,7 +783,6 @@
             return field;
         }
 
-        // Faqat tanlangan til bo'yicha maydondan qidirish (uz/ru aralashib ketmasligi uchun)
         function getStrictLocalized(field) {
             if (!field) return '';
             if (typeof field === 'object') {
@@ -769,6 +812,9 @@
                 if (res.ok) {
                     let db = await res.json();
                     allProducts = db.products || [];
+                    if (db.settings && db.settings.theme && !localStorage.getItem('site_theme')) {
+                        localStorage.setItem('site_theme', db.settings.theme);
+                    }
                 }
             } catch (err) {
                 try {
@@ -776,6 +822,9 @@
                     if (resDb.ok) {
                         let db = await resDb.json();
                         allProducts = db.products || [];
+                        if (db.settings && db.settings.theme && !localStorage.getItem('site_theme')) {
+                            localStorage.setItem('site_theme', db.settings.theme);
+                        }
                     }
                 } catch (e) {
                     console.error("Mahsulotlarni yuklab bo'lmadi:", e);
@@ -796,7 +845,7 @@
         let currentProductsList = [];
 
         function initPage() {
-            applyTranslations();
+            applyThemeAndTranslations();
             if (!allProducts || allProducts.length === 0) {
                 setTimeout(initPage, 50);
                 return;
@@ -810,7 +859,6 @@
                 pageTitleEl.textContent = `${t.products_title}: "${searchQueryParam}"`;
 
                 let q = searchQueryParam.toLowerCase();
-                // Qidiruv faqat tanlangan tildagi matnlar bo'yicha ishlaydi
                 let exactMatches = allProducts.filter(p => {
                     let n = getStrictLocalized(p.name).toLowerCase();
                     let s = getStrictLocalized(p.subcat).toLowerCase();
@@ -1097,7 +1145,6 @@
                 return;
             }
 
-            // Faqat joriy til bo'yicha qidiruv natijalarini filter qilish
             let matches = allProducts.filter(p => {
                 let n = getStrictLocalized(p.name).toLowerCase();
                 let s = getStrictLocalized(p.subcat).toLowerCase();
