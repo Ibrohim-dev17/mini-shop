@@ -724,7 +724,6 @@
             return field;
         }
 
-        // Backend (database.json) orqali tilni olish
         async function fetchLanguageAndInit() {
             try {
                 let response = await fetch('/api/profile');
@@ -1257,7 +1256,6 @@
             history.back();
         }
 
-        // Sahifa qayta ochilganda bazadagi tilni yangilab olish
         window.addEventListener('pageshow', (event) => {
             fetchLanguageAndInit();
         });
