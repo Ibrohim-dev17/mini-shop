@@ -376,7 +376,58 @@
       "sizes": [1] 
     }
   ],
-  "categories": [],
+  "categories": [
+    {
+      "id": 1,
+      "name": { "uz": "Ayollar kiyimlari", "ru": "Женская одежда" },
+      "subcats": [
+        { "name": { "uz": "Ko'ylaklar", "ru": "Платья" }, "img": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Kurtkalar", "ru": "Куртки" }, "img": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Jinsilar", "ru": "Джинсы" }, "img": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Futbolkalar", "ru": "Футболки" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": { "uz": "Erkaklar kiyimlari", "ru": "Мужская одежда" },
+      "subcats": [
+        { "name": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "img": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Sportivniy", "ru": "Спортивные костюмы" }, "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Erkaklar ko'ylaklari", "ru": "Мужские рубашки" }, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Erkaklar jinsilari", "ru": "Мужские джинсы" }, "img": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": { "uz": "Oyoq kiyimlar", "ru": "Обувь" },
+      "subcats": [
+        { "name": { "uz": "Tapichka", "ru": "Тапочки" }, "img": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "img": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Tuflilar", "ru": "Туфли" }, "img": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Qishki etiklar", "ru": "Зимние ботинки" }, "img": "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": { "uz": "Aksessuarlar", "ru": "Аксессуары" },
+      "subcats": [
+        { "name": { "uz": "Shapkalar", "ru": "Шапки" }, "img": "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Sumkalar", "ru": "Сумки" }, "img": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Soatlar", "ru": "Часы" }, "img": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Ko'zoynaklar", "ru": "Очки" }, "img": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": { "uz": "Uy uchun", "ru": "Товары для дома" },
+      "subcats": [
+        { "name": { "uz": "Uy tapichkalari", "ru": "Домашние тапочки" }, "img": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "To'qima buyumlar", "ru": "Текстиль" }, "img": "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Idish-tovoqlar", "ru": "Посуда" }, "img": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&auto=format&fit=crop&q=80" }
+      ]
+    }
+  ],
   "orders": [],
   "users": [
     {
