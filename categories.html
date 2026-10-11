@@ -40,7 +40,7 @@
             background: #ffffff;
             z-index: 999;
             padding: 12px 16px;
-            margin-top: 55px; /* Qidiruv paneli biroz pastroqqa tushirildi */
+            margin-top: 55px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -201,7 +201,7 @@
             color: #ff3b30;
         }
 
-        /* Asosiy konteyner: Chap va o'ng qismlar o'ziga xos alohida scrollga ega */
+        /* Asosiy konteyner */
         .catalog-container {
             max-width: 1300px;
             margin: 125px auto 0 auto;
@@ -214,14 +214,14 @@
 
         @media (max-width: 768px) {
             .catalog-container {
-                flex-direction: column;
-                padding: 8px 12px;
-                gap: 12px;
+                flex-direction: row;
+                padding: 8px;
+                gap: 8px;
                 height: calc(100vh - 120px);
             }
         }
 
-        /* Chap tomon: alohida scroll */
+        /* 1. Chap tomon: Yozuvli asosiy kategoriyalar (O'ziga xos alohida vertical scroll) */
         .sidebar-categories {
             width: 260px;
             background: #ffffff;
@@ -239,23 +239,19 @@
 
         @media (max-width: 768px) {
             .sidebar-categories {
-                width: 100%;
-                height: auto;
-                max-height: 65px;
-                display: flex;
-                overflow-x: auto;
-                overflow-y: hidden;
-                gap: 6px;
+                width: 135px;
+                height: 100%;
+                display: block;
+                overflow-x: hidden;
+                overflow-y: auto;
                 padding: 6px;
-                white-space: nowrap;
                 border-radius: 12px;
                 flex-shrink: 0;
             }
-            .sidebar-categories::-webkit-scrollbar { display: none; }
         }
 
         .sidebar-item {
-            padding: 12px 14px;
+            padding: 14px 12px;
             font-size: 13px;
             font-weight: 500;
             color: #7d818c;
@@ -264,16 +260,7 @@
             line-height: 1.35;
             border-radius: 10px;
             position: relative;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar-item {
-                display: inline-block;
-                padding: 8px 14px;
-                background: var(--bg);
-                flex-shrink: 0;
-            }
-            .sidebar-item.active::before { display: none; }
+            margin-bottom: 4px;
         }
 
         .sidebar-item.active {
@@ -294,7 +281,11 @@
             border-radius: 0 4px 4px 0;
         }
 
-        /* O'ng tomon: alohida scroll */
+        @media (max-width: 768px) {
+            .sidebar-item.active::before { display: none; }
+        }
+
+        /* 2. O'ng tomon: Doirali kategoriyalar paneli (O'ziga xos alohida vertical scroll) */
         .content-panel {
             flex: 1;
             padding: 20px;
@@ -304,6 +295,12 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             height: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .content-panel {
+                padding: 12px;
+            }
         }
 
         .panel-title {
@@ -337,8 +334,8 @@
         }
 
         .subcat-img-wrap {
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             border-radius: 50%;
             background: var(--bg);
             overflow: hidden;
