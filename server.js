@@ -65,6 +65,12 @@ app.put('/api/profile', (req, res) => {
     }
 });
 
+// 3. Barcha mahsulotlarni database.json dan olib beruvchi qism
+app.get('/api/products', (req, res) => {
+    let db = readDatabase();
+    res.json(db);
+});
+
 app.listen(3000, () => {
     console.log("Server 3000-portda ishga tushdi!");
 });
