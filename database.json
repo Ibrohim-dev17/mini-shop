@@ -2,6 +2,20 @@
   "settings": {
     "theme": "light"
   },
+  "banners": [
+    {
+      "img": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80",
+      "product_id": 101
+    },
+    {
+      "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80",
+      "product_id": 107
+    },
+    {
+      "img": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80",
+      "product_id": 201
+    }
+  ],
   "products": [
     { 
       "id": 101, 
