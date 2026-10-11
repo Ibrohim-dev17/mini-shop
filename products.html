@@ -674,6 +674,9 @@
                 history_title: "Oxirgi qidiruvlar",
                 clear_history: "Tozalash",
                 no_results: "Hech narsa topilmadi...",
+                search_all_label: "bo'yicha barcha natijalarni ko'rish",
+                search_type: "Qidirish",
+                product_type: "Mahsulot",
                 nav_home: "Bosh sahifa",
                 nav_catalog: "Katalog",
                 nav_cart: "Savatcha",
@@ -691,6 +694,9 @@
                 history_title: "История поиска",
                 clear_history: "Очистить",
                 no_results: "Ничего не найдено...",
+                search_all_label: "посмотреть все результаты для",
+                search_type: "Поиск",
+                product_type: "Товар",
                 nav_home: "Главная",
                 nav_catalog: "Каталог",
                 nav_cart: "Корзина",
@@ -731,6 +737,15 @@
                 return field[currentLang] || field['uz'] || Object.values(field)[0] || '';
             }
             return field;
+        }
+
+        // Faqat tanlangan til bo'yicha maydondan qidirish (uz/ru aralashib ketmasligi uchun)
+        function getStrictLocalized(field) {
+            if (!field) return '';
+            if (typeof field === 'object') {
+                return field[currentLang] || '';
+            }
+            return '';
         }
 
         async function fetchAppDataAndInit() {
@@ -795,7 +810,12 @@
                 pageTitleEl.textContent = `${t.products_title}: "${searchQueryParam}"`;
 
                 let q = searchQueryParam.toLowerCase();
-                let exactMatches = allProducts.filter(p => getLocalized(p.name).toLowerCase().includes(q) || getLocalized(p.subcat).toLowerCase().includes(q));
+                // Qidiruv faqat tanlangan tildagi matnlar bo'yicha ishlaydi
+                let exactMatches = allProducts.filter(p => {
+                    let n = getStrictLocalized(p.name).toLowerCase();
+                    let s = getStrictLocalized(p.subcat).toLowerCase();
+                    return n.includes(q) || s.includes(q);
+                });
 
                 let categoryIds = [...new Set(exactMatches.map(p => p.category_id))];
                 let sameCategoryProducts = allProducts.filter(p => categoryIds.includes(p.category_id) && !exactMatches.includes(p));
@@ -808,8 +828,6 @@
                 searchInput.value = '';
                 if (subName) {
                     let decodedSub = decodeURIComponent(subName).trim();
-                    
-                    // Agar sub (subkat) bazadagi obyekt bo'lsa, joriy tildagisini olamiz
                     let foundProduct = allProducts.find(p => {
                         let subUz = (p.subcat && p.subcat.uz) ? p.subcat.uz.trim().toLowerCase() : '';
                         let subRu = (p.subcat && p.subcat.ru) ? p.subcat.ru.trim().toLowerCase() : '';
@@ -823,9 +841,8 @@
                     }
 
                     currentProductsList = allProducts.filter(p => {
-                        let subUz = (p.subcat && p.subcat.uz) ? p.subcat.uz.trim().toLowerCase() : '';
-                        let subRu = (p.subcat && p.subcat.ru) ? p.subcat.ru.trim().toLowerCase() : '';
-                        return subUz === decodedSub.toLowerCase() || subRu === decodedSub.toLowerCase() || getLocalized(p.subcat).trim().toLowerCase() === decodedSub.toLowerCase();
+                        let subText = getStrictLocalized(p.subcat).trim().toLowerCase();
+                        return subText === decodedSub.toLowerCase();
                     });
                 } else if (catId) {
                     if (categoryNames[catId]) {
@@ -1080,17 +1097,18 @@
                 return;
             }
 
+            // Faqat joriy til bo'yicha qidiruv natijalarini filter qilish
             let matches = allProducts.filter(p => {
-                let n = getLocalized(p.name).toLowerCase();
-                let s = getLocalized(p.subcat).toLowerCase();
+                let n = getStrictLocalized(p.name).toLowerCase();
+                let s = getStrictLocalized(p.subcat).toLowerCase();
                 return n.includes(val) || s.includes(val);
             });
 
             let html = '';
             if (matches.length > 0) {
                 html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${val.replace(/'/g, "\\'")}')">
-                    <span>"${val}" bo'yicha barcha natijalarni ko'rish</span>
-                    <span class="suggestion-type">Qidirish</span>
+                    <span>"${val}" ${t.search_all_label}</span>
+                    <span class="suggestion-type">${t.search_type}</span>
                 </div>`;
 
                 matches.slice(0, 8).forEach(prod => {
@@ -1100,7 +1118,7 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             <span>${prodName}</span>
                         </div>
-                        <span class="suggestion-type">Mahsulot</span>
+                        <span class="suggestion-type">${t.product_type}</span>
                     </div>`;
                 });
             } else {
