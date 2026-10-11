@@ -324,10 +324,10 @@
         </div>
     </div>
 
-    <!-- Stories Bloki (Video va Rasm qo'llab-quvvatlaydi, videos.html ga o'tadi) -->
+    <!-- Stories Bloki (stories.html sahifasiga yo'naltiradi) -->
     <div class="stories-container" id="storiesContainer"></div>
 
-    <!-- Bannerlar (To'g'ri ishlaydigan slider) -->
+    <!-- Bannerlar -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
@@ -560,7 +560,7 @@
         }
 
         function openStory(id) {
-            window.location.href = `videos.html?id=${id}`;
+            window.location.href = `stories.html?id=${id}`;
         }
 
         function renderBanner() {
