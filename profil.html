@@ -262,14 +262,18 @@
         updateBadges();
 
         async function loadProfile() {
+            // Har doim localStorage birinchi o'rinda turadi
             let currentLang = localStorage.getItem('selected_lang') || 'uz';
+            
             try {
                 let response = await fetch('/api/profile');
                 if (response.ok) {
                     let user = await response.json();
                     document.getElementById('userName').textContent = user.name || "Foydalanuvchi";
                     document.getElementById('userPhone').textContent = user.phone || "+998 90 123 45 67";
-                    if (user.language) {
+                    
+                    // Agar localStorage bo'sh bo'lsagina serverdagi tilni olamiz
+                    if (!localStorage.getItem('selected_lang') && user.language) {
                         currentLang = user.language;
                         localStorage.setItem('selected_lang', currentLang);
                     }
