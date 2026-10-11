@@ -123,7 +123,7 @@
         .search-suggestion-item:hover { background: var(--primary-bg); color: var(--primary); }
         .suggestion-type { font-size: 11px; color: var(--muted); background: var(--bg); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-left: 8px; }
 
-        /* Stories bloki */
+        /* Stories Bloki */
         .stories-container {
             display: flex;
             gap: 12px;
@@ -152,12 +152,13 @@
             align-items: center;
             justify-content: center;
         }
-        .story-img {
+        .story-img, .story-video {
             width: 62px;
             height: 62px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--card);
+            background: #000;
         }
         .story-title {
             font-size: 11px;
@@ -175,17 +176,16 @@
             width: 100%;
             position: relative;
             overflow: hidden;
-            padding: 8px 0;
+            padding: 12px 0 4px 0;
             max-width: 1300px;
             margin: 0 auto;
             touch-action: pan-y;
         }
-        .banner-track { display: flex; padding-left: 16px; will-change: transform; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
-        .banner-slide { flex: 0 0 85vw; max-width: 700px; margin-right: 12px; height: 150px; border-radius: 16px; overflow: hidden; background: var(--border); cursor: pointer; }
-        @media (min-width: 768px) { .banner-slide { flex: 0 0 700px; height: 240px; } }
+        .banner-track { display: flex; padding-left: 10vw; will-change: transform; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .banner-slide { flex: 0 0 80vw; margin-right: 10px; height: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); background: var(--border); user-select: none; cursor: pointer; }
         .banner-slide img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
-        .banner-dots { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+        .banner-dots { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; margin-bottom: 4px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s ease; }
         .dot.active { width: 22px; border-radius: 10px; background: var(--primary); }
 
         /* Flash Sale & Taymer */
@@ -211,7 +211,7 @@
             border-radius: 8px;
         }
 
-        /* Filtr chipslari */
+        /* Filtr chipslari (SVG ikonchali) */
         .filter-chips {
             display: flex;
             gap: 8px;
@@ -233,18 +233,22 @@
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
+        .chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
         .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        .section-title { font-size: 18px; font-weight: 700; padding: 0 16px; margin: 20px 0 12px 0; max-width: 1300px; margin-left: auto; margin-right: auto; }
+        .section-title { font-size: 16px; font-weight: 700; padding: 0 16px; margin: 16px 0 10px 0; max-width: 1300px; margin-left: auto; margin-right: auto; }
         .categories-row { display: flex; gap: 12px; overflow-x: auto; padding: 0 16px 8px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
         .categories-row::-webkit-scrollbar { display: none; }
-        .category-item { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--text); width: 76px; }
-        .category-img-box { width: 70px; height: 70px; border-radius: 18px; overflow: hidden; background: var(--card); border: 1px solid var(--border); }
+        .category-item { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--text); width: 70px; }
+        .category-img-box { width: 64px; height: 64px; border-radius: 16px; overflow: hidden; background: var(--card); border: 1px solid var(--border); }
         .category-img-box img { width: 100%; height: 100%; object-fit: cover; }
         .category-item span { font-size: 11px; text-align: center; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* Mahsulotlar gridi */
+        /* Mahsulotlar gridi va kartochkalari */
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; max-width: 1300px; margin: 0 auto; }
         @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
@@ -253,40 +257,47 @@
         .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); }
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
         [data-theme="dark"] .heart-icon-sm { background: rgba(28, 29, 34, 0.6); border-color: rgba(255, 255, 255, 0.1); }
-        .heart-icon-sm svg { width: 17px; height: 17px; fill: none; stroke: #1f2026; stroke-width: 2; }
+        .heart-icon-sm svg { width: 17px; height: 17px; fill: none; stroke: #1f2026; stroke-width: 2; transition: all 0.2s; }
         [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
         .product-img-box { width: 100%; height: 220px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; }
         @media (min-width: 768px) { .product-img-box { height: 260px; } }
-        .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+
+        .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .card-slider-container::-webkit-scrollbar { display: none; }
         .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
         .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .card-dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; z-index: 4; pointer-events: none; }
-        .card-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); }
+        .card-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); transition: all 0.2s; }
         .card-dot.active { width: 14px; border-radius: 3px; background: #ffffff; }
 
-        .badge-dynamic-sm { position: absolute; bottom: 8px; left: 8px; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; z-index: 4; pointer-events: none; }
+        .badge-dynamic-sm { position: absolute; bottom: 8px; left: 8px; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; z-index: 4; pointer-events: none; display: flex; align-items: center; gap: 3px; }
+
         .product-info { padding: 12px 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+        .product-info-top { display: flex; flex-direction: column; }
         .price-row { display: flex; align-items: center; gap: 6px; }
         .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
         .main-price.out-of-stock { color: var(--danger); font-size: 14px; }
         .discount-tag { background: var(--discount-bg); color: var(--discount-text); font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
-        .old-prices { font-size: 12px; color: var(--muted); margin-top: 2px; text-decoration: line-through; }
-        .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 6px; height: 34px; cursor: pointer; }
-        .product-rating { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); margin: 8px 0; }
-        .rating-box { display: flex; align-items: center; gap: 2px; }
-        .rating-box svg { width: 13px; height: 13px; fill: var(--star); }
+        .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .price-old { text-decoration: line-through; }
+        .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
+        .product-rating { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin: 8px 0; gap: 4px; }
+        .rating-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .rating-box, .comment-box { display: flex; align-items: center; gap: 2px; }
+        .rating-box svg { width: 13px; height: 13px; fill: var(--star); flex-shrink: 0; }
+        .comment-box svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
         .rating-num { font-weight: 700; color: var(--text); }
 
         .cart-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
+        .cart-btn-sm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
         .notify-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
         .notify-btn-sm.active-notified { background: #00c853; color: #ffffff; }
 
         .cart-counter-box-sm { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 36px; background: var(--bg); border-radius: 10px; padding: 0 6px; border: 1px solid var(--border); }
         .counter-btn-sm { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 26px; height: 26px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .counter-btn-sm:disabled { opacity: 0.4; }
+        .counter-btn-sm:disabled { opacity: 0.4; cursor: not-allowed; }
         .counter-val-sm { font-size: 14px; font-weight: 700; color: var(--text); }
 
         .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
@@ -313,29 +324,41 @@
         </div>
     </div>
 
-    <!-- Stories Bloki -->
+    <!-- Stories Bloki (Video va Rasm qo'llab-quvvatlaydi, videos.html ga o'tadi) -->
     <div class="stories-container" id="storiesContainer"></div>
 
-    <!-- Bannerlar -->
+    <!-- Bannerlar (To'g'ri ishlaydigan slider) -->
     <div class="banner-carousel-container" id="bannerContainer">
         <div class="banner-track" id="bannerTrack"></div>
     </div>
     <div class="banner-dots" id="bannerDots"></div>
 
-    <!-- Flash Sale / Kun Aksiya Headeri -->
+    <!-- Flash Sale Header -->
     <div class="flash-sale-header">
         <div class="flash-title-wrap">
-            <span class="flash-title" data-i18n="flash_sale_title">Kun aksiyasi ⚡</span>
+            <span class="flash-title" data-i18n="flash_sale_title">Kun aksiyasi</span>
         </div>
         <div class="timer-box" id="flashTimer">00:00:00</div>
     </div>
 
-    <!-- Filtr Chipslari -->
+    <!-- Filtr Chipslari (SVG Ikonchalar bilan) -->
     <div class="filter-chips">
-        <div class="chip active" onclick="filterProducts('all', this)" data-i18n="chip_all">Barchasi</div>
-        <div class="chip" onclick="filterProducts('chegirma', this)" data-i18n="chip_discount">Aksiya 🔥</div>
-        <div class="chip" onclick="filterProducts('top', this)" data-i18n="chip_top">Top savdo ⭐</div>
-        <div class="chip" onclick="filterProducts('cheap', this)" data-i18n="chip_cheap">Arzon narx</div>
+        <div class="chip active" onclick="filterProducts('all', this)" data-i18n="chip_all">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Barchasi
+        </div>
+        <div class="chip" onclick="filterProducts('chegirma', this)" data-i18n="chip_discount">
+            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+            Aksiya
+        </div>
+        <div class="chip" onclick="filterProducts('top', this)" data-i18n="chip_top">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Top savdo
+        </div>
+        <div class="chip" onclick="filterProducts('cheap', this)" data-i18n="chip_cheap">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Arzon narx
+        </div>
     </div>
 
     <h2 class="section-title" data-i18n="categories_title">Kategoriyalar</h2>
@@ -344,7 +367,6 @@
     <h2 class="section-title" data-i18n="recommended_title">Siz uchun tanladik</h2>
     <div class="products-grid" id="productsGrid"></div>
 
-    <!-- Oxirgi ko'rilganlar -->
     <h2 class="section-title" id="recentTitle" style="display:none;" data-i18n="recent_title">Siz ko'rgansiz</h2>
     <div class="products-grid" id="recentProductsGrid"></div>
 
@@ -375,10 +397,10 @@
         const translations = {
             uz: {
                 search_placeholder: "Mahsulotlar va turkumlar izlash...",
-                flash_sale_title: "Kun aksiyasi ⚡",
+                flash_sale_title: "Kun aksiyasi",
                 chip_all: "Barchasi",
-                chip_discount: "Aksiya 🔥",
-                chip_top: "Top savdo ⭐",
+                chip_discount: "Aksiya",
+                chip_top: "Top savdo",
                 chip_cheap: "Arzon narx",
                 categories_title: "Kategoriyalar",
                 recommended_title: "Siz uchun tanladik",
@@ -399,10 +421,10 @@
             },
             ru: {
                 search_placeholder: "Поиск товаров и категорий...",
-                flash_sale_title: "Акция дня ⚡",
+                flash_sale_title: "Акция дня",
                 chip_all: "Все",
-                chip_discount: "Скидки 🔥",
-                chip_top: "Топ продажи ⭐",
+                chip_discount: "Акция",
+                chip_top: "Топ продажи",
                 chip_cheap: "Дешевые",
                 categories_title: "Категории",
                 recommended_title: "Специально для вас",
@@ -444,7 +466,10 @@
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (t[key]) el.textContent = t[key];
+                if (t[key]) {
+                    const svgHtml = el.querySelector('svg') ? el.querySelector('svg').outerHTML : '';
+                    el.innerHTML = svgHtml + ' ' + t[key];
+                }
             });
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
@@ -507,19 +532,42 @@
                 container.style.display = 'none';
                 return;
             }
-            container.innerHTML = storiesData.map(s => `
-                <div class="story-item" onclick="goToProduct(${s.product_id || 101})">
-                    <div class="story-ring">
-                        <img class="story-img" src="${s.img}" alt="Story">
+
+            const now = new Date().getTime();
+            let activeStories = storiesData.filter(s => {
+                if (!s.created_at || !s.duration_hours) return true;
+                let createdTime = new Date(s.created_at).getTime();
+                let expiryTime = createdTime + (s.duration_hours * 60 * 60 * 1000);
+                return now < expiryTime;
+            });
+
+            if (activeStories.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = activeStories.map(s => {
+                let mediaHtml = s.type === 'video' 
+                    ? `<video class="story-video" src="${s.media}" muted playsinline></video>`
+                    : `<img class="story-img" src="${s.media}" alt="Story">`;
+                return `
+                    <div class="story-item" onclick="openStory(${s.id})">
+                        <div class="story-ring">${mediaHtml}</div>
+                        <span class="story-title">${getLocalized(s.title)}</span>
                     </div>
-                    <span class="story-title">${getLocalized(s.title)}</span>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+
+        function openStory(id) {
+            window.location.href = `videos.html?id=${id}`;
         }
 
         function renderBanner() {
             const track = document.getElementById('bannerTrack');
             const dotsContainer = document.getElementById('bannerDots');
+            const container = document.getElementById('bannerContainer');
+
             let banners = bannerImagesData.length > 0 ? bannerImagesData : allProducts.slice(0, 3).map(p => ({ img: p.images[0], product_id: p.id }));
             let slidesData = [banners[banners.length - 1], ...banners, banners[0]];
 
@@ -531,8 +579,86 @@
             `).join('');
 
             let slideIndex = 1;
-            const slideWidth = 720;
-            track.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
+            let isTransitioning = false;
+            let slideInterval;
+
+            function getSlideWidth() {
+                const slideEl = track.querySelector('.banner-slide');
+                if (!slideEl) return window.innerWidth * 0.8 + 10;
+                return slideEl.offsetWidth + 10;
+            }
+
+            function updateSlider(animate = true) {
+                const slideWidth = getSlideWidth();
+                track.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+                track.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
+
+                let realIndex = (slideIndex - 1 + banners.length) % banners.length;
+                const dots = dotsContainer.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
+
+            updateSlider(false);
+
+            function startAutoSlide() {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(() => {
+                    if (isTransitioning) return;
+                    isTransitioning = true;
+                    slideIndex++;
+                    updateSlider(true);
+                }, 6000);
+            }
+            startAutoSlide();
+
+            track.addEventListener('transitionend', () => {
+                isTransitioning = false;
+                if (slideIndex >= slidesData.length - 1) {
+                    slideIndex = 1;
+                    updateSlider(false);
+                }
+                if (slideIndex <= 0) {
+                    slideIndex = slidesData.length - 2;
+                    updateSlider(false);
+                }
+            });
+
+            let startX = 0;
+            let startY = 0;
+            let isDragging = false;
+
+            container.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                clearInterval(slideInterval);
+            });
+
+            container.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                let diff = e.clientX - startX;
+                const slideWidth = getSlideWidth();
+                track.style.transition = 'none';
+                track.style.transform = `translateX(${-slideIndex * slideWidth + diff}px)`;
+            });
+
+            container.addEventListener('pointerup', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                let diffX = e.clientX - startX;
+                let diffY = Math.abs(e.clientY - startY);
+
+                if (Math.abs(diffX) < 6 && diffY < 6) return;
+
+                if (diffX > 50 && slideIndex > 0) slideIndex--;
+                else if (diffX < -50 && slideIndex < slidesData.length - 1) slideIndex++;
+                updateSlider(true);
+                startAutoSlide();
+            });
+
+            window.addEventListener('resize', () => updateSlider(false));
         }
 
         function startFlashTimer() {
@@ -575,7 +701,7 @@
                 let cName = getLocalized(c.name);
                 let img = c.subcats && c.subcats[0] ? c.subcats[0].img : "https://picsum.photos/100";
                 return `
-                    <a href="products.html?cat_id=${c.id}&sub=${encodeURIComponent(cName)}" class="category-item">
+                    <a href="products.html?cat_id=${c.id}&sub=${encodeURIComponent(cName)}" class="category-item" onclick="localStorage.setItem('active_cat_id', ${c.id})">
                         <div class="category-img-box"><img src="${img}" alt="${cName}"></div>
                         <span>${cName}</span>
                     </a>
@@ -587,23 +713,46 @@
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = list.map(p => {
                 let isLiked = favs.includes(p.id) ? 'liked' : '';
-                let pImages = p.images || ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600"];
+                let pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
+                let hasMultipleImages = pImages.length > 1;
+                let loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
                 let prodName = getLocalized(p.name);
+
+                let badgeHtml = '';
+                if (p.badgeType === 'original') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">${currentLang === 'ru' ? '✓ ОРИГИНАЛ' : '✓ ORIGINAL'}</div>`;
+                } else if (p.badgeType === 'chegirma') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">${currentLang === 'ru' ? 'Скидка' : 'Chegirmada'}</div>`;
+                } else if (p.badgeType === 'arzonlashdi') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">${currentLang === 'ru' ? 'Дешевле' : 'Arzonlashdi'}</div>`;
+                }
+
                 return `
                     <div class="product-card" id="product-card-${p.id}">
                         <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
                             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </button>
                         <div class="product-img-box" onclick="goToProduct(${p.id})">
-                            <div class="card-slider-container">
-                                ${pImages.map(img => `<div class="card-slide"><img src="${img}"></div>`).join('')}
+                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
+                                ${loopedImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
                             </div>
+                            ${hasMultipleImages ? `<div class="card-dots">${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}</div>` : ''}
+                            ${badgeHtml}
                         </div>
                         <div class="product-info" id="product-info-${p.id}"></div>
                     </div>
                 `;
             }).join('');
+
             list.forEach(p => updateCardInfoOnly(p.id));
+
+            setTimeout(() => {
+                document.querySelectorAll('.card-slider-container').forEach(container => {
+                    if (container.dataset.originalLength) {
+                        container.scrollLeft = container.clientWidth;
+                    }
+                });
+            }, 50);
         }
 
         function updateCardInfoOnly(id) {
@@ -612,23 +761,182 @@
             let p = allProducts.find(item => item.id === id);
             if (!p) return;
 
+            let defaultSize = p.sizes ? p.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+            let prodName = getLocalized(p.name);
             let stock = p.stock !== undefined ? p.stock : 10;
             let isOut = stock <= 0;
-            let prodName = getLocalized(p.name);
+            let isNotified = notifiedList.includes(p.id);
 
-            let btnHtml = isOut ? `<button class="notify-btn-sm">${t.notify_btn}</button>` : `<button class="cart-btn-sm" onclick="event.stopPropagation()">${t.cart_btn}</button>`;
+            let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
+                <span class="main-price">${p.price}</span>
+                ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${p.discount}</span>` : ''}
+            `;
+
+            let btnHtml = '';
+            if (isOut) {
+                btnHtml = isNotified 
+                    ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
+                    : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
+            } else if (!cartItem) {
+                btnHtml = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>${t.cart_btn}</span>
+                    </button>
+                `;
+            } else {
+                let maxReached = cartItem.qty >= stock;
+                btnHtml = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                    </div>
+                `;
+            }
 
             infoContainer.innerHTML = `
-                <div>
-                    <div class="price-row"><span class="main-price">${p.price}</span>${p.discount ? `<span class="discount-tag">${p.discount}</span>` : ''}</div>
-                    <div class="old-prices">${p.oldPrice || ''}</div>
-                    <div class="product-title" onclick="goToProduct(${p.id})">${prodName}</div>
+                <div class="product-info-top">
+                    <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
+                    ${!isOut ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${p.oldPrice || ''}</span></div>` : ''}
+                    <div class="product-title" onclick="goToProduct(${p.id})" title="${prodName}">${prodName}</div>
                     <div class="product-rating">
-                        <div class="rating-box"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="rating-num">${p.rating || 4.8}</span></div>
+                        <div class="rating-left" onclick="goToProduct(${p.id})">
+                            <div class="rating-box">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                <span class="rating-num">${p.rating || 4.8}</span>
+                            </div>
+                            <div class="comment-box">
+                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                <span class="comments-num">${p.comments || 50}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div>${btnHtml}</div>
+                <div class="card-action-container card-action-container-${p.id}">${btnHtml}</div>
             `;
+        }
+
+        function handleCardScroll(e, originalLen) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const scrollLeft = container.scrollLeft;
+            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            } else if (scrollLeft <= 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = originalLen * slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            }
+            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            const realIndex = (activeIndex + originalLen) % originalLen;
+            const dotsBox = container.parentElement.querySelector('.card-dots');
+            if (dotsBox) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
+        }
+
+        function addSimilarToCart(id) {
+            let prod = allProducts.find(p => p.id === id);
+            if (prod) {
+                let stock = prod.stock !== undefined ? prod.stock : 10;
+                let defaultSize = prod.sizes ? prod.sizes[0] : null;
+                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+                let currentQty = cartItem ? cartItem.qty : 0;
+
+                if (currentQty < stock) {
+                    if (!cartItem) {
+                        cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
+                    } else {
+                        cartItem.qty += 1;
+                    }
+                    localStorage.setItem('cart_products', JSON.stringify(cart));
+                    updateCardActionUI(id);
+                    updateBadges();
+                } else {
+                    alert("Omborda yetarli mahsulot qolmagan!");
+                }
+            }
+        }
+
+        function changeSimilarQty(id, delta) {
+            let prod = allProducts.find(p => p.id === id);
+            if (!prod) return;
+            let stock = prod.stock !== undefined ? prod.stock : 10;
+            let defaultSize = prod.sizes ? prod.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+
+            if (cartItem) {
+                let newQty = cartItem.qty + delta;
+                if (newQty > stock) {
+                    alert("Ombordagi mavjud miqdordan oshira olmaysiz!");
+                    return;
+                }
+                cartItem.qty = newQty;
+                if (cartItem.qty <= 0) {
+                    cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
+                }
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateCardActionUI(id);
+                updateBadges();
+            }
+        }
+
+        function toggleNotify(id) {
+            if (notifiedList.includes(id)) {
+                notifiedList = notifiedList.filter(item => item !== id);
+            } else {
+                notifiedList.push(id);
+            }
+            localStorage.setItem('notified_products', JSON.stringify(notifiedList));
+            updateCardActionUI(id);
+        }
+
+        function updateCardActionUI(id) {
+            const actionContainer = document.querySelector(`.card-action-container-${id}`);
+            if (!actionContainer) {
+                updateCardInfoOnly(id);
+                return;
+            }
+
+            const p = allProducts.find(item => item.id === id);
+            if (!p) return;
+
+            let defaultSize = p.sizes ? p.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+            let stock = p.stock !== undefined ? p.stock : 10;
+            let isOut = stock <= 0;
+            let isNotified = notifiedList.includes(id);
+
+            let btnHtml = '';
+            if (isOut) {
+                btnHtml = isNotified 
+                    ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
+                    : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
+            } else if (!cartItem) {
+                btnHtml = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>${t.cart_btn}</span>
+                    </button>
+                `;
+            } else {
+                let maxReached = cartItem.qty >= stock;
+                btnHtml = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                    </div>
+                `;
+            }
+            actionContainer.innerHTML = btnHtml;
         }
 
         function renderRecentProducts() {
@@ -660,9 +968,13 @@
         function updateBadges() {
             const favBadge = document.getElementById('favBadge');
             const cartBadge = document.getElementById('cartBadge');
-            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); }
+            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
+            if (validFavs.length > 0) { favBadge.textContent = validFavs.length; favBadge.classList.add('show'); }
+            else { favBadge.classList.remove('show'); }
+
             let totalCart = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
             if (totalCart > 0) { cartBadge.textContent = totalCart; cartBadge.classList.add('show'); }
+            else { cartBadge.classList.remove('show'); }
         }
 
         function goToProduct(id) {
