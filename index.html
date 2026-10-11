@@ -37,6 +37,7 @@
 
         .sticky-header { position: fixed; top: 0; left: 0; right: 0; background: var(--card); z-index: 999; padding: 12px 16px; margin-top: 45px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; max-width: 1300px; margin-left: auto; margin-right: auto; }
         .sticky-header::before { content: ''; position: absolute; top: -60px; left: 0; right: 0; height: 60px; background: var(--card); z-index: -1; }
+        
         .search-box-wrapper { position: relative; width: 100%; flex: 1; }
         .search-box { display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 8px 12px; gap: 8px; border: 1px solid var(--border); width: 100%; }
         .search-box:focus-within { border-color: var(--primary); }
@@ -46,8 +47,13 @@
 
         .search-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-top: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); max-height: 350px; overflow-y: auto; z-index: 1000; display: none; }
         .search-dropdown.show { display: block; }
+        .search-header-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; font-size: 12px; font-weight: 700; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--bg); }
+        .clear-history-btn { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; font-size: 12px; }
         .search-suggestion-item { padding: 12px 14px; font-size: 13px; color: var(--text); border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: var(--card); }
         .search-suggestion-item:hover { background: var(--primary-bg); color: var(--primary); }
+        .suggestion-type { font-size: 11px; color: var(--muted); background: var(--bg); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-left: 8px; }
+        .history-item-left { display: flex; align-items: center; gap: 8px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .remove-history-item { background: none; border: none; color: var(--muted); font-size: 16px; padding: 4px 8px; cursor: pointer; }
 
         /* Storislar */
         .stories-container { display: flex; gap: 12px; overflow-x: auto; padding: 120px 16px 8px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
@@ -66,14 +72,14 @@
         .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
         .dot.active { width: 22px; border-radius: 10px; background: var(--primary); }
 
-        /* Matnli kategoriyalar (Admin panel tartibi bo'yicha) */
+        /* Matnli kategoriyalar */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
         .categories-scroll-wrapper::-webkit-scrollbar { display: none; }
         .categories-track { display: flex; gap: 10px; width: max-content; }
         .cat-text-pill { background: var(--card); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; white-space: nowrap; transition: 0.2s; }
         .cat-text-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Dinamik subkategoriyalar doira shaklida */
+        /* Subkategoriyalar doirasi */
         .subcats-row { display: flex; gap: 12px; overflow-x: auto; padding: 4px 16px 12px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
         .subcats-row::-webkit-scrollbar { display: none; }
         .subcat-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; width: 64px; text-decoration: none; color: var(--text); }
@@ -81,52 +87,73 @@
         .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* “Barchasi” tanlanganda chiqadigan quyi filtr chipslari */
+        /* Barchasi deganda chiqadigan quyi filtrlar */
         .sub-filter-chips { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 12px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
         .sub-filter-chips::-webkit-scrollbar { display: none; }
         .sub-chip { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .sub-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Haftalik aksiya bloki */
-        .weekly-sale-section { background: #7000ff; border-radius: 20px; padding: 16px; max-width: 1300px; margin: 16px auto; color: #fff; }
-        .weekly-sale-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .weekly-sale-title { font-size: 18px; font-weight: 800; }
-        .weekly-sale-all { font-size: 14px; font-weight: 600; cursor: pointer; }
-        .weekly-sale-track { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
-        .weekly-sale-track::-webkit-scrollbar { display: none; }
-
-        /* Mahsulotlar gridi */
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; max-width: 1300px; margin: 0 auto; }
+        /* Mahsulotlar gridi va products.html bilan bir xil kartochka dizayni */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 16px; max-width: 1300px; margin: 0 auto; }
         @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+        @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
 
-        .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); flex: 0 0 170px; width: 170px; }
-        .products-grid .product-card { width: 100%; flex: none; }
-        
-        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
+        .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); }
+        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+        [data-theme="dark"] .heart-icon-sm { background: rgba(28, 29, 34, 0.6); border-color: rgba(255, 255, 255, 0.1); }
         .heart-icon-sm svg { width: 17px; height: 17px; fill: none; stroke: #1f2026; stroke-width: 2; }
+        [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
-        .product-img-box { width: 100%; height: 180px; background: var(--bg); position: relative; overflow: hidden; cursor: pointer; }
-        .product-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .prod-timer-badge { position: absolute; bottom: 8px; left: 8px; background: #7000ff; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 6px; display: flex; align-items: center; gap: 3px; z-index: 3; }
-        .installment-badge { background: #ffeb3b; color: #000; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block; margin: 4px 0; }
+        .product-img-box { width: 100%; height: 220px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; }
+        @media (min-width: 768px) { .product-img-box { height: 260px; } }
 
-        .product-info { padding: 10px; display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
+        .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .card-slider-container::-webkit-scrollbar { display: none; }
+        .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
+        .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; z-index: 4; pointer-events: none; }
+        .card-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); transition: all 0.2s; }
+        .card-dot.active { width: 14px; border-radius: 3px; background: #ffffff; }
+
+        .badge-dynamic-sm { position: absolute; bottom: 8px; left: 8px; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; z-index: 4; pointer-events: none; display: flex; align-items: center; gap: 3px; }
+
+        .product-info { padding: 12px 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+        .product-info-top { display: flex; flex-direction: column; }
+        .price-row { display: flex; align-items: center; gap: 6px; }
         .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
-        .price-old { font-size: 12px; color: var(--muted); text-decoration: line-through; }
-        .discount-tag { color: #ff3b30; font-size: 11px; font-weight: 700; }
-        .product-title { font-size: 12px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 4px 0; cursor: pointer; }
+        .main-price.out-of-stock { color: var(--danger); font-size: 14px; }
+        .discount-tag { background: var(--discount-bg); color: var(--discount-text); font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+        .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .price-old { text-decoration: line-through; }
+        .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
         
-        .cart-btn-sm { width: 100%; height: 34px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .cart-counter-box-sm { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 34px; background: var(--bg); border-radius: 10px; padding: 0 4px; border: 1px solid var(--border); }
-        .counter-btn-sm { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 24px; height: 24px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .product-rating { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin: 8px 0; gap: 4px; }
+        .rating-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .rating-box, .comment-box { display: flex; align-items: center; gap: 2px; }
+        .rating-box svg { width: 13px; height: 13px; fill: var(--star); flex-shrink: 0; }
+        .comment-box svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
+        .rating-num { font-weight: 700; color: var(--text); }
+
+        .cart-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
+        .notify-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .notify-btn-sm.active-notified { background: #00c853; color: #ffffff; }
+
+        .cart-counter-box-sm { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 36px; background: var(--bg); border-radius: 10px; padding: 0 6px; border: 1px solid var(--border); }
+        .counter-btn-sm { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 26px; height: 26px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .counter-btn-sm:disabled { opacity: 0.4; cursor: not-allowed; }
+        .counter-val-sm { font-size: 14px; font-weight: 700; color: var(--text); }
 
         /* Navigatsiya */
-        .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); display: flex; justify-content: space-around; align-items: center; border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; }
+        .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
+        [data-theme="dark"] .bottom-nav { background: rgba(28, 29, 34, 0.95); border-color: rgba(255, 255, 255, 0.08); }
+        @media (min-width: 1024px) { .bottom-nav { max-width: 550px; } }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; font-weight: 500; width: 20%; position: relative; padding: 8px 0; }
+        .nav-icon-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: #808080; stroke-width: 1.8; transition: all 0.2s; }
         .nav-item.active { color: var(--primary); font-weight: 600; }
-        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+        .nav-item.active svg { stroke: var(--primary); fill: var(--primary-bg); transform: scale(1.05); }
         .badge-count { position: absolute; top: -4px; right: -8px; background: #000; color: #fff; font-size: 10px; font-weight: 700; min-width: 17px; height: 17px; border-radius: 10px; display: none; align-items: center; justify-content: center; padding: 0 4px; }
         .badge-count.show { display: flex; }
     </style>
@@ -137,7 +164,7 @@
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" autocomplete="off">
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)" autocomplete="off">
             </div>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
@@ -150,15 +177,11 @@
     </div>
     <div class="banner-dots" id="bannerDots"></div>
 
-    <!-- Admin paneldan tartiblanadigan matnli kategoriyalar -->
     <div class="categories-scroll-wrapper">
         <div class="categories-track" id="categoriesTrack"></div>
     </div>
 
-    <!-- “Barchasi” turganda tagida chiqadigan filtrlar, kategoriya turganda subkategoriyalar doirasi -->
     <div id="dynamicSubOrFilters"></div>
-
-    <div id="weeklySaleContainer"></div>
 
     <div class="products-grid" id="productsGrid"></div>
 
@@ -167,36 +190,104 @@
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            <span>Bosh sahifa</span>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+            <span data-i18n="nav_home">Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
-            <span>Katalog</span>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
+            <span data-i18n="nav_catalog">Katalog</span>
         </a>
-        <a href="cart.html" class="nav-item" style="position:relative;">
-            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            <div class="badge-count" id="cartBadge">0</div>
-            <span>Savatcha</span>
+        <a href="cart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
+            <span data-i18n="nav_cart">Savatcha</span>
         </a>
-        <a href="heart.html" class="nav-item" style="position:relative;">
-            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            <div class="badge-count" id="favBadge">0</div>
-            <span>Saralangan</span>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span data-i18n="nav_fav">Saralangan</span>
         </a>
         <a href="profil.html" class="nav-item">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>Profil</span>
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <span data-i18n="nav_profile">Profil</span>
         </a>
     </nav>
 
     <script>
-        let dbData = { categories: [], products: [], banners: [], stories: [], home_sections: [] };
+        const translations = {
+            uz: {
+                search_placeholder: "Mahsulotlar va turkumlar izlash...",
+                history_title: "Oxirgi qidiruvlar",
+                clear_history: "Tozalash",
+                no_results: "Hech narsa topilmadi...",
+                search_all_label: "bo'yicha barcha natijalarni ko'rish",
+                search_type: "Qidirish",
+                product_type: "Mahsulot",
+                cart_btn: "Savatga",
+                notify_btn: "Kelganda xabar qilish",
+                notify_active: "✓ Xabar beriladi",
+                out_of_stock: "Qolmadi",
+                nav_home: "Bosh sahifa",
+                nav_catalog: "Katalog",
+                nav_cart: "Savatcha",
+                nav_fav: "Saralangan",
+                nav_profile: "Profil"
+            },
+            ru: {
+                search_placeholder: "Поиск товаров и категорий...",
+                history_title: "История поиска",
+                clear_history: "Очистить",
+                no_results: "Ничего не найдено...",
+                search_all_label: "посмотреть все результаты для",
+                search_type: "Поиск",
+                product_type: "Товар",
+                cart_btn: "В корзину",
+                notify_btn: "Сообщить о поступлении",
+                notify_active: "✓ Сообщим",
+                out_of_stock: "Нет в наличии",
+                nav_home: "Главная",
+                nav_catalog: "Каталог",
+                nav_cart: "Корзина",
+                nav_fav: "Избранное",
+                nav_profile: "Профиль"
+            }
+        };
+
         let currentLang = localStorage.getItem('selected_lang') || 'uz';
+        let t = translations[currentLang] || translations['uz'];
+        let dbData = { categories: [], products: [], banners: [], stories: [] };
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+        let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
         let activeCatId = 'all';
         let activeSubFilter = 'all';
+
+        function applyThemeAndTranslations() {
+            currentLang = localStorage.getItem('selected_lang') || 'uz';
+            t = translations[currentLang] || translations['uz'];
+
+            let siteTheme = localStorage.getItem('site_theme') || 'light';
+            if (siteTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+        }
+
+        function getLocalized(field) {
+            if (!field) return '';
+            if (typeof field === 'object') {
+                return field[currentLang] || field['uz'] || Object.values(field)[0] || '';
+            }
+            return field;
+        }
 
         async function init() {
             try {
@@ -204,18 +295,13 @@
                 if (res.ok) dbData = await res.json();
             } catch (e) { console.error(e); }
 
+            applyThemeAndTranslations();
             renderStories();
             renderBanners();
             renderCategoriesTrack();
-            renderWeeklySales();
             renderMainContent();
             renderRecentProducts();
             updateBadges();
-        }
-
-        function getLoc(obj) {
-            if (!obj) return '';
-            return typeof obj === 'object' ? (obj[currentLang] || obj['uz'] || Object.values(obj)[0]) : obj;
         }
 
         function renderStories() {
@@ -226,7 +312,7 @@
                     <div class="story-ring">
                         ${s.type === 'video' ? `<video class="story-video" src="${s.media}" muted></video>` : `<img class="story-img" src="${s.media}">`}
                     </div>
-                    <span class="story-title">${getLoc(s.title)}</span>
+                    <span class="story-title">${getLocalized(s.title)}</span>
                 </div>
             `).join('');
         }
@@ -247,7 +333,7 @@
             track.innerHTML = `
                 <div class="cat-text-pill ${activeCatId === 'all' ? 'active' : ''}" onclick="selectCategory('all')">Barchasi</div>
                 ${sortedCats.map(cat => `
-                    <div class="cat-text-pill ${activeCatId === cat.id ? 'active' : ''}" onclick="selectCategory(${cat.id})">${getLoc(cat.name)}</div>
+                    <div class="cat-text-pill ${activeCatId === cat.id ? 'active' : ''}" onclick="selectCategory(${cat.id})">${getLocalized(cat.name)}</div>
                 `).join('')}
             `;
             renderSubOrFiltersArea();
@@ -263,7 +349,6 @@
         function renderSubOrFiltersArea() {
             const area = document.getElementById('dynamicSubOrFilters');
             if (activeCatId === 'all') {
-                // “Barchasi” deganda tagida chiqadigan qo'shimcha filtrlar
                 area.innerHTML = `
                     <div class="sub-filter-chips">
                         <div class="sub-chip ${activeSubFilter === 'all' ? 'active' : ''}" onclick="setSubFilter('all', this)">Barchasi</div>
@@ -278,9 +363,9 @@
                 area.innerHTML = `
                     <div class="subcats-row">
                         ${cat.subcats.map(sub => `
-                            <div class="subcat-item" onclick="filterBySub('${getLoc(sub.name)}')">
+                            <div class="subcat-item" onclick="filterBySub('${getLocalized(sub.name)}')">
                                 <div class="subcat-circle"><img src="${sub.img}"></div>
-                                <span class="subcat-name">${getLoc(sub.name)}</span>
+                                <span class="subcat-name">${getLocalized(sub.name)}</span>
                             </div>
                         `).join('')}
                     </div>
@@ -296,30 +381,10 @@
         }
 
         function filterBySub(subName) {
-            let filtered = dbData.products.filter(p => getLoc(p.subcat) === subName);
+            let filtered = dbData.products.filter(p => getLocalized(p.subcat).toLowerCase() === subName.toLowerCase());
             renderProductsGrid(filtered);
         }
 
-        function renderWeeklySales() {
-            const container = document.getElementById('weeklySaleContainer');
-            let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
-            if (!section || !section.product_ids) { container.innerHTML = ''; return; }
-
-            let promoProds = dbData.products.filter(p => section.product_ids.includes(p.id));
-            container.innerHTML = `
-                <div class="weekly-sale-section">
-                    <div class="weekly-sale-header">
-                        <span class="weekly-sale-title">${getLoc(section.title)}</span>
-                        <span class="weekly-sale-all">Barchasi ></span>
-                    </div>
-                    <div class="weekly-sale-track">
-                        ${promoProds.map(p => createProductCardHtml(p, true)).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        // Har kuni yangilanadigan Random 50ta mahsulot mantiqi
         function getDailyRandomProducts(allProds) {
             let todayStr = new Date().toDateString();
             let savedDate = localStorage.getItem('random_prods_date');
@@ -337,7 +402,6 @@
 
         function renderMainContent() {
             let prods = [...dbData.products];
-            
             if (activeCatId !== 'all') {
                 prods = prods.filter(p => p.category_id === activeCatId);
             } else {
@@ -354,56 +418,141 @@
             renderProductsGrid(prods);
         }
 
-        function createProductCardHtml(p, isPromo = false) {
-            let isLiked = favs.includes(p.id) ? 'liked' : '';
-            let img = p.images && p.images[0] ? p.images[0] : '';
-            let cartItem = cart.find(item => item.id === p.id);
+        function renderProductsGrid(list) {
+            const grid = document.getElementById('productsGrid');
+            if (list.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--muted);">${t.no_results}</div>`;
+                return;
+            }
 
-            return `
-                <div class="product-card" onclick="location.href='product.html?id=${p.id}'">
-                    <div class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
-                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    </div>
-                    <div class="product-img-box">
-                        <img src="${img}">
-                        ${isPromo ? `<div class="prod-timer-badge">⏰ 39:54:33</div>` : ''}
-                    </div>
-                    <div class="product-info">
-                        <div>
-                            <div style="display:flex; align-items:center; gap:6px;">
-                                <span class="main-price">${p.price}</span>
-                                ${p.badgeType === 'chegirma' ? `<span class="discount-tag">${p.discount}</span>` : ''}
+            grid.innerHTML = list.map(p => {
+                const isLiked = favs.includes(p.id) ? 'liked' : '';
+                const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
+                const hasMultipleImages = pImages.length > 1;
+                const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
+                const prodName = getLocalized(p.name);
+
+                let badgeHtml = '';
+                if (p.badgeType === 'original') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">${currentLang === 'ru' ? '✓ ОРИГИНАЛ' : '✓ ORIGINAL'}</div>`;
+                } else if (p.badgeType === 'chegirma') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">${currentLang === 'ru' ? 'Скидка' : 'Chegirmada'}</div>`;
+                } else if (p.badgeType === 'arzonlashdi') {
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">${currentLang === 'ru' ? 'Дешевле' : 'Arzonlashdi'}</div>`;
+                }
+
+                return `
+                    <div class="product-card" id="product-card-${p.id}">
+                        <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </button>
+                        <div class="product-img-box" onclick="goToProduct(${p.id})">
+                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
+                                ${loopedImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
                             </div>
-                            <div class="price-old">${p.oldPrice || ''}</div>
-                            <div class="installment-badge">6 171 so'm/oy</div>
-                            <div class="product-title">${getLoc(p.name)}</div>
+                            ${hasMultipleImages ? `<div class="card-dots">${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}</div>` : ''}
+                            ${badgeHtml}
                         </div>
-                        <div style="margin-top:8px;">
-                            ${!cartItem ? `
-                                <button class="cart-btn-sm" onclick="event.stopPropagation(); addToCart(${p.id})">Savatga</button>
-                            ` : `
-                                <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
-                                    <button class="counter-btn-sm" onclick="changeQty(${p.id}, -1)">-</button>
-                                    <span>${cartItem.qty}</span>
-                                    <button class="counter-btn-sm" onclick="changeQty(${p.id}, 1)">+</button>
-                                </div>
-                            `}
+                        <div class="product-info" id="product-info-${p.id}"></div>
+                    </div>
+                `;
+            }).join('');
+
+            list.forEach(p => updateCardInfoOnly(p.id));
+            setTimeout(() => {
+                document.querySelectorAll('.card-slider-container').forEach(container => {
+                    if (container.dataset.originalLength) {
+                        container.scrollLeft = container.clientWidth;
+                    }
+                });
+            }, 50);
+        }
+
+        function updateCardInfoOnly(id) {
+            const infoContainer = document.getElementById(`product-info-${id}`);
+            if (!infoContainer) return;
+            const p = dbData.products.find(item => item.id === id);
+            if (!p) return;
+
+            const defaultSize = p.sizes ? p.sizes[0] : null;
+            const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+            const prodName = getLocalized(p.name);
+            let stock = p.stock !== undefined ? p.stock : 10;
+            let isOut = stock <= 0;
+            let isNotified = notifiedList.includes(p.id);
+
+            let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
+                <span class="main-price">${p.price}</span>
+                ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${p.discount}</span>` : ''}
+            `;
+
+            let btnHtml = '';
+            if (isOut) {
+                btnHtml = isNotified 
+                    ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
+                    : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
+            } else if (!cartItem) {
+                btnHtml = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>${t.cart_btn}</span>
+                    </button>
+                `;
+            } else {
+                let maxReached = cartItem.qty >= stock;
+                btnHtml = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                    </div>
+                `;
+            }
+
+            infoContainer.innerHTML = `
+                <div class="product-info-top">
+                    <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
+                    ${!isOut ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${p.oldPrice || ''}</span></div>` : ''}
+                    <div class="product-title" onclick="goToProduct(${p.id})" title="${prodName}">${prodName}</div>
+                    <div class="product-rating">
+                        <div class="rating-left" onclick="goToProduct(${p.id})">
+                            <div class="rating-box">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                <span class="rating-num">${p.rating || 4.8}</span>
+                            </div>
+                            <div class="comment-box">
+                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                <span class="comments-num">${p.comments || 50}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="card-action-container card-action-container-${p.id}">${btnHtml}</div>
             `;
         }
 
-        function renderProductsGrid(list) {
-            document.getElementById('productsGrid').innerHTML = list.map(p => createProductCardHtml(p, false)).join('');
-        }
-
-        function renderRecentProducts() {
-            let recentIds = JSON.parse(localStorage.getItem('recent_products')) || [];
-            if (recentIds.length === 0) return;
-            document.getElementById('recentTitle').style.display = 'block';
-            let recentList = dbData.products.filter(p => recentIds.includes(p.id));
-            document.getElementById('recentProductsGrid').innerHTML = recentList.map(p => createProductCardHtml(p, false)).join('');
+        function handleCardScroll(e, originalLen) {
+            const container = e.target;
+            const slideWidth = container.clientWidth;
+            const scrollLeft = container.scrollLeft;
+            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            } else if (scrollLeft <= 5) {
+                container.style.scrollBehavior = 'auto';
+                container.scrollLeft = originalLen * slideWidth;
+                container.style.scrollBehavior = 'smooth';
+            }
+            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            const realIndex = (activeIndex + originalLen) % originalLen;
+            const dotsBox = container.parentElement.querySelector('.card-dots');
+            if (dotsBox) {
+                const dots = dotsBox.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === realIndex);
+                }
+            }
         }
 
         function toggleHeart(e, id) {
@@ -415,36 +564,172 @@
             updateBadges();
         }
 
-        function addToCart(id) {
+        function addSimilarToCart(id) {
             let prod = dbData.products.find(p => p.id === id);
-            if (!prod) return;
-            let item = cart.find(i => i.id === id);
-            if (item) item.qty += 1;
-            else cart.push({ ...prod, qty: 1 });
-            localStorage.setItem('cart_products', JSON.stringify(cart));
-            renderMainContent();
-            renderWeeklySales();
-            updateBadges();
+            if (prod) {
+                let stock = prod.stock !== undefined ? prod.stock : 10;
+                let defaultSize = prod.sizes ? prod.sizes[0] : null;
+                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+                let currentQty = cartItem ? cartItem.qty : 0;
+
+                if (currentQty < stock) {
+                    if (!cartItem) cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
+                    else cartItem.qty += 1;
+                    localStorage.setItem('cart_products', JSON.stringify(cart));
+                    updateCardActionUI(id);
+                    updateBadges();
+                } else alert("Omborda yetarli mahsulot qolmagan!");
+            }
         }
 
-        function changeQty(id, delta) {
-            let item = cart.find(i => i.id === id);
-            if (!item) return;
-            item.qty += delta;
-            if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-            localStorage.setItem('cart_products', JSON.stringify(cart));
-            renderMainContent();
-            renderWeeklySales();
-            updateBadges();
+        function changeSimilarQty(id, delta) {
+            let prod = dbData.products.find(p => p.id === id);
+            if (!prod) return;
+            let stock = prod.stock !== undefined ? prod.stock : 10;
+            let defaultSize = prod.sizes ? prod.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
+
+            if (cartItem) {
+                let newQty = cartItem.qty + delta;
+                if (newQty > stock) { alert("Ombordagi mavjud miqdordan oshira olmaysiz!"); return; }
+                cartItem.qty = newQty;
+                if (cartItem.qty <= 0) cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
+                localStorage.setItem('cart_products', JSON.stringify(cart));
+                updateCardActionUI(id);
+                updateBadges();
+            }
+        }
+
+        function toggleNotify(id) {
+            if (notifiedList.includes(id)) notifiedList = notifiedList.filter(item => item !== id);
+            else notifiedList.push(id);
+            localStorage.setItem('notified_products', JSON.stringify(notifiedList));
+            updateCardActionUI(id);
+        }
+
+        function updateCardActionUI(id) {
+            const actionContainer = document.querySelector(`.card-action-container-${id}`);
+            if (!actionContainer) { updateCardInfoOnly(id); return; }
+            const p = dbData.products.find(item => item.id === id);
+            if (!p) return;
+
+            let defaultSize = p.sizes ? p.sizes[0] : null;
+            let cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
+            let stock = p.stock !== undefined ? p.stock : 10;
+            let isOut = stock <= 0;
+            let isNotified = notifiedList.includes(id);
+
+            let btnHtml = '';
+            if (isOut) {
+                btnHtml = isNotified 
+                    ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
+                    : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
+            } else if (!cartItem) {
+                btnHtml = `
+                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
+                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>${t.cart_btn}</span>
+                    </button>
+                `;
+            } else {
+                let maxReached = cartItem.qty >= stock;
+                btnHtml = `
+                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
+                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
+                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+                    </div>
+                `;
+            }
+            actionContainer.innerHTML = btnHtml;
+        }
+
+        function renderRecentProducts() {
+            let recentIds = JSON.parse(localStorage.getItem('recent_products')) || [];
+            if (recentIds.length === 0) return;
+            document.getElementById('recentTitle').style.display = 'block';
+            let recentList = dbData.products.filter(p => recentIds.includes(p.id));
+            document.getElementById('recentProductsGrid').innerHTML = recentList.map(p => `
+                <div class="product-card" onclick="goToProduct(${p.id})">
+                    <div class="product-img-box"><img src="${p.images[0]}" style="width:100%; height:100%; object-fit:cover;"></div>
+                    <div class="product-info">
+                        <div class="main-price">${p.price}</div>
+                        <div class="product-title">${getLocalized(p.name)}</div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function updateBadges() {
-            let favBadge = document.getElementById('favBadge');
-            let cartBadge = document.getElementById('cartBadge');
-            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else favBadge.classList.remove('show');
-            let totalCart = cart.reduce((s, i) => s + i.qty, 0);
-            if (totalCart > 0) { cartBadge.textContent = totalCart; cartBadge.classList.add('show'); } else cartBadge.classList.remove('show');
+            const favBadge = document.getElementById('favBadge');
+            const cartBadge = document.getElementById('cartBadge');
+            let validFavs = favs.filter(id => dbData.products.some(p => p.id === id));
+            if (validFavs.length > 0) { favBadge.textContent = validFavs.length; favBadge.classList.add('show'); }
+            else { favBadge.classList.remove('show'); }
+
+            let totalCart = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+            if (totalCart > 0) { cartBadge.textContent = totalCart; cartBadge.classList.add('show'); }
+            else { cartBadge.classList.remove('show'); }
         }
+
+        function goToProduct(id) {
+            let recent = JSON.parse(localStorage.getItem('recent_products')) || [];
+            recent = recent.filter(i => i !== id);
+            recent.unshift(id);
+            if (recent.length > 6) recent = recent.slice(0, 6);
+            localStorage.setItem('recent_products', JSON.stringify(recent));
+            window.location.href = `product.html?id=${id}`;
+        }
+
+        // Qidiruv funksiyalari
+        function getSearchHistory() { return JSON.parse(localStorage.getItem('search_history')) || []; }
+        function saveSearchQuery(q) {
+            if (!q) return;
+            let history = getSearchHistory();
+            history = history.filter(item => item.toLowerCase() !== q.toLowerCase());
+            history.unshift(q);
+            if (history.length > 5) history = history.slice(0, 5);
+            localStorage.setItem('search_history', JSON.stringify(history));
+        }
+        function showSearchHistory() {
+            const val = document.getElementById('searchInput').value.trim();
+            const dropdown = document.getElementById('searchDropdown');
+            if (val.length > 0) return;
+            let history = getSearchHistory();
+            if (history.length === 0) { dropdown.classList.remove('show'); return; }
+            let html = `<div class="search-header-row"><span>${t.history_title}</span><button class="clear-history-btn" onclick="clearAllHistory(event)">${t.clear_history}</button></div>`;
+            history.forEach((item, index) => {
+                html += `<div class="search-suggestion-item" onclick="selectHistoryItem('${item.replace(/'/g, "\\'")}')"><div class="history-item-left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>${item}</span></div><button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button></div>`;
+            });
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+        function clearAllHistory(e) { e.stopPropagation(); localStorage.removeItem('search_history'); document.getElementById('searchDropdown').classList.remove('show'); }
+        function removeHistoryItem(e, index) { e.stopPropagation(); let history = getSearchHistory(); history.splice(index, 1); localStorage.setItem('search_history', JSON.stringify(history)); showSearchHistory(); }
+        function selectHistoryItem(item) {
+            document.getElementById('searchInput').value = item;
+            document.getElementById('searchDropdown').classList.remove('show');
+            saveSearchQuery(item);
+            window.location.href = `products.html?q=${encodeURIComponent(item)}`;
+        }
+        function handleLiveSearch(e) {
+            const val = e.target.value.trim().toLowerCase();
+            const dropdown = document.getElementById('searchDropdown');
+            if (val.length === 0) { showSearchHistory(); return; }
+            let matches = dbData.products.filter(p => getLocalized(p.name).toLowerCase().includes(val) || getLocalized(p.subcat).toLowerCase().includes(val));
+            let html = `<div class="search-suggestion-item" onclick="closeSearchAndGo('${val}')"><span>"${val}" ${t.search_all_label}</span><span class="suggestion-type">${t.search_type}</span></div>`;
+            matches.slice(0, 6).forEach(prod => {
+                let pName = getLocalized(prod.name);
+                html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${pName}')"><div class="history-item-left"><span>${pName}</span></div><span class="suggestion-type">${t.product_type}</span></div>`;
+            });
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
+        }
+        function closeSearchAndGo(query) {
+            saveSearchQuery(query);
+            window.location.href = `products.html?q=${encodeURIComponent(query)}`;
+        }
+        function handleSearch(e) { if (e.key === 'Enter') { let q = e.target.value.trim(); if (q) closeSearchAndGo(q); } }
 
         window.addEventListener('DOMContentLoaded', init);
     </script>
