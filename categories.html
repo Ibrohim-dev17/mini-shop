@@ -114,6 +114,7 @@
             font-weight: 700;
             color: var(--muted);
             border-bottom: 1px solid var(--border);
+            background: #fafafc;
         }
 
         .clear-history-btn {
@@ -134,6 +135,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background: #fff;
         }
 
         .search-suggestion-item:last-child {
@@ -160,6 +162,9 @@
             align-items: center;
             gap: 8px;
             flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .remove-history-item {
@@ -184,7 +189,7 @@
         }
 
         .sidebar-categories {
-            width: 145px;
+            width: 155px;
             background: #ffffff;
             border-right: 1px solid var(--border);
             overflow-y: auto;
@@ -200,7 +205,7 @@
         }
 
         .sidebar-item {
-            padding: 14px 10px;
+            padding: 14px 12px;
             font-size: 13px;
             font-weight: 500;
             color: #7d818c;
@@ -213,7 +218,7 @@
         .sidebar-item.active {
             color: var(--primary);
             font-weight: 700;
-            background: transparent;
+            background: var(--primary-bg);
         }
 
         .sidebar-item.active::before {
@@ -223,14 +228,14 @@
             top: 50%;
             transform: translateY(-50%);
             width: 4px;
-            height: 20px;
+            height: 22px;
             background: var(--primary);
             border-radius: 0 4px 4px 0;
         }
 
         .content-panel {
             flex: 1;
-            padding: 14px;
+            padding: 16px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             background: var(--card);
@@ -241,13 +246,17 @@
             font-size: 16px;
             font-weight: 800;
             color: var(--text);
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .subcats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px 8px;
+            gap: 16px 10px;
+        }
+
+        @media (min-width: 768px) {
+            .subcats-grid { grid-template-columns: repeat(4, 1fr); }
         }
 
         .subcat-card {
@@ -261,8 +270,8 @@
         }
 
         .subcat-img-wrap {
-            width: 66px;
-            height: 66px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             background: var(--bg);
             overflow: hidden;
@@ -284,7 +293,7 @@
         .subcat-name {
             font-size: 11px;
             font-weight: 500;
-            line-height: 1.2;
+            line-height: 1.25;
             color: var(--text);
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -295,7 +304,7 @@
 
         .bottom-nav {
             position: fixed;
-            bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
@@ -337,9 +346,7 @@
             pointer-events: none;
         }
 
-        .nav-item span {
-            pointer-events: none;
-        }
+        .nav-item span { pointer-events: none; }
 
         .nav-item svg {
             width: 24px;
@@ -387,7 +394,7 @@
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)">
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)" autocomplete="off">
             </div>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
@@ -401,249 +408,199 @@
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-            <span>Bosh sahifa</span>
+            <span data-i18n="nav_home">Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item active">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
-            <span>Katalog</span>
+            <span data-i18n="nav_catalog">Katalog</span>
         </a>
         <a href="cart.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
-            <span>Savatcha</span>
+            <span data-i18n="nav_cart">Savatcha</span>
         </a>
         <a href="heart.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
-            <span>Saralangan</span>
+            <span data-i18n="nav_fav">Saralangan</span>
         </a>
         <a href="profil.html" class="nav-item">
             <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-            <span>Profil</span>
+            <span data-i18n="nav_profile">Profil</span>
         </a>
     </nav>
 
     <script>
+        const translations = {
+            uz: {
+                search_placeholder: "Mahsulotlar va turkumlar izlash...",
+                history_title: "Oxirgi qidiruvlar",
+                clear_history: "Tozalash",
+                no_results: "Hech narsa topilmadi...",
+                search_all_label: "bo'yicha barcha natijalarni ko'rish",
+                search_type: "Qidirish",
+                category_type: "Bo'lim",
+                subcat_type: "Turkum",
+                product_type: "Mahsulot",
+                nav_home: "Bosh sahifa",
+                nav_catalog: "Katalog",
+                nav_cart: "Savatcha",
+                nav_fav: "Saralangan",
+                nav_profile: "Profil"
+            },
+            ru: {
+                search_placeholder: "Поиск товаров и категорий...",
+                history_title: "История поиска",
+                clear_history: "Очистить",
+                no_results: "Ничего не найдено...",
+                search_all_label: "посмотреть все результаты для",
+                search_type: "Поиск",
+                category_type: "Раздел",
+                subcat_type: "Категория",
+                product_type: "Товар",
+                nav_home: "Главная",
+                nav_catalog: "Каталог",
+                nav_cart: "Корзина",
+                nav_fav: "Избранное",
+                nav_profile: "Профиль"
+            }
+        };
+
         const CATEGORIES_DATA = [
             {
                 id: 1,
-                name: "Ayollar kiyimlari",
+                name: { uz: "Ayollar kiyimlari", ru: "Женская одежда" },
                 subcats: [
-                    { name: "Ko'ylaklar", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Kurtkalar", img: "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Ichki kiyimlar", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Jinsilar", img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Futbolkalar", img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" }
+                    { name: { uz: "Ko'ylaklar", ru: "Платья" }, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Kurtkalar", ru: "Куртки" }, img: "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Ichki kiyimlar", ru: "Нижнее белье" }, img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Jinsilar", ru: "Джинсы" }, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Futbolkalar", ru: "Футболки" }, img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" }
                 ]
             },
             {
                 id: 2,
-                name: "Erkaklar kiyimlari",
+                name: { uz: "Erkaklar kiyimlari", ru: "Мужская одежда" },
                 subcats: [
-                    { name: "Erkaklar kurtkalari", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Sportivniy", img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Erkaklar ko'ylaklari", img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Erkaklar jinsilari", img: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&auto=format&fit=crop&q=80" }
+                    { name: { uz: "Erkaklar kurtkalari", ru: "Мужские куртки" }, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Sportivniy", ru: "Спортивные костюмы" }, img: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Erkaklar ko'ylaklari", ru: "Мужские рубашки" }, img: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Erkaklar jinsilari", ru: "Мужские джинсы" }, img: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&auto=format&fit=crop&q=80" }
                 ]
             },
             {
                 id: 3,
-                name: "Oyoq kiyimlar",
+                name: { uz: "Oyoq kiyimlar", ru: "Обувь" },
                 subcats: [
-                    { name: "Tapichka", img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Krossovkalar", img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Tuflilar", img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Qishki etiklar", img: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&auto=format&fit=crop&q=80" }
+                    { name: { uz: "Tapichka", ru: "Тапочки" }, img: "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Krossovkalar", ru: "Кроссовки" }, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Tuflilar", ru: "Туфли" }, img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Qishki etiklar", ru: "Зимние ботинки" }, img: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&auto=format&fit=crop&q=80" }
                 ]
             },
             {
                 id: 4,
-                name: "Aksessuarlar",
+                name: { uz: "Aksessuarlar", ru: "Аксессуары" },
                 subcats: [
-                    { name: "Shapkalar", img: "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Sumkalar", img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Soatlar", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Ko'zoynaklar", img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&auto=format&fit=crop&q=80" }
+                    { name: { uz: "Shapkalar", ru: "Шапки" }, img: "https://images.unsplash.com/photo-1534215754734-18e55d134346?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Sumkalar", ru: "Сумки" }, img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Soatlar", ru: "Часы" }, img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Ko'zoynaklar", ru: "Очки" }, img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&auto=format&fit=crop&q=80" }
                 ]
             },
             {
                 id: 5,
-                name: "Uy uchun",
+                name: { uz: "Uy uchun", ru: "Товары для дома" },
                 subcats: [
-                    { name: "Uy tapichkalari", img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
-                    { name: "To'qima buyumlar", img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&auto=format&fit=crop&q=80" },
-                    { name: "Idish-tovoqlar", img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&auto=format&fit=crop&q=80" }
+                    { name: { uz: "Uy tapichkalari", ru: "Домашние тапочки" }, img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "To'qima buyumlar", ru: "Текстиль" }, img: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=200&auto=format&fit=crop&q=80" },
+                    { name: { uz: "Idish-tovoqlar", ru: "Посуда" }, img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&auto=format&fit=crop&q=80" }
                 ]
             }
         ];
 
-        // products.html dagi barcha mahsulotlar to'liq ro'yxati (har qanday so'zni qidirish uchun)
-        const ALL_PRODUCTS_DB = [
-            // Ko'ylaklar
-            { id: 101, name: "Ayollar uchun zamonaviy oq ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
-            { id: 102, name: "Kechki qora libos", category_id: 1, subcat: "Ko'ylaklar" },
-            { id: 103, name: "Yozgi yengil gulli ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
-            { id: 104, name: "Klassik ishbilarmon ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
-            { id: 105, name: "Qizil tantanali ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
-            { id: 106, name: "Trikotaj kundalik ko'ylak", category_id: 1, subcat: "Ko'ylaklar" },
-            // Kurtkalar
-            { id: 107, name: "Qishki issiq qora kurtka", category_id: 1, subcat: "Kurtkalar" },
-            { id: 108, name: "Bej rangli uzun palto-kurtka", category_id: 1, subcat: "Kurtkalar" },
-            { id: 109, name: "Qisqa charm kurtka (ko'k)", category_id: 1, subcat: "Kurtkalar" },
-            { id: 110, name: "Pushti sportivniy duxovka kurtka", category_id: 1, subcat: "Kurtkalar" },
-            { id: 111, name: "Klassik qora bolonka kurtka", category_id: 1, subcat: "Kurtkalar" },
-            { id: 112, name: "Oversize uslubdagi demi kurtka", category_id: 1, subcat: "Kurtkalar" },
-            // Ichki kiyimlar
-            { id: 113, name: "Ayollar uchun paxtali to'plam", category_id: 1, subcat: "Ichki kiyimlar" },
-            { id: 114, name: "Kruzhevnoy nafis komplekt", category_id: 1, subcat: "Ichki kiyimlar" },
-            { id: 115, name: "Kundalik bejiyos byustgalter", category_id: 1, subcat: "Ichki kiyimlar" },
-            { id: 116, name: "Sportivniy top-byustgalter", category_id: 1, subcat: "Ichki kiyimlar" },
-            { id: 117, name: "Sets-trusiki (3 talik to'plam)", category_id: 1, subcat: "Ichki kiyimlar" },
-            { id: 118, name: "Ipak uy xalati va ichki kiyim", category_id: 1, subcat: "Ichki kiyimlar" },
-            // Jinsilar
-            { id: 119, name: "Mom fit ko'k jinsi shim", category_id: 1, subcat: "Jinsilar" },
-            { id: 120, name: "Klassik qora streytch jinsi", category_id: 1, subcat: "Jinsilar" },
-            { id: 121, name: "Wide leg keng bichimli jinsi", category_id: 1, subcat: "Jinsilar" },
-            { id: 122, name: "Oq yozgi ingichka jinsi shim", category_id: 1, subcat: "Jinsilar" },
-            { id: 123, name: "Boyfriend uslubidagi yirtiq jinsi", category_id: 1, subcat: "Jinsilar" },
-            { id: 124, name: "High waist baland bel jinsi", category_id: 1, subcat: "Jinsilar" },
-            // Futbolkalar
-            { id: 125, name: "Oq bazaviy paxtali futbolka", category_id: 1, subcat: "Futbolkalar" },
-            { id: 126, name: "Qora oversize printli futbolka", category_id: 1, subcat: "Futbolkalar" },
-            { id: 127, name: "Pushti rangli yozgi polo futbolka", category_id: 1, subcat: "Futbolkalar" },
-            { id: 128, name: "Chiziqli navy stilidagi futbolka", category_id: 1, subcat: "Futbolkalar" },
-            { id: 129, name: "Bej rangli trikotaj crop-top futbolka", category_id: 1, subcat: "Futbolkalar" },
-            { id: 130, name: "Klassik kulrang sport futbolkasi", category_id: 1, subcat: "Futbolkalar" },
-            // Erkaklar kurtkalari
-            { id: 201, name: "Erkaklar uchun qishki qora kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
-            { id: 202, name: "Klassik jigar rang charm kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
-            { id: 203, name: "Sportivniy duxovka kurtka (ko'k)", category_id: 2, subcat: "Erkaklar kurtkalari" },
-            { id: 204, name: "Erkaklar uchun uzun palto", category_id: 2, subcat: "Erkaklar kurtkalari" },
-            { id: 205, name: "Haki rangli parka kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
-            { id: 206, name: "Yengil bomber kurtka", category_id: 2, subcat: "Erkaklar kurtkalari" },
-            // Sportivniy
-            { id: 207, name: "Erkaklar uchun qora sport kostyumi", category_id: 2, subcat: "Sportivniy" },
-            { id: 208, name: "Kulrang fleece sportivniy", category_id: 2, subcat: "Sportivniy" },
-            { id: 209, name: "Brendoviy yugurish kostyumi", category_id: 2, subcat: "Sportivniy" },
-            { id: 210, name: "Paxtali sport shim va xudi", category_id: 2, subcat: "Sportivniy" },
-            { id: 211, name: "Kantli qora sport shimi", category_id: 2, subcat: "Sportivniy" },
-            { id: 212, name: "Ochiq ko'k rangli sport xudi", category_id: 2, subcat: "Sportivniy" },
-            // Erkaklar ko'ylaklari
-            { id: 213, name: "Klassik oq erkaklar ko'ylagi", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
-            { id: 214, name: "Havo rang ishbilarmon ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
-            { id: 215, name: "Kletkali kundalik ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
-            { id: 216, name: "Qora rangli zamonaviy ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
-            { id: 217, name: "Yozgi koton yengil ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
-            { id: 218, name: "Stilniy lin ko'ylak", category_id: 2, subcat: "Erkaklar ko'ylaklari" },
-            // Erkaklar jinsilari
-            { id: 219, name: "Erkaklar uchun klassik ko'k jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
-            { id: 220, name: "Qora toraytirilgan slim jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
-            { id: 221, name: "Ochiq rangli yozgi jinsi shim", category_id: 2, subcat: "Erkaklar jinsilari" },
-            { id: 222, name: "Qulay streytch qora jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
-            { id: 223, name: "Jibakli qalin qishki jinsi shim", category_id: 2, subcat: "Erkaklar jinsilari" },
-            { id: 224, name: "Zarg'aldoq ip naqshli jinsi", category_id: 2, subcat: "Erkaklar jinsilari" },
-            // Tapichka
-            { id: 301, name: "Uy uchun yumshoq pelush tapichka", category_id: 3, subcat: "Tapichka" },
-            { id: 302, name: "Rezinali yozgi plyaj tapichkasi", category_id: 3, subcat: "Tapichka" },
-            { id: 303, name: "Ortopedik qulay uy shippagi", category_id: 3, subcat: "Tapichka" },
-            { id: 304, name: "Maza qilib yurish uchun maxsus shippak", category_id: 3, subcat: "Tapichka" },
-            { id: 305, name: "Qishki yopiq junli tapichka", category_id: 3, subcat: "Tapichka" },
-            { id: 306, name: "Massaj qiluvchi rezina tapichka", category_id: 3, subcat: "Tapichka" },
-            // Krossovkalar
-            { id: 307, name: "Sport uchun zamonaviy krossovka", category_id: 3, subcat: "Krossovkalar" },
-            { id: 308, name: "Oq rangli universal ked-krossovka", category_id: 3, subcat: "Krossovkalar" },
-            { id: 309, name: "Qora yugurish krossovkasi", category_id: 3, subcat: "Krossovkalar" },
-            { id: 310, name: "Qalin taglikli stilniy krossovka", category_id: 3, subcat: "Krossovkalar" },
-            { id: 311, name: "Basketbol uslubidagi krossovka", category_id: 3, subcat: "Krossovkalar" },
-            { id: 312, name: "Yengil to'rli yozgi krossovka", category_id: 3, subcat: "Krossovkalar" },
-            // Tuflilar
-            { id: 313, name: "Klassik qora erkaklar tuflisi", category_id: 3, subcat: "Tuflilar" },
-            { id: 314, name: "Ayollar uchun nafis poshnali tufli", category_id: 3, subcat: "Tuflilar" },
-            { id: 315, name: "Laklangan tantanali tufli", category_id: 3, subcat: "Tuflilar" },
-            { id: 316, name: "Past poshnali kundalik qulay tufli", category_id: 3, subcat: "Tuflilar" },
-            { id: 317, name: "Mokasina uslubidagi yumshoq tufli", category_id: 3, subcat: "Tuflilar" },
-            { id: 318, name: "Oksford uslubidagi charm tufli", category_id: 3, subcat: "Tuflilar" },
-            // Qishki etiklar
-            { id: 319, name: "Qishki issiq mo'ynali etik", category_id: 3, subcat: "Qishki etiklar" },
-            { id: 320, name: "Erkaklar uchun qalin taglik botinkasi", category_id: 3, subcat: "Qishki etiklar" },
-            { id: 321, name: "Ayollar uchun zamsh qishki etik", category_id: 3, subcat: "Qishki etiklar" },
-            { id: 322, name: "Suv o'tkazmaydigan termobotinka", category_id: 3, subcat: "Qishki etiklar" },
-            { id: 323, name: "Qisqartirilgan qishki botinka", category_id: 3, subcat: "Qishki etiklar" },
-            { id: 324, name: "Trekking turistik qishki etik", category_id: 3, subcat: "Qishki etiklar" },
-            // Shapkalar
-            { id: 401, name: "Bahorgi qora shapka", category_id: 4, subcat: "Shapkalar" },
-            { id: 402, name: "Yozgi quyosh qalpog'i (Kepka)", category_id: 4, subcat: "Shapkalar" },
-            { id: 403, name: "Qishki jun quloqchinli shapka", category_id: 4, subcat: "Shapkalar" },
-            { id: 404, name: "Stilniy panama (shlyapa)", category_id: 4, subcat: "Shapkalar" },
-            { id: 405, name: "Sportivniy brend kepka", category_id: 4, subcat: "Shapkalar" },
-            { id: 406, name: "Klassik qora bere", category_id: 4, subcat: "Shapkalar" },
-            // Sumkalar
-            { id: 407, name: "Ayollar uchun elegante charm sumka", category_id: 4, subcat: "Sumkalar" },
-            { id: 408, name: "Kichik yelka sumkasi (Clutch)", category_id: 4, subcat: "Sumkalar" },
-            { id: 409, name: "Kundalik shopper sumka", category_id: 4, subcat: "Sumkalar" },
-            { id: 410, name: "Sport uslubidagi ruksak-sumka", category_id: 4, subcat: "Sumkalar" },
-            { id: 411, name: "Klassik qora ish sumkasi", category_id: 4, subcat: "Sumkalar" },
-            { id: 412, name: "Brendoviy zanjirli sumka", category_id: 4, subcat: "Sumkalar" },
-            // Soatlar
-            { id: 413, name: "Smart qo'l soati (Smart Watch)", category_id: 4, subcat: "Soatlar" },
-            { id: 414, name: "Klassik metall tasmali qo'l soati", category_id: 4, subcat: "Soatlar" },
-            { id: 415, name: "Ayollar uchun nafis tillarang soat", category_id: 4, subcat: "Soatlar" },
-            { id: 416, name: "Sport uslubidagi elektron soat", category_id: 4, subcat: "Soatlar" },
-            { id: 417, name: "Charm tasmali erkaklar soati", category_id: 4, subcat: "Soatlar" },
-            { id: 418, name: "Minimalistik dizaynli qo'l soati", category_id: 4, subcat: "Soatlar" },
-            // Ko'zoynaklar
-            { id: 419, name: "Quyoshdan saqlovchi qora ko'zoynak", category_id: 4, subcat: "Ko'zoynaklar" },
-            { id: 420, name: "Kvadrat shakldagi imidj ko'zoynagi", category_id: 4, subcat: "Ko'zoynaklar" },
-            { id: 421, name: "Aviator uslubidagi quyosh ko'zoynagi", category_id: 4, subcat: "Ko'zoynaklar" },
-            { id: 422, name: "Dumaloq dizaynli retro ko'zoynak", category_id: 4, subcat: "Ko'zoynaklar" },
-            { id: 423, name: "Sportivniy velosipedchi ko'zoynagi", category_id: 4, subcat: "Ko'zoynaklar" },
-            { id: 424, name: "Kompyuter uchun nurlar himoyali ko'zoynak", category_id: 4, subcat: "Ko'zoynaklar" },
-            // Uy tapichkalari
-            { id: 501, name: "Uy uchun pelushli issiq tapichka", category_id: 5, subcat: "Uy tapichkalari" },
-            { id: 502, name: "Erkaklar uchun yumshoq uy shippagi", category_id: 5, subcat: "Uy tapichkalari" },
-            { id: 503, name: "Bolalar va kattalar uchun qiziqarli tapichka", category_id: 5, subcat: "Uy tapichkalari" },
-            { id: 504, name: "Yengil ipak uy shippagi", category_id: 5, subcat: "Uy tapichkalari" },
-            { id: 505, name: "Ortopedik uy poyabzali", category_id: 5, subcat: "Uy tapichkalari" },
-            { id: 506, name: "Qalin taglikli qishki uy shippagi", category_id: 5, subcat: "Uy tapichkalari" },
-            // To'qima buyumlar
-            { id: 507, name: "Yumshoq yotoq yopinchig'i (Pled)", category_id: 5, subcat: "To'qima buyumlar" },
-            { id: 508, name: "Paxtali choyshablar to'plami (Postel)", category_id: 5, subcat: "To'qima buyumlar" },
-            { id: 509, name: "Dekorativ yostiqlar to'plami", category_id: 5, subcat: "To'qima buyumlar" },
-            { id: 510, name: "Oshxona uchun sochiqlar to'plami", category_id: 5, subcat: "To'qima buyumlar" },
-            { id: 511, name: "Hammom uchun katta paxta sochiq", category_id: 5, subcat: "To'qima buyumlar" },
-            { id: 512, name: "Stilniy stol yopig'i (Skatert)", category_id: 5, subcat: "To'qima buyumlar" },
-            // Idish-tovoqlar
-            { id: 513, name: "Keramika piyola va kosalar to'plami", category_id: 5, subcat: "Idish-tovoqlar" },
-            { id: 514, name: "Zanglamaydigan po'latdan kastrulkalar to'plami", category_id: 5, subcat: "Idish-tovoqlar" },
-            { id: 515, name: "Granit qoplamali yopishmaydigan tovada", category_id: 5, subcat: "Idish-tovoqlar" },
-            { id: 516, name: "Shisha stakanlar to'plami (6 talik)", category_id: 5, subcat: "Idish-tovoqlar" },
-            { id: 517, name: "Choynak va finjonlar to'plami", category_id: 5, subcat: "Idish-tovoqlar" },
-            { id: 518, name: "Oshxona pichoqlari jamlanmasi", category_id: 5, subcat: "Idish-tovoqlar" }
-        ];
-
+        let currentLang = localStorage.getItem('selected_lang') || 'uz';
+        let t = translations[currentLang] || translations['uz'];
+        let allProducts = [];
         let activeCatId = parseInt(localStorage.getItem('active_cat_id')) || 1;
 
+        function applyTranslations() {
+            currentLang = localStorage.getItem('selected_lang') || 'uz';
+            t = translations[currentLang] || translations['uz'];
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+        }
+
+        function getLocalized(field) {
+            if (!field) return '';
+            if (typeof field === 'object') {
+                return field[currentLang] || field['uz'] || Object.values(field)[0] || '';
+            }
+            return field;
+        }
+
+        function getStrictLocalized(field) {
+            if (!field) return '';
+            if (typeof field === 'object') {
+                return field[currentLang] || '';
+            }
+            return '';
+        }
+
+        async function fetchProductsAndInit() {
+            try {
+                let res = await fetch('/api/products');
+                if (res.ok) {
+                    let db = await res.json();
+                    allProducts = db.products || [];
+                }
+            } catch (err) {
+                try {
+                    let resDb = await fetch('database.json');
+                    if (resDb.ok) {
+                        let db = await resDb.json();
+                        allProducts = db.products || [];
+                    }
+                } catch (e) {
+                    console.error("Bazadan mahsulotlarni o'qib bo'lmadi:", e);
+                }
+            }
+            renderCatalog();
+            updateBadges();
+        }
+
         function renderCatalog() {
+            applyTranslations();
             const sidebar = document.getElementById('sidebarCategories');
             const panel = document.getElementById('contentPanel');
 
             sidebar.innerHTML = CATEGORIES_DATA.map(c => `
                 <div class="sidebar-item ${c.id === activeCatId ? 'active' : ''}" onclick="selectCategory(${c.id})">
-                    ${c.name}
+                    ${getLocalized(c.name)}
                 </div>
             `).join('');
 
             const currentCat = CATEGORIES_DATA.find(c => c.id === activeCatId) || CATEGORIES_DATA[0];
 
             panel.innerHTML = `
-                <div class="panel-title">${currentCat.name}</div>
+                <div class="panel-title">${getLocalized(currentCat.name)}</div>
                 <div class="subcats-grid">
-                    ${currentCat.subcats.map(sub => `
-                        <a href="products.html?cat_id=${currentCat.id}&sub=${encodeURIComponent(sub.name)}" class="subcat-card" onclick="localStorage.setItem('active_cat_id', ${currentCat.id})">
-                            <div class="subcat-img-wrap">
-                                <img src="${sub.img}" alt="${sub.name}" class="subcat-img">
-                            </div>
-                            <span class="subcat-name">${sub.name}</span>
-                        </a>
-                    `).join('')}
+                    ${currentCat.subcats.map(sub => {
+                        const subName = getLocalized(sub.name);
+                        return `
+                            <a href="products.html?cat_id=${currentCat.id}&sub=${encodeURIComponent(subName)}" class="subcat-card" onclick="localStorage.setItem('active_cat_id', ${currentCat.id})">
+                                <div class="subcat-img-wrap">
+                                    <img src="${sub.img}" alt="${subName}" class="subcat-img">
+                                </div>
+                                <span class="subcat-name">${subName}</span>
+                            </a>
+                        `;
+                    }).join('')}
                 </div>
             `;
         }
@@ -680,14 +637,14 @@
 
             let html = `
                 <div class="search-header-row">
-                    <span>Oxirgi qidiruvlar</span>
-                    <button class="clear-history-btn" onclick="clearAllHistory(event)">Tozalash</button>
+                    <span>${t.history_title}</span>
+                    <button class="clear-history-btn" onclick="clearAllHistory(event)">${t.clear_history}</button>
                 </div>
             `;
 
             history.forEach((item, index) => {
                 html += `
-                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item}')">
+                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item.replace(/'/g, "\\'")}')">
                         <div class="history-item-left">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             <span>${item}</span>
@@ -722,7 +679,7 @@
             window.location.href = `products.html?q=${encodeURIComponent(item)}`;
         }
 
-        // Barcha kategoriya, kichik kategoriya va jami mahsulotlar bo'yicha to'liq qidirish
+        // Qidiruv faqat joriy tilda ishlaydi
         function handleLiveSearch(e) {
             const val = e.target.value.trim().toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
@@ -736,55 +693,55 @@
             let matchedSubcats = [];
             let matchedProducts = [];
 
-            // 1. Asosiy kategoriyalardan qidirish
             CATEGORIES_DATA.forEach(cat => {
-                if (cat.name.toLowerCase().includes(val)) {
-                    matchedMainCats.push({ catId: cat.id, catName: cat.name });
+                let catNameStr = getStrictLocalized(cat.name).toLowerCase();
+                if (catNameStr.includes(val)) {
+                    matchedMainCats.push({ catId: cat.id, catName: getLocalized(cat.name) });
                 }
-                // 2. Kichik kategoriyalardan qidirish
                 cat.subcats.forEach(sub => {
-                    if (sub.name.toLowerCase().includes(val)) {
-                        matchedSubcats.push({ catId: cat.id, subName: sub.name, catName: cat.name });
+                    let subNameStr = getStrictLocalized(sub.name).toLowerCase();
+                    if (subNameStr.includes(val)) {
+                        matchedSubcats.push({ catId: cat.id, subName: getLocalized(sub.name), catName: getLocalized(cat.name) });
                     }
                 });
             });
 
-            // 3. Jami mahsulotlar bazasidan to'liq qidirish (masalan: "havo", "kurtka", "qora" va hokazo)
-            matchedProducts = ALL_PRODUCTS_DB.filter(p => p.name.toLowerCase().includes(val));
+            matchedProducts = allProducts.filter(p => {
+                let pNameStr = getStrictLocalized(p.name).toLowerCase();
+                return pNameStr.includes(val);
+            });
 
             let html = '';
 
             if (matchedMainCats.length > 0 || matchedSubcats.length > 0 || matchedProducts.length > 0) {
-                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val}'); window.location.href='products.html?q=${encodeURIComponent(val)}'">
-                    <span>"${val}" bo'yicha barcha natijalarni ko'rish</span>
-                    <span class="suggestion-type">Qidirish</span>
+                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val.replace(/'/g, "\\'")}'); window.location.href='products.html?q=${encodeURIComponent(val)}'">
+                    <span>"${val}" ${t.search_all_label}</span>
+                    <span class="suggestion-type">${t.search_type}</span>
                 </div>`;
 
-                // Asosiy kategoriyalar
                 matchedMainCats.forEach(item => {
                     html += `<div class="search-suggestion-item" onclick="selectCategoryFromSearch(${item.catId})">
                         <span>${item.catName}</span>
-                        <span class="suggestion-type">Bo'lim</span>
+                        <span class="suggestion-type">${t.category_type}</span>
                     </div>`;
                 });
 
-                // Kichik kategoriyalar
                 matchedSubcats.forEach(item => {
-                    html += `<div class="search-suggestion-item" onclick="selectSubcatFromSearch(${item.catId}, '${item.subName}')">
+                    html += `<div class="search-suggestion-item" onclick="selectSubcatFromSearch(${item.catId}, '${item.subName.replace(/'/g, "\\'")}')">
                         <span>${item.subName} <small style="color:var(--muted)">(${item.catName})</small></span>
-                        <span class="suggestion-type">Turkum</span>
+                        <span class="suggestion-type">${t.subcat_type}</span>
                     </div>`;
                 });
 
-                // Mahsulotlar (barcha kategoriya ichidagilar)
-                matchedProducts.slice(0, 10).forEach(prod => {
-                    html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${prod.name}'); window.location.href='product.html?id=${prod.id}'">
-                        <span>${prod.name}</span>
-                        <span class="suggestion-type">Mahsulot</span>
+                matchedProducts.slice(0, 8).forEach(prod => {
+                    let pName = getLocalized(prod.name);
+                    html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${pName.replace(/'/g, "\\'")}'); window.location.href='product.html?id=${prod.id}'">
+                        <span>${pName}</span>
+                        <span class="suggestion-type">${t.product_type}</span>
                     </div>`;
                 });
             } else {
-                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">Hech narsa topilmadi...</div>`;
+                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">${t.no_results}</div>`;
             }
 
             dropdown.innerHTML = html;
@@ -823,7 +780,35 @@
             }
         });
 
-        renderCatalog();
+        function updateBadges() {
+            let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+            let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+            const favBadge = document.getElementById('favBadge');
+            const cartBadge = document.getElementById('cartBadge');
+
+            if (favs.length > 0) {
+                favBadge.textContent = favs.length;
+                favBadge.classList.add('show');
+            } else {
+                favBadge.classList.remove('show');
+            }
+
+            let totalCartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+            if (totalCartCount > 0) {
+                cartBadge.textContent = totalCartCount;
+                cartBadge.classList.add('show');
+            } else {
+                cartBadge.classList.remove('show');
+            }
+        }
+
+        window.addEventListener('pageshow', () => {
+            fetchProductsAndInit();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchProductsAndInit();
+        });
     </script>
 </body>
 </html>
