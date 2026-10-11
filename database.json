@@ -3,18 +3,25 @@
     "theme": "light"
   },
   "banners": [
-    { "img": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80", "product_id": 101 },
-    { "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80", "product_id": 107 },
-    { "img": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80", "product_id": 201 },
-    { "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80", "product_id": 301 },
-    { "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80", "product_id": 401 }
+    {
+      "img": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80",
+      "product_id": 101
+    },
+    {
+      "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80",
+      "product_id": 107
+    }
   ],
   "stories": [
-    { "id": 1, "title": { "uz": "Super Aksiya", "ru": "Супер Акция" }, "type": "video", "media": "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4", "product_id": 101, "created_at": "2026-10-11T12:00:00Z", "duration_hours": 24 },
-    { "id": 2, "title": { "uz": "Yangi Kolleksiya", "ru": "Новая Коллекция" }, "type": "image", "media": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80", "product_id": 102, "created_at": "2026-10-10T08:00:00Z", "duration_hours": 72 },
-    { "id": 3, "title": { "uz": "Chegirmalar", "ru": "Скидки" }, "type": "image", "media": "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80", "product_id": 107, "created_at": "2026-10-10T08:00:00Z", "duration_hours": 72 },
-    { "id": 4, "title": { "uz": "Top Tovarlar", "ru": "Топ товары" }, "type": "image", "media": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80", "product_id": 113, "created_at": "2026-10-10T08:00:00Z", "duration_hours": 72 },
-    { "id": 5, "title": { "uz": "Elektronika", "ru": "Электроника" }, "type": "image", "media": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80", "product_id": 401, "created_at": "2026-10-10T08:00:00Z", "duration_hours": 72 }
+    {
+      "id": 1,
+      "title": { "uz": "Super Aksiya", "ru": "Супер Акция" },
+      "type": "video",
+      "media": "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4",
+      "product_id": 101,
+      "created_at": "2026-10-11T12:00:00Z",
+      "duration_hours": 24
+    }
   ],
   "home_sections": [
     {
@@ -23,7 +30,7 @@
       "enabled": true,
       "order": 1,
       "timer_end": "2026-10-15T23:59:59",
-      "product_ids": [101, 107, 201, 301, 401, 501]
+      "product_ids": [101, 107, 201, 307]
     }
   ],
   "categories": [
@@ -33,9 +40,7 @@
       "name": { "uz": "Ayollar kiyimlari", "ru": "Женская одежда" },
       "subcats": [
         { "name": { "uz": "Ko'ylaklar", "ru": "Платья" }, "img": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Kurtkalar", "ru": "Куртки" }, "img": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Jinsilar", "ru": "Джинсы" }, "img": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Kurtkalar", "ru": "Куртки" }, "img": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -44,150 +49,71 @@
       "name": { "uz": "Erkaklar kiyimlari", "ru": "Мужская одежда" },
       "subcats": [
         { "name": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "img": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Sportivniy", "ru": "Спортивные костюмы" }, "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Erkaklar ko'ylaklari", "ru": "Мужские рубашки" }, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Futbolkalar", "ru": "Футболки" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 3,
-      "order": 3,
-      "name": { "uz": "Oyoq kiyimlar", "ru": "Обувь" },
-      "subcats": [
-        { "name": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "img": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Tufellar", "ru": "Туфли" }, "img": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Etiklar", "ru": "Сапоги" }, "img": "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Tapichka", "ru": "Тапочки" }, "img": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 4,
-      "order": 4,
-      "name": { "uz": "Elektronika", "ru": "Электроника" },
-      "subcats": [
-        { "name": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "img": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Noutbuklar", "ru": "Ноутбуки" }, "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Quloqchinlar", "ru": "Наушники" }, "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Smart soatlar", "ru": "Смарт-часы" }, "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 5,
-      "order": 5,
-      "name": { "uz": "Maishiy texnika", "ru": "Бытовая техника" },
-      "subcats": [
-        { "name": { "uz": "Changyutgichlar", "ru": "Пылесосы" }, "img": "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Blenderlar", "ru": "Блендеры" }, "img": "https://images.unsplash.com/photo-1570222094114-d074f7e14e5b?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Dazmollar", "ru": "Утюги" }, "img": "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Mikserlar", "ru": "Миксеры" }, "img": "https://images.unsplash.com/photo-15926663469ec-9dbdd535a2d7?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 6,
-      "order": 6,
-      "name": { "uz": "Uy jihozlari", "ru": "Товары для дома" },
-      "subcats": [
-        { "name": { "uz": "Idish-tovoqlar", "ru": "Посуда" }, "img": "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Ko'rpa-to'shaklar", "ru": "Постельное белье" }, "img": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Chiroqlar", "ru": "Светильники" }, "img": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Gilamlar", "ru": "Ковры" }, "img": "https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 7,
-      "order": 7,
-      "name": { "uz": "Go'zallik va parvarish", "ru": "Красота и уход" },
-      "subcats": [
-        { "name": { "uz": "Atirlar", "ru": "Парфюмерия" }, "img": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Soch parvarishi", "ru": "Уход за волосами" }, "img": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Kosmetika", "ru": "Косметика" }, "img": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Krem va losyonlar", "ru": "Кремы и лосьоны" }, "img": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 8,
-      "order": 8,
-      "name": { "uz": "Sport va hordiq", "ru": "Спорт и отдых" },
-      "subcats": [
-        { "name": { "uz": "Trenajyorlar", "ru": "Тренажеры" }, "img": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Velosipedlar", "ru": "Велосипеды" }, "img": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Gantellar", "ru": "Гантели" }, "img": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Palatkalar", "ru": "Палатки" }, "img": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 9,
-      "order": 9,
-      "name": { "uz": "Avto tovarlar", "ru": "Автотовары" },
-      "subcats": [
-        { "name": { "uz": "Chexollar", "ru": "Чехлы" }, "img": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Videoregistratorlar", "ru": "Видеорегистраторы" }, "img": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Avto moylash", "ru": "Автохимия" }, "img": "https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Nasoslar", "ru": "Насосы" }, "img": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=200&auto=format&fit=crop&q=80" }
-      ]
-    },
-    {
-      "id": 10,
-      "order": 10,
-      "name": { "uz": "Bolalar olami", "ru": "Детский мир" },
-      "subcats": [
-        { "name": { "uz": "O'yinchoqlar", "ru": "Игрушки" }, "img": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Bolalar kiyimlari", "ru": "Детская одежда" }, "img": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Tagliklar", "ru": "Подгузники" }, "img": "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Aravachalar", "ru": "Коляски" }, "img": "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Sportivniy", "ru": "Спортивные костюмы" }, "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" }
       ]
     }
   ],
   "products": [
-    { "id": 101, "category_id": 1, "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, "name": { "uz": "Ayollar oq ko'ylagi", "ru": "Женское белое платье" }, "price": "220 000 so'm", "oldPrice": "350 000 so'm", "discount": "↓ 37%", "badgeType": "arzonlashdi", "rating": 4.9, "comments": 178, "stock": 5, "images": ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 102, "category_id": 1, "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, "name": { "uz": "Kechki qora libos", "ru": "Вечернее черное платье" }, "price": "450 000 so'm", "oldPrice": "650 000 so'm", "discount": "↓ 30%", "badgeType": "original", "rating": 5.0, "comments": 84, "stock": 3, "images": ["https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 103, "category_id": 1, "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, "name": { "uz": "Yozgi yengil ko'ylak", "ru": "Летнее легкое платье" }, "price": "180 000 so'm", "oldPrice": "250 000 so'm", "discount": "↓ 28%", "badgeType": "chegirma", "rating": 4.7, "comments": 45, "stock": 10, "images": ["https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 104, "category_id": 1, "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, "name": { "uz": "Klassik qizil ko'ylak", "ru": "Классическое красное платье" }, "price": "310 000 so'm", "oldPrice": "400 000 so'm", "discount": "↓ 22%", "badgeType": "original", "rating": 4.8, "comments": 92, "stock": 6, "images": ["https://images.unsplash.com/photo-1502716119720-b23a93e5fb1b?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 105, "category_id": 1, "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, "name": { "uz": "Gulli yozgi sarafan", "ru": "Цветочный летний сарафан" }, "price": "195 000 so'm", "oldPrice": "280 000 so'm", "discount": "↓ 30%", "badgeType": "chegirma", "rating": 4.6, "comments": 33, "stock": 8, "images": ["https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 106, "category_id": 1, "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, "name": { "uz": "Baxmal kechki libos", "ru": "Бархатное вечернее платье" }, "price": "520 000 so'm", "oldPrice": "700 000 so'm", "discount": "↓ 25%", "badgeType": "original", "rating": 4.9, "comments": 110, "stock": 2, "images": ["https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=600&auto=format&fit=crop&q=80"] },
-
-    { "id": 107, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Qishki qora kurtka", "ru": "Зимняя черная куртка" }, "price": "450 000 so'm", "oldPrice": "680 000 so'm", "discount": "↓ 33%", "badgeType": "original", "rating": 4.9, "comments": 124, "stock": 3, "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 108, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Pushti qisqa kurtka", "ru": "Розовая короткая куртка" }, "price": "390 000 so'm", "oldPrice": "500 000 so'm", "discount": "↓ 22%", "badgeType": "chegirma", "rating": 4.7, "comments": 60, "stock": 5, "images": ["https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 109, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Dжинsovka kurtka", "ru": "Джинсовая куртка" }, "price": "280 000 so'm", "oldPrice": "380 000 so'm", "discount": "↓ 26%", "badgeType": "original", "rating": 4.8, "comments": 71, "stock": 7, "images": ["https://images.unsplash.com/photo-1543322747-81df3a283741?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 110, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Bahorgi plash", "ru": "Весенний плащ" }, "price": "340 000 so'm", "oldPrice": "450 000 so'm", "discount": "↓ 24%", "badgeType": "chegirma", "rating": 4.5, "comments": 39, "stock": 4, "images": ["https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 111, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Sportivniy kurtka", "ru": "Спортивная куртка" }, "price": "310 000 so'm", "oldPrice": "420 000 so'm", "discount": "↓ 26%", "badgeType": "original", "rating": 4.9, "comments": 88, "stock": 9, "images": ["https://images.unsplash.com/photo-1548883354-7622d03a27c6?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 112, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Oversize kurtka", "ru": "Оверсайз куртка" }, "price": "480 000 so'm", "oldPrice": "600 000 so'm", "discount": "↓ 20%", "badgeType": "arzonlashdi", "rating": 5.0, "comments": 105, "stock": 3, "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"] },
-
-    { "id": 113, "category_id": 1, "subcat": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "name": { "uz": "Ayollar to'plami 1", "ru": "Женский комплект 1" }, "price": "95 000 so'm", "oldPrice": "150 000 so'm", "discount": "↓ 36%", "badgeType": "chegirma", "rating": 4.8, "comments": 210, "stock": 15, "images": ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 114, "category_id": 1, "subcat": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "name": { "uz": "Paxtali ichki kiyim", "ru": "Хлопковое белье" }, "price": "75 000 so'm", "oldPrice": "110 000 so'm", "discount": "↓ 31%", "badgeType": "original", "rating": 4.9, "comments": 140, "stock": 20, "images": ["https://images.unsplash.com/photo-1583846554097-f584e0224d08?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 115, "category_id": 1, "subcat": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "name": { "uz": "Kruzheshniy to'plam", "ru": "Кружевной комплект" }, "price": "130 000 so'm", "oldPrice": "190 000 so'm", "discount": "↓ 31%", "badgeType": "arzonlashdi", "rating": 4.7, "comments": 95, "stock": 8, "images": ["https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 116, "category_id": 1, "subcat": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "name": { "uz": "Uy uchun Pijama", "ru": "Домашняя пижама" }, "price": "160 000 so'm", "oldPrice": "230 000 so'm", "discount": "↓ 30%", "badgeType": "original", "rating": 4.9, "comments": 180, "stock": 12, "images": ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 117, "category_id": 1, "subcat": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "name": { "uz": "Saten xalat va to'plam", "ru": "Сатиновый халат и комплект" },
-      "price": "210 000 so'm", "oldPrice": "300 000 so'm", "discount": "↓ 30%", "badgeType": "chegirma", "rating": 4.8, "comments": 64, "stock": 7, "images": ["https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 118, "category_id": 1, "subcat": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "name": { "uz": "Termo ichki kiyim", "ru": "Термобелье женское" }, "price": "190 000 so'm", "oldPrice": "260 000 so'm", "discount": "↓ 26%", "badgeType": "original", "rating": 4.9, "comments": 115, "stock": 10, "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"] },
-
-    { "id": 119, "category_id": 1, "subcat": { "uz": "Jinsilar", "ru": "Джинсы" }, "name": { "uz": "Mom fit jinsi", "ru": "Джинсы Mom fit" }, "price": "240 000 so'm", "oldPrice": "350 000 so'm", "discount": "↓ 31%", "badgeType": "original", "rating": 4.8, "comments": 160, "stock": 6, "images": ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 120, "category_id": 1, "subcat": { "uz": "Jinsilar", "ru": "Джинсы" }, "name": { "uz": "Skinni ko'k jinsi", "ru": "Джинсы скинни синие" }, "price": "210 000 so'm", "oldPrice": "300 000 so'm", "discount": "↓ 30%", "badgeType": "chegirma", "rating": 4.7, "comments": 82, "stock": 9, "images": ["https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 121, "category_id": 1, "subcat": { "uz": "Jinsilar", "ru": "Джинсы" }, "name": { "uz": "Wide leg keng jinsi", "ru": "Джинсы Wide leg" }, "price": "270 000 so'm", "oldPrice": "380 000 so'm", "discount": "↓ 28%", "badgeType": "original", "rating": 4.9, "comments": 134, "stock": 5, "images": ["https://images.unsplash.com/photo-1542272604-787c96355353?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 122, "category_id": 1, "subcat": { "uz": "Jinsilar", "ru": "Джинсы" }, "name": { "uz": "Qora klassik jinsi", "ru": "Черные классические джинсы" }, "price": "250 000 so'm", "oldPrice": "340 000 so'm", "discount": "↓ 26%", "badgeType": "arzonlashdi", "rating": 4.8, "comments": 90, "stock": 7, "images": ["https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 123, "category_id": 1, "subcat": { "uz": "Jinsilar", "ru": "Джинсы" }, "name": { "uz": "Yirtiq dizaynli jinsi", "ru": "Джинсы с рваными элементами" }, "price": "260 000 so'm", "oldPrice": "360 000 so'm", "discount": "↓ 27%", "badgeType": "chegirma", "rating": 4.6, "comments": 53, "stock": 4, "images": ["https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 124, "category_id": 1, "subcat": { "uz": "Jinsilar", "ru": "Джинсы" }, "name": { "uz": "Yuqori bel jinsi", "ru": "Джинсы с высокой талией" }, "price": "280 000 so'm", "oldPrice": "390 000 so'm", "discount": "↓ 28%", "badgeType": "original", "rating": 4.9, "comments": 142, "stock": 6, "images": ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"] },
-
-    { "id": 201, "category_id": 2, "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "name": { "uz": "Erkaklar qishki kurtkasi", "ru": "Мужская зимняя куртка" }, "price": "520 000 so'm", "oldPrice": "780 000 so'm", "discount": "↓ 33%", "badgeType": "original", "rating": 4.9, "comments": 150, "stock": 4, "images": ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 202, "category_id": 2, "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "name": { "uz": "Damperoq ko'k kurtka", "ru": "Синяя куртка демисезонная" }, "price": "430 000 so'm", "oldPrice": "600 000 so'm", "discount": "↓ 28%", "badgeType": "chegirma", "rating": 4.7, "comments": 78, "stock": 6, "images": ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 203, "category_id": 2, "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "name": { "uz": "Charm erkaklar kurtkasi", "ru": "Кожаная мужская куртка" }, "price": "650 000 so'm", "oldPrice": "900 000 so'm", "discount": "↓ 27%", "badgeType": "original", "rating": 5.0, "comments": 94, "stock": 3, "images": ["https://images.unsplash.com/photo-1520975916090-3105956dac38?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 204, "category_id": 2, "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "name": { "uz": "Sportivniy kurtka erkaklar", "ru": "Мужская спортивная куртка" }, "price": "380 000 so'm", "oldPrice": "520 000 so'm", "discount": "↓ 26%", "badgeType": "arzonlashdi", "rating": 4.8, "comments": 65, "stock": 7, "images": ["https://images.unsplash.com/photo-1495105787522-5334e3ffa0ef?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 205, "category_id": 2, "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "name": { "uz": "Parka erkaklar uchun", "ru": "Мужская парка" }, "price": "590 000 so'm", "oldPrice": "800 000 so'm", "discount": "↓ 26%", "badgeType": "original", "rating": 4.9, "comments": 112, "stock": 5, "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 206, "category_id": 2, "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "name": { "uz": "Vetrovka yengil kurtka", "ru": "Легкая ветровка" }, "price": "290 000 so'm", "oldPrice": "400 000 so'm", "discount": "↓ 27%", "badgeType": "chegirma", "rating": 4.6, "comments": 41, "stock": 8, "images": ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"] },
-
-    { "id": 301, "category_id": 3, "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "name": { "uz": "Sport krossovka", "ru": "Спортивные кроссовки" }, "price": "320 000 so'm", "oldPrice": "500 000 so'm", "discount": "↓ 36%", "badgeType": "original", "rating": 4.9, "comments": 240, "stock": 2, "images": ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 302, "category_id": 3, "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "name": { "uz": "Yugurish uchun krossovka", "ru": "Кроссовки для бега" }, "price": "290 000 so'm", "oldPrice": "420 000 so'm", "discount": "↓ 30%", "badgeType": "chegirma", "rating": 4.8, "comments": 130, "stock": 6, "images": ["https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 303, "category_id": 3, "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "name": { "uz": "Kundalik oq krossovka", "ru": "Повседневные белые кроссовки" }, "price": "270 000 so'm", "oldPrice": "380 000 so'm", "discount": "↓ 28%", "badgeType": "original", "rating": 4.9, "comments": 195, "stock": 10, "images": ["https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 304, "category_id": 3, "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "name": { "uz": "Basketbol krossovkalari", "ru": "Баскетбольные кроссовки" }, "price": "410 000 so'm", "oldPrice": "580 000 so'm", "discount": "↓ 29%", "badgeType": "arzonlashdi", "rating": 5.0, "comments": 88, "stock": 4, "images": ["https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 305, "category_id": 3, "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "name": { "uz": "Treking krossovka", "ru": "Трекинговые кроссовки" }, "price": "390 000 so'm", "oldPrice": "520 000 so'm", "discount": "↓ 25%", "badgeType": "original", "rating": 4.7, "comments": 54, "stock": 7, "images": ["https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 306, "category_id": 3, "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "name": { "uz": "Stilniy brend krossovka", "ru": "Стильные брендовые кроссовки" }, "price": "450 000 so'm", "oldPrice": "630 000 so'm", "discount": "↓ 28%", "badgeType": "chegirma", "rating": 4.9, "comments": 110, "stock": 5, "images": ["https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=600&auto=format&fit=crop&q=80"] },
-
-    { "id": 401, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Smartfon Flagship Pro 256GB", "ru": "Смартфон Flagship Pro 256GB" }, "price": "4 500 000 so'm", "oldPrice": "5 200 000 so'm", "discount": "↓ 13%", "badgeType": "original", "rating": 5.0, "comments": 310, "stock": 10, "images": ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 402, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Smartfon Ultra 128GB", "ru": "Смартфон Ultra 128GB" }, "price": "3 200 000 so'm", "oldPrice": "3 800 000 so'm", "discount": "↓ 15%", "badgeType": "chegirma", "rating": 4.8, "comments": 185, "stock": 6, "images": ["https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 403, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Budget Phone 64GB", "ru": "Бюджетный смартфон 64GB" }, "price": "1 800 000 so'm", "oldPrice": "2 200 000 so'm", "discount": "↓ 18%", "badgeType": "original", "rating": 4.7, "comments": 140, "stock": 12, "images": ["https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 404, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Gaming Phone 512GB", "ru": "Игровой смартфон 512GB" }, "price": "6 100 000 so'm", "oldPrice": "7 000 000 so'm", "discount": "↓ 12%", "badgeType": "arzonlashdi", "rating": 5.0, "comments": 95, "stock": 3, "images": ["https://images.unsplash.com/photo-1533228876829-65c94e7b5025?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 405, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Mini Smartfon Compact", "ru": "Мини смартфон Compact" }, "price": "2 400 000 so'm", "oldPrice": "2 900 000 so'm", "discount": "↓ 17%", "badgeType": "chegirma", "rating": 4.6, "comments": 64, "stock": 7, "images": ["https://images.unsplash.com/photo-1523206489230-c012c64b2b48?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 406, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Max Phone 1TB", "ru": "Макс Телефон 1TB" }, "price": "7 500 000 so'm", "oldPrice": "8 500 000 so'm", "discount": "↓ 11%", "badgeType": "original", "rating": 4.9, "comments": 210, "stock": 2, "images": ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80"] }
+    { 
+      "id": 101, 
+      "category_id": 1, 
+      "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, 
+      "name": { "uz": "Ayollar uchun zamonaviy oq ko'ylak", "ru": "Современное женское белое платье" }, 
+      "price": "220 000 so'm", 
+      "oldPrice": "350 000 so'm", 
+      "discount": "↓ 37%", 
+      "badgeType": "arzonlashdi", 
+      "rating": 4.9, 
+      "comments": 178, 
+      "stock": 5, 
+      "images": ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"], 
+      "sizes": [42, 44, 46] 
+    },
+    { 
+      "id": 107, 
+      "category_id": 1, 
+      "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, 
+      "name": { "uz": "Qishki issiq qora kurtka", "ru": "Теплая зимняя черная куртка" }, 
+      "price": "450 000 so'm", 
+      "oldPrice": "680 000 so'm", 
+      "discount": "↓ 33%", 
+      "badgeType": "original", 
+      "rating": 4.9, 
+      "comments": 124, 
+      "stock": 3, 
+      "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"], 
+      "sizes": [38, 39, 40] 
+    },
+    { 
+      "id": 201, 
+      "category_id": 2, 
+      "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, 
+      "name": { "uz": "Erkaklar uchun qishki qora kurtka", "ru": "Мужская зимняя черная куртка" }, 
+      "price": "520 000 so'm", 
+      "oldPrice": "780 000 so'm", 
+      "discount": "↓ 33%", 
+      "badgeType": "original", 
+      "rating": 4.9, 
+      "comments": 150, 
+      "stock": 4, 
+      "images": ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], 
+      "sizes": [48, 50, 52] 
+    },
+    { 
+      "id": 307, 
+      "category_id": 3, 
+      "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, 
+      "name": { "uz": "Sport uchun zamonaviy krossovka", "ru": "Современные спортивные кроссовки" }, 
+      "price": "320 000 so'm", 
+      "oldPrice": "500 000 so'm", 
+      "discount": "↓ 36%", 
+      "badgeType": "original", 
+      "rating": 4.9, 
+      "comments": 240, 
+      "stock": 2, 
+      "images": ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], 
+      "sizes": [40, 41, 42, 43, 44] 
+    }
   ],
   "orders": [],
   "users": [
