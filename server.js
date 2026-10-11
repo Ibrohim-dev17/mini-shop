@@ -71,6 +71,11 @@ app.get('/api/products', (req, res) => {
     res.json(db);
 });
 
+// MAHSUS: stories.html so'rovi kelganda to'g'ridan-to'g'ri faylni uzatish
+app.get('/stories.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'stories.html'));
+});
+
 app.listen(3000, () => {
     console.log("Server 3000-portda ishga tushdi!");
 });
