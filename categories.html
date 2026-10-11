@@ -201,7 +201,7 @@
             color: #ff3b30;
         }
 
-        /* Asosiy konteyner - Temu uslubida to'g'ri joylashgan */
+        /* Asosiy konteyner */
         .catalog-container {
             max-width: 1300px;
             margin: 125px auto 0 auto;
@@ -220,9 +220,9 @@
             }
         }
 
-        /* 1. Chap tomon: Yozuvli asosiy kategoriyalar (Faqat yuqoriga-pastga scroll) */
+        /* 1. Chap tomon: Yozuvli asosiy kategoriyalar (Mustaqil vertical scroll) */
         .sidebar-categories {
-            width: 140px;
+            width: 130px;
             background: #ffffff;
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -236,7 +236,7 @@
 
         @media (min-width: 768px) {
             .sidebar-categories {
-                width: 240px;
+                width: 220px;
                 padding: 8px;
             }
         }
@@ -281,7 +281,7 @@
             border-radius: 0 4px 4px 0;
         }
 
-        /* 2. O'ng tomon: Doirali kategoriyalar (Faqat yuqoriga-pastga scroll va to'liq kenglik) */
+        /* 2. O'ng tomon: Doirali kategoriyalar (Qat'iy 3 ta ustun va mustaqil vertical scroll) */
         .content-panel {
             flex: 1;
             padding: 16px;
@@ -313,15 +313,15 @@
 
         .subcats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px 10px;
+            grid-template-columns: repeat(3, 1fr); /* Qat'iy 3 ta ustun */
+            gap: 16px 12px;
         }
 
         @media (min-width: 768px) {
-            .subcats-grid { grid-template-columns: repeat(4, 1fr); gap: 20px 16px; }
+            .subcats-grid { grid-template-columns: repeat(3, 1fr); gap: 24px 20px; }
         }
         @media (min-width: 1024px) {
-            .subcats-grid { grid-template-columns: repeat(5, 1fr); }
+            .subcats-grid { grid-template-columns: repeat(3, 1fr); gap: 28px 24px; }
         }
 
         .subcat-card {
@@ -332,11 +332,12 @@
             cursor: pointer;
             text-decoration: none;
             color: var(--text);
+            width: 100%;
         }
 
         .subcat-img-wrap {
-            width: 70px;
-            height: 70px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             background: var(--bg);
             overflow: hidden;
@@ -601,7 +602,6 @@
             renderCatalog();
             updateBadges();
 
-            // Qaytish tugmasi bosilganda o'sha joyiga qaytish uchun scroll pozitsiyasini tiklash
             let savedScroll = localStorage.getItem('catalog_content_scroll');
             if (savedScroll) {
                 setTimeout(() => {
@@ -648,7 +648,7 @@
             activeCatId = id;
             localStorage.setItem('active_cat_id', id);
             const panel = document.getElementById('contentPanel');
-            if (panel) panel.scrollTop = 0; // Boshqa kategoriyaga o'tganda o'ng tomonni tepadan boshlash
+            if (panel) panel.scrollTop = 0;
             localStorage.removeItem('catalog_content_scroll');
             renderCatalog();
         }
