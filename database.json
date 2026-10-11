@@ -9,31 +9,18 @@
     },
     {
       "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80",
-      "product_id": 107
-    },
-    {
-      "img": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80",
       "product_id": 201
     }
   ],
   "stories": [
     {
       "id": 1,
-      "title": { "uz": "Super Video Aksiya", "ru": "Супер Видео Акция" },
+      "title": { "uz": "Super Aksiya", "ru": "Супер Акция" },
       "type": "video",
       "media": "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4",
       "product_id": 101,
       "created_at": "2026-10-11T12:00:00Z",
       "duration_hours": 24
-    },
-    {
-      "id": 2,
-      "title": { "uz": "Yangi Kolleksiya", "ru": "Новая Коллекция" },
-      "type": "image",
-      "media": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80",
-      "product_id": 102,
-      "created_at": "2026-10-10T08:00:00Z",
-      "duration_hours": 72
     }
   ],
   "home_sections": [
@@ -43,7 +30,7 @@
       "enabled": true,
       "order": 1,
       "timer_end": "2026-10-15T23:59:59",
-      "product_ids": [101, 107, 201, 307]
+      "product_ids": [101, 201, 301, 401]
     }
   ],
   "categories": [
@@ -65,7 +52,8 @@
       "subcats": [
         { "name": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "img": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Sportivniy", "ru": "Спортивные костюмы" }, "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Erkaklar ko'ylaklari", "ru": "Мужские рубашки" }, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Erkaklar ko'ylaklari", "ru": "Мужские рубашки" }, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Futbolkalar", "ru": "Футболки" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -73,86 +61,149 @@
       "order": 3,
       "name": { "uz": "Oyoq kiyimlar", "ru": "Обувь" },
       "subcats": [
-        { "name": { "uz": "Tapichka", "ru": "Тапочки" }, "img": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "img": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "img": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Tufellar", "ru": "Туфли" }, "img": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Etiklar", "ru": "Сапоги" }, "img": "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Tapichka", "ru": "Тапочки" }, "img": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 4,
+      "order": 4,
+      "name": { "uz": "Elektronika", "ru": "Электроника" },
+      "subcats": [
+        { "name": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "img": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Noutbuklar", "ru": "Ноутбуки" }, "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Quloqchinlar", "ru": "Наушники" }, "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Smart soatlar", "ru": "Смарт-часы" }, "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 5,
+      "order": 5,
+      "name": { "uz": "Maishiy texnika", "ru": "Бытовая техника" },
+      "subcats": [
+        { "name": { "uz": "Changyutgichlar", "ru": "Пылесосы" }, "img": "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Blenderlar", "ru": "Блендеры" }, "img": "https://images.unsplash.com/photo-1570222094114-d074f7e14e5b?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Dazmollar", "ru": "Утюги" }, "img": "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Mikserlar", "ru": "Миксеры" }, "img": "https://images.unsplash.com/photo-15926663469ec-9dbdd535a2d7?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 6,
+      "order": 6,
+      "name": { "uz": "Uy jihozlari", "ru": "Товары для дома" },
+      "subcats": [
+        { "name": { "uz": "Idish-tovoqlar", "ru": "Посуда" }, "img": "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Ko'rpa-to'shaklar", "ru": "Постельное белье" }, "img": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Chiroqlar", "ru": "Светильники" }, "img": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Gilamlar", "ru": "Ковры" }, "img": "https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 7,
+      "order": 7,
+      "name": { "uz": "Go'zallik va parvarish", "ru": "Красота и уход" },
+      "subcats": [
+        { "name": { "uz": "Atirlar", "ru": "Парфюмерия" }, "img": "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Soch parvarishi", "ru": "Уход за волосами" }, "img": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Kosmetika", "ru": "Косметика" }, "img": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Krem va losyonlar", "ru": "Кремы и лосьоны" }, "img": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 8,
+      "order": 8,
+      "name": { "uz": "Sport va hordiq", "ru": "Спорт и отдых" },
+      "subcats": [
+        { "name": { "uz": "Trenajyorlar", "ru": "Тренажеры" }, "img": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Velosipedlar", "ru": "Велосипеды" }, "img": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Gantellar", "ru": "Гантели" }, "img": "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Peshin va palatkalar", "ru": "Палатки" }, "img": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 9,
+      "order": 9,
+      "name": { "uz": "Avto tovarlar", "ru": "Автотовары" },
+      "subcats": [
+        { "name": { "uz": "Chexollar", "ru": "Чехлы" }, "img": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Videoregistratorlar", "ru": "Видеорегистраторы" }, "img": "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Avto moylash", "ru": "Автохимия" }, "img": "https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Nasoslar", "ru": "Насосы" }, "img": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 10,
+      "order": 10,
+      "name": { "uz": "Bolalar olami", "ru": "Детский мир" },
+      "subcats": [
+        { "name": { "uz": "O'yinchoqlar", "ru": "Игрушки" }, "img": "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Bolalar kiyimlari", "ru": "Детская одежда" }, "img": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Tagliklar", "ru": "Подгузники" }, "img": "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Aravachalar", "ru": "Коляски" }, "img": "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=200&auto=format&fit=crop&q=80" }
       ]
     }
   ],
   "products": [
-    { 
-      "id": 101, 
-      "category_id": 1, 
-      "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, 
-      "name": { "uz": "Ayollar uchun zamonaviy oq ko'ylak", "ru": "Современное женское белое платье" }, 
-      "price": "220 000 so'm", 
-      "oldPrice": "350 000 so'm", 
-      "discount": "↓ 37%", 
-      "badgeType": "arzonlashdi", 
-      "rating": 4.9, 
-      "comments": 178, 
-      "stock": 5, 
-      "images": ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"], 
-      "sizes": [42, 44, 46] 
+    {
+      "id": 101,
+      "category_id": 1,
+      "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" },
+      "name": { "uz": "Ayollar uchun zamonaviy oq ko'ylak", "ru": "Современное женское белое платье" },
+      "price": "220 000 so'm",
+      "oldPrice": "350 000 so'm",
+      "discount": "↓ 37%",
+      "badgeType": "arzonlashdi",
+      "rating": 4.9,
+      "comments": 178,
+      "stock": 5,
+      "images": ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"],
+      "sizes": [42, 44, 46]
     },
-    { 
-      "id": 102, 
-      "category_id": 1, 
-      "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, 
-      "name": { "uz": "Kechki qora libos", "ru": "Вечернее черное платье" }, 
-      "price": "450 000 so'm", 
-      "oldPrice": "650 000 so'm", 
-      "discount": "↓ 30%", 
-      "badgeType": "original", 
-      "rating": 5.0, 
-      "comments": 84, 
-      "stock": 1, 
-      "images": ["https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80"], 
-      "sizes": [40, 42, 44] 
+    {
+      "id": 201,
+      "category_id": 2,
+      "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" },
+      "name": { "uz": "Erkaklar uchun qishki qora kurtka", "ru": "Мужская зимняя черная куртка" },
+      "price": "520 000 so'm",
+      "oldPrice": "780 000 so'm",
+      "discount": "↓ 33%",
+      "badgeType": "original",
+      "rating": 4.9,
+      "comments": 150,
+      "stock": 4,
+      "images": ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"],
+      "sizes": [48, 50, 52]
     },
-    { 
-      "id": 107, 
-      "category_id": 1, 
-      "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, 
-      "name": { "uz": "Qishki issiq qora kurtka", "ru": "Теплая зимняя черная куртка" }, 
-      "price": "450 000 so'm", 
-      "oldPrice": "680 000 so'm", 
-      "discount": "↓ 33%", 
-      "badgeType": "original", 
-      "rating": 4.9, 
-      "comments": 124, 
-      "stock": 3, 
-      "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"], 
-      "sizes": [38, 39, 40] 
+    {
+      "id": 301,
+      "category_id": 3,
+      "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" },
+      "name": { "uz": "Sport uchun zamonaviy krossovka", "ru": "Современные спортивные кроссовки" },
+      "price": "320 000 so'm",
+      "oldPrice": "500 000 so'm",
+      "discount": "↓ 36%",
+      "badgeType": "original",
+      "rating": 4.9,
+      "comments": 240,
+      "stock": 2,
+      "images": ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"],
+      "sizes": [40, 41, 42]
     },
-    { 
-      "id": 201, 
-      "category_id": 2, 
-      "subcat": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, 
-      "name": { "uz": "Erkaklar uchun qishki qora kurtka", "ru": "Мужская зимняя черная куртка" }, 
-      "price": "520 000 so'm", 
-      "oldPrice": "780 000 so'm", 
-      "discount": "↓ 33%", 
-      "badgeType": "original", 
-      "rating": 4.9, 
-      "comments": 150, 
-      "stock": 4, 
-      "images": ["https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&auto=format&fit=crop&q=80"], 
-      "sizes": [48, 50, 52] 
-    },
-    { 
-      "id": 307, 
-      "category_id": 3, 
-      "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" }, 
-      "name": { "uz": "Sport uchun zamonaviy krossovka", "ru": "Современные спортивные кроссовки" }, 
-      "price": "320 000 so'm", 
-      "oldPrice": "500 000 so'm", 
-      "discount": "↓ 36%", 
-      "badgeType": "original", 
-      "rating": 4.9, 
-      "comments": 240, 
-      "stock": 2, 
-      "images": ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80"], 
-      "sizes": [40, 41, 42, 43, 44] 
+    {
+      "id": 401,
+      "category_id": 4,
+      "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" },
+      "name": { "uz": "Smartfon Flagship Pro 256GB", "ru": "Смартфон Flagship Pro 256GB" },
+      "price": "4 500 000 so'm",
+      "oldPrice": "5 200 000 so'm",
+      "discount": "↓ 13%",
+      "badgeType": "original",
+      "rating": 5.0,
+      "comments": 310,
+      "stock": 10,
+      "images": ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80"]
     }
   ],
   "orders": [],
