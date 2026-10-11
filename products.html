@@ -808,7 +808,20 @@
                 searchInput.value = '';
                 if (subName) {
                     let decodedSub = decodeURIComponent(subName).trim();
-                    pageTitleEl.textContent = decodedSub;
+                    
+                    // Agar sub (subkat) bazadagi obyekt bo'lsa, joriy tildagisini olamiz
+                    let foundProduct = allProducts.find(p => {
+                        let subUz = (p.subcat && p.subcat.uz) ? p.subcat.uz.trim().toLowerCase() : '';
+                        let subRu = (p.subcat && p.subcat.ru) ? p.subcat.ru.trim().toLowerCase() : '';
+                        return subUz === decodedSub.toLowerCase() || subRu === decodedSub.toLowerCase();
+                    });
+
+                    if (foundProduct && foundProduct.subcat) {
+                        pageTitleEl.textContent = getLocalized(foundProduct.subcat);
+                    } else {
+                        pageTitleEl.textContent = decodedSub;
+                    }
+
                     currentProductsList = allProducts.filter(p => {
                         let subUz = (p.subcat && p.subcat.uz) ? p.subcat.uz.trim().toLowerCase() : '';
                         let subRu = (p.subcat && p.subcat.ru) ? p.subcat.ru.trim().toLowerCase() : '';
@@ -854,7 +867,7 @@
 
                 let badgeHtml = '';
                 if (p.badgeType === 'original') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
+                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">${currentLang === 'ru' ? '✓ ОРИГИНАЛ' : '✓ ORIGINAL'}</div>`;
                 } else if (p.badgeType === 'chegirma') {
                     badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">${currentLang === 'ru' ? 'Скидка' : 'Chegirmada'}</div>`;
                 } else if (p.badgeType === 'arzonlashdi') {
