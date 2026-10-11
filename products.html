@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mahsulotlar - Uzum Market</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="data.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -694,13 +693,12 @@
             }
         };
 
-        let currentLang = localStorage.getItem('selected_lang') || 'uz';
-        let t = translations[currentLang] || translations['uz'];
+        let currentLang = 'uz';
+        let t = translations[currentLang];
+        let allProducts = [];
 
         function applyTranslations() {
-            currentLang = localStorage.getItem('selected_lang') || 'uz';
             t = translations[currentLang] || translations['uz'];
-
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.textContent = t[key];
@@ -709,6 +707,52 @@
                 const key = el.getAttribute('data-i18n-placeholder');
                 if (t[key]) el.placeholder = t[key];
             });
+        }
+
+        function getLocalized(field) {
+            if (!field) return '';
+            if (typeof field === 'object') {
+                return field[currentLang] || field['uz'] || Object.values(field)[0] || '';
+            }
+            return field;
+        }
+
+        // Serverdan ham foydalanuvchi tilini, ham bazadagi mahsulotlarni tortib kelish
+        async function fetchAppDataAndInit() {
+            try {
+                let response = await fetch('/api/profile');
+                if (response.ok) {
+                    let user = await response.json();
+                    if (user.language) {
+                        currentLang = user.language;
+                        localStorage.setItem('selected_lang', currentLang);
+                    }
+                }
+            } catch (error) {
+                currentLang = localStorage.getItem('selected_lang') || 'uz';
+            }
+
+            try {
+                // database.json dan mahsulotlarni olish uchun serverga so'rov
+                let res = await fetch('/api/products'); // Agar maxsus API bo'lmasa, database.json ning o'zini ham fetch qilishingiz mumkin
+                if (res.ok) {
+                    let db = await res.json();
+                    allProducts = db.products || [];
+                }
+            } catch (err) {
+                // Agar server orqali olinmasa, bevosita database.json dan o'qishga harakat qiladi
+                try {
+                    let resDb = await fetch('database.json');
+                    if (resDb.ok) {
+                        let db = await resDb.json();
+                        allProducts = db.products || [];
+                    }
+                } catch (e) {
+                    console.error("Mahsulotlarni yuklab bo'lmadi:", e);
+                }
+            }
+
+            initPage();
         }
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -721,34 +765,9 @@
         let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
         let currentProductsList = [];
 
-        function getLocalized(field) {
-            if (!field) return '';
-            if (typeof field === 'object') {
-                return field[currentLang] || field['uz'] || Object.values(field)[0] || '';
-            }
-            return field;
-        }
-
-        async function fetchLanguageAndInit() {
-            try {
-                let response = await fetch('/api/profile');
-                if (response.ok) {
-                    let user = await response.json();
-                    if (user.language) {
-                        currentLang = user.language;
-                        localStorage.setItem('selected_lang', currentLang);
-                        t = translations[currentLang] || translations['uz'];
-                    }
-                }
-            } catch (error) {
-                console.warn("Backenddan tilni o'qishda xatolik (localStorage ishlatilmoqda):", error);
-            }
-            initPage();
-        }
-
         function initPage() {
             applyTranslations();
-            if (typeof allProducts === 'undefined' || allProducts.length === 0) {
+            if (!allProducts || allProducts.length === 0) {
                 setTimeout(initPage, 50);
                 return;
             }
@@ -1267,11 +1286,11 @@
         }
 
         window.addEventListener('pageshow', (event) => {
-            fetchLanguageAndInit();
+            fetchAppDataAndInit();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
-            fetchLanguageAndInit();
+            fetchAppDataAndInit();
         });
     </script>
 </body>
