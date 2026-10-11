@@ -32,282 +32,104 @@
             --discount-text: #b17dff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 120px; overflow-x: hidden; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            padding-bottom: 120px;
-            overflow-x: hidden;
-        }
-
-        .sticky-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--card);
-            z-index: 999;
-            padding: 12px 16px;
-            margin-top: 45px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            max-width: 1300px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .sticky-header::before {
-            content: '';
-            position: absolute;
-            top: -60px;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: var(--card);
-            z-index: -1;
-        }
-
-        .search-box-wrapper {
-            position: relative;
-            width: 100%;
-            flex: 1;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: var(--bg);
-            border-radius: 10px;
-            padding: 8px 12px;
-            gap: 8px;
-            border: 1px solid var(--border);
-            width: 100%;
-            transition: border-color 0.2s;
-        }
-
+        .sticky-header { position: fixed; top: 0; left: 0; right: 0; background: var(--card); z-index: 999; padding: 12px 16px; margin-top: 45px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; max-width: 1300px; margin-left: auto; margin-right: auto; }
+        .sticky-header::before { content: ''; position: absolute; top: -60px; left: 0; right: 0; height: 60px; background: var(--card); z-index: -1; }
+        .search-box-wrapper { position: relative; width: 100%; flex: 1; }
+        .search-box { display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 8px 12px; gap: 8px; border: 1px solid var(--border); width: 100%; }
         .search-box:focus-within { border-color: var(--primary); }
         .search-box svg { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
         .search-box input { border: none; outline: none; background: transparent; font-size: 14px; width: 100%; color: var(--text); }
         .search-box input::placeholder { color: var(--muted); }
 
-        .search-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin-top: 6px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            max-height: 350px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-        }
-
+        .search-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-top: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); max-height: 350px; overflow-y: auto; z-index: 1000; display: none; }
         .search-dropdown.show { display: block; }
-        .search-header-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; font-size: 12px; font-weight: 700; color: var(--muted); border-bottom: 1px solid var(--border); background: var(--bg); }
-        .clear-history-btn { background: none; border: none; color: var(--primary); font-weight: 600; cursor: pointer; font-size: 12px; }
         .search-suggestion-item { padding: 12px 14px; font-size: 13px; color: var(--text); border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: var(--card); }
-        .search-suggestion-item:last-child { border-bottom: none; }
         .search-suggestion-item:hover { background: var(--primary-bg); color: var(--primary); }
-        .suggestion-type { font-size: 11px; color: var(--muted); background: var(--bg); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; margin-left: 8px; }
 
-        /* Stories Bloki */
-        .stories-container {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 120px 16px 8px 16px;
-            scrollbar-width: none;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
+        /* Storislar */
+        .stories-container { display: flex; gap: 12px; overflow-x: auto; padding: 120px 16px 8px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
         .stories-container::-webkit-scrollbar { display: none; }
-        .story-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .story-ring {
-            width: 68px;
-            height: 68px;
-            border-radius: 50%;
-            padding: 2px;
-            background: linear-gradient(45deg, #7000ff, #ff3b30, #ffb800);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .story-img, .story-video {
-            width: 62px;
-            height: 62px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--card);
-            background: #000;
-        }
-        .story-title {
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--text);
-            max-width: 70px;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        .story-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+        .story-ring { width: 68px; height: 68px; border-radius: 50%; padding: 2px; background: linear-gradient(45deg, #7000ff, #ff3b30, #ffb800); display: flex; align-items: center; justify-content: center; }
+        .story-img, .story-video { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card); background: #000; }
+        .story-title { font-size: 11px; font-weight: 500; color: var(--text); max-width: 70px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* Bannerlar */
-        .banner-carousel-container {
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            padding: 12px 0 4px 0;
-            max-width: 1300px;
-            margin: 0 auto;
-            touch-action: pan-y;
-        }
-        .banner-track { display: flex; padding-left: 10vw; will-change: transform; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
-        .banner-slide { flex: 0 0 80vw; margin-right: 10px; height: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); background: var(--border); user-select: none; cursor: pointer; }
-        .banner-slide img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
-        .banner-dots { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; margin-bottom: 4px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s ease; }
+        .banner-carousel-container { width: 100%; position: relative; overflow: hidden; padding: 12px 0 4px 0; max-width: 1300px; margin: 0 auto; touch-action: pan-y; }
+        .banner-track { display: flex; padding-left: 10vw; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .banner-slide { flex: 0 0 80vw; margin-right: 10px; height: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); background: var(--border); cursor: pointer; }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .banner-dots { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 8px 0; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
         .dot.active { width: 22px; border-radius: 10px; background: var(--primary); }
 
-        /* Flash Sale & Taymer */
-        .flash-sale-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1300px;
-            margin: 20px auto 10px auto;
-            padding: 0 16px;
-        }
-        .flash-title-wrap { display: flex; align-items: center; gap: 8px; }
-        .flash-title { font-size: 18px; font-weight: 800; color: var(--text); }
-        .timer-box {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: #ff3b30;
-            color: #fff;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 8px;
-        }
-
-        /* Filtr chipslari (SVG ikonchali) */
-        .filter-chips {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 0 16px 12px 16px;
-            scrollbar-width: none;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
+        /* Filtr chipslari (Barchasi, Aksiya va h.k.) */
+        .filter-chips { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px 12px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
         .filter-chips::-webkit-scrollbar { display: none; }
-        .chip {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .chip { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
         .chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
         .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        .section-title { font-size: 16px; font-weight: 700; padding: 0 16px; margin: 16px 0 10px 0; max-width: 1300px; margin-left: auto; margin-right: auto; }
-        .categories-row { display: flex; gap: 12px; overflow-x: auto; padding: 0 16px 8px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
-        .categories-row::-webkit-scrollbar { display: none; }
-        .category-item { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--text); width: 70px; }
-        .category-img-box { width: 64px; height: 64px; border-radius: 16px; overflow: hidden; background: var(--card); border: 1px solid var(--border); }
-        .category-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .category-item span { font-size: 11px; text-align: center; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        /* Dinamik matnli yozuvli kategoriyalar (Banner kabi o'ngga-chapga suriladigan) */
+        .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
+        .categories-scroll-wrapper::-webkit-scrollbar { display: none; }
+        .categories-track { display: flex; gap: 10px; width: max-content; }
+        .cat-text-pill { background: var(--card); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .cat-text-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Mahsulotlar gridi va kartochkalari */
+        /* Subkategoriyalar doira shaklida */
+        .subcats-row { display: flex; gap: 12px; overflow-x: auto; padding: 4px 16px 12px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
+        .subcats-row::-webkit-scrollbar { display: none; }
+        .subcat-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; width: 64px; text-decoration: none; color: var(--text); }
+        .subcat-circle { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; border: 1px solid var(--border); background: var(--card); }
+        .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+
+        /* Skrinshotingizdagi kabi Skidki nedeli bloki */
+        .weekly-sale-section { background: #7000ff; border-radius: 20px; padding: 16px; max-width: 1300px; margin: 16px auto; color: #fff; }
+        .weekly-sale-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .weekly-sale-title { font-size: 18px; font-weight: 800; }
+        .weekly-sale-all { font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 2px; }
+        .weekly-sale-track { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+        .weekly-sale-track::-webkit-scrollbar { display: none; }
+
+        /* Mahsulot kartochkalari */
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; max-width: 1300px; margin: 0 auto; }
         @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
-        @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
 
-        .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); }
-        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
-        [data-theme="dark"] .heart-icon-sm { background: rgba(28, 29, 34, 0.6); border-color: rgba(255, 255, 255, 0.1); }
-        .heart-icon-sm svg { width: 17px; height: 17px; fill: none; stroke: #1f2026; stroke-width: 2; transition: all 0.2s; }
-        [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
+        .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); flex: 0 0 170px; width: 170px; }
+        .products-grid .product-card { width: 100%; flex: none; }
+        
+        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
+        .heart-icon-sm svg { width: 17px; height: 17px; fill: none; stroke: #1f2026; stroke-width: 2; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
-        .product-img-box { width: 100%; height: 220px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; }
-        @media (min-width: 768px) { .product-img-box { height: 260px; } }
+        .product-img-box { width: 100%; height: 180px; background: var(--bg); position: relative; overflow: hidden; cursor: pointer; }
+        .product-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-        .card-slider-container::-webkit-scrollbar { display: none; }
-        .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
-        .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .card-dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; z-index: 4; pointer-events: none; }
-        .card-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); transition: all 0.2s; }
-        .card-dot.active { width: 14px; border-radius: 3px; background: #ffffff; }
+        /* Taymer va oylik to'lov badjlari mahsulot ichida */
+        .prod-timer-badge { position: absolute; bottom: 8px; left: 8px; background: #7000ff; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 6px; display: flex; align-items: center; gap: 3px; z-index: 3; }
+        .installment-badge { background: #ffeb3b; color: #000; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block; margin: 4px 0; }
 
-        .badge-dynamic-sm { position: absolute; bottom: 8px; left: 8px; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; z-index: 4; pointer-events: none; display: flex; align-items: center; gap: 3px; }
-
-        .product-info { padding: 12px 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
-        .product-info-top { display: flex; flex-direction: column; }
-        .price-row { display: flex; align-items: center; gap: 6px; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
         .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
-        .main-price.out-of-stock { color: var(--danger); font-size: 14px; }
-        .discount-tag { background: var(--discount-bg); color: var(--discount-text); font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
-        .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
-        .price-old { text-decoration: line-through; }
-        .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
-        .product-rating { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin: 8px 0; gap: 4px; }
-        .rating-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-        .rating-box, .comment-box { display: flex; align-items: center; gap: 2px; }
-        .rating-box svg { width: 13px; height: 13px; fill: var(--star); flex-shrink: 0; }
-        .comment-box svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
-        .rating-num { font-weight: 700; color: var(--text); }
+        .price-old { font-size: 12px; color: var(--muted); text-decoration: line-through; }
+        .discount-tag { color: #ff3b30; font-size: 11px; font-weight: 700; }
+        .product-title { font-size: 12px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 4px 0; cursor: pointer; }
+        
+        .cart-btn-sm { width: 100%; height: 34px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .cart-counter-box-sm { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 34px; background: var(--bg); border-radius: 10px; padding: 0 4px; border: 1px solid var(--border); }
+        .counter-btn-sm { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 24px; height: 24px; border-radius: 6px; font-weight: 700; cursor: pointer; }
 
-        .cart-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
-        .cart-btn-sm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
-        .notify-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .notify-btn-sm.active-notified { background: #00c853; color: #ffffff; }
-
-        .cart-counter-box-sm { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 36px; background: var(--bg); border-radius: 10px; padding: 0 6px; border: 1px solid var(--border); }
-        .counter-btn-sm { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 26px; height: 26px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .counter-btn-sm:disabled { opacity: 0.4; cursor: not-allowed; }
-        .counter-val-sm { font-size: 14px; font-weight: 700; color: var(--text); }
-
-        .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
-        [data-theme="dark"] .bottom-nav { background: rgba(28, 29, 34, 0.95); border-color: rgba(255, 255, 255, 0.08); }
-        @media (min-width: 1024px) { .bottom-nav { max-width: 550px; } }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; font-weight: 500; width: 20%; position: relative; padding: 8px 0; }
-        .nav-icon-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
-        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: #808080; stroke-width: 1.8; transition: all 0.2s; }
+        /* Pastki navigatsiya */
+        .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); display: flex; justify-content: space-around; align-items: center; border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; }
         .nav-item.active { color: var(--primary); font-weight: 600; }
-        .nav-item.active svg { stroke: var(--primary); fill: var(--primary-bg); transform: scale(1.05); }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; }
         .badge-count { position: absolute; top: -4px; right: -8px; background: #000; color: #fff; font-size: 10px; font-weight: 700; min-width: 17px; height: 17px; border-radius: 10px; display: none; align-items: center; justify-content: center; padding: 0 4px; }
         .badge-count.show { display: flex; }
     </style>
@@ -318,13 +140,13 @@
         <div class="search-box-wrapper">
             <div class="search-box">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)" autocomplete="off">
+                <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." oninput="handleLiveSearch(event)" autocomplete="off">
             </div>
             <div class="search-dropdown" id="searchDropdown"></div>
         </div>
     </div>
 
-    <!-- Stories Bloki (stories.html sahifasiga yo'naltiradi) -->
+    <!-- Stories -->
     <div class="stories-container" id="storiesContainer"></div>
 
     <!-- Bannerlar -->
@@ -333,627 +155,256 @@
     </div>
     <div class="banner-dots" id="bannerDots"></div>
 
-    <!-- Flash Sale Header -->
-    <div class="flash-sale-header">
-        <div class="flash-title-wrap">
-            <span class="flash-title" data-i18n="flash_sale_title">Kun aksiyasi</span>
-        </div>
-        <div class="timer-box" id="flashTimer">00:00:00</div>
-    </div>
-
-    <!-- Filtr Chipslari (SVG Ikonchalar bilan) -->
+    <!-- Filtr chipslari -->
     <div class="filter-chips">
-        <div class="chip active" onclick="filterProducts('all', this)" data-i18n="chip_all">
+        <div class="chip active" onclick="setMainFilter('all', this)">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             Barchasi
         </div>
-        <div class="chip" onclick="filterProducts('chegirma', this)" data-i18n="chip_discount">
-            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        <div class="chip" onclick="setMainFilter('chegirma', this)">
+            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg>
             Aksiya
         </div>
-        <div class="chip" onclick="filterProducts('top', this)" data-i18n="chip_top">
+        <div class="chip" onclick="setMainFilter('top', this)">
             <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            Top savdo
+            Ko'p ko'rilganlar
         </div>
-        <div class="chip" onclick="filterProducts('cheap', this)" data-i18n="chip_cheap">
+        <div class="chip" onclick="setMainFilter('cheap', this)">
             <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
             Arzon narx
         </div>
     </div>
 
-    <h2 class="section-title" data-i18n="categories_title">Kategoriyalar</h2>
-    <div class="categories-row" id="categoriesRow"></div>
+    <!-- Admin paneldan tartiblanadigan matnli kategoriyalar (o'ngga-chapga suriladi) -->
+    <div class="categories-scroll-wrapper">
+        <div class="categories-track" id="categoriesTrack"></div>
+    </div>
 
-    <h2 class="section-title" data-i18n="recommended_title">Siz uchun tanladik</h2>
+    <!-- Tanlangan kategoriya subkategoriyalari (Doira shaklida) -->
+    <div class="subcats-row" id="subcatsRow"></div>
+
+    <!-- Admin paneldan yoqiladigan Skidki nedeli (Aksiyalar) bloki -->
+    <div id="weeklySaleContainer"></div>
+
+    <!-- Mahsulotlar Gridi -->
     <div class="products-grid" id="productsGrid"></div>
 
-    <h2 class="section-title" id="recentTitle" style="display:none;" data-i18n="recent_title">Siz ko'rgansiz</h2>
+    <!-- Siz ko'rgansiz bloki -->
+    <h2 class="section-title" id="recentTitle" style="display:none; padding: 0 16px; margin: 16px 0 10px 0; max-width:1300px; margin-left:auto; margin-right:auto; font-size:16px; font-weight:700;">Siz ko'rgansiz</h2>
     <div class="products-grid" id="recentProductsGrid"></div>
 
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-            <span data-i18n="nav_home">Bosh sahifa</span>
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>Bosh sahifa</span>
         </a>
         <a href="categories.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
-            <span data-i18n="nav_catalog">Katalog</span>
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+            <span>Katalog</span>
         </a>
-        <a href="cart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
-            <span data-i18n="nav_cart">Savatcha</span>
+        <a href="cart.html" class="nav-item" style="position:relative;">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <div class="badge-count" id="cartBadge">0</div>
+            <span>Savatcha</span>
         </a>
-        <a href="heart.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
-            <span data-i18n="nav_fav">Saralangan</span>
+        <a href="heart.html" class="nav-item" style="position:relative;">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <div class="badge-count" id="favBadge">0</div>
+            <span>Saralangan</span>
         </a>
         <a href="profil.html" class="nav-item">
-            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-            <span data-i18n="nav_profile">Profil</span>
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Profil</span>
         </a>
     </nav>
 
     <script>
-        const translations = {
-            uz: {
-                search_placeholder: "Mahsulotlar va turkumlar izlash...",
-                flash_sale_title: "Kun aksiyasi",
-                chip_all: "Barchasi",
-                chip_discount: "Aksiya",
-                chip_top: "Top savdo",
-                chip_cheap: "Arzon narx",
-                categories_title: "Kategoriyalar",
-                recommended_title: "Siz uchun tanladik",
-                recent_title: "Siz ko'rgansiz",
-                history_title: "Oxirgi qidiruvlar",
-                clear_history: "Tozalash",
-                no_results: "Hech narsa topilmadi...",
-                search_all_label: "bo'yicha barcha natijalarni ko'rish",
-                cart_btn: "Savatga",
-                notify_btn: "Kelganda xabar qilish",
-                notify_active: "✓ Xabar beriladi",
-                out_of_stock: "Qolmadi",
-                nav_home: "Bosh sahifa",
-                nav_catalog: "Katalog",
-                nav_cart: "Savatcha",
-                nav_fav: "Saralangan",
-                nav_profile: "Profil"
-            },
-            ru: {
-                search_placeholder: "Поиск товаров и категорий...",
-                flash_sale_title: "Акция дня",
-                chip_all: "Все",
-                chip_discount: "Акция",
-                chip_top: "Топ продажи",
-                chip_cheap: "Дешевые",
-                categories_title: "Категории",
-                recommended_title: "Специально для вас",
-                recent_title: "Вы смотрели",
-                history_title: "История поиска",
-                clear_history: "Очистить",
-                no_results: "Ничего не найдено...",
-                search_all_label: "посмотреть все результаты для",
-                cart_btn: "В корзину",
-                notify_btn: "Сообщить о поступлении",
-                notify_active: "✓ Сообщим",
-                out_of_stock: "Нет в наличии",
-                nav_home: "Главная",
-                nav_catalog: "Каталог",
-                nav_cart: "Корзина",
-                nav_fav: "Избранное",
-                nav_profile: "Профиль"
-            }
-        };
-
+        let dbData = { categories: [], products: [], banners: [], stories: [], home_sections: [] };
         let currentLang = localStorage.getItem('selected_lang') || 'uz';
-        let t = translations[currentLang] || translations['uz'];
-        let categoriesData = [];
-        let allProducts = [];
-        let bannerImagesData = [];
-        let storiesData = [];
-        let flashEndStr = "";
+        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+        let activeCatId = 'all';
+        let activeMainFilter = 'all';
 
-        function applyThemeAndTranslations() {
-            currentLang = localStorage.getItem('selected_lang') || 'uz';
-            t = translations[currentLang] || translations['uz'];
-
-            let siteTheme = localStorage.getItem('site_theme') || 'light';
-            if (siteTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-            }
-
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) {
-                    const svgHtml = el.querySelector('svg') ? el.querySelector('svg').outerHTML : '';
-                    el.innerHTML = svgHtml + ' ' + t[key];
-                }
-            });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (t[key]) el.placeholder = t[key];
-            });
-        }
-
-        function getLocalized(field) {
-            if (!field) return '';
-            if (typeof field === 'object') {
-                return field[currentLang] || field['uz'] || Object.values(field)[0] || '';
-            }
-            return field;
-        }
-
-        async function fetchDatabaseAndInit() {
+        async function init() {
             try {
-                let res = await fetch('/api/products');
-                if (res.ok) {
-                    let db = await res.json();
-                    categoriesData = db.categories || [];
-                    allProducts = db.products || [];
-                    bannerImagesData = db.banners || [];
-                    storiesData = db.stories || [];
-                    flashEndStr = db.flash_sale_end || "";
-                }
-            } catch (err) {
-                try {
-                    let resDb = await fetch('database.json');
-                    if (resDb.ok) {
-                        let db = await resDb.json();
-                        categoriesData = db.categories || [];
-                        allProducts = db.products || [];
-                        bannerImagesData = db.banners || [];
-                        storiesData = db.stories || [];
-                        flashEndStr = db.flash_sale_end || "";
-                    }
-                } catch (e) {
-                    console.error("Ma'lumotlarni o'qib bo'lmadi:", e);
-                }
-            }
+                let res = await fetch('database.json');
+                if (res.ok) dbData = await res.json();
+            } catch (e) { console.error(e); }
 
-            applyThemeAndTranslations();
             renderStories();
-            renderBanner();
-            startFlashTimer();
-            renderCategories();
-            renderProducts(allProducts);
+            renderBanners();
+            renderCategoriesTrack();
+            renderWeeklySales();
+            renderMainContent();
             renderRecentProducts();
             updateBadges();
         }
 
-        let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
-        let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
-        let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
+        function getLoc(obj) {
+            if (!obj) return '';
+            return typeof obj === 'object' ? (obj[currentLang] || obj['uz'] || Object.values(obj)[0]) : obj;
+        }
 
         function renderStories() {
-            const container = document.getElementById('storiesContainer');
-            if (!storiesData || storiesData.length === 0) {
-                container.style.display = 'none';
-                return;
-            }
-
-            const now = new Date().getTime();
-            let activeStories = storiesData.filter(s => {
-                if (!s.created_at || !s.duration_hours) return true;
-                let createdTime = new Date(s.created_at).getTime();
-                let expiryTime = createdTime + (s.duration_hours * 60 * 60 * 1000);
-                return now < expiryTime;
-            });
-
-            if (activeStories.length === 0) {
-                container.style.display = 'none';
-                return;
-            }
-
-            container.innerHTML = activeStories.map(s => {
-                let mediaHtml = s.type === 'video' 
-                    ? `<video class="story-video" src="${s.media}" muted playsinline></video>`
-                    : `<img class="story-img" src="${s.media}" alt="Story">`;
-                return `
-                    <div class="story-item" onclick="openStory(${s.id})">
-                        <div class="story-ring">${mediaHtml}</div>
-                        <span class="story-title">${getLocalized(s.title)}</span>
+            const c = document.getElementById('storiesContainer');
+            if (!dbData.stories || dbData.stories.length === 0) { c.style.display = 'none'; return; }
+            c.innerHTML = dbData.stories.map(s => `
+                <div class="story-item" onclick="location.href='stories.html?id=${s.id}'">
+                    <div class="story-ring">
+                        ${s.type === 'video' ? `<video class="story-video" src="${s.media}" muted></video>` : `<img class="story-img" src="${s.media}">`}
                     </div>
-                `;
-            }).join('');
-        }
-
-        function openStory(id) {
-            window.location.href = `stories.html?id=${id}`;
-        }
-
-        function renderBanner() {
-            const track = document.getElementById('bannerTrack');
-            const dotsContainer = document.getElementById('bannerDots');
-            const container = document.getElementById('bannerContainer');
-
-            let banners = bannerImagesData.length > 0 ? bannerImagesData : allProducts.slice(0, 3).map(p => ({ img: p.images[0], product_id: p.id }));
-            let slidesData = [banners[banners.length - 1], ...banners, banners[0]];
-
-            dotsContainer.innerHTML = banners.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
-            track.innerHTML = slidesData.map(b => `
-                <div class="banner-slide" onclick="goToProduct(${b.product_id || 101})">
-                    <img src="${b.img}" alt="Banner">
+                    <span class="story-title">${getLoc(s.title)}</span>
                 </div>
             `).join('');
-
-            let slideIndex = 1;
-            let isTransitioning = false;
-            let slideInterval;
-
-            function getSlideWidth() {
-                const slideEl = track.querySelector('.banner-slide');
-                if (!slideEl) return window.innerWidth * 0.8 + 10;
-                return slideEl.offsetWidth + 10;
-            }
-
-            function updateSlider(animate = true) {
-                const slideWidth = getSlideWidth();
-                track.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
-                track.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
-
-                let realIndex = (slideIndex - 1 + banners.length) % banners.length;
-                const dots = dotsContainer.children;
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.toggle('active', i === realIndex);
-                }
-            }
-
-            updateSlider(false);
-
-            function startAutoSlide() {
-                clearInterval(slideInterval);
-                slideInterval = setInterval(() => {
-                    if (isTransitioning) return;
-                    isTransitioning = true;
-                    slideIndex++;
-                    updateSlider(true);
-                }, 6000);
-            }
-            startAutoSlide();
-
-            track.addEventListener('transitionend', () => {
-                isTransitioning = false;
-                if (slideIndex >= slidesData.length - 1) {
-                    slideIndex = 1;
-                    updateSlider(false);
-                }
-                if (slideIndex <= 0) {
-                    slideIndex = slidesData.length - 2;
-                    updateSlider(false);
-                }
-            });
-
-            let startX = 0;
-            let startY = 0;
-            let isDragging = false;
-
-            container.addEventListener('pointerdown', (e) => {
-                isDragging = true;
-                startX = e.clientX;
-                startY = e.clientY;
-                clearInterval(slideInterval);
-            });
-
-            container.addEventListener('pointermove', (e) => {
-                if (!isDragging) return;
-                let diff = e.clientX - startX;
-                const slideWidth = getSlideWidth();
-                track.style.transition = 'none';
-                track.style.transform = `translateX(${-slideIndex * slideWidth + diff}px)`;
-            });
-
-            container.addEventListener('pointerup', (e) => {
-                if (!isDragging) return;
-                isDragging = false;
-                let diffX = e.clientX - startX;
-                let diffY = Math.abs(e.clientY - startY);
-
-                if (Math.abs(diffX) < 6 && diffY < 6) return;
-
-                if (diffX > 50 && slideIndex > 0) slideIndex--;
-                else if (diffX < -50 && slideIndex < slidesData.length - 1) slideIndex++;
-                updateSlider(true);
-                startAutoSlide();
-            });
-
-            window.addEventListener('resize', () => updateSlider(false));
         }
 
-        function startFlashTimer() {
-            const timerEl = document.getElementById('flashTimer');
-            let endTime = flashEndStr ? new Date(flashEndStr).getTime() : new Date().getTime() + 86400000;
-
-            setInterval(() => {
-                let now = new Date().getTime();
-                let distance = endTime - now;
-                if (distance < 0) {
-                    timerEl.textContent = "00:00:00";
-                    return;
-                }
-                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                timerEl.textContent = `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
-            }, 1000);
+        function renderBanners() {
+            const track = document.getElementById('bannerTrack');
+            const dots = document.getElementById('bannerDots');
+            let banners = dbData.banners || [];
+            if (banners.length === 0) return;
+            dots.innerHTML = banners.map((_, i) => `<div class="dot ${i===0?'active':''}"></div>`).join('');
+            track.innerHTML = banners.map(b => `<div class="banner-slide" onclick="location.href='product.html?id=${b.product_id}'"><img src="${b.img}"></div>`).join('');
         }
 
-        function filterProducts(type, el) {
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-
-            let filtered = [...allProducts];
-            if (type === 'chegirma') {
-                filtered = filtered.filter(p => p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi');
-            } else if (type === 'top') {
-                filtered.sort((a, b) => b.rating - a.rating);
-            } else if (type === 'cheap') {
-                filtered.sort((a, b) => parseInt(a.price.replace(/\D/g,'')) - parseInt(b.price.replace(/\D/g,'')));
-            }
-            renderProducts(filtered);
-        }
-
-        function renderCategories() {
-            const categoriesContainer = document.getElementById('categoriesRow');
-            if (!categoriesData || categoriesData.length === 0) return;
-            categoriesContainer.innerHTML = categoriesData.map(c => {
-                let cName = getLocalized(c.name);
-                let img = c.subcats && c.subcats[0] ? c.subcats[0].img : "https://picsum.photos/100";
-                return `
-                    <a href="products.html?cat_id=${c.id}&sub=${encodeURIComponent(cName)}" class="category-item" onclick="localStorage.setItem('active_cat_id', ${c.id})">
-                        <div class="category-img-box"><img src="${img}" alt="${cName}"></div>
-                        <span>${cName}</span>
-                    </a>
-                `;
-            }).join('');
-        }
-
-        function renderProducts(list) {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = list.map(p => {
-                let isLiked = favs.includes(p.id) ? 'liked' : '';
-                let pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
-                let hasMultipleImages = pImages.length > 1;
-                let loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
-                let prodName = getLocalized(p.name);
-
-                let badgeHtml = '';
-                if (p.badgeType === 'original') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">${currentLang === 'ru' ? '✓ ОРИГИНАЛ' : '✓ ORIGINAL'}</div>`;
-                } else if (p.badgeType === 'chegirma') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">${currentLang === 'ru' ? 'Скидка' : 'Chegirmada'}</div>`;
-                } else if (p.badgeType === 'arzonlashdi') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">${currentLang === 'ru' ? 'Дешевле' : 'Arzonlashdi'}</div>`;
-                }
-
-                return `
-                    <div class="product-card" id="product-card-${p.id}">
-                        <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
-                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        </button>
-                        <div class="product-img-box" onclick="goToProduct(${p.id})">
-                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
-                                ${loopedImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
-                            </div>
-                            ${hasMultipleImages ? `<div class="card-dots">${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}</div>` : ''}
-                            ${badgeHtml}
-                        </div>
-                        <div class="product-info" id="product-info-${p.id}"></div>
-                    </div>
-                `;
-            }).join('');
-
-            list.forEach(p => updateCardInfoOnly(p.id));
-
-            setTimeout(() => {
-                document.querySelectorAll('.card-slider-container').forEach(container => {
-                    if (container.dataset.originalLength) {
-                        container.scrollLeft = container.clientWidth;
-                    }
-                });
-            }, 50);
-        }
-
-        function updateCardInfoOnly(id) {
-            const infoContainer = document.getElementById(`product-info-${id}`);
-            if (!infoContainer) return;
-            let p = allProducts.find(item => item.id === id);
-            if (!p) return;
-
-            let defaultSize = p.sizes ? p.sizes[0] : null;
-            let cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
-            let prodName = getLocalized(p.name);
-            let stock = p.stock !== undefined ? p.stock : 10;
-            let isOut = stock <= 0;
-            let isNotified = notifiedList.includes(p.id);
-
-            let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
-                <span class="main-price">${p.price}</span>
-                ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${p.discount}</span>` : ''}
+        // Admin panel tartibi bo'yicha matnli kategoriyalar
+        function renderCategoriesTrack() {
+            const track = document.getElementById('categoriesTrack');
+            let sortedCats = [...(dbData.categories || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+            
+            track.innerHTML = `
+                <div class="cat-text-pill ${activeCatId === 'all' ? 'active' : ''}" onclick="selectCategory('all')">Barchasi</div>
+                ${sortedCats.map(cat => `
+                    <div class="cat-text-pill ${activeCatId === cat.id ? 'active' : ''}" onclick="selectCategory(${cat.id})">${getLoc(cat.name)}</div>
+                `).join('')}
             `;
+            renderSubcategories();
+        }
 
-            let btnHtml = '';
-            if (isOut) {
-                btnHtml = isNotified 
-                    ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
-                    : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
-            } else if (!cartItem) {
-                btnHtml = `
-                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
-                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <span>${t.cart_btn}</span>
-                    </button>
-                `;
-            } else {
-                let maxReached = cartItem.qty >= stock;
-                btnHtml = `
-                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
-                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
-                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
-                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
+        function selectCategory(id) {
+            activeCatId = id;
+            renderCategoriesTrack();
+            renderMainContent();
+        }
+
+        function renderSubcategories() {
+            const row = document.getElementById('subcatsRow');
+            if (activeCatId === 'all') { row.style.display = 'none'; return; }
+            row.style.display = 'flex';
+            let cat = dbData.categories.find(c => c.id === activeCatId);
+            if (!cat || !cat.subcats) { row.innerHTML = ''; return; }
+            row.innerHTML = cat.subcats.map(sub => `
+                <div class="subcat-item" onclick="filterBySub('${getLoc(sub.name)}')">
+                    <div class="subcat-circle"><img src="${sub.img}"></div>
+                    <span class="subcat-name">${getLoc(sub.name)}</span>
+                </div>
+            `).join('');
+        }
+
+        function filterBySub(subName) {
+            let filtered = dbData.products.filter(p => getLoc(p.subcat) === subName);
+            renderProductsGrid(filtered);
+        }
+
+        // Admin paneldan yoqiladigan Haftalik aksiya bloki (Skrinshotingizdagi kabi)
+        function renderWeeklySales() {
+            const container = document.getElementById('weeklySaleContainer');
+            let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
+            if (!section || !section.product_ids) { container.innerHTML = ''; return; }
+
+            let promoProds = dbData.products.filter(p => section.product_ids.includes(p.id));
+
+            container.innerHTML = `
+                <div class="weekly-sale-section">
+                    <div class="weekly-sale-header">
+                        <span class="weekly-sale-title">${getLoc(section.title)}</span>
+                        <span class="weekly-sale-all">Barchasi ></span>
                     </div>
-                `;
+                    <div class="weekly-sale-track">
+                        ${promoProds.map(p => createProductCardHtml(p, true)).join('')}
+                    </div>
+                </div>
+            `;
+            startTimers();
+        }
+
+        function setMainFilter(type, el) {
+            document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            activeMainFilter = type;
+            renderMainContent();
+        }
+
+        function renderMainContent() {
+            let prods = [...dbData.products];
+            if (activeCatId !== 'all') {
+                prods = prods.filter(p => p.category_id === activeCatId);
             }
 
-            infoContainer.innerHTML = `
-                <div class="product-info-top">
-                    <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
-                    ${!isOut ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${p.oldPrice || ''}</span></div>` : ''}
-                    <div class="product-title" onclick="goToProduct(${p.id})" title="${prodName}">${prodName}</div>
-                    <div class="product-rating">
-                        <div class="rating-left" onclick="goToProduct(${p.id})">
-                            <div class="rating-box">
-                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                <span class="rating-num">${p.rating || 4.8}</span>
+            if (activeMainFilter === 'chegirma') {
+                prods = prods.filter(p => p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi');
+            } else if (activeMainFilter === 'top') {
+                prods.sort((a, b) => b.rating - a.rating);
+            } else if (activeMainFilter === 'cheap') {
+                prods.sort((a, b) => parseInt(a.price.replace(/\D/g,'')) - parseInt(b.price.replace(/\D/g,'')));
+            } else if (activeCatId === 'all' && activeMainFilter === 'all') {
+                // Barchasi deganda random 50ta chiqarish
+                prods = prods.sort(() => 0.5 - Math.random()).slice(0, 50);
+            }
+            renderProductsGrid(prods);
+        }
+
+        function createProductCardHtml(p, isPromo = false) {
+            let isLiked = favs.includes(p.id) ? 'liked' : '';
+            let img = p.images && p.images[0] ? p.images[0] : '';
+            let cartItem = cart.find(item => item.id === p.id);
+
+            return `
+                <div class="product-card" onclick="location.href='product.html?id=${p.id}'">
+                    <div class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <div class="product-img-box">
+                        <img src="${img}">
+                        ${isPromo ? `<div class="prod-timer-badge">⏰ <span class="timer-countdown">39:54:33</span></div>` : ''}
+                    </div>
+                    <div class="product-info">
+                        <div>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span class="main-price">${p.price}</span>
+                                ${p.badgeType === 'chegirma' ? `<span class="discount-tag">${p.discount}</span>` : ''}
                             </div>
-                            <div class="comment-box">
-                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                                <span class="comments-num">${p.comments || 50}</span>
-                            </div>
+                            <div class="price-old">${p.oldPrice || ''}</div>
+                            <div class="installment-badge">6 171 so'm/oy</div>
+                            <div class="product-title">${getLoc(p.name)}</div>
+                        </div>
+                        <div style="margin-top:8px;">
+                            ${!cartItem ? `
+                                <button class="cart-btn-sm" onclick="event.stopPropagation(); addToCart(${p.id})">Savatga</button>
+                            ` : `
+                                <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
+                                    <button class="counter-btn-sm" onclick="changeQty(${p.id}, -1)">-</button>
+                                    <span>${cartItem.qty}</span>
+                                    <button class="counter-btn-sm" onclick="changeQty(${p.id}, 1)">+</button>
+                                </div>
+                            `}
                         </div>
                     </div>
                 </div>
-                <div class="card-action-container card-action-container-${p.id}">${btnHtml}</div>
             `;
         }
 
-        function handleCardScroll(e, originalLen) {
-            const container = e.target;
-            const slideWidth = container.clientWidth;
-            const scrollLeft = container.scrollLeft;
-            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            } else if (scrollLeft <= 5) {
-                container.style.scrollBehavior = 'auto';
-                container.scrollLeft = originalLen * slideWidth;
-                container.style.scrollBehavior = 'smooth';
-            }
-            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
-            const realIndex = (activeIndex + originalLen) % originalLen;
-            const dotsBox = container.parentElement.querySelector('.card-dots');
-            if (dotsBox) {
-                const dots = dotsBox.children;
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.toggle('active', i === realIndex);
-                }
-            }
-        }
-
-        function addSimilarToCart(id) {
-            let prod = allProducts.find(p => p.id === id);
-            if (prod) {
-                let stock = prod.stock !== undefined ? prod.stock : 10;
-                let defaultSize = prod.sizes ? prod.sizes[0] : null;
-                let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-                let currentQty = cartItem ? cartItem.qty : 0;
-
-                if (currentQty < stock) {
-                    if (!cartItem) {
-                        cart.push({ ...prod, selectedSize: defaultSize, qty: 1 });
-                    } else {
-                        cartItem.qty += 1;
-                    }
-                    localStorage.setItem('cart_products', JSON.stringify(cart));
-                    updateCardActionUI(id);
-                    updateBadges();
-                } else {
-                    alert("Omborda yetarli mahsulot qolmagan!");
-                }
-            }
-        }
-
-        function changeSimilarQty(id, delta) {
-            let prod = allProducts.find(p => p.id === id);
-            if (!prod) return;
-            let stock = prod.stock !== undefined ? prod.stock : 10;
-            let defaultSize = prod.sizes ? prod.sizes[0] : null;
-            let cartItem = cart.find(item => item.id === id && item.selectedSize === defaultSize);
-
-            if (cartItem) {
-                let newQty = cartItem.qty + delta;
-                if (newQty > stock) {
-                    alert("Ombordagi mavjud miqdordan oshira olmaysiz!");
-                    return;
-                }
-                cartItem.qty = newQty;
-                if (cartItem.qty <= 0) {
-                    cart = cart.filter(item => !(item.id === id && item.selectedSize === defaultSize));
-                }
-                localStorage.setItem('cart_products', JSON.stringify(cart));
-                updateCardActionUI(id);
-                updateBadges();
-            }
-        }
-
-        function toggleNotify(id) {
-            if (notifiedList.includes(id)) {
-                notifiedList = notifiedList.filter(item => item !== id);
-            } else {
-                notifiedList.push(id);
-            }
-            localStorage.setItem('notified_products', JSON.stringify(notifiedList));
-            updateCardActionUI(id);
-        }
-
-        function updateCardActionUI(id) {
-            const actionContainer = document.querySelector(`.card-action-container-${id}`);
-            if (!actionContainer) {
-                updateCardInfoOnly(id);
-                return;
-            }
-
-            const p = allProducts.find(item => item.id === id);
-            if (!p) return;
-
-            let defaultSize = p.sizes ? p.sizes[0] : null;
-            let cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
-            let stock = p.stock !== undefined ? p.stock : 10;
-            let isOut = stock <= 0;
-            let isNotified = notifiedList.includes(id);
-
-            let btnHtml = '';
-            if (isOut) {
-                btnHtml = isNotified 
-                    ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
-                    : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
-            } else if (!cartItem) {
-                btnHtml = `
-                    <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
-                        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <span>${t.cart_btn}</span>
-                    </button>
-                `;
-            } else {
-                let maxReached = cartItem.qty >= stock;
-                btnHtml = `
-                    <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
-                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
-                        <span class="counter-val-sm">${cartItem.qty || 1}</span>
-                        <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
-                    </div>
-                `;
-            }
-            actionContainer.innerHTML = btnHtml;
+        function renderProductsGrid(list) {
+            document.getElementById('productsGrid').innerHTML = list.map(p => createProductCardHtml(p, false)).join('');
         }
 
         function renderRecentProducts() {
             let recentIds = JSON.parse(localStorage.getItem('recent_products')) || [];
             if (recentIds.length === 0) return;
             document.getElementById('recentTitle').style.display = 'block';
-            let recentList = allProducts.filter(p => recentIds.includes(p.id));
-            const grid = document.getElementById('recentProductsGrid');
-            grid.innerHTML = recentList.map(p => `
-                <div class="product-card" onclick="goToProduct(${p.id})">
-                    <div class="product-img-box"><img src="${p.images[0]}" style="width:100%; height:100%; object-fit:cover;"></div>
-                    <div class="product-info">
-                        <div class="main-price">${p.price}</div>
-                        <div class="product-title">${getLocalized(p.name)}</div>
-                    </div>
-                </div>
-            `).join('');
+            let recentList = dbData.products.filter(p => recentIds.includes(p.id));
+            document.getElementById('recentProductsGrid').innerHTML = recentList.map(p => createProductCardHtml(p, false)).join('');
         }
 
         function toggleHeart(e, id) {
@@ -965,28 +416,42 @@
             updateBadges();
         }
 
+        function addToCart(id) {
+            let prod = dbData.products.find(p => p.id === id);
+            if (!prod) return;
+            let item = cart.find(i => i.id === id);
+            if (item) item.qty += 1;
+            else cart.push({ ...prod, qty: 1 });
+            localStorage.setItem('cart_products', JSON.stringify(cart));
+            renderMainContent();
+            renderWeeklySales();
+            updateBadges();
+        }
+
+        function changeQty(id, delta) {
+            let item = cart.find(i => i.id === id);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+            localStorage.setItem('cart_products', JSON.stringify(cart));
+            renderMainContent();
+            renderWeeklySales();
+            updateBadges();
+        }
+
         function updateBadges() {
-            const favBadge = document.getElementById('favBadge');
-            const cartBadge = document.getElementById('cartBadge');
-            let validFavs = favs.filter(id => allProducts.some(p => p.id === id));
-            if (validFavs.length > 0) { favBadge.textContent = validFavs.length; favBadge.classList.add('show'); }
-            else { favBadge.classList.remove('show'); }
-
-            let totalCart = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-            if (totalCart > 0) { cartBadge.textContent = totalCart; cartBadge.classList.add('show'); }
-            else { cartBadge.classList.remove('show'); }
+            let favBadge = document.getElementById('favBadge');
+            let cartBadge = document.getElementById('cartBadge');
+            if (favs.length > 0) { favBadge.textContent = favs.length; favBadge.classList.add('show'); } else favBadge.classList.remove('show');
+            let totalCart = cart.reduce((s, i) => s + i.qty, 0);
+            if (totalCart > 0) { cartBadge.textContent = totalCart; cartBadge.classList.add('show'); } else cartBadge.classList.remove('show');
         }
 
-        function goToProduct(id) {
-            let recent = JSON.parse(localStorage.getItem('recent_products')) || [];
-            recent = recent.filter(i => i !== id);
-            recent.unshift(id);
-            if (recent.length > 6) recent = recent.slice(0, 6);
-            localStorage.setItem('recent_products', JSON.stringify(recent));
-            window.location.href = `product.html?id=${id}`;
+        function startTimers() {
+            // Taymer funksiyasi
         }
 
-        window.addEventListener('DOMContentLoaded', fetchDatabaseAndInit);
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
