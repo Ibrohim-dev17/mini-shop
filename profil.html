@@ -262,7 +262,7 @@
         updateBadges();
 
         async function loadProfile() {
-            let currentLang = localStorage.getItem('selected_lang');
+            let currentLang = localStorage.getItem('selected_lang') || 'uz';
             try {
                 let response = await fetch('/api/profile');
                 if (response.ok) {
@@ -275,17 +275,15 @@
                     }
                 }
             } catch (error) {
-                console.error("Profilni yuklashda tarmoq xatoligi:", error);
+                console.warn("Profilni yuklashda tarmoq xatoligi, localStorage ishlatilmoqda.");
             }
-            setLanguageUI(currentLang || 'uz');
+            setLanguageUI(currentLang);
         }
 
         async function changeLanguage(lang) {
-            // 1. Darhol brauzer xotirasiga yozamiz va UI ni yangilaymiz (tugma ishlashini kafolatlaydi)
             localStorage.setItem('selected_lang', lang);
             setLanguageUI(lang);
 
-            // 2. Fon rejimida serverga (database.json ga) yuboramiz
             try {
                 await fetch('/api/profile', {
                     method: 'PUT',
@@ -293,10 +291,9 @@
                     body: JSON.stringify({ language: lang })
                 });
             } catch (error) {
-                console.error("Serverga saqlashda xatolik (lokal davom etadi):", error);
+                console.error("Serverga saqlashda xatolik:", error);
             }
 
-            // Sahifani yangilab barcha sahifalarga ta'sir qilishini ta'minlaymiz
             location.reload();
         }
 
