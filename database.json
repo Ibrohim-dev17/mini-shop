@@ -10,17 +10,30 @@
     {
       "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80",
       "product_id": 107
+    },
+    {
+      "img": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80",
+      "product_id": 201
     }
   ],
   "stories": [
     {
       "id": 1,
-      "title": { "uz": "Super Aksiya", "ru": "Супер Акция" },
+      "title": { "uz": "Super Video Aksiya", "ru": "Супер Видео Акция" },
       "type": "video",
       "media": "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4",
       "product_id": 101,
       "created_at": "2026-10-11T12:00:00Z",
       "duration_hours": 24
+    },
+    {
+      "id": 2,
+      "title": { "uz": "Yangi Kolleksiya", "ru": "Новая Коллекция" },
+      "type": "image",
+      "media": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80",
+      "product_id": 102,
+      "created_at": "2026-10-10T08:00:00Z",
+      "duration_hours": 72
     }
   ],
   "home_sections": [
@@ -40,7 +53,9 @@
       "name": { "uz": "Ayollar kiyimlari", "ru": "Женская одежда" },
       "subcats": [
         { "name": { "uz": "Ko'ylaklar", "ru": "Платья" }, "img": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Kurtkalar", "ru": "Куртки" }, "img": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Kurtkalar", "ru": "Куртки" }, "img": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Jinsilar", "ru": "Джинсы" }, "img": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -49,7 +64,17 @@
       "name": { "uz": "Erkaklar kiyimlari", "ru": "Мужская одежда" },
       "subcats": [
         { "name": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "img": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Sportivniy", "ru": "Спортивные костюмы" }, "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Sportivniy", "ru": "Спортивные костюмы" }, "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Erkaklar ko'ylaklari", "ru": "Мужские рубашки" }, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" }
+      ]
+    },
+    {
+      "id": 3,
+      "order": 3,
+      "name": { "uz": "Oyoq kiyimlar", "ru": "Обувь" },
+      "subcats": [
+        { "name": { "uz": "Tapichka", "ru": "Тапочки" }, "img": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Krossovkalar", "ru": "Кроссовки" }, "img": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&auto=format&fit=crop&q=80" }
       ]
     }
   ],
@@ -66,8 +91,23 @@
       "rating": 4.9, 
       "comments": 178, 
       "stock": 5, 
-      "images": ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80"], 
+      "images": ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&auto=format&fit=crop&q=80"], 
       "sizes": [42, 44, 46] 
+    },
+    { 
+      "id": 102, 
+      "category_id": 1, 
+      "subcat": { "uz": "Ko'ylaklar", "ru": "Платья" }, 
+      "name": { "uz": "Kechki qora libos", "ru": "Вечернее черное платье" }, 
+      "price": "450 000 so'm", 
+      "oldPrice": "650 000 so'm", 
+      "discount": "↓ 30%", 
+      "badgeType": "original", 
+      "rating": 5.0, 
+      "comments": 84, 
+      "stock": 1, 
+      "images": ["https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=80"], 
+      "sizes": [40, 42, 44] 
     },
     { 
       "id": 107, 
