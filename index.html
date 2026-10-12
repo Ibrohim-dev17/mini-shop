@@ -87,11 +87,12 @@
         .weekly-title { font-size: 18px; font-weight: 800; color: #fff; }
         .weekly-all-btn { font-size: 14px; font-weight: 600; cursor: pointer; color: #fff; text-decoration: none; }
         
-        .weekly-track-wrapper { overflow-x: auto; scrollbar-width: none; touch-action: pan-x; -webkit-overflow-scrolling: touch; }
+        .weekly-track-wrapper { overflow-x: auto; scrollbar-width: none; touch-action: pan-x; -webkit-overflow-scrolling: touch; cursor: grab; }
+        .weekly-track-wrapper:active { cursor: grabbing; }
         .weekly-track-wrapper::-webkit-scrollbar { display: none; }
-        .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; touch-action: pan-x pan-y; }
+        .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; }
 
-        /* AKSIYA burchakli nishoni */
+        /* AKSIYA nishoni */
         .badge-action-ribbon {
             position: absolute;
             top: 10px;
@@ -109,7 +110,6 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
-        /* Rasm ichidagi pastki qism elementlari (Taymer va Original) */
         .card-image-badges {
             position: absolute;
             bottom: 8px;
@@ -371,9 +371,7 @@
             if (window.Telegram && window.Telegram.WebApp) {
                 const tg = window.Telegram.WebApp;
                 tg.expand();
-                if (tg.BackButton) {
-                    tg.BackButton.hide();
-                }
+                if (tg.BackButton) tg.BackButton.hide();
             }
             init();
         });
@@ -463,7 +461,6 @@
             }
             
             document.getElementById('storyModal').style.display = 'flex';
-            
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
                 window.Telegram.WebApp.BackButton.show();
                 window.Telegram.WebApp.BackButton.onClick(closeStoryModal);
@@ -476,7 +473,6 @@
         function closeStoryModal() {
             clearTimeout(storyTimer);
             document.getElementById('storyModal').style.display = 'none';
-            
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
                 window.Telegram.WebApp.BackButton.hide();
             }
@@ -526,7 +522,8 @@
                 if (prod) {
                     document.getElementById('modalPrevImg').src = prod.images && prod.images[0] ? prod.images[0] : '';
                     document.getElementById('modalPrevTitle').textContent = getLocalized(prod.name);
-                    document.getElementById('modalPrevPrice').textContent = prod.price;
+                    let isExpired = isWeeklySaleExpired();
+                    document.getElementById('modalPrevPrice').textContent = isExpired ? (prod.oldPrice || prod.price) : prod.price;
                     document.getElementById('modalBtnText').textContent = currentLang === 'ru' ? 'Смотреть' : "Ko'rish";
                     document.getElementById('modalProductCard').onclick = () => {
                         window.location.href = `product.html?id=${prod.id}`;
@@ -654,6 +651,12 @@
             });
         }
 
+        function isWeeklySaleExpired() {
+            let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
+            if (!section || !section.timer_end) return false;
+            return new Date().getTime() > new Date(section.timer_end).getTime();
+        }
+
         function renderWeeklySales() {
             const container = document.getElementById('weeklySaleContainer');
             let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
@@ -669,7 +672,7 @@
                         </div>
                         <a href="sales.html" class="weekly-all-btn">${t.all_btn}</a>
                     </div>
-                    <div class="weekly-track-wrapper">
+                    <div class="weekly-track-wrapper" id="weeklyTrackWrapper">
                         <div class="weekly-track">
                             ${promoProds.map(p => createProductCardHTML(p, true)).join('')}
                         </div>
@@ -681,9 +684,31 @@
                 startWeeklyCountdown(section.timer_end);
             }
             promoProds.forEach(p => updateCardInfoOnly(p.id));
+            setupDragScroll('weeklyTrackWrapper');
         }
 
-        // Taymer (kunlar chiqarilmaydi, faqat soat:minut:sekund)
+        function setupDragScroll(id) {
+            const slider = document.getElementById(id);
+            if (!slider) return;
+            let isDown = false;
+            let startX, scrollLeft;
+
+            slider.addEventListener('pointerdown', (e) => {
+                isDown = true;
+                startX = e.clientX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener('pointerleave', () => { isDown = false; });
+            slider.addEventListener('pointerup', () => { isDown = false; });
+            slider.addEventListener('pointermove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.clientX - slider.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        }
+
         function startWeeklyCountdown(endTimeStr) {
             function updateTimer() {
                 let now = new Date().getTime();
@@ -695,6 +720,11 @@
 
                 if (distance < 0) {
                     timerEls.forEach(el => el.textContent = "00:00:00");
+                    // Vaqt tugaganda narxlarni yangilash
+                    document.querySelectorAll('.product-card').forEach(card => {
+                        let id = card.id.replace('product-card-', '');
+                        updateCardInfoOnly(Number(id));
+                    });
                     return;
                 }
 
@@ -761,17 +791,26 @@
         function createProductCardHTML(p, isWeekly = false) {
             const isLiked = favs.includes(p.id) ? 'liked' : '';
             const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
-            const hasMultipleImages = pImages.length > 1;
-            const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
-            const prodName = getLocalized(p.name);
+            
+            // 2ta yoki 3ta rasmni to'g'ridan-to'g'ri banner kabi aylanadigan qilish uchun 121212 / 123123 usuli
+            let loopImages = [];
+            if (pImages.length === 2) {
+                loopImages = [pImages[1], pImages[0], pImages[1], pImages[0]];
+            } else if (pImages.length >= 3) {
+                loopImages = [pImages[2], pImages[0], pImages[1], pImages[2], pImages[0]];
+            } else {
+                loopImages = pImages;
+            }
 
+            const prodName = getLocalized(p.name);
             let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
             let isWeeklyItem = section && section.product_ids.includes(p.id);
+            let expired = isWeeklySaleExpired();
 
-            let ribbonBadge = isWeeklyItem ? `<div class="badge-action-ribbon">${currentLang === 'ru' ? 'АКЦИЯ' : 'AKSIYA'}</div>` : '';
+            let ribbonBadge = (isWeeklyItem && !expired) ? `<div class="badge-action-ribbon">${currentLang === 'ru' ? 'АКЦИЯ' : 'AKSIYA'}</div>` : '';
 
             let badgesHtml = '';
-            let timerHtml = isWeeklyItem ? `
+            let timerHtml = (isWeeklyItem && !expired) ? `
                 <div class="card-timer-badge">
                     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     <span class="card-timer-val">00:00:00</span>
@@ -795,10 +834,10 @@
                         <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                     </button>
                     <div class="product-img-box" onclick="goToProduct(${p.id})">
-                        <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
-                            ${loopedImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
+                        <div class="card-slider-container" data-original-length="${pImages.length}" onscroll="handleCardInfiniteScroll(event, ${pImages.length})">
+                            ${loopImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
                         </div>
-                        ${hasMultipleImages ? `<div class="card-dots">${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}</div>` : ''}
+                        <div class="card-dots">${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}</div>
                         ${ribbonBadge}
                         ${badgesHtml}
                     </div>
@@ -818,7 +857,8 @@
             list.forEach(p => updateCardInfoOnly(p.id));
             setTimeout(() => {
                 document.querySelectorAll('.card-slider-container').forEach(container => {
-                    if (container.dataset.originalLength) container.scrollLeft = container.clientWidth;
+                    let slideW = container.clientWidth;
+                    container.scrollLeft = slideW; // Boshlang'ich o'rta slaydga o'tkazish
                 });
             }, 50);
         }
@@ -836,12 +876,26 @@
             let isOut = stock <= 0;
             let isNotified = notifiedList.includes(p.id);
 
-            // "so'm" so'zini olib tashlab, narx va chegirma foizini yonma-yon qo'yish
-            let cleanPrice = p.price ? p.price.replace(/\s*so['‘]m/gi, '').trim() : '';
+            let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
+            let isWeeklyItem = section && section.product_ids.includes(p.id);
+            let expired = isWeeklySaleExpired();
+
+            let displayPrice = p.price;
+            let displayOldPrice = p.oldPrice;
+            let displayDiscount = p.discount;
+
+            if (isWeeklyItem && expired) {
+                displayPrice = p.oldPrice || p.price;
+                displayOldPrice = '';
+                displayDiscount = '';
+            }
+
+            let cleanPrice = displayPrice ? displayPrice.replace(/\s*so['‘]m/gi, '').trim() : '';
+            let cleanOldPrice = displayOldPrice ? displayOldPrice.replace(/\s*so['‘]m/gi, '').trim() : '';
 
             let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
                 <span class="main-price">${cleanPrice}</span>
-                ${p.discount ? `<span class="discount-tag">${p.discount}</span>` : ''}
+                ${displayDiscount ? `<span class="discount-tag">${displayDiscount}</span>` : ''}
             `;
 
             let btnHtml = '';
@@ -870,7 +924,7 @@
             infoContainer.innerHTML = `
                 <div class="product-info-top">
                     <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
-                    ${!isOut ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${p.oldPrice ? p.oldPrice.replace(/\s*so['‘]m/gi, '').trim() : ''}</span></div>` : ''}
+                    ${(!isOut && cleanOldPrice) ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${cleanOldPrice}</span></div>` : ''}
                     <div class="product-title" onclick="goToProduct(${p.id})">${prodName}</div>
                     <div class="product-rating">
                         <div class="rating-left" onclick="goToProduct(${p.id})">
@@ -883,25 +937,33 @@
             `;
         }
 
-        function handleCardScroll(e, originalLen) {
+        // Cheksiz aylanuvchi slayder mantiqi (Banner kabi 121212 / 123123)
+        function handleCardInfiniteScroll(e, originalLen) {
             const container = e.target;
             const slideWidth = container.clientWidth;
             const scrollLeft = container.scrollLeft;
-            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+            const maxScroll = slideWidth * (container.children.length - 1);
+
+            if (scrollLeft >= maxScroll - 5) {
                 container.style.scrollBehavior = 'auto';
                 container.scrollLeft = slideWidth;
                 container.style.scrollBehavior = 'smooth';
             } else if (scrollLeft <= 5) {
                 container.style.scrollBehavior = 'auto';
-                container.scrollLeft = originalLen * slideWidth;
+                container.scrollLeft = slideWidth * originalLen;
                 container.style.scrollBehavior = 'smooth';
             }
-            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
-            const realIndex = (activeIndex + originalLen) % originalLen;
+
+            let activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            if (activeIndex < 0) activeIndex = 0;
+            if (activeIndex >= originalLen) activeIndex = originalLen - 1;
+
             const dotsBox = container.parentElement.querySelector('.card-dots');
             if (dotsBox) {
                 const dots = dotsBox.children;
-                for (let i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === realIndex);
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].classList.toggle('active', i === activeIndex);
+                }
             }
         }
 
@@ -968,6 +1030,12 @@
 
             grid.innerHTML = recentList.map(p => createProductCardHTML(p, false)).join('');
             recentList.forEach(p => updateCardInfoOnly(p.id));
+            setTimeout(() => {
+                document.querySelectorAll('#recentProductsGrid .card-slider-container').forEach(container => {
+                    let slideW = container.clientWidth;
+                    container.scrollLeft = slideW;
+                });
+            }, 50);
         }
 
         function updateBadges() {
