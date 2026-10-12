@@ -70,7 +70,7 @@
         .story-img, .story-video { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card); background: #000; }
         .story-title { font-size: 11px; font-weight: 500; color: var(--text); max-width: 70px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Bannerlar (5s) */
+        /* Bannerlar */
         .banner-carousel-container { width: 100%; position: relative; overflow: hidden; padding: 12px 0 4px 0; max-width: 1300px; margin: 0 auto; touch-action: pan-y; }
         .banner-track { display: flex; padding-left: 10vw; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
         .banner-slide { flex: 0 0 80vw; margin-right: 10px; height: 145px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); background: var(--border); cursor: pointer; }
@@ -79,7 +79,7 @@
         .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
         .dot.active { width: 22px; border-radius: 10px; background: var(--primary); }
 
-        /* Hafta aksiyalari qutusi (To'q binafsha/moviy rang) */
+        /* Hafta aksiyalari */
         .weekly-sale-box { background: #7000ff; border-radius: 20px; padding: 16px; max-width: 1300px; margin: 16px auto; color: #fff; }
         .weekly-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .weekly-title-row { display: flex; align-items: center; gap: 8px; }
@@ -91,9 +91,16 @@
         .weekly-track-wrapper::-webkit-scrollbar { display: none; }
         .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; }
 
-        /* Kartochka ichidagi vaqt (taymer) */
-        .card-timer-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #ff3b30; background: #fff1f0; padding: 2px 6px; border-radius: 6px; margin-top: 4px; width: fit-content; }
-        .card-timer-badge svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
+        /* Rasmdagi kabi chaqmoqli/burchakli aksiya nishoni (Badge) */
+        .badge-action-ribbon { position: absolute; top: 8px; left: 0; background: #7000ff; color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; z-index: 4; pointer-events: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        
+        /* Original vaqtli badge (Rasmdagidek) */
+        .card-bottom-badges { display: flex; align-items: center; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+        .card-timer-badge { display: flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; color: #fff; background: #7000ff; padding: 3px 6px; border-radius: 6px; }
+        .card-timer-badge svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        .badge-original-sm { background: #00c853; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 6px; display: flex; align-items: center; gap: 3px; }
+        .badge-original-sm svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 2.5; }
 
         /* Kategoriyalar */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
@@ -109,14 +116,13 @@
         .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* Mahsulotlar gridi va eni biroz ingichka qilingan kartochkalar */
+        /* Mahsulotlar gridi */
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 16px; max-width: 1300px; margin: 0 auto; }
         @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
         @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
 
         .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); width: 100%; }
-        /* Hafta aksiyasidagi kartochkalar uchun eni biroz ingichka o'lcham */
         .weekly-card-item { width: 155px; flex: 0 0 155px; }
 
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
@@ -135,8 +141,6 @@
         .card-dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; z-index: 4; pointer-events: none; }
         .card-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); transition: all 0.2s; }
         .card-dot.active { width: 14px; border-radius: 3px; background: #ffffff; }
-
-        .badge-dynamic-sm { position: absolute; bottom: 8px; left: 8px; color: #fff; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; z-index: 4; pointer-events: none; display: flex; align-items: center; gap: 3px; }
 
         .product-info { padding: 12px 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
         .product-info-top { display: flex; flex-direction: column; }
@@ -355,7 +359,6 @@
             updateBadges();
         }
 
-        // --- Storis Mantiqi ---
         function renderStories() {
             const c = document.getElementById('storiesContainer');
             if (!dbData.stories || dbData.stories.length === 0) { c.style.display = 'none'; return; }
@@ -494,7 +497,6 @@
             }
         });
 
-        // --- Mahsulotni Storis uslubida ochish ---
         function goToProduct(id) {
             let prod = dbData.products.find(p => p.id === id);
             if (!prod) return;
@@ -517,7 +519,6 @@
             openStoryModal(99999);
         }
 
-        // --- Bannerlar ---
         function renderBanners() {
             const track = document.getElementById('bannerTrack');
             const dotsContainer = document.getElementById('bannerDots');
@@ -584,7 +585,6 @@
             });
         }
 
-        // --- Hafta aksiyalari (Charxpalak va kartochkadagi taymerlar) ---
         function renderWeeklySales() {
             const container = document.getElementById('weeklySaleContainer');
             let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
@@ -614,6 +614,7 @@
             promoProds.forEach(p => updateCardInfoOnly(p.id));
         }
 
+        // 1 haftagacha bo'lgan taymer mantiqi (maksimal 7 kun yoki bazadan kelgan vaqt)
         function startWeeklyCountdown(endTimeStr) {
             function updateTimer() {
                 let now = new Date().getTime();
@@ -629,6 +630,8 @@
                 }
 
                 let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                // Agar 1 haftadan oshsa, 7 kunga cheklash yoki to'g'ridan to'g'ri ko'rsatish
+                if (days > 7) days = 7;
                 let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 let seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -699,10 +702,11 @@
             const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
             const prodName = getLocalized(p.name);
 
-            let badgeHtml = '';
-            if (p.badgeType === 'original') badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">✓ ORIGINAL</div>`;
-            else if (p.badgeType === 'chegirma') badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">Chegirmada</div>`;
-            else if (p.badgeType === 'arzonlashdi') badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">Arzonlashdi</div>`;
+            let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
+            let isWeeklyItem = section && section.product_ids.includes(p.id);
+
+            // Rasmdagi kabi yuqori chap burchakdagi AKSIYA nishoni
+            let ribbonBadge = isWeeklyItem ? `<div class="badge-action-ribbon">${currentLang === 'ru' ? 'АКЦИЯ' : 'AKSIYA'}</div>` : '';
 
             return `
                 <div class="product-card ${isWeekly ? 'weekly-card-item' : ''}" id="product-card-${p.id}">
@@ -714,7 +718,7 @@
                             ${loopedImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
                         </div>
                         ${hasMultipleImages ? `<div class="card-dots">${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}</div>` : ''}
-                        ${badgeHtml}
+                        ${ribbonBadge}
                     </div>
                     <div class="product-info" id="product-info-${p.id}"></div>
                 </div>
@@ -755,15 +759,36 @@
 
             let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
                 <span class="main-price">${p.price}</span>
-                ${p.badgeType ? `<span class="discount-tag">${p.discount || ''}</span>` : ''}
+                ${p.discount ? `<span class="discount-tag">${p.discount}</span>` : ''}
             `;
 
-            let timerBadgeHtml = isWeeklyItem ? `
-                <div class="card-timer-badge">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <span class="card-timer-val">00:00:00</span>
-                </div>
-            ` : '';
+            // Rasmdagi kabi pastki qismdagi taymer va original nishoni
+            let bottomBadgesHtml = '';
+            if (isWeeklyItem) {
+                bottomBadgesHtml = `
+                    <div class="card-bottom-badges">
+                        <div class="card-timer-badge">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span class="card-timer-val">00:00:00</span>
+                        </div>
+                        ${p.badgeType === 'original' ? `
+                            <div class="badge-original-sm">
+                                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>ORIGINAL</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else if (p.badgeType === 'original') {
+                bottomBadgesHtml = `
+                    <div class="card-bottom-badges">
+                        <div class="badge-original-sm">
+                            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>ORIGINAL</span>
+                        </div>
+                    </div>
+                `;
+            }
 
             let btnHtml = '';
             if (isOut) {
@@ -792,7 +817,7 @@
                 <div class="product-info-top">
                     <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
                     ${!isOut ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${p.oldPrice || ''}</span></div>` : ''}
-                    ${timerBadgeHtml}
+                    ${bottomBadgesHtml}
                     <div class="product-title" onclick="goToProduct(${p.id})">${prodName}</div>
                     <div class="product-rating">
                         <div class="rating-left" onclick="goToProduct(${p.id})">
@@ -904,7 +929,6 @@
             else { cartBadge.classList.remove('show'); }
         }
 
-        // --- Qidiruv va Klaviatura Boshqaruvi ---
         function getSearchHistory() { return JSON.parse(localStorage.getItem('search_history')) || []; }
         function saveSearchQuery(q) {
             if (!q) return;
