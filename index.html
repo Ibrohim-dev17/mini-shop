@@ -79,7 +79,7 @@
         .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
         .dot.active { width: 22px; border-radius: 10px; background: var(--primary); }
 
-        /* Hafta aksiyalari */
+        /* Hafta aksiyalari (o'zgarishsiz qoldirildi) */
         .weekly-sale-box { background: #7000ff; border-radius: 20px; padding: 16px; max-width: 1300px; margin: 16px auto; color: #fff; }
         .weekly-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .weekly-title-row { display: flex; align-items: center; gap: 8px; }
@@ -163,14 +163,15 @@
         .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* Mahsulotlar gridi */
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 16px; max-width: 1300px; margin: 0 auto; }
-        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
-        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+        /* Mahsulotlar gridi - rasmlar bir-biriga tegib ketmaydigan qilib kengaytirildi */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 12px 16px; max-width: 1300px; margin: 0 auto; }
+        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; } }
         @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
 
-        .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); width: 100%; }
-        .weekly-card-item { width: 155px; flex: 0 0 155px; }
+        /* Orqa fondagi boxlar olib tashlandi, shaffof va toza ko'rinish */
+        .product-card { background: transparent; border-radius: 0; overflow: visible; position: relative; display: flex; flex-direction: column; border: none; width: 100%; }
+        .weekly-card-item { background: var(--card); border-radius: 16px; padding: 0; border: 1px solid var(--border); overflow: hidden; width: 155px; flex: 0 0 155px; }
 
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
         [data-theme="dark"] .heart-icon-sm { background: rgba(28, 29, 34, 0.6); border-color: rgba(255, 255, 255, 0.1); }
@@ -178,23 +179,27 @@
         [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
-        .product-img-box { width: 100%; height: 210px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; }
-        @media (min-width: 768px) { .product-img-box { height: 250px; } }
+        /* Rasmlar eni kattalashtirildi */
+        .product-img-box { width: 100%; height: 230px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        @media (min-width: 768px) { .product-img-box { height: 270px; } }
+        .weekly-card-item .product-img-box { height: 210px; border-radius: 16px 16px 0 0; box-shadow: none; }
 
         .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .card-slider-container::-webkit-scrollbar { display: none; }
         .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
         .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Nuqtalar rasmdan pastda, narxdan tepada (ikkalasining o'rtasida) */
+        /* Nuqtalar rasmdan pastda, narxdan tepada */
         .card-dots { display: flex; justify-content: center; align-items: center; gap: 4px; margin: 6px 0 2px 0; z-index: 4; }
         .card-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
         .card-dot.active { width: 12px; border-radius: 3px; background: var(--primary); }
 
-        .product-info { padding: 4px 10px 12px 10px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+        .product-info { padding: 6px 4px 12px 4px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+        .weekly-card-item .product-info { padding: 10px; }
+
         .product-info-top { display: flex; flex-direction: column; }
         .price-row { display: flex; align-items: center; gap: 6px; }
-        .main-price { font-size: 15px; font-weight: 800; color: var(--text); }
+        .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
         .main-price.out-of-stock { color: var(--danger); font-size: 14px; }
         .discount-tag { font-size: 13px; font-weight: 700; color: #ff3b30; display: flex; align-items: center; }
         .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
@@ -830,7 +835,6 @@
                 badgesHtml = `<div class="card-image-badges">${timerHtml}${originalHtml}</div>`;
             }
 
-            // Agar rasmlar soni 1 tadan ko'p bo'lsagina nuqtalar chiqadi
             let dotsHtml = pImages.length > 1 ? `
                 <div class="card-dots">
                     ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
