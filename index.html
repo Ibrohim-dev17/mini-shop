@@ -88,22 +88,23 @@
         .weekly-title { font-size: 18px; font-weight: 800; color: #fff; }
         .weekly-all-btn { font-size: 14px; font-weight: 600; cursor: pointer; color: #fff; text-decoration: none; }
 
-        .weekly-track-wrapper { overflow-x: auto; scrollbar-width: none; touch-action: pan-x; -webkit-overflow-scrolling: touch; cursor: grab; }
+        .weekly-track-wrapper { overflow-x: auto; scrollbar-width: none; touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; cursor: grab; }
         .weekly-track-wrapper:active { cursor: grabbing; }
         .weekly-track-wrapper::-webkit-scrollbar { display: none; }
         .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; }
 
         /* AKSIYA nishoni */
-        .badge-action-ribbon { position: absolute; top: 12px; left: -5px; background: #8b3dff; color: #fff; font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; z-index: 4; pointer-events: none; letter-spacing: 0.4px; transform: rotate(-4deg); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        .badge-action-ribbon { position: absolute; top: 12px; left: -6px; background: linear-gradient(135deg, #a35bff 0%, #7000ff 100%); color: #fff; font-size: 10px; font-weight: 800; line-height: 1; letter-spacing: 0.7px; padding: 5px 9px 5px 10px; border-radius: 4px 9px 9px 4px; z-index: 4; pointer-events: none; transform: rotate(-3deg); box-shadow: 0 3px 8px rgba(112, 0, 255, 0.35); }
+        .badge-action-ribbon::before { content: ''; position: absolute; left: 0; bottom: -5px; width: 6px; height: 5px; background: #4a00b0; clip-path: polygon(0 0, 100% 0, 100% 100%); }
         .weekly-card-item .badge-action-ribbon { left: 3px; top: 14px; }
 
-        .card-image-badges { position: absolute; bottom: 8px; left: 6px; right: 6px; display: flex; align-items: center; gap: 4px; z-index: 4; pointer-events: none; flex-wrap: wrap; }
-        .card-timer-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #fff; background: #8b3dff; padding: 4px 8px 4px 6px; border-radius: 10px; }
-        .card-timer-badge svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+        .card-image-badges { position: absolute; bottom: 6px; left: 6px; right: 6px; display: flex; align-items: center; gap: 3px; z-index: 4; pointer-events: none; flex-wrap: wrap; }
+        .card-timer-badge { display: flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; line-height: 1; color: #fff; background: rgba(139, 61, 255, 0.92); padding: 3px 6px 3px 4px; border-radius: 8px; }
+        .card-timer-badge svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
-        .badge-original-sm { background: #00c853; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px 3px 4px; border-radius: 10px; display: flex; align-items: center; gap: 4px; }
-        .orig-ic { width: 15px; height: 15px; border-radius: 50%; background: #009b3e; display: flex; align-items: center; justify-content: center; }
-        .orig-ic svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+        .badge-original-sm { background: #00c853; color: #fff; font-size: 9px; font-weight: 700; line-height: 1; padding: 3px 6px 3px 4px; border-radius: 8px; display: flex; align-items: center; gap: 3px; }
+
+        .badge-original-sm svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
         /* Olov ikonkali "Oxirgisi" nishoni (products.html bilan bir xil) */
         .last-item-badge { display: flex; align-items: center; gap: 2px; color: #ff3d00; font-weight: 700; font-size: 10px; background: #fff2ee; padding: 2px 5px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
@@ -343,6 +344,8 @@
         let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
         let viewedStories = JSON.parse(localStorage.getItem('viewed_stories')) || [];
         let activeCatId = 'all';
+        let searchActive = false;
+        let searchBackdropTimer = null;
 
         // Olov ikonkasi (barcha joyda bir xil)
         const FIRE_ICON = `
@@ -366,7 +369,7 @@
             if (window.Telegram && window.Telegram.WebApp) {
                 const tg = window.Telegram.WebApp;
                 tg.expand();
-                if (tg.BackButton) tg.BackButton.hide();
+                if (tg.BackButton) { tg.BackButton.onClick(handleTgBack); tg.BackButton.hide(); }
             }
             init();
         });
@@ -394,6 +397,7 @@
                 history.pushState(null, '', window.location.href);
                 return;
             }
+            if (searchActive) closeSearchDropdown();
             history.pushState(null, '', window.location.href);
         });
 
@@ -471,10 +475,7 @@
             }
 
             document.getElementById('storyModal').style.display = 'flex';
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
-                window.Telegram.WebApp.BackButton.show();
-                window.Telegram.WebApp.BackButton.onClick(closeStoryModal);
-            }
+            syncTgBack();
 
             initModalProgress();
             playModalStory(currentStoryIdx);
@@ -483,9 +484,7 @@
         function closeStoryModal() {
             clearTimeout(storyTimer);
             document.getElementById('storyModal').style.display = 'none';
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
-                window.Telegram.WebApp.BackButton.hide();
-            }
+            syncTgBack();
             renderStories();
         }
 
@@ -709,6 +708,7 @@
             let startX, scrollLeft;
 
             slider.addEventListener('pointerdown', (e) => {
+                if (e.pointerType !== 'mouse') return;
                 isDown = true;
                 startX = e.clientX - slider.offsetLeft;
                 scrollLeft = slider.scrollLeft;
@@ -838,7 +838,7 @@
 
             let originalHtml = p.badgeType === 'original' ? `
                 <div class="badge-original-sm">
-                    <span class="orig-ic"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     <span>ORIGINAL</span>
                 </div>
             ` : '';
@@ -1108,7 +1108,7 @@
             const val = document.getElementById('searchInput').value.trim();
             const dropdown = document.getElementById('searchDropdown');
             const backdrop = document.getElementById('searchBackdrop');
-            backdrop.classList.add('show');
+            markSearchOpen();
 
             if (val.length > 0) return;
             let history = getSearchHistory();
@@ -1121,11 +1121,53 @@
             dropdown.classList.add('show');
         }
 
-        function closeSearchDropdown() {
-            document.getElementById('searchDropdown').classList.remove('show');
-            document.getElementById('searchBackdrop').classList.remove('show');
-            document.getElementById('searchInput').blur();
+        function getTg() { return window.Telegram && window.Telegram.WebApp; }
+
+        // Telegram "orqaga" tugmasi: hikoya yoki qidiruv ochiq bo'lsa ko'rinadi
+        function syncTgBack() {
+            const tg = getTg();
+            if (!tg || !tg.BackButton) return;
+            const modal = document.getElementById('storyModal');
+            const storyOpen = modal && modal.style.display === 'flex';
+            if (storyOpen || searchActive) tg.BackButton.show();
+            else tg.BackButton.hide();
         }
+
+        function handleTgBack() {
+            const modal = document.getElementById('storyModal');
+            if (modal && modal.style.display === 'flex') { closeStoryModal(); return; }
+            if (searchActive) closeSearchDropdown();
+        }
+
+        function markSearchOpen() {
+            clearTimeout(searchBackdropTimer);
+            searchActive = true;
+            document.getElementById('searchBackdrop').classList.add('show');
+            syncTgBack();
+        }
+
+        function closeSearchDropdown() {
+            searchActive = false;
+            document.getElementById('searchDropdown').classList.remove('show');
+            document.getElementById('searchInput').blur(); // klaviatura yopiladi
+            syncTgBack();
+            // fon biroz kechikib yopiladi, shunda bosish ostidagi kartaga o'tib ketmaydi
+            clearTimeout(searchBackdropTimer);
+            searchBackdropTimer = setTimeout(() => {
+                if (!searchActive) document.getElementById('searchBackdrop').classList.remove('show');
+            }, 300);
+        }
+
+        function isInsideSearch(target) {
+            return !!(target && target.closest && (target.closest('#searchBoxContainer') || target.closest('#searchDropdown')));
+        }
+
+        // Ekranga sal tegilsa yoki surilsa, qidiruv va klaviatura yopiladi
+        ['touchstart', 'touchmove', 'wheel'].forEach(evName => {
+            document.addEventListener(evName, (e) => {
+                if (searchActive && !isInsideSearch(e.target)) closeSearchDropdown();
+            }, { passive: true });
+        });
 
         document.addEventListener('click', (e) => {
             const searchBox = document.getElementById('searchBoxContainer');
@@ -1148,7 +1190,7 @@
             const val = rawVal.toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
             const backdrop = document.getElementById('searchBackdrop');
-            backdrop.classList.add('show');
+            markSearchOpen();
 
             if (val.length === 0) { showSearchHistory(); return; }
             let matches = dbData.products.filter(p => getLocalized(p.name).toLowerCase().includes(val) || getLocalized(p.subcat).toLowerCase().includes(val));
