@@ -148,7 +148,7 @@
         }
         .badge-original-sm svg { width: 9px; height: 9px; stroke: #fff; fill: none; stroke-width: 2.5; }
 
-        /* Olov ikonkali Oxirgi/Последний nishoni (rasmdagidek rang va icon) */
+        /* Olov ikonkali Oxirgi nishoni */
         .badge-last-sm {
             background: #fff0ed;
             color: #e65100;
@@ -158,10 +158,10 @@
             border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             border: 1px solid #ffd8cc;
         }
-        .badge-last-sm svg { width: 12px; height: 12px; fill: url(#fireGradient); flex-shrink: 0; }
+        .badge-last-sm svg { width: 11px; height: 11px; fill: #ff5722; flex-shrink: 0; }
 
         /* Kategoriyalar */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
@@ -177,7 +177,7 @@
         .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* Mahsulotlar gridi - rasmlar birxil o'lchamda va konteyner ichida to'g'ri joylashgan */
+        /* Mahsulotlar gridi - qat'iy birxil o'lchamda */
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 12px; max-width: 1300px; margin: 0 auto; align-items: start; }
         @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -192,16 +192,15 @@
         [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
-        /* Rasmlar qat'iy birxil o'lchamda, ortiqcha kengayib ketmaydi */
-        .product-img-box { width: 100%; height: 260px; background: #ffffff; position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-        [data-theme="dark"] .product-img-box { background: #1c1d22; }
+        /* Rasmlar konteyneri mukammal moslashtirildi */
+        .product-img-box { width: 100%; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; }
         @media (min-width: 768px) { .product-img-box { height: 300px; } }
         .weekly-card-item .product-img-box { height: 210px; border-radius: 16px 16px 0 0; box-shadow: none; }
 
         .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .card-slider-container::-webkit-scrollbar { display: none; }
-        .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; }
-        .card-slide img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 8px; border-radius: 16px; }
+        .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
+        .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 16px; }
         .weekly-card-item .card-slide img { border-radius: 16px 16px 0 0; }
         
         .card-dots { display: flex; justify-content: center; align-items: center; gap: 4px; margin: 6px 0 2px 0; z-index: 4; }
@@ -253,16 +252,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Olov uchun SVG Gradient -->
-    <svg width="0" height="0" style="position:absolute;">
-        <defs>
-            <linearGradient id="fireGradient" x1="0%" y1="100%" x2="0%" y2="0%">
-                <stop offset="0%" stop-color="#ff9800"/>
-                <stop offset="100%" stop-color="#f44336"/>
-            </linearGradient>
-        </defs>
-    </svg>
 
     <div class="search-backdrop" id="searchBackdrop" onclick="closeSearchDropdown()"></div>
 
@@ -361,7 +350,6 @@
                 recent_title: "Siz ko'rgansiz",
                 weekly_sale_title: "Hafta aksiyalari",
                 all_btn: "Barchasi >",
-                all_categories: "Barchasi",
                 last_item: "Oxirgi",
                 nav_home: "Bosh sahifa",
                 nav_catalog: "Katalog",
@@ -384,7 +372,6 @@
                 recent_title: "Вы смотрели",
                 weekly_sale_title: "Скидки недели",
                 all_btn: "Все >",
-                all_categories: "Все",
                 last_item: "Последний",
                 nav_home: "Главная",
                 nav_catalog: "Каталог",
@@ -779,7 +766,7 @@
             let sortedCats = [...(dbData.categories || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
 
             track.innerHTML = `
-                <div class="cat-text-pill ${activeCatId === 'all' ? 'active' : ''}" onclick="selectCategory('all')">${t.all_categories}</div>
+                <div class="cat-text-pill ${activeCatId === 'all' ? 'active' : ''}" onclick="selectCategory('all')">Barchasi</div>
                 ${sortedCats.map(cat => `
                     <div class="cat-text-pill ${activeCatId === cat.id ? 'active' : ''}" onclick="selectCategory(${cat.id})">${getLocalized(cat.name)}</div>
                 `).join('')}
