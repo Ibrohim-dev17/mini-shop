@@ -45,7 +45,7 @@
         .search-box input { border: none; outline: none; background: transparent; font-size: 14px; width: 100%; color: var(--text); }
         .search-box input::placeholder { color: var(--muted); }
 
-        /* Qidiruv paytida fonni qoplovchi va bosilganda yopuvchi qatlam */
+        /* Qidiruv fonini qoplovchi qatlam */
         .search-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 998; display: none; }
         .search-backdrop.show { display: block; }
 
@@ -63,7 +63,15 @@
         .stories-container { display: flex; gap: 12px; overflow-x: auto; padding: 120px 16px 8px 16px; scrollbar-width: none; max-width: 1300px; margin: 0 auto; }
         .stories-container::-webkit-scrollbar { display: none; }
         .story-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
-        .story-ring { width: 68px; height: 68px; border-radius: 50%; padding: 2px; background: linear-gradient(45deg, #7000ff, #ff3b30, #ffb800); display: flex; align-items: center; justify-content: center; }
+        
+        .story-ring { width: 68px; height: 68px; border-radius: 50%; padding: 2px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        /* Har xil rangli gradient halqalar */
+        .story-ring.type-sale { background: linear-gradient(45deg, #ff3b30, #ff9500, #ffcc00); }
+        .story-ring.type-new { background: linear-gradient(45deg, #7000ff, #00c853, #00b0ff); }
+        .story-ring.type-special { background: linear-gradient(45deg, #ff007f, #7000ff, #ff3b30); }
+        /* Ko'rilgan storis hoshiyasi */
+        .story-ring.viewed { background: var(--border) !important; }
+
         .story-img, .story-video { width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid var(--card); background: #000; }
         .story-title { font-size: 11px; font-weight: 500; color: var(--text); max-width: 70px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -164,7 +172,7 @@
 
     <div class="sticky-header">
         <div class="search-box-wrapper">
-            <div class="search-box">
+            <div class="search-box" id="searchBoxContainer">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="text" id="searchInput" placeholder="Mahsulotlar va turkumlar izlash..." data-i18n-placeholder="search_placeholder" onfocus="showSearchHistory()" oninput="handleLiveSearch(event)" onkeypress="handleSearch(event)" autocomplete="off">
             </div>
@@ -192,7 +200,7 @@
     <h2 class="section-title" id="recentTitle" style="display:none; padding: 0 16px; margin: 16px 0 10px 0; max-width:1300px; margin-left:auto; margin-right:auto; font-size:16px; font-weight:700;" data-i18n="recent_title">Siz ko'rgansiz</h2>
     <div class="products-grid" id="recentProductsGrid"></div>
 
-    <!-- Storis Modal Oynasi (Instagram uslubida) -->
+    <!-- Storis Modal Oynasi -->
     <div id="storyModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 9999; flex-direction: column; justify-content: space-between;">
         <div style="position: absolute; top: 55px; left: 16px; right: 16px; z-index: 100; display: flex; flex-direction: column; gap: 8px;">
             <div style="display: flex; gap: 4px; width: 100%;" id="modalProgressBars"></div>
@@ -292,6 +300,7 @@
         let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
         let cart = JSON.parse(localStorage.getItem('cart_products')) || [];
         let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
+        let viewedStories = JSON.parse(localStorage.getItem('viewed_stories')) || [];
         let activeCatId = 'all';
 
         function applyThemeAndTranslations() {
@@ -333,18 +342,25 @@
             updateBadges();
         }
 
-        // --- Storis Modal Mantiqi ---
+        // --- Storis Mantiqi va Ranglar ---
         function renderStories() {
             const c = document.getElementById('storiesContainer');
             if (!dbData.stories || dbData.stories.length === 0) { c.style.display = 'none'; return; }
-            c.innerHTML = dbData.stories.map(s => `
-                <div class="story-item" onclick="openStoryModal(${s.id})">
-                    <div class="story-ring">
-                        ${s.type === 'video' ? `<video class="story-video" src="${s.media}" muted></video>` : `<img class="story-img" src="${s.media}">`}
+            
+            c.innerHTML = dbData.stories.map((s, index) => {
+                let isViewed = viewedStories.includes(s.id);
+                // Har xil rangli gradient halqalar (Aksiya, Yangi, Maxsus)
+                let ringClass = isViewed ? 'viewed' : (index % 3 === 0 ? 'type-sale' : (index % 3 === 1 ? 'type-new' : 'type-special'));
+                
+                return `
+                    <div class="story-item" onclick="openStoryModal(${s.id})">
+                        <div class="story-ring ${ringClass}" id="story-ring-${s.id}">
+                            ${s.type === 'video' ? `<video class="story-video" src="${s.media}" muted></video>` : `<img class="story-img" src="${s.media}">`}
+                        </div>
+                        <span class="story-title">${getLocalized(s.title)}</span>
                     </div>
-                    <span class="story-title">${getLocalized(s.title)}</span>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         let currentStoryIdx = 0;
@@ -354,6 +370,14 @@
         function openStoryModal(id) {
             let foundIdx = dbData.stories.findIndex(s => s.id === id);
             if (foundIdx !== -1) currentStoryIdx = foundIdx;
+            
+            // Ko'rilganlar ro'yxatiga qo'shish va saqlash
+            if (!viewedStories.includes(id)) {
+                viewedStories.push(id);
+                localStorage.setItem('viewed_stories', JSON.stringify(viewedStories));
+                let ringEl = document.getElementById(`story-ring-${id}`);
+                if (ringEl) ringEl.className = 'story-ring viewed';
+            }
             
             document.getElementById('storyModal').style.display = 'flex';
             
@@ -373,6 +397,7 @@
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
                 window.Telegram.WebApp.BackButton.hide();
             }
+            renderStories(); // Storislar holatini yangilash
         }
 
         function initModalProgress() {
@@ -391,6 +416,12 @@
             }
             currentStoryIdx = index;
             let story = dbData.stories[currentStoryIdx];
+
+            // Har safar keyingi storis ochilganda ham viewed ga qo'shiladi
+            if (!viewedStories.includes(story.id)) {
+                viewedStories.push(story.id);
+                localStorage.setItem('viewed_stories', JSON.stringify(viewedStories));
+            }
 
             for (let i = 0; i < dbData.stories.length; i++) {
                 let fill = document.getElementById(`mprog-${i}`);
@@ -865,6 +896,15 @@
             document.getElementById('searchBackdrop').classList.remove('show');
             document.getElementById('searchInput').blur();
         }
+
+        // Ekranning istalgan boshqa joyiga tekkanda qidiruv va klaviaturani yopish
+        document.addEventListener('click', (e) => {
+            const searchBox = document.getElementById('searchBoxContainer');
+            const dropdown = document.getElementById('searchDropdown');
+            if (searchBox && !searchBox.contains(e.target) && !dropdown.contains(e.target)) {
+                closeSearchDropdown();
+            }
+        });
 
         function clearAllHistory(e) { e.stopPropagation(); localStorage.removeItem('search_history'); closeSearchDropdown(); }
         function removeHistoryItem(e, index) { e.stopPropagation(); let history = getSearchHistory(); history.splice(index, 1); localStorage.setItem('search_history', JSON.stringify(history)); showSearchHistory(); }
