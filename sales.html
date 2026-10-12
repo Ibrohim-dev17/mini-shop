@@ -48,18 +48,19 @@
 
         .product-card { min-width: 0; background: transparent; position: relative; display: flex; flex-direction: column; width: 100%; height: 100%; }
 
-        .badge-action-ribbon { position: absolute; top: 12px; left: -5px; background: #8b3dff; color: #fff; font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; z-index: 4; pointer-events: none; letter-spacing: 0.4px; transform: rotate(-4deg); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        .badge-action-ribbon { position: absolute; top: 12px; left: -6px; background: linear-gradient(135deg, #a35bff 0%, #7000ff 100%); color: #fff; font-size: 10px; font-weight: 800; line-height: 1; letter-spacing: 0.7px; padding: 5px 9px 5px 10px; border-radius: 4px 9px 9px 4px; z-index: 4; pointer-events: none; transform: rotate(-3deg); box-shadow: 0 3px 8px rgba(112, 0, 255, 0.35); }
+        .badge-action-ribbon::before { content: ''; position: absolute; left: 0; bottom: -5px; width: 6px; height: 5px; background: #4a00b0; clip-path: polygon(0 0, 100% 0, 100% 100%); }
 
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(110, 110, 120, 0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
         .heart-icon-sm svg { width: 18px; height: 18px; fill: none; stroke: #ffffff; stroke-width: 2; }
         .heart-icon-sm.liked svg { fill: #8b4dff; stroke: #8b4dff; }
 
-        .card-image-badges { position: absolute; bottom: 8px; left: 6px; right: 6px; display: flex; align-items: center; gap: 4px; z-index: 4; pointer-events: none; flex-wrap: wrap; }
-        .card-timer-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #fff; background: #8b3dff; padding: 4px 8px 4px 6px; border-radius: 10px; }
-        .card-timer-badge svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-        .badge-original-sm { background: #00c853; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px 3px 4px; border-radius: 10px; display: flex; align-items: center; gap: 4px; }
-        .orig-ic { width: 15px; height: 15px; border-radius: 50%; background: #009b3e; display: flex; align-items: center; justify-content: center; }
-        .orig-ic svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+        .card-image-badges { position: absolute; bottom: 6px; left: 6px; right: 6px; display: flex; align-items: center; gap: 3px; z-index: 4; pointer-events: none; flex-wrap: wrap; }
+        .card-timer-badge { display: flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; line-height: 1; color: #fff; background: rgba(139, 61, 255, 0.92); padding: 3px 6px 3px 4px; border-radius: 8px; }
+        .card-timer-badge svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+        .badge-original-sm { background: #00c853; color: #fff; font-size: 9px; font-weight: 700; line-height: 1; padding: 3px 6px 3px 4px; border-radius: 8px; display: flex; align-items: center; gap: 3px; }
+
+        .badge-original-sm svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
         .product-img-box { width: 100%; min-width: 0; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; }
         @media (min-width: 768px) { .product-img-box { height: 300px; } }
@@ -349,7 +350,7 @@
                 </div>`;
             const originalHtml = p.badgeType === 'original' ? `
                 <div class="badge-original-sm">
-                    <span class="orig-ic"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     <span>ORIGINAL</span>
                 </div>` : '';
 
