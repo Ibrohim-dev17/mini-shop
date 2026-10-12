@@ -163,15 +163,14 @@
         .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* Mahsulotlar gridi - rasmlar kattalashtirildi, o'zaro chiroyli bo'shliqli */
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 12px 16px; max-width: 1300px; margin: 0 auto; }
-        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
-        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 22px; } }
+        /* Mahsulotlar gridi - kichik oraliq va kengroq rasmlar uchun moslashtirildi */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 12px 12px; max-width: 1300px; margin: 0 auto; }
+        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
+        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
         @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
 
         .product-card { background: transparent; border-radius: 0; overflow: visible; position: relative; display: flex; flex-direction: column; border: none; width: 100%; }
         
-        /* Hafta aksiyasi kartochkasi rasmi chetlari asosiynikidek qilindi */
         .weekly-card-item { background: var(--card); border-radius: 16px; padding: 0; border: 1px solid var(--border); overflow: hidden; width: 155px; flex: 0 0 155px; }
 
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
@@ -180,9 +179,9 @@
         [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
-        /* Asosiy mahsulotlar rasmining eni va balandligi kattalashtirildi */
-        .product-img-box { width: 100%; height: 250px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
-        @media (min-width: 768px) { .product-img-box { height: 290px; } }
+        /* Asosiy mahsulotlar rasmining eni maksimal kattalashtirildi, o'rtada kichik joy qoladi */
+        .product-img-box { width: 100%; height: 270px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        @media (min-width: 768px) { .product-img-box { height: 310px; } }
         .weekly-card-item .product-img-box { height: 210px; border-radius: 16px 16px 0 0; box-shadow: none; }
 
         .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -215,6 +214,7 @@
         .comment-box svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
         .rating-num { font-weight: 700; color: var(--text); }
 
+        .card-action-container { width: 100%; margin-top: auto; }
         .cart-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
         .cart-btn-sm svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
 
@@ -950,7 +950,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-action-container card-action-container-${p.id}">${btnHtml}</div>
+                <div class="card-action-container">${btnHtml}</div>
             `;
         }
 
