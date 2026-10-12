@@ -149,6 +149,15 @@
         }
         .badge-original-sm svg { width: 9px; height: 9px; stroke: #fff; fill: none; stroke-width: 2.5; }
 
+        .badge-last-sm {
+            background: #ff3b30;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 5px;
+            border-radius: 6px;
+        }
+
         /* Kategoriyalar */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
         .categories-scroll-wrapper::-webkit-scrollbar { display: none; }
@@ -169,7 +178,6 @@
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
         @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
 
-        /* Kartochka foni shaffof emas, toza ko'rinishda */
         .product-card { background: transparent; border-radius: 0; overflow: visible; position: relative; display: flex; flex-direction: column; border: none; width: 100%; }
         .weekly-card-item { background: var(--card); border-radius: 16px; padding: 0; border: 1px solid var(--border); overflow: hidden; width: 155px; flex: 0 0 155px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
 
@@ -179,8 +187,8 @@
         [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
-        /* Rasmlar to'liq dumaloq qirrali (border-radius) */
-        .product-img-box { width: 100%; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        /* Rasmlar o'lchami to'liq moslashtirildi */
+        .product-img-box { width: 100%; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; }
         @media (min-width: 768px) { .product-img-box { height: 300px; } }
         .weekly-card-item .product-img-box { height: 210px; border-radius: 16px 16px 0 0; box-shadow: none; }
 
@@ -825,6 +833,9 @@
                 </div>
             ` : '';
 
+            let stock = p.stock !== undefined ? p.stock : 10;
+            let lastItemBadge = (stock === 1) ? `<div class="badge-last-sm">${currentLang === 'ru' ? 'Остался 1 шт' : 'Oxirgisi'}</div>` : '';
+
             let originalHtml = p.badgeType === 'original' ? `
                 <div class="badge-original-sm">
                     <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -832,8 +843,8 @@
                 </div>
             ` : '';
 
-            if (timerHtml || originalHtml) {
-                badgesHtml = `<div class="card-image-badges">${timerHtml}${originalHtml}</div>`;
+            if (timerHtml || originalHtml || lastItemBadge) {
+                badgesHtml = `<div class="card-image-badges">${timerHtml}${lastItemBadge}${originalHtml}</div>`;
             }
 
             let dotsHtml = pImages.length > 1 ? `
