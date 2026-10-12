@@ -3,66 +3,66 @@
     "theme": "light"
   },
   "banners": [
-    { "img": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80", "product_id": 101 },
-    { "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80", "product_id": 107 },
-    { "img": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80", "product_id": 201 },
-    { "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80", "product_id": 301 },
-    { "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80", "product_id": 401 }
+    { "id": 1, "img": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&auto=format&fit=crop&q=80", "type": "product", "product_id": 101 },
+    { "id": 2, "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80", "type": "category", "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" } },
+    { "id": 3, "img": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80", "type": "product", "product_id": 201 },
+    { "id": 4, "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80", "type": "category", "category_id": 3, "subcat": { "uz": "Krossovkalar", "ru": "Кроссовки" } },
+    { "id": 5, "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80", "type": "category", "category_id": 4 }
   ],
   "stories": [
-    { 
-      "id": 1, 
-      "title": { "uz": "Super Aksiya", "ru": "Супер Акция" }, 
-      "type": "video", 
-      "media": "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4", 
-      "product_id": 101, 
-      "created_at": "2026-10-11T12:00:00Z", 
-      "duration_hours": 24 
+    {
+      "id": 1,
+      "title": { "uz": "Super Aksiya", "ru": "Супер Акция" },
+      "type": "video",
+      "media": "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4",
+      "product_id": 101,
+      "created_at": "2026-10-11T12:00:00Z",
+      "duration_hours": 24
     },
-    { 
-      "id": 2, 
-      "title": { "uz": "Yangi Kolleksiya", "ru": "Новая Коллекция" }, 
-      "type": "image", 
-      "media": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80", 
-      "product_id": 102, 
-      "created_at": "2026-10-10T08:00:00Z", 
-      "duration_hours": 72 
+    {
+      "id": 2,
+      "title": { "uz": "Yangi Kolleksiya", "ru": "Новая Коллекция" },
+      "type": "image",
+      "media": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&auto=format&fit=crop&q=80",
+      "product_id": 102,
+      "created_at": "2026-10-10T08:00:00Z",
+      "duration_hours": 72
     },
-    { 
-      "id": 3, 
-      "title": { "uz": "Chegirmalar", "ru": "Скидки" }, 
-      "type": "image", 
-      "media": "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80", 
-      "product_id": 107, 
-      "created_at": "2026-10-10T08:00:00Z", 
-      "duration_hours": 72 
+    {
+      "id": 3,
+      "title": { "uz": "Chegirmalar", "ru": "Скидки" },
+      "type": "image",
+      "media": "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80",
+      "product_id": 107,
+      "created_at": "2026-10-10T08:00:00Z",
+      "duration_hours": 72
     },
-    { 
-      "id": 4, 
-      "title": { "uz": "Top Tovarlar", "ru": "Топ товары" }, 
-      "type": "image", 
-      "media": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80", 
-      "product_id": 113, 
-      "created_at": "2026-10-10T08:00:00Z", 
-      "duration_hours": 72 
+    {
+      "id": 4,
+      "title": { "uz": "Top Tovarlar", "ru": "Топ товары" },
+      "type": "image",
+      "media": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80",
+      "product_id": 113,
+      "created_at": "2026-10-10T08:00:00Z",
+      "duration_hours": 72
     },
-    { 
-      "id": 5, 
-      "title": { "uz": "Elektronika", "ru": "Электроника" }, 
-      "type": "image", 
-      "media": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80", 
-      "product_id": 401, 
-      "created_at": "2026-10-10T08:00:00Z", 
-      "duration_hours": 72 
+    {
+      "id": 5,
+      "title": { "uz": "Elektronika", "ru": "Электроника" },
+      "type": "image",
+      "media": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80",
+      "product_id": 401,
+      "created_at": "2026-10-10T08:00:00Z",
+      "duration_hours": 72
     },
-    { 
-      "id": 6, 
-      "title": { "uz": "Kuzgi Trend", "ru": "Осенний тренд" }, 
-      "type": "video", 
-      "media": "https://assets.mixkit.co/videos/preview/mixkit-stylish-woman-walking-in-a-neon-lit-city-41420-large.mp4", 
-      "product_id": 201, 
-      "created_at": "2026-10-11T14:00:00Z", 
-      "duration_hours": 24 
+    {
+      "id": 6,
+      "title": { "uz": "Kuzgi Trend", "ru": "Осенний тренд" },
+      "type": "video",
+      "media": "https://assets.mixkit.co/videos/preview/mixkit-stylish-woman-walking-in-a-neon-lit-city-41420-large.mp4",
+      "product_id": 201,
+      "created_at": "2026-10-11T14:00:00Z",
+      "duration_hours": 24
     }
   ],
   "home_sections": [
@@ -71,7 +71,7 @@
       "title": { "uz": "Hafta aksiyalari", "ru": "Скидки недели" },
       "enabled": true,
       "order": 1,
-      "timer_end": "2026-10-15T23:59:59",
+      "timer_end": "2026-10-15T23:59:59+05:00",
       "product_ids": [101, 107, 201, 301, 401, 501, 502, 503, 504, 505]
     }
   ],
@@ -131,7 +131,7 @@
         { "name": { "uz": "Changyutgichlar", "ru": "Пылесосы" }, "img": "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Blenderlar", "ru": "Блендеры" }, "img": "https://images.unsplash.com/photo-1570222094114-d074f7e14e5b?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Dazmollar", "ru": "Утюги" }, "img": "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Mikserlar", "ru": "Миксеры" }, "img": "https://images.unsplash.com/photo-15926663469ec-9dbdd535a2d7?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Mikserlar", "ru": "Миксеры" }, "img": "https://images.unsplash.com/photo-1570222094114-d074f7e14e5b?w=200&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -200,7 +200,7 @@
 
     { "id": 107, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Qishki qora kurtka", "ru": "Зимняя черная куртка" }, "price": "450 000 so'm", "oldPrice": "680 000 so'm", "discount": "↓ 33%", "badgeType": "original", "rating": 4.9, "comments": 124, "stock": 3, "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80"] },
     { "id": 108, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Pushti qisqa kurtka", "ru": "Розовая короткая куртка" }, "price": "390 000 so'm", "oldPrice": "500 000 so'm", "discount": "↓ 22%", "badgeType": "chegirma", "rating": 4.7, "comments": 60, "stock": 1, "images": ["https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 109, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Dжинsovka kurtka", "ru": "Джинсовая куртка" }, "price": "280 000 so'm", "oldPrice": "", "discount": "", "badgeType": "", "rating": 4.8, "comments": 71, "stock": 7, "images": ["https://images.unsplash.com/photo-1543322747-81df3a283741?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 109, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Jinsi kurtka", "ru": "Джинсовая куртка" }, "price": "280 000 so'm", "oldPrice": "", "discount": "", "badgeType": "", "rating": 4.8, "comments": 71, "stock": 7, "images": ["https://images.unsplash.com/photo-1543322747-81df3a283741?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"] },
     { "id": 110, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Bahorgi plash", "ru": "Весенний плащ" }, "price": "340 000 so'm", "oldPrice": "450 000 so'm", "discount": "↓ 24%", "badgeType": "chegirma", "rating": 4.5, "comments": 39, "stock": 1, "images": ["https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80"] },
     { "id": 111, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Sportivniy kurtka", "ru": "Спортивная куртка" }, "price": "310 000 so'm", "oldPrice": "", "discount": "", "badgeType": "original", "rating": 4.9, "comments": 88, "stock": 9, "images": ["https://images.unsplash.com/photo-1548883354-7622d03a27c6?w=600&auto=format&fit=crop&q=80", "https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"] },
     { "id": 112, "category_id": 1, "subcat": { "uz": "Kurtkalar", "ru": "Куртки" }, "name": { "uz": "Oversize kurtka", "ru": "Оверсайз куртка" }, "price": "480 000 so'm", "oldPrice": "600 000 so'm", "discount": "↓ 20%", "badgeType": "arzonlashdi", "rating": 5.0, "comments": 105, "stock": 1, "images": ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&auto=format&fit=crop&q=80"] },
