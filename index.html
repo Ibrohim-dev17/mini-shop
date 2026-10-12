@@ -91,16 +91,72 @@
         .weekly-track-wrapper::-webkit-scrollbar { display: none; }
         .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; }
 
-        /* Rasmdagi kabi chaqmoqli/burchakli aksiya nishoni (Badge) */
-        .badge-action-ribbon { position: absolute; top: 8px; left: 0; background: #7000ff; color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; z-index: 4; pointer-events: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-        
-        /* Original vaqtli badge (Rasmdagidek) */
-        .card-bottom-badges { display: flex; align-items: center; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
-        .card-timer-badge { display: flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; color: #fff; background: #7000ff; padding: 3px 6px; border-radius: 6px; }
-        .card-timer-badge svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; }
+        /* Rasmdagi kabi AKSIYA burchakli nishoni */
+        .badge-action-ribbon {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            background: #7000ff;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            z-index: 4;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
 
-        .badge-original-sm { background: #00c853; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 6px; display: flex; align-items: center; gap: 3px; }
-        .badge-original-sm svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 2.5; }
+        /* Rasm ichidagi pastki qism elementlari (Taymer, Original, Chegirma) */
+        .card-image-badges {
+            position: absolute;
+            bottom: 8px;
+            left: 6px;
+            right: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 4;
+            pointer-events: none;
+            flex-wrap: wrap;
+        }
+
+        .card-timer-badge {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 9px;
+            font-weight: 700;
+            color: #fff;
+            background: #7000ff;
+            padding: 3px 5px;
+            border-radius: 6px;
+        }
+        .card-timer-badge svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        .badge-original-sm {
+            background: #00c853;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 5px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .badge-original-sm svg { width: 9px; height: 9px; stroke: #fff; fill: none; stroke-width: 2.5; }
+
+        .badge-discount-sm {
+            background: #ff3b30;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 5px;
+            border-radius: 6px;
+        }
 
         /* Kategoriyalar */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
@@ -138,7 +194,7 @@
         .card-slider-container::-webkit-scrollbar { display: none; }
         .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
         .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .card-dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; z-index: 4; pointer-events: none; }
+        .card-dots { position: absolute; bottom: 32px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; z-index: 4; pointer-events: none; }
         .card-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); transition: all 0.2s; }
         .card-dot.active { width: 14px; border-radius: 3px; background: #ffffff; }
 
@@ -147,7 +203,6 @@
         .price-row { display: flex; align-items: center; gap: 6px; }
         .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
         .main-price.out-of-stock { color: var(--danger); font-size: 14px; }
-        .discount-tag { background: var(--discount-bg); color: var(--discount-text); font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
         .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
         .price-old { text-decoration: line-through; }
         .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
@@ -319,6 +374,31 @@
         let notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
         let viewedStories = JSON.parse(localStorage.getItem('viewed_stories')) || [];
         let activeCatId = 'all';
+
+        // Telegram WebApp BackButton sozlamalari va telefon orqaga tugmasini boshqarish
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.Telegram && window.Telegram.WebApp) {
+                const tg = window.Telegram.WebApp;
+                tg.expand();
+                if (tg.BackButton) {
+                    tg.BackButton.hide(); // Bosh sahifada yashirin turadi
+                }
+            }
+            init();
+        });
+
+        // Telefonning fiziki / brauzer orqaga tugmasi bosilganda mini app to'satdan yopilib ketishining oldini olish
+        window.history.pushState({ page: 'home' }, '', window.location.href);
+        window.addEventListener('popstate', (event) => {
+            let storyModal = document.getElementById('storyModal');
+            if (storyModal && storyModal.style.display === 'flex') {
+                closeStoryModal();
+                history.pushState(null, '', window.location.href);
+                return;
+            }
+            // Agar boshqa sahifada bo'lmasa, chiqib ketishni oldini olish uchun holatni ushlab turamiz
+            history.pushState(null, '', window.location.href);
+        });
 
         function applyThemeAndTranslations() {
             currentLang = localStorage.getItem('selected_lang') || 'uz';
@@ -614,7 +694,7 @@
             promoProds.forEach(p => updateCardInfoOnly(p.id));
         }
 
-        // 1 haftagacha bo'lgan taymer mantiqi (maksimal 7 kun yoki bazadan kelgan vaqt)
+        // 1 haftagacha bo'lgan taymer mantiqi (maksimal 7 kun)
         function startWeeklyCountdown(endTimeStr) {
             function updateTimer() {
                 let now = new Date().getTime();
@@ -630,7 +710,6 @@
                 }
 
                 let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                // Agar 1 haftadan oshsa, 7 kunga cheklash yoki to'g'ridan to'g'ri ko'rsatish
                 if (days > 7) days = 7;
                 let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -705,8 +784,30 @@
             let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
             let isWeeklyItem = section && section.product_ids.includes(p.id);
 
-            // Rasmdagi kabi yuqori chap burchakdagi AKSIYA nishoni
+            // Yuqori chap burchakdagi AKSIYA nishoni
             let ribbonBadge = isWeeklyItem ? `<div class="badge-action-ribbon">${currentLang === 'ru' ? 'АКЦИЯ' : 'AKSIYA'}</div>` : '';
+
+            // Pastki qismdagi nishonlar (Taymer, Original, Chegirma foizi)
+            let badgesHtml = '';
+            let timerHtml = isWeeklyItem ? `
+                <div class="card-timer-badge">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span class="card-timer-val">00:00:00</span>
+                </div>
+            ` : '';
+
+            let originalHtml = p.badgeType === 'original' ? `
+                <div class="badge-original-sm">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>ORIGINAL</span>
+                </div>
+            ` : '';
+
+            let discountHtml = p.discount ? `<div class="badge-discount-sm">${p.discount}</div>` : '';
+
+            if (timerHtml || originalHtml || discountHtml) {
+                badgesHtml = `<div class="card-image-badges">${timerHtml}${originalHtml}${discountHtml}</div>`;
+            }
 
             return `
                 <div class="product-card ${isWeekly ? 'weekly-card-item' : ''}" id="product-card-${p.id}">
@@ -719,6 +820,7 @@
                         </div>
                         ${hasMultipleImages ? `<div class="card-dots">${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}</div>` : ''}
                         ${ribbonBadge}
+                        ${badgesHtml}
                     </div>
                     <div class="product-info" id="product-info-${p.id}"></div>
                 </div>
@@ -754,41 +856,9 @@
             let isOut = stock <= 0;
             let isNotified = notifiedList.includes(p.id);
 
-            let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
-            let isWeeklyItem = section && section.product_ids.includes(p.id);
-
             let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
                 <span class="main-price">${p.price}</span>
-                ${p.discount ? `<span class="discount-tag">${p.discount}</span>` : ''}
             `;
-
-            // Rasmdagi kabi pastki qismdagi taymer va original nishoni
-            let bottomBadgesHtml = '';
-            if (isWeeklyItem) {
-                bottomBadgesHtml = `
-                    <div class="card-bottom-badges">
-                        <div class="card-timer-badge">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            <span class="card-timer-val">00:00:00</span>
-                        </div>
-                        ${p.badgeType === 'original' ? `
-                            <div class="badge-original-sm">
-                                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                <span>ORIGINAL</span>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            } else if (p.badgeType === 'original') {
-                bottomBadgesHtml = `
-                    <div class="card-bottom-badges">
-                        <div class="badge-original-sm">
-                            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>ORIGINAL</span>
-                        </div>
-                    </div>
-                `;
-            }
 
             let btnHtml = '';
             if (isOut) {
@@ -817,7 +887,6 @@
                 <div class="product-info-top">
                     <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
                     ${!isOut ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${p.oldPrice || ''}</span></div>` : ''}
-                    ${bottomBadgesHtml}
                     <div class="product-title" onclick="goToProduct(${p.id})">${prodName}</div>
                     <div class="product-rating">
                         <div class="rating-left" onclick="goToProduct(${p.id})">
@@ -999,8 +1068,6 @@
             window.location.href = `products.html?q=${encodeURIComponent(query)}`;
         }
         function handleSearch(e) { if (e.key === 'Enter') { let q = e.target.value.trim(); if (q) closeSearchAndGo(q); } }
-
-        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
