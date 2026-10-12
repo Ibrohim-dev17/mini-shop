@@ -94,14 +94,16 @@
         .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; }
 
         /* AKSIYA nishoni */
-        .badge-action-ribbon { position: absolute; top: 10px; left: 0; background: #7000ff; color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; z-index: 4; pointer-events: none; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        .badge-action-ribbon { position: absolute; top: 12px; left: -5px; background: #8b3dff; color: #fff; font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 8px; z-index: 4; pointer-events: none; letter-spacing: 0.4px; transform: rotate(-4deg); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        .weekly-card-item .badge-action-ribbon { left: 3px; top: 14px; }
 
         .card-image-badges { position: absolute; bottom: 8px; left: 6px; right: 6px; display: flex; align-items: center; gap: 4px; z-index: 4; pointer-events: none; flex-wrap: wrap; }
-        .card-timer-badge { display: flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; color: #fff; background: #7000ff; padding: 3px 5px; border-radius: 6px; }
-        .card-timer-badge svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .card-timer-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #fff; background: #8b3dff; padding: 4px 8px 4px 6px; border-radius: 10px; }
+        .card-timer-badge svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        .badge-original-sm { background: #00c853; color: #fff; font-size: 9px; font-weight: 700; padding: 3px 5px; border-radius: 6px; display: flex; align-items: center; gap: 2px; }
-        .badge-original-sm svg { width: 9px; height: 9px; stroke: #fff; fill: none; stroke-width: 2.5; }
+        .badge-original-sm { background: #00c853; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px 3px 4px; border-radius: 10px; display: flex; align-items: center; gap: 4px; }
+        .orig-ic { width: 15px; height: 15px; border-radius: 50%; background: #009b3e; display: flex; align-items: center; justify-content: center; }
+        .orig-ic svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
 
         /* Olov ikonkali "Oxirgisi" nishoni (products.html bilan bir xil) */
         .last-item-badge { display: flex; align-items: center; gap: 2px; color: #ff3d00; font-weight: 700; font-size: 10px; background: #fff2ee; padding: 2px 5px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
@@ -129,36 +131,40 @@
         @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
         .product-card { min-width: 0; background: transparent; border-radius: 0; overflow: visible; position: relative; display: flex; flex-direction: column; border: none; width: 100%; height: 100%; }
-        .weekly-card-item { background: var(--card); border-radius: 16px; padding: 0; border: 1px solid var(--border); overflow: hidden; width: 155px; flex: 0 0 155px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .weekly-card-item { background: var(--card); border-radius: 20px; padding: 8px; border: none; overflow: hidden; width: 155px; flex: 0 0 155px; }
+        .weekly-more-card { flex: 0 0 155px; width: 155px; background: var(--card); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; text-decoration: none; color: var(--text); }
+        .weekly-more-circle { width: 44px; height: 44px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+        .weekly-more-circle svg { width: 20px; height: 20px; stroke: var(--text); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .weekly-more-text { font-size: 14px; font-weight: 600; text-align: center; line-height: 1.3; }
 
-        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
-        [data-theme="dark"] .heart-icon-sm { background: rgba(28, 29, 34, 0.6); border-color: rgba(255, 255, 255, 0.1); }
-        .heart-icon-sm svg { width: 17px; height: 17px; fill: none; stroke: #1f2026; stroke-width: 2; }
-        [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
-        .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
+        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(110, 110, 120, 0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
+        .heart-icon-sm svg { width: 18px; height: 18px; fill: none; stroke: #ffffff; stroke-width: 2; }
+        .heart-icon-sm.liked svg { fill: #8b4dff; stroke: #8b4dff; }
+        .weekly-card-item .heart-icon-sm { top: 16px; right: 16px; }
 
         .product-img-box { width: 100%; min-width: 0; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; }
         @media (min-width: 768px) { .product-img-box { height: 300px; } }
-        .weekly-card-item .product-img-box { height: 210px; border-radius: 16px 16px 0 0; box-shadow: none; }
+        .weekly-card-item .product-img-box { height: 200px; border-radius: 16px; box-shadow: none; }
 
         .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .card-slider-container::-webkit-scrollbar { display: none; }
         .card-slide { flex: 0 0 100%; width: 100%; min-width: 100%; height: 100%; scroll-snap-align: start; }
         .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 16px; }
-        .weekly-card-item .card-slide img { border-radius: 16px 16px 0 0; }
+        .weekly-card-item .card-slide img { border-radius: 16px; }
 
         .card-dots { display: flex; justify-content: center; align-items: center; gap: 4px; margin: 6px 0 2px 0; z-index: 4; }
         .card-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
         .card-dot.active { width: 12px; border-radius: 3px; background: var(--primary); }
 
         .product-info { padding: 6px 4px 12px 4px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; min-width: 0; }
-        .weekly-card-item .product-info { padding: 10px; }
+        .weekly-card-item .product-info { padding: 8px 2px 2px 2px; }
 
         .product-info-top { display: flex; flex-direction: column; }
         .price-row { display: flex; align-items: center; gap: 6px; }
         .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
         .main-price.out-of-stock { color: var(--danger); font-size: 14px; }
-        .discount-tag { font-size: 13px; font-weight: 700; color: #ff3b30; display: flex; align-items: center; }
+        .discount-tag { font-size: 13px; font-weight: 700; color: #e0218a; display: flex; align-items: center; gap: 1px; }
+        .discount-tag svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
         .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
         .price-old { text-decoration: line-through; }
         .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
@@ -295,6 +301,7 @@
                 weekly_sale_title: "Hafta aksiyalari",
                 all_btn: "Barchasi >",
                 cat_all: "Barchasi",
+                see_all: "Barchasini ko'rish",
                 last_item: "Oxirgisi",
                 nav_home: "Bosh sahifa",
                 nav_catalog: "Katalog",
@@ -318,6 +325,7 @@
                 weekly_sale_title: "Скидки недели",
                 all_btn: "Все >",
                 cat_all: "Все",
+                see_all: "Смотреть все",
                 last_item: "Последний",
                 nav_home: "Главная",
                 nav_catalog: "Каталог",
@@ -343,6 +351,12 @@
                 <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
             </svg>`;
 
+        const DOWN_ARROW = `<svg viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="20"></line><polyline points="6 14 12 20 18 14"></polyline></svg>`;
+        function discountLabel(d) {
+            const m = String(d || '').match(/\d+(?:[.,]\d+)?/);
+            return m ? m[0] + '%' : '';
+        }
+
         // Qidiruv matnini onclick ichida xavfsiz ishlatish uchun
         function escAttr(s) {
             return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -358,6 +372,21 @@
         });
 
         window.history.pushState({ page: 'home' }, '', window.location.href);
+
+        // Boshqa sahifadan orqaga qaytganda holatni yangilash
+        window.addEventListener('pageshow', (e) => {
+            if (!e.persisted) return;
+            favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+            cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+            notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
+                window.Telegram.WebApp.BackButton.hide();
+            }
+            renderWeeklySales();
+            renderMainContent();
+            renderRecentProducts();
+            updateBadges();
+        });
         window.addEventListener('popstate', () => {
             let storyModal = document.getElementById('storyModal');
             if (storyModal && storyModal.style.display === 'flex') {
@@ -656,6 +685,10 @@
                     <div class="weekly-track-wrapper" id="weeklyTrackWrapper">
                         <div class="weekly-track">
                             ${promoProds.map(p => createProductCardHTML(p, true)).join('')}
+                            <a href="sales.html" class="weekly-more-card">
+                                <div class="weekly-more-circle"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
+                                <span class="weekly-more-text">${t.see_all}</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -774,7 +807,8 @@
 
         function createProductCardHTML(p, isWeekly = false) {
             const isLiked = favs.includes(p.id) ? 'liked' : '';
-            const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
+            let pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
+            if (isWeekly) pImages = [pImages[0]]; // haftalik aksiya bo'limida faqat bitta rasm
 
             let loopImages = [];
             if (pImages.length > 1) {
@@ -797,14 +831,14 @@
             let badgesHtml = '';
             let timerHtml = (isWeeklyItem && !expired) ? `
                 <div class="card-timer-badge">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="7.5"></circle><line x1="12" y1="14" x2="12" y2="10.5"></line><line x1="9.5" y1="2.5" x2="14.5" y2="2.5"></line><line x1="12" y1="2.5" x2="12" y2="6.5"></line></svg>
                     <span class="card-timer-val">00:00:00</span>
                 </div>
             ` : '';
 
             let originalHtml = p.badgeType === 'original' ? `
                 <div class="badge-original-sm">
-                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span class="orig-ic"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                     <span>ORIGINAL</span>
                 </div>
             ` : '';
@@ -821,6 +855,7 @@
 
             return `
                 <div class="product-card ${isWeekly ? 'weekly-card-item' : ''}" id="product-card-${p.id}">
+                    ${ribbonBadge}
                     <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
                         <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                     </button>
@@ -828,7 +863,6 @@
                         <div class="card-slider-container" data-original-length="${pImages.length}" onscroll="handleCardInfiniteScroll(event, ${pImages.length})">
                             ${loopImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
                         </div>
-                        ${ribbonBadge}
                         ${badgesHtml}
                     </div>
                     ${dotsHtml}
@@ -896,7 +930,7 @@
 
             let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
                 <span class="main-price">${cleanPrice}</span>
-                ${displayDiscount ? `<span class="discount-tag">${displayDiscount}</span>` : ''}
+                ${(isWeeklyItem && !expired && discountLabel(displayDiscount)) ? `<span class="discount-tag">${DOWN_ARROW}${discountLabel(displayDiscount)}</span>` : ''}
             `;
 
             let btnHtml = '';
