@@ -33,9 +33,11 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); padding-top: 70px; padding-bottom: 120px; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+        body { background-color: var(--bg); color: var(--text); padding-top: 125px; padding-bottom: 120px; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
 
-        .sticky-header { position: fixed; top: 0; left: 0; right: 0; background: var(--card); z-index: 999; padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; max-width: 1300px; margin-left: auto; margin-right: auto; }
+        /* Qidiruv paneli (pastga tushirilgan) */
+        .sticky-header { position: fixed; top: 0; left: 0; right: 0; margin-top: 55px; background: var(--card); z-index: 999; padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; max-width: 1300px; margin-left: auto; margin-right: auto; }
+        .sticky-header::before { content: ''; position: absolute; top: -60px; left: 0; right: 0; height: 60px; background: var(--card); z-index: -1; }
 
         .search-box-wrapper { position: relative; width: 100%; flex: 1; }
         .search-box { display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 8px 12px; gap: 8px; border: 1px solid var(--border); width: 100%; position: relative; z-index: 1001; }
@@ -85,83 +87,26 @@
         .weekly-title-row svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; }
         .weekly-title { font-size: 18px; font-weight: 800; color: #fff; }
         .weekly-all-btn { font-size: 14px; font-weight: 600; cursor: pointer; color: #fff; text-decoration: none; }
-        
+
         .weekly-track-wrapper { overflow-x: auto; scrollbar-width: none; touch-action: pan-x; -webkit-overflow-scrolling: touch; cursor: grab; }
         .weekly-track-wrapper:active { cursor: grabbing; }
         .weekly-track-wrapper::-webkit-scrollbar { display: none; }
         .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; }
 
         /* AKSIYA nishoni */
-        .badge-action-ribbon {
-            position: absolute;
-            top: 10px;
-            left: 0;
-            background: #7000ff;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-            z-index: 4;
-            pointer-events: none;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
+        .badge-action-ribbon { position: absolute; top: 10px; left: 0; background: #7000ff; color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; z-index: 4; pointer-events: none; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
 
-        .card-image-badges {
-            position: absolute;
-            bottom: 8px;
-            left: 6px;
-            right: 6px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            z-index: 4;
-            pointer-events: none;
-            flex-wrap: wrap;
-        }
-
-        .card-timer-badge {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            font-size: 9px;
-            font-weight: 700;
-            color: #fff;
-            background: #7000ff;
-            padding: 3px 5px;
-            border-radius: 6px;
-        }
+        .card-image-badges { position: absolute; bottom: 8px; left: 6px; right: 6px; display: flex; align-items: center; gap: 4px; z-index: 4; pointer-events: none; flex-wrap: wrap; }
+        .card-timer-badge { display: flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; color: #fff; background: #7000ff; padding: 3px 5px; border-radius: 6px; }
         .card-timer-badge svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-        .badge-original-sm {
-            background: #00c853;
-            color: #fff;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 3px 5px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
+        .badge-original-sm { background: #00c853; color: #fff; font-size: 9px; font-weight: 700; padding: 3px 5px; border-radius: 6px; display: flex; align-items: center; gap: 2px; }
         .badge-original-sm svg { width: 9px; height: 9px; stroke: #fff; fill: none; stroke-width: 2.5; }
 
-        /* Olov ikonkali Oxirgi nishoni */
-        .badge-last-sm {
-            background: #fff0ed;
-            color: #e65100;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 3px 7px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            border: 1px solid #ffd8cc;
-        }
-        .badge-last-sm svg { width: 11px; height: 11px; fill: #ff5722; flex-shrink: 0; }
+        /* Olov ikonkali "Oxirgisi" nishoni (products.html bilan bir xil) */
+        .last-item-badge { display: flex; align-items: center; gap: 2px; color: #ff3d00; font-weight: 700; font-size: 10px; background: #fff2ee; padding: 2px 5px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+        [data-theme="dark"] .last-item-badge { background: #3b1d12; }
+        .last-item-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
 
         /* Kategoriyalar */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
@@ -177,13 +122,13 @@
         .subcat-circle img { width: 100%; height: 100%; object-fit: cover; }
         .subcat-name { font-size: 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
 
-        /* Mahsulotlar gridi - qat'iy birxil o'lchamda */
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px 12px; max-width: 1300px; margin: 0 auto; align-items: start; }
-        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
-        @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
+        /* Mahsulotlar gridi: ustunlar qat'iy teng (minmax(0, 1fr)) */
+        .products-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 12px 12px; max-width: 1300px; margin: 0 auto; align-items: start; }
+        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
-        .product-card { background: transparent; border-radius: 0; overflow: visible; position: relative; display: flex; flex-direction: column; border: none; width: 100%; height: 100%; }
+        .product-card { min-width: 0; background: transparent; border-radius: 0; overflow: visible; position: relative; display: flex; flex-direction: column; border: none; width: 100%; height: 100%; }
         .weekly-card-item { background: var(--card); border-radius: 16px; padding: 0; border: 1px solid var(--border); overflow: hidden; width: 155px; flex: 0 0 155px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
 
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
@@ -192,22 +137,21 @@
         [data-theme="dark"] .heart-icon-sm svg { stroke: #f4f5f7; }
         .heart-icon-sm.liked svg { fill: #ff3b30; stroke: #ff3b30; }
 
-        /* Rasmlar konteyneri mukammal moslashtirildi */
-        .product-img-box { width: 100%; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; }
+        .product-img-box { width: 100%; min-width: 0; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; }
         @media (min-width: 768px) { .product-img-box { height: 300px; } }
         .weekly-card-item .product-img-box { height: 210px; border-radius: 16px 16px 0 0; box-shadow: none; }
 
         .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .card-slider-container::-webkit-scrollbar { display: none; }
-        .card-slide { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
+        .card-slide { flex: 0 0 100%; width: 100%; min-width: 100%; height: 100%; scroll-snap-align: start; }
         .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 16px; }
         .weekly-card-item .card-slide img { border-radius: 16px 16px 0 0; }
-        
+
         .card-dots { display: flex; justify-content: center; align-items: center; gap: 4px; margin: 6px 0 2px 0; z-index: 4; }
         .card-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
         .card-dot.active { width: 12px; border-radius: 3px; background: var(--primary); }
 
-        .product-info { padding: 6px 4px 12px 4px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+        .product-info { padding: 6px 4px 12px 4px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; min-width: 0; }
         .weekly-card-item .product-info { padding: 10px; }
 
         .product-info-top { display: flex; flex-direction: column; }
@@ -219,7 +163,7 @@
         .price-old { text-decoration: line-through; }
         .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
 
-        .product-rating { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin: 8px 0; gap: 4px; }
+        .product-rating { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin: 8px 0; gap: 4px; flex-wrap: nowrap; }
         .rating-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
         .rating-box, .comment-box { display: flex; align-items: center; gap: 2px; }
         .rating-box svg { width: 13px; height: 13px; fill: var(--star); flex-shrink: 0; }
@@ -350,7 +294,8 @@
                 recent_title: "Siz ko'rgansiz",
                 weekly_sale_title: "Hafta aksiyalari",
                 all_btn: "Barchasi >",
-                last_item: "Oxirgi",
+                cat_all: "Barchasi",
+                last_item: "Oxirgisi",
                 nav_home: "Bosh sahifa",
                 nav_catalog: "Katalog",
                 nav_cart: "Savatcha",
@@ -372,6 +317,7 @@
                 recent_title: "Вы смотрели",
                 weekly_sale_title: "Скидки недели",
                 all_btn: "Все >",
+                cat_all: "Все",
                 last_item: "Последний",
                 nav_home: "Главная",
                 nav_catalog: "Каталог",
@@ -390,6 +336,18 @@
         let viewedStories = JSON.parse(localStorage.getItem('viewed_stories')) || [];
         let activeCatId = 'all';
 
+        // Olov ikonkasi (barcha joyda bir xil)
+        const FIRE_ICON = `
+            <svg viewBox="0 0 512 512">
+                <path fill="#ff3d00" d="M192 480c-70.7 0-128-57.3-128-128 0-48.4 27.2-90.3 67.2-111.4 5.3-2.8 11.8.6 12.8 6.5 5.2 32.1 23.3 60.1 48.9 78.4 4.1 2.9 9.9-.1 10.2-5.1 2-35.3-11.4-74.8-40.2-118.4C145.4 179.8 192 110.1 192 48c0-8.8 10.7-13.1 16.9-6.9 72.8 72.8 111.1 168.1 87.4 256.4 1.4-.9 2.8-1.9 4.1-2.9 33.7-25.9 55.6-67.6 55.6-114.6 0-8.8 10.7-13.1 16.9-6.9 65 65 91.1 155.1 68.3 234.9C425.4 430.4 316.5 480 192 480z"/>
+                <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
+            </svg>`;
+
+        // Qidiruv matnini onclick ichida xavfsiz ishlatish uchun
+        function escAttr(s) {
+            return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             if (window.Telegram && window.Telegram.WebApp) {
                 const tg = window.Telegram.WebApp;
@@ -400,7 +358,7 @@
         });
 
         window.history.pushState({ page: 'home' }, '', window.location.href);
-        window.addEventListener('popstate', (event) => {
+        window.addEventListener('popstate', () => {
             let storyModal = document.getElementById('storyModal');
             if (storyModal && storyModal.style.display === 'flex') {
                 closeStoryModal();
@@ -452,11 +410,11 @@
         function renderStories() {
             const c = document.getElementById('storiesContainer');
             if (!dbData.stories || dbData.stories.length === 0) { c.style.display = 'none'; return; }
-            
+
             c.innerHTML = dbData.stories.map((s, index) => {
                 let isViewed = viewedStories.includes(s.id);
                 let ringClass = isViewed ? 'viewed' : (index % 3 === 0 ? 'type-sale' : (index % 3 === 1 ? 'type-new' : 'type-special'));
-                
+
                 return `
                     <div class="story-item" onclick="openStoryModal(${s.id})">
                         <div class="story-ring ${ringClass}" id="story-ring-${s.id}">
@@ -475,14 +433,14 @@
         function openStoryModal(id) {
             let foundIdx = dbData.stories.findIndex(s => s.id === id);
             if (foundIdx !== -1) currentStoryIdx = foundIdx;
-            
+
             if (!viewedStories.includes(id)) {
                 viewedStories.push(id);
                 localStorage.setItem('viewed_stories', JSON.stringify(viewedStories));
                 let ringEl = document.getElementById(`story-ring-${id}`);
                 if (ringEl) ringEl.className = 'story-ring viewed';
             }
-            
+
             document.getElementById('storyModal').style.display = 'flex';
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
                 window.Telegram.WebApp.BackButton.show();
@@ -603,7 +561,7 @@
                 media: prod.images && prod.images[0] ? prod.images[0] : '',
                 product_id: prod.id
             };
-            
+
             dbData.stories = [tempStory];
             openStoryModal(99999);
         }
@@ -707,6 +665,7 @@
                 startWeeklyCountdown(section.timer_end);
             }
             promoProds.forEach(p => updateCardInfoOnly(p.id));
+            setupSliderStart('#weeklyTrackWrapper');
             setupDragScroll('weeklyTrackWrapper');
         }
 
@@ -732,6 +691,7 @@
             });
         }
 
+        let weeklyTimerInterval = null;
         function startWeeklyCountdown(endTimeStr) {
             function updateTimer() {
                 let now = new Date().getTime();
@@ -743,6 +703,7 @@
 
                 if (distance < 0) {
                     timerEls.forEach(el => el.textContent = "00:00:00");
+                    clearInterval(weeklyTimerInterval);
                     document.querySelectorAll('.product-card').forEach(card => {
                         let id = card.id.replace('product-card-', '');
                         updateCardInfoOnly(Number(id));
@@ -757,8 +718,9 @@
                 let timeStr = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 timerEls.forEach(el => el.textContent = timeStr);
             }
+            clearInterval(weeklyTimerInterval);
             updateTimer();
-            setInterval(updateTimer, 1000);
+            weeklyTimerInterval = setInterval(updateTimer, 1000);
         }
 
         function renderCategoriesTrack() {
@@ -766,7 +728,7 @@
             let sortedCats = [...(dbData.categories || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
 
             track.innerHTML = `
-                <div class="cat-text-pill ${activeCatId === 'all' ? 'active' : ''}" onclick="selectCategory('all')">Barchasi</div>
+                <div class="cat-text-pill ${activeCatId === 'all' ? 'active' : ''}" onclick="selectCategory('all')">${t.cat_all}</div>
                 ${sortedCats.map(cat => `
                     <div class="cat-text-pill ${activeCatId === cat.id ? 'active' : ''}" onclick="selectCategory(${cat.id})">${getLocalized(cat.name)}</div>
                 `).join('')}
@@ -788,7 +750,7 @@
             area.innerHTML = `
                 <div class="subcats-row">
                     ${cat.subcats.map(sub => `
-                        <div class="subcat-item" onclick="filterBySub('${getLocalized(sub.name)}')">
+                        <div class="subcat-item" onclick="filterBySub('${escAttr(getLocalized(sub.name))}')">
                             <div class="subcat-circle"><img src="${sub.img}"></div>
                             <span class="subcat-name">${getLocalized(sub.name)}</span>
                         </div>
@@ -813,7 +775,7 @@
         function createProductCardHTML(p, isWeekly = false) {
             const isLiked = favs.includes(p.id) ? 'liked' : '';
             const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
-            
+
             let loopImages = [];
             if (pImages.length > 1) {
                 if (pImages.length === 2) {
@@ -840,14 +802,6 @@
                 </div>
             ` : '';
 
-            let stock = p.stock !== undefined ? p.stock : 10;
-            let lastItemBadge = (stock === 1) ? `
-                <div class="badge-last-sm">
-                    <svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span>${t.last_item}</span>
-                </div>
-            ` : '';
-
             let originalHtml = p.badgeType === 'original' ? `
                 <div class="badge-original-sm">
                     <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -855,8 +809,8 @@
                 </div>
             ` : '';
 
-            if (timerHtml || originalHtml || lastItemBadge) {
-                badgesHtml = `<div class="card-image-badges">${timerHtml}${lastItemBadge}${originalHtml}</div>`;
+            if (timerHtml || originalHtml) {
+                badgesHtml = `<div class="card-image-badges">${timerHtml}${originalHtml}</div>`;
             }
 
             let dotsHtml = pImages.length > 1 ? `
@@ -883,6 +837,20 @@
             `;
         }
 
+        // Slayderlarni 2-slaydga (haqiqiy 1-rasm) o'rnatish
+        function setupSliderStart(scopeSelector) {
+            setTimeout(() => {
+                document.querySelectorAll(`${scopeSelector} .card-slider-container`).forEach(container => {
+                    let slideW = container.clientWidth;
+                    if (container.children.length > 1) {
+                        container.style.scrollBehavior = 'auto';
+                        container.scrollLeft = slideW;
+                        container.style.scrollBehavior = 'smooth';
+                    }
+                });
+            }, 60);
+        }
+
         function renderProductsGrid(list) {
             const grid = document.getElementById('productsGrid');
             if (list.length === 0) {
@@ -892,14 +860,7 @@
 
             grid.innerHTML = list.map(p => createProductCardHTML(p, false)).join('');
             list.forEach(p => updateCardInfoOnly(p.id));
-            setTimeout(() => {
-                document.querySelectorAll('.card-slider-container').forEach(container => {
-                    let slideW = container.clientWidth;
-                    if (container.children.length > 1) {
-                        container.scrollLeft = slideW;
-                    }
-                });
-            }, 50);
+            setupSliderStart('#productsGrid');
         }
 
         function updateCardInfoOnly(id) {
@@ -913,6 +874,7 @@
             const prodName = getLocalized(p.name);
             let stock = p.stock !== undefined ? p.stock : 10;
             let isOut = stock <= 0;
+            let isLast = stock === 1;
             let isNotified = notifiedList.includes(p.id);
 
             let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
@@ -939,7 +901,7 @@
 
             let btnHtml = '';
             if (isOut) {
-                btnHtml = isNotified 
+                btnHtml = isNotified
                     ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
                     : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
             } else if (!cartItem) {
@@ -960,6 +922,13 @@
                 `;
             }
 
+            const lastBadgeHtml = (isLast && !isOut) ? `
+                <div class="last-item-badge">
+                    ${FIRE_ICON}
+                    <span>${t.last_item}</span>
+                </div>
+            ` : '';
+
             infoContainers.forEach(infoContainer => {
                 infoContainer.innerHTML = `
                     <div class="product-info-top">
@@ -971,6 +940,7 @@
                                 <div class="rating-box"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="rating-num">${p.rating || 4.8}</span></div>
                                 <div class="comment-box"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span class="comments-num">${p.comments || 50}</span></div>
                             </div>
+                            ${lastBadgeHtml}
                         </div>
                     </div>
                     <div class="card-action-container">${btnHtml}</div>
@@ -1074,14 +1044,7 @@
 
             grid.innerHTML = recentList.map(p => createProductCardHTML(p, false)).join('');
             recentList.forEach(p => updateCardInfoOnly(p.id));
-            setTimeout(() => {
-                document.querySelectorAll('#recentProductsGrid .card-slider-container').forEach(container => {
-                    let slideW = container.clientWidth;
-                    if (container.children.length > 1) {
-                        container.scrollLeft = slideW;
-                    }
-                });
-            }, 50);
+            setupSliderStart('#recentProductsGrid');
         }
 
         function updateBadges() {
@@ -1096,6 +1059,7 @@
             else { cartBadge.classList.remove('show'); }
         }
 
+        /* ---------- Qidiruv ---------- */
         function getSearchHistory() { return JSON.parse(localStorage.getItem('search_history')) || []; }
         function saveSearchQuery(q) {
             if (!q) return;
@@ -1117,7 +1081,7 @@
             if (history.length === 0) { dropdown.classList.remove('show'); return; }
             let html = `<div class="search-header-row"><span>${t.history_title}</span><button class="clear-history-btn" onclick="clearAllHistory(event)">${t.clear_history}</button></div>`;
             history.forEach((item, index) => {
-                html += `<div class="search-suggestion-item" onclick="selectHistoryItem('${item.replace(/'/g, "\\'")}')"><div class="history-item-left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>${item}</span></div><button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button></div>`;
+                html += `<div class="search-suggestion-item" onclick="selectHistoryItem('${escAttr(item)}')"><div class="history-item-left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>${item}</span></div><button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button></div>`;
             });
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
@@ -1146,17 +1110,18 @@
             window.location.href = `products.html?q=${encodeURIComponent(item)}`;
         }
         function handleLiveSearch(e) {
-            const val = e.target.value.trim().toLowerCase();
+            const rawVal = e.target.value.trim();
+            const val = rawVal.toLowerCase();
             const dropdown = document.getElementById('searchDropdown');
             const backdrop = document.getElementById('searchBackdrop');
             backdrop.classList.add('show');
 
             if (val.length === 0) { showSearchHistory(); return; }
             let matches = dbData.products.filter(p => getLocalized(p.name).toLowerCase().includes(val) || getLocalized(p.subcat).toLowerCase().includes(val));
-            let html = `<div class="search-suggestion-item" onclick="closeSearchAndGo('${val}')"><span>"${val}" ${t.search_all_label}</span><span class="suggestion-type">${t.search_type}</span></div>`;
+            let html = `<div class="search-suggestion-item" onclick="closeSearchAndGo('${escAttr(rawVal)}')"><span>"${rawVal}" ${t.search_all_label}</span><span class="suggestion-type">${t.search_type}</span></div>`;
             matches.slice(0, 6).forEach(prod => {
                 let pName = getLocalized(prod.name);
-                html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${pName}')"><div class="history-item-left"><span>${pName}</span></div><span class="suggestion-type">${t.product_type}</span></div>`;
+                html += `<div class="search-suggestion-item" onclick="closeSearchAndGo('${escAttr(pName)}')"><div class="history-item-left"><span>${pName}</span></div><span class="suggestion-type">${t.product_type}</span></div>`;
             });
             dropdown.innerHTML = html;
             dropdown.classList.add('show');
