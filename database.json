@@ -72,7 +72,7 @@
       "enabled": true,
       "order": 1,
       "timer_end": "2026-10-15T23:59:59",
-      "product_ids": [101, 107, 201, 301, 401, 501]
+      "product_ids": [101, 107, 201, 301, 401, 501, 502, 503, 504, 505]
     }
   ],
   "categories": [
@@ -84,7 +84,8 @@
         { "name": { "uz": "Ko'ylaklar", "ru": "Платья" }, "img": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Kurtkalar", "ru": "Куртки" }, "img": "https://images.unsplash.com/photo-1544441893-675973e31985?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Ichki kiyimlar", "ru": "Нижнее белье" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Jinsilar", "ru": "Джинсы" }, "img": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Jinsilar", "ru": "Джинсы" }, "img": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Kostyumlar", "ru": "Костюмы" }, "img": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=200&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -95,7 +96,8 @@
         { "name": { "uz": "Erkaklar kurtkalari", "ru": "Мужские куртки" }, "img": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Sportivniy", "ru": "Спортивные костюмы" }, "img": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Erkaklar ko'ylaklari", "ru": "Мужские рубашки" }, "img": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Futbolkalar", "ru": "Футболки" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Futbolkalar", "ru": "Футболки" }, "img": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Klassik shimlar", "ru": "Классические брюки" }, "img": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=200&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -117,7 +119,8 @@
         { "name": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "img": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Noutbuklar", "ru": "Ноутбуки" }, "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=200&auto=format&fit=crop&q=80" },
         { "name": { "uz": "Quloqchinlar", "ru": "Наушники" }, "img": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&auto=format&fit=crop&q=80" },
-        { "name": { "uz": "Smart soatlar", "ru": "Смарт-часы" }, "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80" }
+        { "name": { "uz": "Smart soatlar", "ru": "Смарт-часы" }, "img": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&auto=format&fit=crop&q=80" },
+        { "name": { "uz": "Powerbank", "ru": "Павербанки" }, "img": "https://images.unsplash.com/photo-1609592424104-93cad4295982?w=200&auto=format&fit=crop&q=80" }
       ]
     },
     {
@@ -235,7 +238,18 @@
     { "id": 403, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Budget Phone 64GB", "ru": "Бюджетный смартфон 64GB" }, "price": "1 800 000 so'm", "oldPrice": "", "discount": "", "badgeType": "", "rating": 4.7, "comments": 140, "stock": 12, "images": ["https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&auto=format&fit=crop&q=80"] },
     { "id": 404, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Gaming Phone 512GB", "ru": "Игровой смартфон 512GB" }, "price": "6 100 000 so'm", "oldPrice": "7 000 000 so'm", "discount": "↓ 12%", "badgeType": "arzonlashdi", "rating": 5.0, "comments": 95, "stock": 3, "images": ["https://images.unsplash.com/photo-1533228876829-65c94e7b5025?w=600&auto=format&fit=crop&q=80"] },
     { "id": 405, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Mini Smartfon Compact", "ru": "Мини смартфон Compact" }, "price": "2 400 000 so'm", "oldPrice": "2 900 000 so'm", "discount": "↓ 17%", "badgeType": "chegirma", "rating": 4.6, "comments": 64, "stock": 7, "images": ["https://images.unsplash.com/photo-1523206489230-c012c64b2b48?w=600&auto=format&fit=crop&q=80"] },
-    { "id": 406, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Max Phone 1TB", "ru": "Макс Телефон 1TB" }, "price": "7 500 000 so'm", "oldPrice": "", "discount": "", "badgeType": "original", "rating": 4.9, "comments": 210, "stock": 2, "images": ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80"] }
+    { "id": 406, "category_id": 4, "subcat": { "uz": "Smartfonlar", "ru": "Смартфоны" }, "name": { "uz": "Max Phone 1TB", "ru": "Макс Телефон 1TB" }, "price": "7 500 000 so'm", "oldPrice": "", "discount": "", "badgeType": "original", "rating": 4.9, "comments": 210, "stock": 2, "images": ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80"] },
+
+    { "id": 501, "category_id": 4, "subcat": { "uz": "Noutbuklar", "ru": "Ноутбуки" }, "name": { "uz": "Ultrabook Pro 14", "ru": "Ультрабук Pro 14" }, "price": "6 800 000 so'm", "oldPrice": "8 500 000 so'm", "discount": "↓ 20%", "badgeType": "arzonlashdi", "rating": 4.9, "comments": 150, "stock": 4, "images": ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 502, "category_id": 4, "subcat": { "uz": "Noutbuklar", "ru": "Ноутбуки" }, "name": { "uz": "Gaming Laptop 16", "ru": "Игровой ноутбук 16" }, "price": "9 500 000 so'm", "oldPrice": "11 000 000 so'm", "discount": "↓ 13%", "badgeType": "original", "rating": 5.0, "comments": 92, "stock": 3, "images": ["https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 503, "category_id": 5, "subcat": { "uz": "Changyutgichlar", "ru": "Пылесосы" }, "name": { "uz": "Smart Robot Changyutgich", "ru": "Умный робот-пылесос" }, "price": "2 100 000 so'm", "oldPrice": "2 900 000 so'm", "discount": "↓ 27%", "badgeType": "chegirma", "rating": 4.8, "comments": 164, "stock": 7, "images": ["https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 504, "category_id": 5, "subcat": { "uz": "Blenderlar", "ru": "Блендеры" }, "name": { "uz": "Professional Blender 1000W", "ru": "Профессиональный блендер 1000W" }, "price": "450 000 so'm", "oldPrice": "600 000 so'm", "discount": "↓ 25%", "badgeType": "original", "rating": 4.7, "comments": 88, "stock": 9, "images": ["https://images.unsplash.com/photo-1570222094114-d074f7e14e5b?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 505, "category_id": 6, "subcat": { "uz": "Idish-tovoqlar", "ru": "Посуда" }, "name": { "uz": "Granit idishlar to'plami", "ru": "Гранитный набор посуды" }, "price": "890 000 so'm", "oldPrice": "1 200 000 so'm", "discount": "↓ 25%", "badgeType": "arzonlashdi", "rating": 4.9, "comments": 130, "stock": 5, "images": ["https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 506, "category_id": 7, "subcat": { "uz": "Atirlar", "ru": "Парфюмерия" }, "name": { "uz": "Luxury Parfyum 100ml", "ru": "Элитный парфюм 100ml" }, "price": "380 000 so'm", "oldPrice": "500 000 so'm", "discount": "↓ 24%", "badgeType": "original", "rating": 4.9, "comments": 76, "stock": 11, "images": ["https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 507, "category_id": 8, "subcat": { "uz": "Velosipedlar", "ru": "Велосипеды" }, "name": { "uz": "Mountain Bike 29", "ru": "Горный велосипед 29" }, "price": "2 800 000 so'm", "oldPrice": "3 500 000 so'm", "discount": "↓ 20%", "badgeType": "chegirma", "rating": 4.8, "comments": 59, "stock": 4, "images": ["https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 508, "category_id": 9, "subcat": { "uz": "Videoregistratorlar", "ru": "Видеорегистраторы" }, "name": { "uz": "HD Avto Videoregistrator", "ru": "HD Авто видеорегистратор" }, "price": "350 000 so'm", "oldPrice": "480 000 so'm", "discount": "↓ 27%", "badgeType": "arzonlashdi", "rating": 4.7, "comments": 68, "stock": 8, "images": ["https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 509, "category_id": 10, "subcat": { "uz": "O'yinchoqlar", "ru": "Игрушки" }, "name": { "uz": "Interaktiv o'yinchoq robot", "ru": "Интерактивный игрушечный робот" }, "price": "290 000 so'm", "oldPrice": "400 000 so'm", "discount": "↓ 27%", "badgeType": "original", "rating": 4.9, "comments": 112, "stock": 6, "images": ["https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop&q=80"] },
+    { "id": 510, "category_id": 2, "subcat": { "uz": "Futbolkalar", "ru": "Футболки" }, "name": { "uz": "Erkaklar polo futbolkasi", "ru": "Мужская футболка поло" }, "price": "140 000 so'm", "oldPrice": "200 000 so'm", "discount": "↓ 30%", "badgeType": "chegirma", "rating": 4.8, "comments": 145, "stock": 14, "images": ["https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80"] }
   ],
   "orders": [],
   "users": [
