@@ -79,17 +79,21 @@
         .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
         .dot.active { width: 22px; border-radius: 10px; background: var(--primary); }
 
-        /* Hafta aksiyalari karuseli (Charxpalak) */
-        .weekly-sale-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 16px; max-width: 1300px; margin: 16px auto; }
+        /* Hafta aksiyalari qutusi (To'q binafsha/moviy rang) */
+        .weekly-sale-box { background: #7000ff; border-radius: 20px; padding: 16px; max-width: 1300px; margin: 16px auto; color: #fff; }
         .weekly-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .weekly-title-row { display: flex; align-items: center; gap: 8px; }
-        .weekly-title-row svg { width: 20px; height: 20px; stroke: var(--primary); fill: none; stroke-width: 2; }
-        .weekly-title { font-size: 16px; font-weight: 800; color: var(--text); }
-        .timer-badge { background: var(--primary-bg); color: var(--primary); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+        .weekly-title-row svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; }
+        .weekly-title { font-size: 18px; font-weight: 800; color: #fff; }
+        .weekly-all-btn { font-size: 14px; font-weight: 600; cursor: pointer; color: #fff; text-decoration: none; }
         
         .weekly-track-wrapper { overflow-x: auto; scrollbar-width: none; touch-action: pan-x; }
         .weekly-track-wrapper::-webkit-scrollbar { display: none; }
-        .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 6px; }
+        .weekly-track { display: flex; gap: 12px; width: max-content; padding-bottom: 4px; }
+
+        /* Kartochka ichidagi vaqt (taymer) */
+        .card-timer-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #ff3b30; background: #fff1f0; padding: 2px 6px; border-radius: 6px; margin-top: 4px; width: fit-content; }
+        .card-timer-badge svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
 
         /* Kategoriyalar */
         .categories-scroll-wrapper { width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0 16px; max-width: 1300px; margin: 8px auto; }
@@ -112,7 +116,7 @@
         @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, 1fr); } }
 
         .product-card { background: var(--card); border-radius: 16px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); width: 100%; }
-        /* Hafta aksiyasidagi kartochkalar uchun eni biroz ingichka (kompakt) o'lcham */
+        /* Hafta aksiyasidagi kartochkalar uchun eni biroz ingichka o'lcham */
         .weekly-card-item { width: 155px; flex: 0 0 155px; }
 
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
@@ -209,7 +213,7 @@
     <h2 class="section-title" id="recentTitle" style="display:none; padding: 0 16px; margin: 16px 0 10px 0; max-width:1300px; margin-left:auto; margin-right:auto; font-size:16px; font-weight:700;" data-i18n="recent_title">Siz ko'rgansiz</h2>
     <div class="products-grid" id="recentProductsGrid"></div>
 
-    <!-- Storis Modal Oynasi (Mahsulotlar ham shu orqali ochiladi) -->
+    <!-- Storis Modal Oynasi -->
     <div id="storyModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 9999; flex-direction: column; justify-content: space-between;">
         <div style="position: absolute; top: 55px; left: 16px; right: 16px; z-index: 100; display: flex; flex-direction: column; gap: 8px;">
             <div style="display: flex; gap: 4px; width: 100%;" id="modalProgressBars"></div>
@@ -490,7 +494,7 @@
             }
         });
 
-        // --- Mahsulotni Storis uslubida to'g'ridan-to'g'ri ochish funksiyasi ---
+        // --- Mahsulotni Storis uslubida ochish ---
         function goToProduct(id) {
             let prod = dbData.products.find(p => p.id === id);
             if (!prod) return;
@@ -501,7 +505,6 @@
             if (recent.length > 6) recent = recent.slice(0, 6);
             localStorage.setItem('recent_products', JSON.stringify(recent));
 
-            // Storis kabi ochish uchun modalni ishlatamiz
             let tempStory = {
                 id: 99999,
                 title: prod.name,
@@ -510,7 +513,6 @@
                 product_id: prod.id
             };
             
-            // Vaqtincha bitta elementlik storis sifatida ochamiz
             dbData.stories = [tempStory];
             openStoryModal(99999);
         }
@@ -582,7 +584,7 @@
             });
         }
 
-        // --- Hafta aksiyalari (Charxpalak va taymer) ---
+        // --- Hafta aksiyalari (Charxpalak va kartochkadagi taymerlar) ---
         function renderWeeklySales() {
             const container = document.getElementById('weeklySaleContainer');
             let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
@@ -596,7 +598,7 @@
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             <span class="weekly-title">${getLocalized(section.title)}</span>
                         </div>
-                        <div class="timer-badge" id="weeklyTimerDisplay">00:00:00</div>
+                        <a href="sales.html" class="weekly-all-btn">${t.all_btn}</a>
                     </div>
                     <div class="weekly-track-wrapper">
                         <div class="weekly-track">
@@ -618,11 +620,11 @@
                 let endTime = new Date(endTimeStr).getTime();
                 let distance = endTime - now;
 
-                const timerEl = document.getElementById('weeklyTimerDisplay');
-                if (!timerEl) return;
+                const timerEls = document.querySelectorAll('.card-timer-val');
+                if (timerEls.length === 0) return;
 
                 if (distance < 0) {
-                    timerEl.textContent = "00:00:00";
+                    timerEls.forEach(el => el.textContent = "00:00:00");
                     return;
                 }
 
@@ -635,7 +637,7 @@
                 if (days > 0) {
                     timeStr = `${days}k ${timeStr}`;
                 }
-                timerEl.textContent = timeStr;
+                timerEls.forEach(el => el.textContent = timeStr);
             }
             updateTimer();
             setInterval(updateTimer, 1000);
@@ -690,7 +692,6 @@
             renderProductsGrid(prods);
         }
 
-        // Mahsulot kartochkasi shablonini generatsiya qilish (Barcha joyda bir xil dizayn)
         function createProductCardHTML(p, isWeekly = false) {
             const isLiked = favs.includes(p.id) ? 'liked' : '';
             const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
@@ -728,7 +729,6 @@
             }
 
             grid.innerHTML = list.map(p => createProductCardHTML(p, false)).join('');
-
             list.forEach(p => updateCardInfoOnly(p.id));
             setTimeout(() => {
                 document.querySelectorAll('.card-slider-container').forEach(container => {
@@ -750,10 +750,20 @@
             let isOut = stock <= 0;
             let isNotified = notifiedList.includes(p.id);
 
+            let section = (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
+            let isWeeklyItem = section && section.product_ids.includes(p.id);
+
             let priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
                 <span class="main-price">${p.price}</span>
                 ${p.badgeType ? `<span class="discount-tag">${p.discount || ''}</span>` : ''}
             `;
+
+            let timerBadgeHtml = isWeeklyItem ? `
+                <div class="card-timer-badge">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span class="card-timer-val">00:00:00</span>
+                </div>
+            ` : '';
 
             let btnHtml = '';
             if (isOut) {
@@ -782,6 +792,7 @@
                 <div class="product-info-top">
                     <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
                     ${!isOut ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${p.oldPrice || ''}</span></div>` : ''}
+                    ${timerBadgeHtml}
                     <div class="product-title" onclick="goToProduct(${p.id})">${prodName}</div>
                     <div class="product-rating">
                         <div class="rating-left" onclick="goToProduct(${p.id})">
