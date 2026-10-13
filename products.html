@@ -524,7 +524,8 @@
 
         /* ---------- Ma'lumotlar: keshdan darhol, fonda yangilash ---------- */
         async function loadDB(onUpdate) {
-            const KEY = new URL('database.json', location.href).href;
+            const DB_URL = 'database.json'; /* backend: 'https://SIZNING-HOST.onrender.com/api/products?shop=demo' */
+            const KEY = new URL(DB_URL, location.href).href;
             let cache = null, cachedText = null;
             try {
                 cache = await caches.open('uzum-db-v1');
