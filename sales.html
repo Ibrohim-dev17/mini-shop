@@ -49,7 +49,7 @@
         .product-card { min-width: 0; background: transparent; position: relative; display: flex; flex-direction: column; width: 100%; height: 100%; }
 
         .img-wrap { position: relative; width: 100%; flex-shrink: 0; }
-        .badge-action-ribbon { position: absolute; top: 12px; left: -5px; background: #7a3cff; color: #fff; font-size: 12px; font-weight: 800; line-height: 1; letter-spacing: 0.6px; padding: 8px 13px; border-radius: 7px; z-index: 4; pointer-events: none; -webkit-mask: radial-gradient(circle at 0 50%, transparent 4.5px, #000 5px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 4.5px, #000 5px) right / 51% 100% no-repeat; mask: radial-gradient(circle at 0 50%, transparent 4.5px, #000 5px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 4.5px, #000 5px) right / 51% 100% no-repeat; }
+        .badge-action-ribbon { position: absolute; top: 14px; left: -4px; background: #8139f8; color: #fff; font-size: 10px; font-weight: 800; line-height: 1; letter-spacing: 0.7px; padding: 6px 9px; border-radius: 5px; z-index: 4; pointer-events: none; transform: rotate(-3deg); transform-origin: left center; -webkit-mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat; mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat; }
 
 
         .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(110, 110, 120, 0.55); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
@@ -268,7 +268,7 @@
 
         /* ---------- Telegram orqaga tugmasi ---------- */
         function goBack() {
-            if (history.length > 1) history.back();
+            if (history.length > 1 && document.referrer) history.back();
             else window.location.href = 'index.html';
         }
 
@@ -277,9 +277,11 @@
             if (!tg) return;
             tg.expand();
             if (tg.BackButton) {
-                tg.BackButton.show();
+                try { tg.BackButton.offClick(goBack); } catch (e) {}
                 tg.BackButton.onClick(goBack);
+                tg.BackButton.show();
             }
+            try { tg.ready(); if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -349,6 +351,16 @@
                 setDB(await loadDB(fresh => { setDB(fresh); renderAll(); }));
             } catch (e) { console.error(e); }
             renderAll();
+            restoreSalesScroll();
+        }
+
+        try { history.scrollRestoration = 'manual'; } catch (e) {}
+        function restoreSalesScroll() {
+            let nav = null;
+            try { nav = performance.getEntriesByType('navigation')[0]; } catch (e) {}
+            if (!nav || nav.type !== 'back_forward') return;
+            const y = parseInt(sessionStorage.getItem('sales_scroll'));
+            if (y > 0) requestAnimationFrame(() => window.scrollTo(0, y));
         }
 
         function renderList() {
