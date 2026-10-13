@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Katalog - Uzum Market</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -210,6 +210,10 @@
             color: #ff3b30;
         }
 
+        .search-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 998; display: none; }
+        .search-backdrop.show { display: block; }
+        .sidebar-categories { position: relative; }
+
         /* Asosiy konteyner */
         .catalog-container {
             max-width: 1300px;
@@ -388,15 +392,13 @@
 
         .bottom-nav {
             position: fixed;
-            bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
             margin: 0 auto;
             height: 64px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.97);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -481,6 +483,8 @@
 </head>
 <body>
 
+    <div class="search-backdrop" id="searchBackdrop" onclick="closeSearchDropdown()"></div>
+
     <div class="sticky-header">
         <div class="search-box-wrapper">
             <div class="search-box">
@@ -557,6 +561,8 @@
 
         let currentLang = localStorage.getItem('selected_lang') || 'uz';
         let t = translations[currentLang] || translations['uz'];
+        let dbData = {};
+        try { history.scrollRestoration = 'manual'; } catch (e) {}
         let categoriesData = [];
         let allProducts = [];
         let activeCatId = parseInt(localStorage.getItem('active_cat_id')) || 1;
@@ -598,39 +604,76 @@
             return '';
         }
 
+        /* ---------- Ma'lumotlar: keshdan darhol, fonda yangilash ---------- */
+        async function loadDB(onUpdate) {
+            const KEY = new URL('database.json', location.href).href;
+            let cache = null, cachedText = null;
+            try {
+                cache = await caches.open('uzum-db-v1');
+                const hit = await cache.match(KEY);
+                if (hit) cachedText = await hit.text();
+            } catch (e) {}
+            const fetchFresh = async () => {
+                const res = await fetch(KEY, { cache: 'no-cache' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const text = await res.text();
+                if (cache && text !== cachedText) {
+                    try { await cache.put(KEY, new Response(text, { headers: { 'Content-Type': 'application/json' } })); } catch (e) {}
+                }
+                return text;
+            };
+            if (cachedText) {
+                try {
+                    const data = JSON.parse(cachedText);
+                    fetchFresh().then(text => {
+                        if (text !== cachedText && onUpdate) { try { onUpdate(JSON.parse(text)); } catch (e) {} }
+                    }).catch(() => {});
+                    return data;
+                } catch (e) {}
+            }
+            return JSON.parse(await fetchFresh());
+        }
+
+        function setDB(d) {
+            dbData = d || {};
+            categoriesData = dbData.categories || [];
+            allProducts = dbData.products || [];
+            if (dbData.settings && dbData.settings.theme && !localStorage.getItem('site_theme')) {
+                localStorage.setItem('site_theme', dbData.settings.theme);
+            }
+        }
+
+        function centerActiveCat() {
+            const sidebar = document.getElementById('sidebarCategories');
+            const a = sidebar && sidebar.querySelector('.sidebar-item.active');
+            if (a) sidebar.scrollTop = Math.max(0, a.offsetTop - sidebar.clientHeight / 2 + a.offsetHeight / 2);
+        }
+
         async function fetchDatabaseAndInit() {
             currentLang = localStorage.getItem('selected_lang') || 'uz';
-
+            applyThemeAndTranslations();
             try {
-                let res = await fetch('/api/products');
-                if (res.ok) {
-                    let db = await res.json();
-                    categoriesData = db.categories || [];
-                    allProducts = db.products || [];
-                    if (db.settings && db.settings.theme && !localStorage.getItem('site_theme')) {
-                        localStorage.setItem('site_theme', db.settings.theme);
-                    }
-                }
+                setDB(await loadDB(fresh => { setDB(fresh); renderCatalog(); updateBadges(); }));
             } catch (err) {
                 try {
-                    let resDb = await fetch('database.json');
-                    if (resDb.ok) {
-                        let db = await resDb.json();
-                        categoriesData = db.categories || [];
-                        allProducts = db.products || [];
-                        if (db.settings && db.settings.theme && !localStorage.getItem('site_theme')) {
-                            localStorage.setItem('site_theme', db.settings.theme);
-                        }
-                    }
-                } catch (e) {
-                    console.error("Bazadan ma'lumotlarni o'qib bo'lmadi:", e);
-                }
+                    const res = await fetch('/api/products');
+                    if (res.ok) setDB(await res.json());
+                } catch (e) { console.error("Bazadan ma'lumotlarni o'qib bo'lmadi:", e); }
+            }
+
+            // Banner yoki qidiruvdan kelgan bo'lsa: ?cat_id=... bo'yicha shu kategoriya ochiladi
+            const urlCat = parseInt(new URLSearchParams(location.search).get('cat_id'));
+            if (!isNaN(urlCat)) {
+                activeCatId = urlCat;
+                localStorage.setItem('active_cat_id', urlCat);
+                localStorage.removeItem('catalog_content_scroll');
             }
 
             renderCatalog();
             updateBadges();
+            centerActiveCat();
 
-            let savedScroll = localStorage.getItem('catalog_content_scroll');
+            const savedScroll = localStorage.getItem('catalog_content_scroll');
             if (savedScroll) {
                 setTimeout(() => {
                     const panel = document.getElementById('contentPanel');
@@ -689,10 +732,20 @@
             }
         }
 
-        function getSearchHistory() {
-            return JSON.parse(localStorage.getItem('search_history')) || [];
-        }
+        /* ================= QIDIRUV: index, products va categories sahifalarida bir xil ================= */
+        let searchActive = false;
+        let searchBackdropTimer = null;
+        let kbBaseH = 0;
+        let kbShown = false;
 
+        // Faqat sahifaning joriy tilidagi matn bo'yicha qidiriladi (ruscha sahifa = ruscha, o'zbekcha = o'zbekcha)
+        function sTxt(f) { if (!f) return ''; if (typeof f === 'string') return f; return f[currentLang] || ''; }
+        function sNorm(s) { return String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[ʻʼ’‘`´ʹ]/g, "'").replace(/\s+/g, ' ').trim(); }
+        function sMatch(text, q) { const tx = sNorm(text); if (!tx || !q) return false; return q.split(' ').every(w => tx.includes(w)); }
+        function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+        function tt(key, fallback) { return (t && t[key]) || fallback; }
+
+        function getSearchHistory() { try { return JSON.parse(localStorage.getItem('search_history')) || []; } catch (e) { return []; } }
         function saveSearchQuery(q) {
             if (!q) return;
             let history = getSearchHistory();
@@ -701,161 +754,144 @@
             if (history.length > 5) history = history.slice(0, 5);
             localStorage.setItem('search_history', JSON.stringify(history));
         }
+        function removeHistoryItem(i) { const h = getSearchHistory(); h.splice(i, 1); localStorage.setItem('search_history', JSON.stringify(h)); renderHistory(); }
+        function clearAllHistory() { localStorage.removeItem('search_history'); closeSearchDropdown(); }
 
-        function showSearchHistory() {
-            const val = document.getElementById('searchInput').value.trim();
-            const dropdown = document.getElementById('searchDropdown');
-            if (val.length > 0) return;
+        function currentVH() { return window.visualViewport ? window.visualViewport.height : window.innerHeight; }
+        function markSearchOpen() {
+            clearTimeout(searchBackdropTimer);
+            if (!searchActive) { kbBaseH = currentVH(); kbShown = false; }
+            searchActive = true;
+            const b = document.getElementById('searchBackdrop');
+            if (b) b.classList.add('show');
+        }
+        function closeSearchDropdown() {
+            searchActive = false;
+            const dd = document.getElementById('searchDropdown');
+            if (dd) dd.classList.remove('show');
+            const inp = document.getElementById('searchInput');
+            if (inp) inp.blur();                                   // klaviatura yopiladi
+            clearTimeout(searchBackdropTimer);
+            // fon biroz kechikib yopiladi, shunda bosish ostidagi kartaga o'tib ketmaydi
+            searchBackdropTimer = setTimeout(() => {
+                if (!searchActive) { const b = document.getElementById('searchBackdrop'); if (b) b.classList.remove('show'); }
+            }, 300);
+        }
+        function closeSearchIfOpen() {
+            const dd = document.getElementById('searchDropdown');
+            if (searchActive || (dd && dd.classList.contains('show'))) { closeSearchDropdown(); return true; }
+            return false;
+        }
 
-            let history = getSearchHistory();
-            if (history.length === 0) {
-                dropdown.classList.remove('show');
+        function renderHistory() {
+            const dd = document.getElementById('searchDropdown');
+            const history = getSearchHistory();
+            if (history.length === 0) { dd.classList.remove('show'); dd.innerHTML = ''; return; }
+            let html = `<div class="search-header-row"><span>${tt('history_title', 'Oxirgi qidiruvlar')}</span><button class="clear-history-btn" data-act="clear">${tt('clear_history', 'Tozalash')}</button></div>`;
+            history.forEach((item, i) => {
+                html += `<div class="search-suggestion-item" data-act="hist" data-q="${escHtml(item)}"><div class="history-item-left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>${escHtml(item)}</span></div><button class="remove-history-item" data-act="del" data-idx="${i}">&times;</button></div>`;
+            });
+            dd.innerHTML = html;
+            dd.classList.add('show');
+        }
+
+        function renderSearchDropdown() {
+            const dd = document.getElementById('searchDropdown');
+            const raw = document.getElementById('searchInput').value.trim();
+            if (!raw) { renderHistory(); return; }
+            const q = sNorm(raw);
+            const src = getSearchSource();
+            const mc = [], ms = [];
+            (src.cats || []).forEach(c => {
+                if (sMatch(sTxt(c.name), q)) mc.push(c);
+                (c.subcats || []).forEach(s => { if (sMatch(sTxt(s.name), q)) ms.push({ c, s }); });
+            });
+            const mp = (src.prods || []).filter(p => sMatch(sTxt(p.name), q) || sMatch(sTxt(p.subcat), q));
+
+            if (!mc.length && !ms.length && !mp.length) {
+                dd.innerHTML = `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">${tt('no_results', 'Hech narsa topilmadi...')}</div>`;
+                dd.classList.add('show');
                 return;
             }
-
-            let html = `
-                <div class="search-header-row">
-                    <span>${t.history_title}</span>
-                    <button class="clear-history-btn" onclick="clearAllHistory(event)">${t.clear_history}</button>
-                </div>
-            `;
-
-            history.forEach((item, index) => {
-                html += `
-                    <div class="search-suggestion-item" onclick="selectHistoryItem('${item.replace(/'/g, "\\'")}')">
-                        <div class="history-item-left">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            <span>${item}</span>
-                        </div>
-                        <button class="remove-history-item" onclick="removeHistoryItem(event, ${index})">&times;</button>
-                    </div>
-                `;
+            let html = `<div class="search-suggestion-item" data-act="all" data-q="${escHtml(raw)}"><span>"${escHtml(raw)}" ${tt('search_all_label', "bo'yicha barcha natijalarni ko'rish")}</span><span class="suggestion-type">${tt('search_type', 'Qidirish')}</span></div>`;
+            mc.slice(0, 3).forEach(c => {
+                html += `<div class="search-suggestion-item" data-act="cat" data-cat="${escHtml(c.id)}"><span>${escHtml(sTxt(c.name))}</span><span class="suggestion-type">${tt('category_type', "Bo'lim")}</span></div>`;
             });
-
-            dropdown.innerHTML = html;
-            dropdown.classList.add('show');
+            ms.slice(0, 4).forEach(x => {
+                html += `<div class="search-suggestion-item" data-act="sub" data-cat="${escHtml(x.c.id)}" data-sub="${escHtml(sTxt(x.s.name))}"><span>${escHtml(sTxt(x.s.name))} <small style="color:var(--muted)">(${escHtml(sTxt(x.c.name))})</small></span><span class="suggestion-type">${tt('subcat_type', 'Turkum')}</span></div>`;
+            });
+            mp.slice(0, 6).forEach(p => {
+                html += `<div class="search-suggestion-item" data-act="prod" data-id="${escHtml(p.id)}" data-q="${escHtml(sTxt(p.name))}"><div class="history-item-left"><span>${escHtml(sTxt(p.name))}</span></div><span class="suggestion-type">${tt('product_type', 'Mahsulot')}</span></div>`;
+            });
+            dd.innerHTML = html;
+            dd.classList.add('show');
         }
 
-        function clearAllHistory(e) {
+        function goSearch(q) {
+            if (!q) return;
+            saveSearchQuery(q);
+            closeSearchDropdown();
+            window.location.href = `products.html?q=${encodeURIComponent(q)}`;
+        }
+        function pickCategory(id) {
+            if (typeof onCategoryPicked === 'function') { onCategoryPicked(id); return; }
+            localStorage.setItem('active_cat_id', id);
+            window.location.href = `categories.html?cat_id=${encodeURIComponent(id)}`;
+        }
+
+        function showSearchHistory() { markSearchOpen(); renderSearchDropdown(); }
+        function handleLiveSearch() { markSearchOpen(); renderSearchDropdown(); }
+        function handleSearch(e) { if (e.key === 'Enter') { const q = e.target.value.trim(); if (q) goSearch(q); } }
+
+        document.getElementById('searchDropdown').addEventListener('click', (e) => {
+            const el = e.target.closest('[data-act]');
+            if (!el) return;
             e.stopPropagation();
-            localStorage.removeItem('search_history');
-            document.getElementById('searchDropdown').classList.remove('show');
+            const d = el.dataset;
+            if (d.act === 'all' || d.act === 'hist') goSearch(d.q);
+            else if (d.act === 'cat') { closeSearchDropdown(); pickCategory(d.cat); }
+            else if (d.act === 'sub') { window.location.href = `products.html?cat_id=${encodeURIComponent(d.cat)}&sub=${encodeURIComponent(d.sub)}`; }
+            else if (d.act === 'prod') { saveSearchQuery(d.q); window.location.href = `product.html?id=${encodeURIComponent(d.id)}`; }
+            else if (d.act === 'del') removeHistoryItem(parseInt(d.idx));
+            else if (d.act === 'clear') clearAllHistory();
+        });
+
+        // Klaviatura yopilsa (orqaga surish), qidiruv ham yopiladi
+        function onViewportResize() {
+            if (!searchActive) return;
+            const h = currentVH();
+            if (h < kbBaseH - 100) kbShown = true;
+            else if (kbShown && h >= kbBaseH - 60) closeSearchDropdown();
         }
+        window.addEventListener('resize', onViewportResize);
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', onViewportResize);
+        window.addEventListener('DOMContentLoaded', () => {
+            const tg = window.Telegram && window.Telegram.WebApp;
+            if (tg && tg.onEvent) tg.onEvent('viewportChanged', onViewportResize);
+        });
 
-        function removeHistoryItem(e, index) {
-            e.stopPropagation();
-            let history = getSearchHistory();
-            history.splice(index, 1);
-            localStorage.setItem('search_history', JSON.stringify(history));
-            showSearchHistory();
+        function isInsideSearch(target) {
+            return !!(target && target.closest && (target.closest('#searchBoxContainer') || target.closest('.search-box-wrapper') || target.closest('#searchDropdown')));
         }
+        // Ekranga sal tegilsa yoki surilsa, qidiruv va klaviatura yopiladi
+        ['touchstart', 'touchmove', 'wheel'].forEach(evName => {
+            document.addEventListener(evName, (e) => {
+                if (searchActive && !isInsideSearch(e.target)) closeSearchDropdown();
+            }, { passive: true });
+        });
+        document.addEventListener('click', (e) => {
+            if (searchActive && !isInsideSearch(e.target)) closeSearchDropdown();
+        });
 
-        function selectHistoryItem(item) {
-            document.getElementById('searchInput').value = item;
-            document.getElementById('searchDropdown').classList.remove('show');
-            saveSearchQuery(item);
-            window.location.href = `products.html?q=${encodeURIComponent(item)}`;
-        }
-
-        function handleLiveSearch(e) {
-            const val = e.target.value.trim().toLowerCase();
-            const dropdown = document.getElementById('searchDropdown');
-
-            if (val.length === 0) {
-                showSearchHistory();
-                return;
-            }
-
-            let matchedMainCats = [];
-            let matchedSubcats = [];
-            let matchedProducts = [];
-
-            categoriesData.forEach(cat => {
-                let catNameStr = getStrictLocalized(cat.name).toLowerCase();
-                if (catNameStr.includes(val)) {
-                    matchedMainCats.push({ catId: cat.id, catName: getLocalized(cat.name) });
-                }
-                cat.subcats.forEach(sub => {
-                    let subNameStr = getStrictLocalized(sub.name).toLowerCase();
-                    if (subNameStr.includes(val)) {
-                        matchedSubcats.push({ catId: cat.id, subName: getLocalized(sub.name), catName: getLocalized(cat.name) });
-                    }
-                });
-            });
-
-            matchedProducts = allProducts.filter(p => {
-                let pNameStr = getStrictLocalized(p.name).toLowerCase();
-                return pNameStr.includes(val);
-            });
-
-            let html = '';
-
-            if (matchedMainCats.length > 0 || matchedSubcats.length > 0 || matchedProducts.length > 0) {
-                html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${val.replace(/'/g, "\\'")}'); window.location.href='products.html?q=${encodeURIComponent(val)}'">
-                    <span>"${val}" ${t.search_all_label}</span>
-                    <span class="suggestion-type">${t.search_type}</span>
-                </div>`;
-
-                matchedMainCats.forEach(item => {
-                    html += `<div class="search-suggestion-item" onclick="selectCategoryFromSearch(${item.catId})">
-                        <span>${item.catName}</span>
-                        <span class="suggestion-type">${t.category_type}</span>
-                    </div>`;
-                });
-
-                matchedSubcats.forEach(item => {
-                    html += `<div class="search-suggestion-item" onclick="selectSubcatFromSearch(${item.catId}, '${item.subName.replace(/'/g, "\\'")}')">
-                        <span>${item.subName} <small style="color:var(--muted)">(${item.catName})</small></span>
-                        <span class="suggestion-type">${t.subcat_type}</span>
-                    </div>`;
-                });
-
-                matchedProducts.slice(0, 8).forEach(prod => {
-                    let pName = getLocalized(prod.name);
-                    html += `<div class="search-suggestion-item" onclick="saveSearchQuery('${pName.replace(/'/g, "\\'")}'); window.location.href='product.html?id=${prod.id}'">
-                        <span>${pName}</span>
-                        <span class="suggestion-type">${t.product_type}</span>
-                    </div>`;
-                });
-            } else {
-                html += `<div class="search-suggestion-item" style="color: var(--muted); justify-content: center;">${t.no_results}</div>`;
-            }
-
-            dropdown.innerHTML = html;
-            dropdown.classList.add('show');
-        }
-
-        function selectCategoryFromSearch(catId) {
-            localStorage.setItem('active_cat_id', catId);
-            document.getElementById('searchDropdown').classList.remove('show');
-            selectCategory(catId);
+        function getSearchSource() { return { cats: categoriesData, prods: allProducts }; }
+        // Qidiruvdan kategoriya tanlansa shu sahifaning o'zida ochiladi
+        function onCategoryPicked(id) {
+            const n = parseInt(id);
+            localStorage.setItem('active_cat_id', n);
+            selectCategory(n);
+            centerActiveCat();
             document.getElementById('searchInput').value = '';
         }
-
-        function selectSubcatFromSearch(catId, subName) {
-            localStorage.setItem('active_cat_id', catId);
-            window.location.href = `products.html?cat_id=${catId}&sub=${encodeURIComponent(subName)}`;
-        }
-
-        function handleSearch(e) {
-            if (e.key === 'Enter') {
-                const query = document.getElementById('searchInput').value.trim();
-                const dropdown = document.getElementById('searchDropdown');
-                if (dropdown) dropdown.classList.remove('show');
-                if (query) {
-                    saveSearchQuery(query);
-                    window.location.href = `products.html?q=${encodeURIComponent(query)}`;
-                }
-            }
-        }
-
-        document.addEventListener('click', (e) => {
-            const wrapper = document.querySelector('.search-box-wrapper');
-            const dropdown = document.getElementById('searchDropdown');
-            if (wrapper && !wrapper.contains(e.target)) {
-                if (dropdown) dropdown.classList.remove('show');
-            }
-        });
 
         function updateBadges() {
             let favs = JSON.parse(localStorage.getItem('fav_products')) || [];
@@ -879,8 +915,63 @@
             }
         }
 
-        window.addEventListener('pageshow', fetchDatabaseAndInit);
-        window.addEventListener('DOMContentLoaded', fetchDatabaseAndInit);
+        /* ---------- Orqaga: telefon tugmasi, chetdan surish va strelka bir xil, ilova yopilmaydi ---------- */
+        function pageGoBack() {
+            if (closeSearchIfOpen()) return;                       // avval qidiruv oynasi yopiladi
+            if (history.length > 1 && document.referrer) history.back();
+            else window.location.href = 'index.html';              // tarix bo'sh bo'lsa ham bosh sahifaga qaytadi
+        }
+        function setupTelegramBack(handler) {
+            const tg = window.Telegram && window.Telegram.WebApp;
+            if (!tg) return;
+            try { tg.ready(); tg.expand(); } catch (e) {}
+            if (tg.BackButton) {
+                try { tg.BackButton.offClick(handler); } catch (e) {}
+                tg.BackButton.onClick(handler);
+                tg.BackButton.show();                              // ko'rinib tursa, telefonning "orqaga" tugmasi ilovani yopmaydi
+            }
+            try { if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
+        }
+        /* ---------- Pastki navigatsiya: 3 tugmali telefonlarda yuqoriga ko'tariladi ---------- */
+        function updateNavInset() {
+            const tg = window.Telegram && window.Telegram.WebApp;
+            let sys = 0;
+            if (tg && tg.safeAreaInset && tg.safeAreaInset.bottom) sys = tg.safeAreaInset.bottom;
+            const cssVar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tg-safe-area-inset-bottom'));
+            if (!isNaN(cssVar)) sys = Math.max(sys, cssVar);
+
+            const probe = document.createElement('div');
+            probe.style.cssText = 'position:fixed;left:0;bottom:0;height:0;visibility:hidden;pointer-events:none;padding-bottom:env(safe-area-inset-bottom, 0px);';
+            document.body.appendChild(probe);
+            const envPx = parseFloat(getComputedStyle(probe).paddingBottom) || 0;
+            probe.remove();
+            sys = Math.max(sys, envPx);
+
+            let extra = sys >= 32 ? Math.max(0, sys - envPx) : 0;
+            const manual = parseFloat(localStorage.getItem('nav_extra'));
+            if (!isNaN(manual)) extra = manual;
+            document.documentElement.style.setProperty('--nav-extra', extra + 'px');
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            updateNavInset();
+            window.addEventListener('resize', updateNavInset);
+            const tg = window.Telegram && window.Telegram.WebApp;
+            if (tg && tg.onEvent) {
+                tg.onEvent('safeAreaChanged', updateNavInset);
+                tg.onEvent('contentSafeAreaChanged', updateNavInset);
+                tg.onEvent('viewportChanged', updateNavInset);
+            }
+        });
+
+        window.addEventListener('pageshow', (e) => {
+            if (!e.persisted) return;
+            updateBadges();
+            setupTelegramBack(pageGoBack);
+        });
+        window.addEventListener('DOMContentLoaded', () => {
+            setupTelegramBack(pageGoBack);
+            fetchDatabaseAndInit();
+        });
     </script>
 </body>
 </html>
