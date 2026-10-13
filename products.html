@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mahsulotlar - Uzum Market</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -43,7 +43,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 120px;
+            padding-bottom: calc(120px + var(--nav-extra, 0px));
             overflow-x: hidden;
         }
 
@@ -249,358 +249,80 @@
             margin: 0 auto;
         }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            padding: 12px 16px;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
+        /* Mahsulotlar gridi va kartochkalar: bosh sahifa (index.html) bilan bir xil */
+        .products-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 12px 12px; max-width: 1300px; margin: 0 auto; align-items: start; }
+        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
-        @media (min-width: 768px) {
-            .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        }
-        @media (min-width: 1024px) {
-            .products-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        }
-        @media (min-width: 1280px) {
-            .products-grid { grid-template-columns: repeat(5, 1fr); }
-        }
+        .product-card { min-width: 0; background: transparent; border-radius: 0; overflow: visible; position: relative; display: flex; flex-direction: column; border: none; width: 100%; height: 100%; }
+        .img-wrap { position: relative; width: 100%; flex-shrink: 0; }
 
-        .product-card {
-            background: var(--card);
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border);
-        }
+        /* AKSIYA nishoni */
+        .badge-action-ribbon { position: absolute; top: 12px; left: -5px; background: #7a3cff; color: #fff; font-size: 12px; font-weight: 800; line-height: 1; letter-spacing: 0.6px; padding: 8px 13px; border-radius: 7px; z-index: 4; pointer-events: none; -webkit-mask: radial-gradient(circle at 0 50%, transparent 4.5px, #000 5px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 4.5px, #000 5px) right / 51% 100% no-repeat; mask: radial-gradient(circle at 0 50%, transparent 4.5px, #000 5px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 4.5px, #000 5px) right / 51% 100% no-repeat; }
 
-        .heart-icon-sm {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 5;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-        }
+        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(110, 110, 120, 0.55); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
+        .heart-icon-sm svg { width: 18px; height: 18px; fill: none; stroke: #ffffff; stroke-width: 2; }
+        .heart-icon-sm.liked svg { fill: #8b4dff; stroke: #8b4dff; }
 
-        [data-theme="dark"] .heart-icon-sm {
-            background: rgba(28, 29, 34, 0.6);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
+        .card-image-badges { position: absolute; bottom: 6px; left: 6px; right: 6px; display: flex; align-items: center; gap: 3px; z-index: 4; pointer-events: none; flex-wrap: wrap; }
+        .card-timer-badge { display: flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; line-height: 1; color: #fff; background: rgba(139, 61, 255, 0.92); padding: 3px 6px 3px 4px; border-radius: 8px; }
+        .card-timer-badge svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+        .badge-original-sm { background: #00c853; color: #fff; font-size: 9px; font-weight: 700; line-height: 1; padding: 3px 7px 3px 3px; border-radius: 8px; display: flex; align-items: center; gap: 3px; }
+        .badge-original-sm svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .badge-text-sm { color: #fff; font-size: 9px; font-weight: 700; line-height: 1; padding: 4px 7px; border-radius: 8px; }
 
-        .heart-icon-sm svg {
-            width: 17px;
-            height: 17px;
-            fill: none;
-            stroke: #1f2026;
-            stroke-width: 2;
-            transition: all 0.2s;
-        }
-
-        [data-theme="dark"] .heart-icon-sm svg {
-            stroke: #f4f5f7;
-        }
-
-        .heart-icon-sm.liked svg {
-            fill: #ff3b30;
-            stroke: #ff3b30;
-        }
-
-        .product-img-box {
-            width: 100%;
-            height: 220px;
-            background: var(--bg);
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        @media (min-width: 768px) {
-            .product-img-box { height: 260px; }
-        }
-        @media (min-width: 1024px) {
-            .product-img-box { height: 280px; }
-        }
-
-        .card-slider-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-
+        .product-img-box { width: 100%; min-width: 0; height: 260px; background: var(--bg); position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-shrink: 0; }
+        @media (min-width: 768px) { .product-img-box { height: 300px; } }
+        .card-slider-container { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         .card-slider-container::-webkit-scrollbar { display: none; }
+        .card-slide { flex: 0 0 100%; width: 100%; min-width: 100%; height: 100%; scroll-snap-align: start; }
+        .card-slide img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 16px; }
 
-        .card-slide {
-            flex: 0 0 100%;
-            width: 100%;
-            height: 100%;
-            scroll-snap-align: start;
-        }
+        .card-dots { display: flex; justify-content: center; align-items: center; gap: 4px; margin: 6px 0 2px 0; }
+        .card-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
+        .card-dot.active { width: 12px; border-radius: 3px; background: var(--primary); }
 
-        .card-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .card-dots {
-            position: absolute;
-            bottom: 8px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            z-index: 4;
-            pointer-events: none;
-        }
-
-        .card-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transition: all 0.2s;
-        }
-
-        .card-dot.active {
-            width: 14px;
-            border-radius: 3px;
-            background: #ffffff;
-        }
-
-        .badge-dynamic-sm {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 6px;
-            z-index: 4;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .product-info {
-            padding: 12px 10px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            justify-content: space-between;
-        }
-
-        .product-info-top {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .price-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .main-price {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text);
-        }
-
-        .main-price.out-of-stock {
-            color: var(--danger);
-            font-size: 14px;
-        }
-
-        .discount-tag {
-            background: var(--discount-bg);
-            color: var(--discount-text);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 1px 5px;
-            border-radius: 4px;
-        }
-
-        .old-prices {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--muted);
-            margin-top: 2px;
-        }
-
+        .product-info { padding: 6px 4px 12px 4px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; min-width: 0; }
+        .product-info-top { display: flex; flex-direction: column; }
+        .price-row { display: flex; align-items: center; gap: 6px; }
+        .main-price { font-size: 16px; font-weight: 800; color: var(--text); }
+        .main-price.out-of-stock { color: var(--danger); font-size: 14px; }
+        .discount-tag { font-size: 13px; font-weight: 700; color: #e0218a; display: flex; align-items: center; gap: 1px; }
+        .discount-tag svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+        .old-prices { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
         .price-old { text-decoration: line-through; }
+        .product-title { font-size: 13px; line-height: 1.3; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; height: 34px; cursor: pointer; }
 
-        .product-title {
-            font-size: 13px;
-            line-height: 1.3;
-            color: var(--text);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 6px;
-            height: 34px;
-            cursor: pointer;
-        }
-
-        .product-rating {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--muted);
-            margin: 8px 0;
-            gap: 4px;
-            flex-wrap: nowrap;
-        }
-
-        .rating-left {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .rating-box, .comment-box {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-
+        .product-rating { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); margin: 8px 0; gap: 4px; flex-wrap: nowrap; }
+        .rating-left { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .rating-box, .comment-box { display: flex; align-items: center; gap: 2px; }
         .rating-box svg { width: 13px; height: 13px; fill: var(--star); flex-shrink: 0; }
         .comment-box svg { width: 13px; height: 13px; fill: none; stroke: var(--muted); stroke-width: 2; flex-shrink: 0; }
         .rating-num { font-weight: 700; color: var(--text); }
+        .last-item-badge { display: flex; align-items: center; gap: 2px; color: #ff3d00; font-weight: 700; font-size: 10px; background: #fff2ee; padding: 2px 5px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+        [data-theme="dark"] .last-item-badge { background: #3b1d12; }
+        .last-item-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-        .last-item-badge {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            color: #ff3d00;
-            font-weight: 700;
-            font-size: 10px;
-            background: #fff2ee;
-            padding: 2px 5px;
-            border-radius: 6px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        [data-theme="dark"] .last-item-badge {
-            background: #3b1d12;
-        }
-
-        .last-item-badge svg {
-            width: 12px;
-            height: 12px;
-            flex-shrink: 0;
-        }
-
-        .card-action-container {
-            margin-top: auto;
-            width: 100%;
-        }
-
-        .cart-btn-sm {
-            width: 100%;
-            height: 36px;
-            background: var(--primary-bg);
-            color: var(--primary);
-            border: none;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-        .cart-btn-sm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
-
-        .notify-btn-sm {
-            width: 100%;
-            height: 36px;
-            background: var(--primary-bg);
-            color: var(--primary);
-            border: none;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .notify-btn-sm.active-notified {
-            background: #00c853;
-            color: #ffffff;
-            cursor: pointer;
-        }
-
-        .cart-counter-box-sm {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            height: 36px;
-            background: var(--bg);
-            border-radius: 10px;
-            padding: 0 6px;
-            border: 1px solid var(--border);
-        }
-
-        .counter-btn-sm {
-            background: var(--card);
-            color: var(--text);
-            border: 1px solid var(--border);
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .card-action-container { width: 100%; margin-top: auto; }
+        .cart-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
+        .cart-btn-sm svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; flex-shrink: 0; }
+        .notify-btn-sm { width: 100%; height: 36px; background: var(--primary-bg); color: var(--primary); border: none; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .notify-btn-sm.active-notified { background: #00c853; color: #ffffff; }
+        .cart-counter-box-sm { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 36px; background: var(--bg); border-radius: 10px; padding: 0 6px; border: 1px solid var(--border); }
+        .counter-btn-sm { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 26px; height: 26px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .counter-btn-sm:disabled { opacity: 0.4; cursor: not-allowed; }
         .counter-val-sm { font-size: 14px; font-weight: 700; color: var(--text); }
 
         .bottom-nav {
             position: fixed;
-            bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px));
             left: 16px;
             right: 16px;
             max-width: 480px;
             margin: 0 auto;
             height: 64px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.97);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -791,46 +513,67 @@
             return '';
         }
 
+        /* ---------- Ma'lumotlar: keshdan darhol, fonda yangilash ---------- */
+        async function loadDB(onUpdate) {
+            const KEY = new URL('database.json', location.href).href;
+            let cache = null, cachedText = null;
+            try {
+                cache = await caches.open('uzum-db-v1');
+                const hit = await cache.match(KEY);
+                if (hit) cachedText = await hit.text();
+            } catch (e) {}
+
+            const fetchFresh = async () => {
+                const res = await fetch(KEY, { cache: 'no-cache' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const text = await res.text();
+                if (cache && text !== cachedText) {
+                    try { await cache.put(KEY, new Response(text, { headers: { 'Content-Type': 'application/json' } })); } catch (e) {}
+                }
+                return text;
+            };
+
+            if (cachedText) {
+                try {
+                    const data = JSON.parse(cachedText);
+                    fetchFresh().then(text => {
+                        if (text !== cachedText && onUpdate) { try { onUpdate(JSON.parse(text)); } catch (e) {} }
+                    }).catch(() => {});
+                    return data;
+                } catch (e) { /* buzilgan kesh: tarmoqdan olamiz */ }
+            }
+            return JSON.parse(await fetchFresh());
+        }
+
+        let dbData = { products: [], home_sections: [] };
+        function setDB(d) {
+            dbData = Object.assign({ products: [], home_sections: [] }, d || {});
+            allProducts = dbData.products || [];
+            if (dbData.settings && dbData.settings.theme && !localStorage.getItem('site_theme')) {
+                localStorage.setItem('site_theme', dbData.settings.theme);
+            }
+        }
+
         async function fetchAppDataAndInit() {
             currentLang = localStorage.getItem('selected_lang') || 'uz';
+            applyThemeAndTranslations();
+
+            // Til serverdan (kutib o'tirmaydi)
+            fetch('/api/profile').then(r => r.ok ? r.json() : null).then(user => {
+                if (user && user.language && !localStorage.getItem('selected_lang')) {
+                    localStorage.setItem('selected_lang', user.language);
+                    if (allProducts.length) initPage();
+                }
+            }).catch(() => {});
 
             try {
-                let response = await fetch('/api/profile');
-                if (response.ok) {
-                    let user = await response.json();
-                    if (user.language && !localStorage.getItem('selected_lang')) {
-                        currentLang = user.language;
-                        localStorage.setItem('selected_lang', currentLang);
-                    }
-                }
-            } catch (error) {
-                console.warn("Serverdan tilni o'qib bo'lmadi, localStorage ishlatilmoqda.");
-            }
-
-            try {
-                let res = await fetch('/api/products');
-                if (res.ok) {
-                    let db = await res.json();
-                    allProducts = db.products || [];
-                    if (db.settings && db.settings.theme && !localStorage.getItem('site_theme')) {
-                        localStorage.setItem('site_theme', db.settings.theme);
-                    }
-                }
+                setDB(await loadDB(fresh => { setDB(fresh); initPage(); }));
             } catch (err) {
                 try {
-                    let resDb = await fetch('database.json');
-                    if (resDb.ok) {
-                        let db = await resDb.json();
-                        allProducts = db.products || [];
-                        if (db.settings && db.settings.theme && !localStorage.getItem('site_theme')) {
-                            localStorage.setItem('site_theme', db.settings.theme);
-                        }
-                    }
-                } catch (e) {
-                    console.error("Mahsulotlarni yuklab bo'lmadi:", e);
-                }
+                    const res = await fetch('/api/products');
+                    if (res.ok) setDB(await res.json());
+                } catch (e) { console.error("Mahsulotlarni yuklab bo'lmadi:", e); }
             }
-
             initPage();
         }
 
@@ -847,7 +590,7 @@
         function initPage() {
             applyThemeAndTranslations();
             if (!allProducts || allProducts.length === 0) {
-                setTimeout(initPage, 50);
+                renderProducts([]);
                 return;
             }
 
@@ -915,6 +658,111 @@
             }
         }
 
+        const FIRE_ICON = `
+            <svg viewBox="0 0 512 512">
+                <path fill="#ff3d00" d="M192 480c-70.7 0-128-57.3-128-128 0-48.4 27.2-90.3 67.2-111.4 5.3-2.8 11.8.6 12.8 6.5 5.2 32.1 23.3 60.1 48.9 78.4 4.1 2.9 9.9-.1 10.2-5.1 2-35.3-11.4-74.8-40.2-118.4C145.4 179.8 192 110.1 192 48c0-8.8 10.7-13.1 16.9-6.9 72.8 72.8 111.1 168.1 87.4 256.4 1.4-.9 2.8-1.9 4.1-2.9 33.7-25.9 55.6-67.6 55.6-114.6 0-8.8 10.7-13.1 16.9-6.9 65 65 91.1 155.1 68.3 234.9C425.4 430.4 316.5 480 192 480z"/>
+                <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
+            </svg>`;
+        const DOWN_ARROW = `<svg viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="20"></line><polyline points="6 14 12 20 18 14"></polyline></svg>`;
+        const STOPWATCH = `<svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="7.5"></circle><line x1="12" y1="14" x2="12" y2="10.5"></line><line x1="9.5" y1="2.5" x2="14.5" y2="2.5"></line><line x1="12" y1="2.5" x2="12" y2="6.5"></line></svg>`;
+
+        function discountLabel(d) {
+            const m = String(d || '').match(/\d+(?:[.,]\d+)?/);
+            return m ? m[0] + '%' : '';
+        }
+
+        /* ---------- Hafta aksiyasi (index bilan bir xil mantiq) ---------- */
+        function getWeeklySection() {
+            return (dbData.home_sections || []).find(s => s.id === 'weekly_discounts' && s.enabled);
+        }
+        function isWeeklyExpired() {
+            const s = getWeeklySection();
+            if (!s || !s.timer_end) return false;
+            return Date.now() > new Date(s.timer_end).getTime();
+        }
+        function isWeeklyItem(p) {
+            const s = getWeeklySection();
+            return !!(s && (s.product_ids || []).includes(p.id));
+        }
+
+        let weeklyTimerInterval = null;
+        function startWeeklyCountdown() {
+            clearInterval(weeklyTimerInterval);
+            const section = getWeeklySection();
+            if (!section || !section.timer_end) return;
+            const endTime = new Date(section.timer_end).getTime();
+
+            function tick() {
+                const els = document.querySelectorAll('.card-timer-val');
+                const distance = endTime - Date.now();
+                if (distance < 0) {
+                    clearInterval(weeklyTimerInterval);
+                    renderProducts(currentProductsList);   // aksiya tugadi: nishon va chegirma olinadi
+                    return;
+                }
+                if (els.length === 0) return;
+                const h = Math.floor(distance / 3600000);
+                const m = Math.floor((distance % 3600000) / 60000);
+                const sec = Math.floor((distance % 60000) / 1000);
+                const str = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+                els.forEach(el => el.textContent = str);
+            }
+            tick();
+            weeklyTimerInterval = setInterval(tick, 1000);
+        }
+
+        function createProductCardHTML(p) {
+            const isLiked = favs.includes(p.id) ? 'liked' : '';
+            const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
+
+            let loopImages = pImages;
+            if (pImages.length === 2) loopImages = [pImages[1], pImages[0], pImages[1], pImages[0]];
+            else if (pImages.length > 2) loopImages = [pImages[pImages.length - 1], ...pImages, pImages[0]];
+
+            const prodName = getLocalized(p.name);
+            const weekly = isWeeklyItem(p) && !isWeeklyExpired();
+
+            const ribbonBadge = weekly ? `<div class="badge-action-ribbon">${currentLang === 'ru' ? 'АКЦИЯ' : 'AKSIYA'}</div>` : '';
+            const timerHtml = weekly ? `
+                <div class="card-timer-badge">
+                    ${STOPWATCH}
+                    <span class="card-timer-val">00:00:00</span>
+                </div>` : '';
+            const originalHtml = p.badgeType === 'original' ? `
+                <div class="badge-original-sm">
+                    <svg viewBox="0 0 24 24"><path fill="#007a28" d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.78 4.78 4 4 0 0 1-6.74 0 4 4 0 0 1-4.78-4.78 4 4 0 0 1 0-6.74Z"></path><path fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" d="m8.5 12.2 2.4 2.4 4.6-4.8"></path></svg>
+                    <span>ORIGINAL</span>
+                </div>` : '';
+            let extraBadge = '';
+            if (p.badgeType === 'chegirma') extraBadge = `<div class="badge-text-sm" style="background:#ff3b30;">${currentLang === 'ru' ? 'Скидка' : 'Chegirmada'}</div>`;
+            else if (p.badgeType === 'arzonlashdi') extraBadge = `<div class="badge-text-sm" style="background:#7000ff;">${currentLang === 'ru' ? 'Дешевле' : 'Arzonlashdi'}</div>`;
+
+            const badgesHtml = (timerHtml || originalHtml || extraBadge) ? `<div class="card-image-badges">${timerHtml}${originalHtml}${extraBadge}</div>` : '';
+            const dotsHtml = pImages.length > 1 ? `
+                <div class="card-dots">
+                    ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
+                </div>` : '';
+
+            return `
+                <div class="product-card" id="product-card-${p.id}">
+                    <div class="img-wrap">
+                        ${ribbonBadge}
+                        <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </button>
+                        <div class="product-img-box" onclick="goToProduct(${p.id})">
+                            <div class="card-slider-container" onscroll="handleCardInfiniteScroll(event, ${pImages.length})">
+                                ${loopImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}" loading="lazy" decoding="async" draggable="false"></div>`).join('')}
+                            </div>
+                            ${badgesHtml}
+                        </div>
+                    </div>
+                    ${dotsHtml}
+                    <div class="product-info" id="product-info-${p.id}"></div>
+                </div>
+            `;
+        }
+
         function renderProducts(list) {
             const grid = document.getElementById('productsGrid');
 
@@ -923,57 +771,18 @@
                 return;
             }
 
-            grid.innerHTML = list.map(p => {
-                const isLiked = favs.includes(p.id) ? 'liked' : '';
-                const pImages = p.images && p.images.length > 0 ? p.images : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80"];
-                const hasMultipleImages = pImages.length > 1;
-                const loopedImages = hasMultipleImages ? [pImages[pImages.length - 1], ...pImages, pImages[0]] : pImages;
-                const prodName = getLocalized(p.name);
+            grid.innerHTML = list.map(p => createProductCardHTML(p)).join('');
+            list.forEach(p => updateCardInfoOnly(p.id));
 
-                let badgeHtml = '';
-                if (p.badgeType === 'original') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #00c853;">${currentLang === 'ru' ? '✓ ОРИГИНАЛ' : '✓ ORIGINAL'}</div>`;
-                } else if (p.badgeType === 'chegirma') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #ff3b30;">${currentLang === 'ru' ? 'Скидка' : 'Chegirmada'}</div>`;
-                } else if (p.badgeType === 'arzonlashdi') {
-                    badgeHtml = `<div class="badge-dynamic-sm" style="background: #7000ff;">${currentLang === 'ru' ? 'Дешевле' : 'Arzonlashdi'}</div>`;
-                }
-
-                return `
-                    <div class="product-card" id="product-card-${p.id}">
-                        <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
-                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        </button>
-                        <div class="product-img-box" onclick="goToProduct(${p.id})">
-                            <div class="card-slider-container" ${hasMultipleImages ? `data-original-length="${pImages.length}" onscroll="handleCardScroll(event, ${pImages.length})"` : ''}>
-                                ${loopedImages.map(imgUrl => `
-                                    <div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>
-                                `).join('')}
-                            </div>
-                            ${hasMultipleImages ? `
-                                <div class="card-dots">
-                                    ${pImages.map((_, idx) => `<div class="card-dot ${idx === 0 ? 'active' : ''}"></div>`).join('')}
-                                </div>
-                            ` : ''}
-                            ${badgeHtml}
-                        </div>
-                        <div class="product-info" id="product-info-${p.id}"></div>
-                    </div>
-                `;
-            }).join('');
-
-            list.forEach(p => {
-                updateCardInfoOnly(p.id);
+            // Slayderlarni 2-slaydga o'rnatish (o'qish va yozish alohida: bitta layout)
+            requestAnimationFrame(() => {
+                const sliders = [...grid.querySelectorAll('.card-slider-container')].filter(c => c.children.length > 1);
+                const widths = sliders.map(c => c.clientWidth);
+                sliders.forEach(c => { c.style.scrollBehavior = 'auto'; });
+                sliders.forEach((c, i) => { c.scrollLeft = widths[i]; });
+                sliders.forEach(c => { c.style.scrollBehavior = 'smooth'; });
             });
-
-            setTimeout(() => {
-                document.querySelectorAll('.card-slider-container').forEach(container => {
-                    if (container.dataset.originalLength) {
-                        const slideWidth = container.clientWidth;
-                        container.scrollLeft = slideWidth;
-                    }
-                });
-            }, 50);
+            startWeeklyCountdown();
         }
 
         function updateCardInfoOnly(id) {
@@ -986,83 +795,62 @@
             const defaultSize = p.sizes ? p.sizes[0] : null;
             const cartItem = cart.find(item => item.id === p.id && item.selectedSize === defaultSize);
             const prodName = getLocalized(p.name);
-            let stock = p.stock !== undefined ? p.stock : 10;
-            let isOut = stock <= 0;
-            let isLast = stock === 1;
-            let isNotified = notifiedList.includes(p.id);
+            const stock = p.stock !== undefined ? p.stock : 10;
+            const isOut = stock <= 0;
+            const isLast = stock === 1;
+            const isNotified = notifiedList.includes(p.id);
 
-            let priceHtml = '';
-            if (isOut) {
-                priceHtml = `<span class="main-price out-of-stock">${t.out_of_stock}</span>`;
-            } else {
-                priceHtml = `
-                    <span class="main-price">${p.price}</span>
-                    ${p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi' ? `<span class="discount-tag">${p.discount}</span>` : ''}
-                `;
-            }
+            const weeklyItem = isWeeklyItem(p);
+            const expired = isWeeklyExpired();
+            let displayPrice = p.price, displayOldPrice = p.oldPrice, displayDiscount = p.discount;
+            if (weeklyItem && expired) { displayPrice = p.oldPrice || p.price; displayOldPrice = ''; displayDiscount = ''; }
+
+            const cleanPrice = displayPrice ? String(displayPrice).replace(/\s*so['‘]m/gi, '').trim() : '';
+            const cleanOldPrice = displayOldPrice ? String(displayOldPrice).replace(/\s*so['‘]m/gi, '').trim() : '';
+            const showDiscount = ((weeklyItem && !expired) || p.badgeType === 'chegirma' || p.badgeType === 'arzonlashdi') && discountLabel(displayDiscount);
+
+            const priceHtml = isOut ? `<span class="main-price out-of-stock">${t.out_of_stock}</span>` : `
+                <span class="main-price">${cleanPrice}</span>
+                ${showDiscount ? `<span class="discount-tag">${DOWN_ARROW}${discountLabel(displayDiscount)}</span>` : ''}
+            `;
 
             let btnHtml = '';
             if (isOut) {
-                if (isNotified) {
-                    btnHtml = `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`;
-                } else {
-                    btnHtml = `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
-                }
+                btnHtml = isNotified
+                    ? `<button class="notify-btn-sm active-notified" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_active}</button>`
+                    : `<button class="notify-btn-sm" onclick="event.stopPropagation(); toggleNotify(${p.id})">${t.notify_btn}</button>`;
             } else if (!cartItem) {
                 btnHtml = `
                     <button class="cart-btn-sm" onclick="event.stopPropagation(); addSimilarToCart(${p.id})">
                         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                         <span>${t.cart_btn}</span>
-                    </button>
-                `;
+                    </button>`;
             } else {
-                let maxReached = cartItem.qty >= stock;
+                const maxReached = cartItem.qty >= stock;
                 btnHtml = `
                     <div class="cart-counter-box-sm" onclick="event.stopPropagation()">
                         <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, -1)">-</button>
                         <span class="counter-val-sm">${cartItem.qty || 1}</span>
                         <button class="counter-btn-sm" onclick="changeSimilarQty(${p.id}, 1)" ${maxReached ? 'disabled' : ''}>+</button>
-                    </div>
-                `;
+                    </div>`;
             }
+
+            const lastBadgeHtml = (isLast && !isOut) ? `<div class="last-item-badge">${FIRE_ICON}<span>${t.last_item}</span></div>` : '';
 
             infoContainer.innerHTML = `
                 <div class="product-info-top">
-                    <div class="price-row" onclick="goToProduct(${p.id})">
-                        ${priceHtml}
-                    </div>
-                    ${!isOut ? `
-                        <div class="old-prices" onclick="goToProduct(${p.id})">
-                            <span class="price-old">${p.oldPrice}</span>
-                        </div>
-                    ` : ''}
+                    <div class="price-row" onclick="goToProduct(${p.id})">${priceHtml}</div>
+                    ${(!isOut && cleanOldPrice) ? `<div class="old-prices" onclick="goToProduct(${p.id})"><span class="price-old">${cleanOldPrice}</span></div>` : ''}
                     <div class="product-title" onclick="goToProduct(${p.id})" title="${prodName}">${prodName}</div>
-                    
                     <div class="product-rating">
                         <div class="rating-left" onclick="goToProduct(${p.id})">
-                            <div class="rating-box">
-                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                                <span class="rating-num">${p.rating || 4.8}</span>
-                            </div>
-                            <div class="comment-box">
-                                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                                <span class="comments-num">${p.comments || 50}</span>
-                            </div>
+                            <div class="rating-box"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span class="rating-num">${p.rating || 4.8}</span></div>
+                            <div class="comment-box"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span class="comments-num">${p.comments || 50}</span></div>
                         </div>
-                        ${isLast ? `
-                            <div class="last-item-badge">
-                                <svg viewBox="0 0 512 512">
-                                    <path fill="#ff3d00" d="M192 480c-70.7 0-128-57.3-128-128 0-48.4 27.2-90.3 67.2-111.4 5.3-2.8 11.8.6 12.8 6.5 5.2 32.1 23.3 60.1 48.9 78.4 4.1 2.9 9.9-.1 10.2-5.1 2-35.3-11.4-74.8-40.2-118.4C145.4 179.8 192 110.1 192 48c0-8.8 10.7-13.1 16.9-6.9 72.8 72.8 111.1 168.1 87.4 256.4 1.4-.9 2.8-1.9 4.1-2.9 33.7-25.9 55.6-67.6 55.6-114.6 0-8.8 10.7-13.1 16.9-6.9 65 65 91.1 155.1 68.3 234.9C425.4 430.4 316.5 480 192 480z"/>
-                                    <path fill="#ffab00" d="M192 448c-53 0-96-43-96-96 0-36.3 20.4-67.7 50.4-83.6 4-2.1 8.9.5 9.6 4.9 3.9 24.1 17.5 45.1 36.7 58.8 3.1 2.2 7.4-.1 7.6-3.9 1.5-26.5-8.5-56.1-30.1-88.8C159.9 203.4 195.1 151 208 96c2.4-10.2 16.6-10.7 19.8-.7 41.5 130.8-21.7 220.7 41.4 286.7 1.1-1.2 2.3-2.5 3.4-3.8 25.3-29.4 41.6-68.5 41.6-111.8 0-8.8 10.7-13.1 16.9-6.9 48.8 48.8 68.4 116.4 51.3 176.2C365.1 411.3 283.3 448 192 448z"/>
-                                </svg>
-                                <span>${t.last_item}</span>
-                            </div>
-                        ` : ''}
+                        ${lastBadgeHtml}
                     </div>
                 </div>
-                <div class="card-action-container card-action-container-${p.id}">
-                    ${btnHtml}
-                </div>
+                <div class="card-action-container card-action-container-${p.id}">${btnHtml}</div>
             `;
         }
 
@@ -1229,26 +1017,32 @@
             updateCardActionUI(id);
         }
 
-        function handleCardScroll(e, originalLen) {
+        function handleCardInfiniteScroll(e, originalLen) {
+            if (originalLen <= 1) return;
             const container = e.target;
             const slideWidth = container.clientWidth;
             const scrollLeft = container.scrollLeft;
-            if (scrollLeft >= (originalLen + 1) * slideWidth - 5) {
+            const maxScroll = slideWidth * (container.children.length - 1);
+
+            if (scrollLeft >= maxScroll - 5) {
                 container.style.scrollBehavior = 'auto';
                 container.scrollLeft = slideWidth;
                 container.style.scrollBehavior = 'smooth';
             } else if (scrollLeft <= 5) {
                 container.style.scrollBehavior = 'auto';
-                container.scrollLeft = originalLen * slideWidth;
+                container.scrollLeft = slideWidth * originalLen;
                 container.style.scrollBehavior = 'smooth';
             }
-            const activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
-            const realIndex = (activeIndex + originalLen) % originalLen;
-            const dotsBox = container.parentElement.querySelector('.card-dots');
+
+            let activeIndex = Math.round(container.scrollLeft / slideWidth) - 1;
+            if (activeIndex < 0) activeIndex = 0;
+            if (activeIndex >= originalLen) activeIndex = originalLen - 1;
+
+            const cardBox = container.closest('.product-card');
+            const dotsBox = cardBox && cardBox.querySelector('.card-dots');
             if (dotsBox) {
-                const dots = dotsBox.children;
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.toggle('active', i === realIndex);
+                for (let i = 0; i < dotsBox.children.length; i++) {
+                    dotsBox.children[i].classList.toggle('active', i === activeIndex);
                 }
             }
         }
@@ -1381,16 +1175,73 @@
             window.location.href = `product.html?id=${id}`;
         }
 
+        /* ---------- Orqaga: telefon tugmasi, chetdan surish va strelka bir xil ishlaydi, ilova yopilmaydi ---------- */
         function goBack() {
+            const dd = document.getElementById('searchDropdown');
+            if (dd && dd.classList.contains('show')) {          // avval qidiruv oynasi yopiladi
+                dd.classList.remove('show');
+                const input = document.getElementById('searchInput');
+                if (input) input.blur();
+                return;
+            }
             sessionStorage.removeItem('products_scroll');
-            history.back();
+            if (history.length > 1 && document.referrer) history.back();
+            else window.location.href = 'index.html';           // tarix bo'sh bo'lsa ham bosh sahifaga qaytadi
         }
 
+        function setupTelegramBack() {
+            const tg = window.Telegram && window.Telegram.WebApp;
+            if (!tg) return;
+            try { tg.ready(); tg.expand(); } catch (e) {}
+            if (tg.BackButton) {
+                tg.BackButton.offClick(goBack);
+                tg.BackButton.onClick(goBack);
+                tg.BackButton.show();                           // ko'rinib tursa, telefonning "orqaga" tugmasi ilovani yopmaydi
+            }
+            try { if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
+        }
+
+        /* ---------- Pastki navigatsiya: 3 tugmali telefonlarda yuqoriga ko'tariladi ---------- */
+        function updateNavInset() {
+            const tg = window.Telegram && window.Telegram.WebApp;
+            let sys = 0;
+            if (tg && tg.safeAreaInset && tg.safeAreaInset.bottom) sys = tg.safeAreaInset.bottom;
+            const cssVar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tg-safe-area-inset-bottom'));
+            if (!isNaN(cssVar)) sys = Math.max(sys, cssVar);
+
+            const probe = document.createElement('div');
+            probe.style.cssText = 'position:fixed;left:0;bottom:0;height:0;visibility:hidden;pointer-events:none;padding-bottom:env(safe-area-inset-bottom, 0px);';
+            document.body.appendChild(probe);
+            const envPx = parseFloat(getComputedStyle(probe).paddingBottom) || 0;
+            probe.remove();
+            sys = Math.max(sys, envPx);
+
+            let extra = sys >= 32 ? Math.max(0, sys - envPx) : 0;
+            const manual = parseFloat(localStorage.getItem('nav_extra'));
+            if (!isNaN(manual)) extra = manual;
+            document.documentElement.style.setProperty('--nav-extra', extra + 'px');
+        }
+
+        // Boshqa sahifadan orqaga qaytilganda holatni yangilash (ikki marta yuklanmaydi)
         window.addEventListener('pageshow', (event) => {
-            fetchAppDataAndInit();
+            if (!event.persisted) return;
+            favs = JSON.parse(localStorage.getItem('fav_products')) || [];
+            cart = JSON.parse(localStorage.getItem('cart_products')) || [];
+            notifiedList = JSON.parse(localStorage.getItem('notified_products')) || [];
+            setupTelegramBack();
+            initPage();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
+            setupTelegramBack();
+            updateNavInset();
+            window.addEventListener('resize', updateNavInset);
+            const tg = window.Telegram && window.Telegram.WebApp;
+            if (tg && tg.onEvent) {
+                tg.onEvent('safeAreaChanged', updateNavInset);
+                tg.onEvent('contentSafeAreaChanged', updateNavInset);
+                tg.onEvent('viewportChanged', updateNavInset);
+            }
             fetchAppDataAndInit();
         });
     </script>
