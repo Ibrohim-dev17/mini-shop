@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hafta aksiyalari - Uzum Market</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #7000ff;
@@ -48,10 +48,11 @@
 
         .product-card { min-width: 0; background: transparent; position: relative; display: flex; flex-direction: column; width: 100%; height: 100%; }
 
-        .badge-action-ribbon { position: absolute; top: 12px; left: -6px; background: #8b4dff; color: #fff; font-size: 11px; font-weight: 800; line-height: 1; letter-spacing: 0.6px; padding: 6px 11px; border-radius: 6px; z-index: 4; pointer-events: none; transform: rotate(-3deg); -webkit-mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat; mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat; }
+        .img-wrap { position: relative; width: 100%; flex-shrink: 0; }
+        .badge-action-ribbon { position: absolute; top: 12px; left: -5px; background: #8b4dff; color: #fff; font-size: 11px; font-weight: 800; line-height: 1; letter-spacing: 0.6px; padding: 6px 11px; border-radius: 6px; z-index: 4; pointer-events: none; transform: rotate(-3deg); -webkit-mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat; mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat; }
 
 
-        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(110, 110, 120, 0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
+        .heart-icon-sm { position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%; background: rgba(110, 110, 120, 0.55); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; }
         .heart-icon-sm svg { width: 18px; height: 18px; fill: none; stroke: #ffffff; stroke-width: 2; }
         .heart-icon-sm.liked svg { fill: #8b4dff; stroke: #8b4dff; }
 
@@ -104,7 +105,7 @@
         .counter-btn-sm:disabled { opacity: 0.4; cursor: not-allowed; }
         .counter-val-sm { font-size: 14px; font-weight: 700; color: var(--text); }
 
-        .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
+        .bottom-nav { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px)); left: 16px; right: 16px; max-width: 480px; margin: 0 auto; height: 64px; background: rgba(255, 255, 255, 0.97); display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 20px; z-index: 1000; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
         [data-theme="dark"] .bottom-nav { background: rgba(28, 29, 34, 0.95); border-color: rgba(255, 255, 255, 0.08); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #808080; font-size: 10px; font-weight: 500; width: 20%; position: relative; padding: 8px 0; }
         .nav-icon-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -297,18 +298,57 @@
             }
         });
 
-        async function init() {
+        /* ---------- Ma'lumotlar: keshdan darhol, fonda yangilash ---------- */
+        async function loadDB(onUpdate) {
+            const KEY = new URL('database.json', location.href).href;
+            let cache = null, cachedText = null;
             try {
-                const res = await fetch('database.json');
-                if (res.ok) dbData = await res.json();
-            } catch (e) { console.error(e); }
+                cache = await caches.open('uzum-db-v1');
+                const hit = await cache.match(KEY);
+                if (hit) cachedText = await hit.text();
+            } catch (e) {}
 
+            const fetchFresh = async () => {
+                const res = await fetch(KEY, { cache: 'no-cache' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const text = await res.text();
+                if (cache && text !== cachedText) {
+                    try { await cache.put(KEY, new Response(text, { headers: { 'Content-Type': 'application/json' } })); } catch (e) {}
+                }
+                return text;
+            };
+
+            if (cachedText) {
+                try {
+                    const data = JSON.parse(cachedText);
+                    fetchFresh().then(text => {
+                        if (text !== cachedText && onUpdate) { try { onUpdate(JSON.parse(text)); } catch (e) {} }
+                    }).catch(() => {});
+                    return data;
+                } catch (e) { /* buzilgan kesh: tarmoqdan olamiz */ }
+            }
+            return JSON.parse(await fetchFresh());
+        }
+
+        function setDB(d) {
+            dbData = Object.assign({ products: [], home_sections: [] }, d || {});
+        }
+
+        function renderAll() {
             applyThemeAndTranslations();
             const section = getSection();
             document.getElementById('pageTitle').textContent = section ? getLocalized(section.title) : t.sale_title;
             renderList();
             updateBadges();
             if (section && section.timer_end) startCountdown(section.timer_end);
+        }
+
+        async function init() {
+            applyThemeAndTranslations();
+            try {
+                setDB(await loadDB(fresh => { setDB(fresh); renderAll(); }));
+            } catch (e) { console.error(e); }
+            renderAll();
         }
 
         function renderList() {
@@ -329,15 +369,13 @@
             grid.innerHTML = list.map(p => createProductCardHTML(p)).join('');
             list.forEach(p => updateCardInfoOnly(p.id));
 
-            setTimeout(() => {
-                document.querySelectorAll('.card-slider-container').forEach(container => {
-                    if (container.children.length > 1) {
-                        container.style.scrollBehavior = 'auto';
-                        container.scrollLeft = container.clientWidth;
-                        container.style.scrollBehavior = 'smooth';
-                    }
-                });
-            }, 60);
+            requestAnimationFrame(() => {
+                const sliders = [...document.querySelectorAll('.card-slider-container')].filter(c => c.children.length > 1);
+                const widths = sliders.map(c => c.clientWidth);
+                sliders.forEach(c => { c.style.scrollBehavior = 'auto'; });
+                sliders.forEach((c, i) => { c.scrollLeft = widths[i]; });
+                sliders.forEach(c => { c.style.scrollBehavior = 'smooth'; });
+            });
         }
 
         function startCountdown(endTimeStr) {
@@ -394,15 +432,17 @@
 
             return `
                 <div class="product-card" id="product-card-${p.id}">
-                    <div class="badge-action-ribbon">${currentLang === 'ru' ? 'АКЦИЯ' : 'AKSIYA'}</div>
-                    <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
-                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    </button>
-                    <div class="product-img-box" onclick="goToProduct(${p.id})">
-                        <div class="card-slider-container" onscroll="handleCardInfiniteScroll(event, ${pImages.length})">
-                            ${loopImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}"></div>`).join('')}
+                    <div class="img-wrap">
+                        <div class="badge-action-ribbon">${currentLang === 'ru' ? 'АКЦИЯ' : 'AKSIYA'}</div>
+                        <button class="heart-icon-sm ${isLiked}" onclick="toggleHeart(event, ${p.id})">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </button>
+                        <div class="product-img-box" onclick="goToProduct(${p.id})">
+                            <div class="card-slider-container" onscroll="handleCardInfiniteScroll(event, ${pImages.length})">
+                                ${loopImages.map(imgUrl => `<div class="card-slide"><img src="${imgUrl}" alt="${prodName}" loading="lazy" decoding="async" draggable="false"></div>`).join('')}
+                            </div>
+                            <div class="card-image-badges">${timerHtml}${originalHtml}</div>
                         </div>
-                        <div class="card-image-badges">${timerHtml}${originalHtml}</div>
                     </div>
                     ${dotsHtml}
                     <div class="product-info" id="product-info-${p.id}"></div>
