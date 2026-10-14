@@ -17,3 +17,12 @@ Mahsulot
  "size_chart":{"cols":["Ko'krak","Bel"],"rows":{"S":[84,66],"M":[88,70]}},   // ixtiyoriy o'lchamlar jadvali
  "sold_week":34,                              // backend bo'lsa buyurtmalardan o'zi hisoblanadi
  "badgeType":"original"}
+
+Rangi bitta bo'lsa colors ni, o'lchami bitta bo'lsa sizes ni yozmasangiz ham bo'ladi.
+Bir nechta rang yoki o'lcham bo'lsa, kartadagi tugma "Tanlash" bo'ladi va mahsulot sahifasiga olib boradi.
+Sharhlar (ixtiyoriy, boshlang'ich sharhlar)
+"reviews":[{"id":1,"product_id":101,"name":"Gulhayo","rating":5,"text":"...","date":"2026-09-25","color":"black","size":"M","photos":["..."],
+            "reply":{"name":"Do'kon","text":"Rahmat!"}}]
+name bo'sh (null) bo'lsa "Anonim" deb chiqadi. Reyting va sharhlar soni shu sharhlardan o'zi hisoblanadi.
+Sozlamalar
+"settings":{"shop_name":"Moda Do'kon","theme":"light"}
