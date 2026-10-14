@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sharhlar</title>
+    <script>try{if(localStorage.getItem('site_theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+    <script defer src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+
+        :root {
+            --primary: #7000ff;
+            --primary-bg: #eef0ff;
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #1f2026;
+            --muted: #8b8e99;
+            --border: #e2e5eb;
+            --star: #ffb800;
+            --discount-bg: #f1e5ff;
+            --discount-text: #7000ff;
+            --danger: #ff3b30;
+        }
+
+        [data-theme="dark"] {
+            --primary: #9b4dff;
+            --primary-bg: #221638;
+            --bg: #121316;
+            --card: #1c1d22;
+            --text: #f4f5f7;
+            --muted: #999cb0;
+            --border: #2a2c33;
+            --discount-bg: #2e1a47;
+            --discount-text: #b17dff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: calc(120px + var(--nav-extra, 0px));
+            overflow-x: hidden;
+        }
+
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--card);
+            z-index: 999;
+            padding: 12px 16px;
+            margin-top: 55px; /* Qidiruv paneli biroz pastroqqa tushirildi */
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .sticky-header::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--card);
+            z-index: -1;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px));
+            left: 16px;
+            right: 16px;
+            max-width: 480px;
+            margin: 0 auto;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.97);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .bottom-nav {
+            background: rgba(28, 29, 34, 0.95);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        @media (min-width: 1024px) { .bottom-nav { max-width: 550px; } }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #808080;
+            font-size: 10px;
+            font-weight: 500;
+            width: 20%;
+            position: relative;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .nav-icon-wrap { position: relative; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        .nav-item span { pointer-events: none; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: #808080; stroke-width: 1.8; transition: all 0.2s ease; }
+        .nav-item.active { color: var(--primary); font-weight: 600; }
+        .nav-item.active svg { stroke: var(--primary); fill: var(--primary-bg); transform: scale(1.05); }
+
+        .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+            background: #000;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 17px;
+            height: 17px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+        .badge-count.show { display: flex; }
+    
+        /* ================= Umumiy komponentlar (sh-*) ================= */
+        .sh-stars { display: inline-flex; gap: 1px; vertical-align: middle; }
+        .sh-star { fill: none; stroke: var(--star); stroke-width: 1.6; stroke-linejoin: round; }
+        .sh-star.on { fill: var(--star); }
+        .sh-btn { width: 100%; height: 48px; border: none; border-radius: 14px; background: var(--primary); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .sh-btn:disabled { opacity: .55; cursor: default; }
+        .sh-btn.ghost { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+        .sh-btn.danger { background: #ff3b30; }
+        .sh-btn.soft { background: var(--primary-bg); color: var(--primary); }
+        .sh-row { display: flex; gap: 10px; } .sh-row .sh-btn { flex: 1; }
+        .sh-label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin: 14px 0 6px; }
+        .sh-input { width: 100%; height: 46px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 12px; padding: 0 14px; font-size: 15px; outline: none; }
+        .sh-input:focus { border-color: var(--primary); }
+        .sh-ta { height: 96px; padding: 12px 14px; resize: none; margin-top: 12px; font-family: inherit; }
+        .sh-code { text-align: center; letter-spacing: 8px; font-size: 22px; font-weight: 700; }
+        .sh-phone { display: flex; align-items: center; border: 1px solid var(--border); background: var(--bg); border-radius: 12px; height: 46px; padding: 0 14px; gap: 8px; }
+        .sh-phone:focus-within { border-color: var(--primary); }
+        .sh-phone span { font-weight: 700; color: var(--text); }
+        .sh-phone input { flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 16px; color: var(--text); }
+        .sh-err { color: #ff3b30; font-size: 13px; min-height: 18px; margin-top: 8px; }
+        .sh-sub { font-size: 13px; color: var(--muted); line-height: 1.45; }
+        .sh-sent { font-size: 14px; font-weight: 600; margin-top: 4px; }
+        .sh-demo { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--primary-bg); color: var(--primary); font-size: 13px; font-weight: 600; }
+        .sh-confirm-text { font-size: 15px; line-height: 1.5; padding: 6px 0 12px; }
+        /* Pastdan chiqadigan oyna */
+        .sh-sheet-wrap { position: fixed; inset: 0; z-index: 3000; visibility: hidden; }
+        .sh-sheet-wrap.show { visibility: visible; }
+        .sh-sheet-bg { position: absolute; inset: 0; background: rgba(0,0,0,.45); opacity: 0; transition: opacity .2s; }
+        .sh-sheet-wrap.show .sh-sheet-bg { opacity: 1; }
+        .sh-sheet { position: absolute; left: 0; right: 0; bottom: 0; max-width: 560px; margin: 0 auto; background: var(--card); color: var(--text); border-radius: 22px 22px 0 0; padding: 8px 18px calc(22px + env(safe-area-inset-bottom, 0px)); max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform .22s ease-out; }
+        .sh-sheet-wrap.show .sh-sheet { transform: translateY(0); }
+        .sh-sheet-grab { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 4px auto 12px; }
+        .sh-sheet-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+        .sh-toast { position: fixed; left: 50%; bottom: calc(110px + var(--nav-extra, 0px)); transform: translate(-50%, 20px); background: rgba(20,20,24,.94); color: #fff; padding: 11px 18px; border-radius: 12px; font-size: 13px; font-weight: 600; z-index: 4000; opacity: 0; pointer-events: none; transition: all .22s; max-width: 86vw; text-align: center; }
+        .sh-toast.show { opacity: 1; transform: translate(-50%, 0); }
+        /* Sharhlar */
+        .sh-review { padding: 14px 0; border-bottom: 1px solid var(--border); }
+        .sh-review:last-child { border-bottom: none; }
+        .sh-review-head { display: flex; align-items: center; gap: 10px; }
+        .sh-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-bg); color: var(--primary); font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .sh-avatar svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .sh-avatar.anon { background: var(--bg); color: var(--muted); }
+        .sh-review-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+        .sh-review-name { font-size: 14px; font-weight: 700; }
+        .sh-review-date { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+        .sh-review-variant { font-size: 12px; color: var(--muted); margin-top: 8px; }
+        .sh-review-text { font-size: 14px; line-height: 1.45; margin-top: 6px; word-break: break-word; }
+        .sh-review-text.muted { color: var(--muted); }
+        .sh-review-photos { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; }
+        .sh-review-photos img { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0; cursor: pointer; }
+        .sh-reply { margin-top: 10px; padding: 10px 12px; background: var(--bg); border-radius: 10px; border-left: 3px solid var(--primary); }
+        .sh-reply-name { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+        .sh-reply-text { font-size: 13px; line-height: 1.4; }
+        /* Lightbox */
+        .sh-lightbox { position: fixed; inset: 0; background: #000; z-index: 3500; opacity: 0; transition: opacity .2s; display: flex; align-items: center; }
+        .sh-lightbox.show { opacity: 1; }
+        .sh-lb-track { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .sh-lb-track::-webkit-scrollbar { display: none; }
+        .sh-lb-slide { flex: 0 0 100%; scroll-snap-align: center; display: flex; align-items: center; justify-content: center; }
+        .sh-lb-slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .sh-lb-close { position: absolute; top: calc(60px + env(safe-area-inset-top, 0px)); right: 16px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.18); border: none; z-index: 2; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .sh-lb-close svg { width: 20px; height: 20px; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; }
+        .sh-lb-count { position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: #fff; font-size: 13px; font-weight: 600; }
+        /* Sharh yozish */
+        .sh-rv-prod { display: flex; gap: 12px; align-items: center; margin: 8px 0 4px; }
+        .sh-rv-prod img { width: 56px; height: 72px; object-fit: cover; border-radius: 10px; background: var(--bg); }
+        .sh-rv-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+        .sh-rate-pick { display: flex; gap: 6px; }
+        .sh-rate-pick button { background: none; border: none; padding: 2px; cursor: pointer; }
+        .sh-rate-pick svg { width: 38px; height: 38px; fill: none; stroke: var(--star); stroke-width: 1.5; stroke-linejoin: round; transition: transform .12s; }
+        .sh-rate-pick button.on svg { fill: var(--star); }
+        .sh-rate-pick button:active svg { transform: scale(1.15); }
+        .sh-photos { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .sh-ph { position: relative; width: 72px; height: 72px; }
+        .sh-ph img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+        .sh-ph button { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 50%; border: none; background: #ff3b30; color: #fff; font-size: 14px; line-height: 1; cursor: pointer; }
+        .sh-ph-add { width: 72px; height: 72px; border-radius: 10px; border: 1.5px dashed var(--border); background: var(--bg); color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 10px; cursor: pointer; }
+        .sh-ph-add svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .sh-seg { display: flex; gap: 6px; background: var(--bg); border: 1px solid var(--border); padding: 4px; border-radius: 12px; }
+        .sh-seg button { flex: 1; height: 38px; border: none; border-radius: 9px; background: transparent; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
+        .sh-seg button.on { background: var(--primary); color: #fff; }
+        .sh-seg button:disabled { opacity: .4; }
+        .sh-empty { text-align: center; padding: 60px 24px; color: var(--muted); }
+        .sh-empty svg { width: 64px; height: 64px; stroke: var(--muted); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 14px; opacity: .7; }
+        .sh-empty h3 { font-size: 18px; color: var(--text); margin-bottom: 6px; }
+        .sh-empty p { font-size: 14px; line-height: 1.45; }
+        .sh-empty .sh-btn { width: auto; display: inline-flex; padding: 0 26px; margin-top: 18px; }
+
+        .hdr-title { font-size: 18px; font-weight: 800; flex: 1; }
+        .page { padding: 125px 12px 0; max-width: 700px; margin: 0 auto; }
+        .box { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 16px; margin-bottom: 12px; }
+        .pm { display: flex; gap: 12px; align-items: center; cursor: pointer; }
+        .pm img { width: 56px; height: 72px; object-fit: cover; border-radius: 10px; background: var(--bg); }
+        .pm-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+        .sum { display: flex; gap: 18px; align-items: center; }
+        .sum-big { text-align: center; min-width: 88px; } .sum-big b { font-size: 40px; font-weight: 800; line-height: 1; display: block; }
+        .sum-big small { display: block; font-size: 12px; color: var(--muted); margin-top: 6px; }
+        .bars { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+        .bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+        .bar-row span:first-child { width: 10px; text-align: right; }
+        .bar { flex: 1; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; } .bar i { display: block; height: 100%; background: var(--star); border-radius: 3px; }
+        .bar-row span:last-child { width: 24px; }
+        .ph-title { font-size: 15px; font-weight: 800; margin-bottom: 10px; }
+        .ph-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; } .ph-row img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; flex-shrink: 0; cursor: pointer; border: 1px solid var(--border); }
+        .filters { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-bottom: 12px; padding-bottom: 2px; }
+        .fchip { flex-shrink: 0; height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .fchip svg { width: 13px; height: 13px; fill: var(--star); stroke: none; }
+        .fchip.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .write-bar { position: fixed; left: 12px; right: 12px; max-width: 560px; margin: 0 auto; bottom: calc(96px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px)); z-index: 990; }
+        body { padding-bottom: calc(170px + var(--nav-extra, 0px)); }
+    </style>
+</head>
+<body>
+    <div class="sticky-header">
+        <button onclick="SH.goBack()" class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+        <div class="hdr-title" data-i18n="r_title">Sharhlar</div>
+    </div>
+    <div class="page" id="page"></div>
+    <div class="write-bar" id="writeBar"></div>
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
+            <span data-i18n="nav_home">Bosh sahifa</span>
+        </a>
+        <a href="categories.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg></div>
+            <span data-i18n="nav_catalog">Katalog</span>
+        </a>
+        <a href="cart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><div class="badge-count" id="cartBadge">0</div></div>
+            <span data-i18n="nav_cart">Savatcha</span>
+        </a>
+        <a href="heart.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><div class="badge-count" id="favBadge">0</div></div>
+            <span data-i18n="nav_fav">Saralangan</span>
+        </a>
+        <a href="profil.html" class="nav-item">
+            <div class="nav-icon-wrap"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <span data-i18n="nav_profile">Profil</span>
+        </a>
+    </nav>
+    <script>
+const SH = (function () {
+  'use strict';
+    /* ---------------- Matnlar (uz / ru) ---------------- */
+    const DICT = {
+      uz: {
+        nav_home: "Bosh sahifa", nav_catalog: "Katalog", nav_cart: "Savatcha", nav_fav: "Saralangan", nav_profile: "Profil",
+        back: "Orqaga", close: "Yopish", cancel: "Bekor qilish", save: "Saqlash", ok: "Yaxshi", yes: "Ha", no: "Yo'q", loading: "Yuklanmoqda...",
+        error_generic: "Xatolik yuz berdi. Qayta urinib ko'ring.", currency: "so'm", pcs: "ta", not_found: "Mahsulot topilmadi", go_home: "Bosh sahifaga",
+        p_color: "Rang", p_size: "O'lcham", p_size_guide: "O'lchamlar jadvali", p_material: "Mato", p_country: "Ishlab chiqarilgan davlat", p_season: "Fasl",
+        p_specs: "Xususiyatlar", p_about: "Tovar haqida", p_show_all: "Barchasini ko'rsatish", p_hide: "Yopish", p_reviews: "Sharhlar", p_all_reviews: "Barcha sharhlar",
+        p_no_reviews: "Hali sharhlar yo'q", p_sold_week: "Bu haftada {n} kishi sotib oldi", p_left: "Oxirgi {n} ta qoldi", p_out: "Qolmadi",
+        p_add_cart: "Savatga qo'shish", p_go_cart: "Savatchaga o'tish", p_notify: "Kelganda xabar qilish", p_notified: "Xabar beriladi",
+        p_similar: "O'xshash mahsulotlar", p_choose_size: "O'lchamni tanlang", p_choose_color: "Rangni tanlang", p_variant_out: "Bu variant qolmagan",
+        p_added: "Savatga qo'shildi", p_notify_on: "Mahsulot kelganda xabar beramiz", p_notify_off: "Xabar o'chirildi", p_max: "Omborda faqat {n} ta qolgan",
+        p_new: "Yangi", p_price_from: "Narxi",
+        r_title: "Sharhlar", r_anon: "Anonim", r_all: "Barchasi", r_with_photos: "Rasmli", r_buyers_photos: "Xaridorlarning fotosuratlari",
+        r_write: "Sharh qoldirish", r_rating_label: "Bahoyingiz", r_text_ph: "Mahsulot haqida fikringiz...", r_add_photo: "Rasm qo'shish",
+        r_post_as: "Sharh qanday nomda chiqsin?", r_as_name: "{name} nomidan", r_as_anon: "Anonim", r_send: "Yuborish", r_thanks: "Sharhingiz uchun rahmat!",
+        r_rate_required: "Iltimos, yulduzcha bilan baho bering", r_variant: "Rang: {c}  ·  O'lcham: {s}", r_seller: "Do'kon javobi", r_based: "{n} ta sharh asosida",
+        r_count: "{n} ta sharh", r_none_filter: "Bu filtr bo'yicha sharh yo'q", r_photo_limit: "Ko'pi bilan 3 ta rasm",
+        c_title: "Savatcha", c_empty_title: "Savatchangiz bo'sh", c_empty_text: "Hozircha xarid qilish uchun mahsulot qo'shmagansiz.", c_go_shop: "Xarid qilishni boshlash",
+        c_select_all: "Hammasini tanlash", c_delete_selected: "Tanlanganlarni o'chirish", c_selected: "Tanlangan: {n}", c_total: "Jami summa", c_checkout: "Rasmiylashtirish",
+        c_remove: "O'chirish", c_choose_items: "Buyurtma uchun mahsulotlarni tanlang", c_need_login_title: "Ro'yxatdan o'ting",
+        c_need_login_text: "Buyurtma berish uchun telefon raqamingizni tasdiqlab, ro'yxatdan o'tishingiz kerak.", c_login_btn: "Kirish / Ro'yxatdan o'tish",
+        c_checkout_title: "Buyurtmani rasmiylashtirish", c_name: "Ism", c_phone: "Telefon", c_address: "Yetkazib berish manzili", c_address_ph: "Shahar, ko'cha, uy",
+        c_comment: "Izoh (ixtiyoriy)", c_payment: "To'lov usuli", c_cash: "Naqd pul (qabul qilganda)", c_confirm: "Buyurtma berish", c_order_ok_title: "Buyurtma qabul qilindi",
+        c_order_ok_text: "Buyurtma №{n} qabul qilindi. Holatini profilda kuzatishingiz mumkin.", c_my_orders: "Buyurtmalarim", c_unavailable: "Qolmagan",
+        c_limit: "Omborda faqat {n} ta qolgan", c_need_address: "Manzilni kiriting", c_need_name: "Ismingizni kiriting", c_items_count: "Mahsulotlar ({n})",
+        c_removed_out: "Qolmagan mahsulotlar buyurtmaga kiritilmadi", c_order_fail: "Buyurtmani yuborib bo'lmadi", c_ask_delete: "Tanlangan mahsulotlar savatdan o'chirilsinmi?",
+        a_login_title: "Kirish", a_login_text: "Telefon raqamingizni kiriting, tasdiqlash kodini yuboramiz.", a_phone: "Telefon raqam", a_name: "Ismingiz",
+        a_name_ph: "Masalan: Aziz", a_get_code: "Kod olish", a_code: "Tasdiqlash kodi", a_code_sent: "Kod {phone} raqamiga yuborildi", a_confirm: "Tasdiqlash",
+        a_resend: "Kodni qayta yuborish", a_resend_in: "Qayta yuborish: {s} s", a_wrong_code: "Kod noto'g'ri yoki eskirgan", a_bad_phone: "Telefon raqamni to'liq kiriting (9 ta raqam)",
+        a_demo_note: "Demo rejim: SMS yuborilmaydi. Kod: {code}", a_logout: "Chiqish", a_logout_ask: "Hisobdan chiqasizmi?", a_welcome: "Xush kelibsiz, {name}!",
+        a_guest: "Mehmon", a_guest_text: "Buyurtma berish uchun ro'yxatdan o'ting", a_need_name: "Ismingizni kiriting", a_wait: "Biroz kuting...",
+        pr_title: "Profil", pr_orders: "Mening buyurtmalarim", pr_favs: "Saralanganlar", pr_settings: "Sozlamalar", pr_lang: "Til", pr_theme: "Mavzu",
+        pr_light: "Kunduzgi", pr_dark: "Tungi", pr_orders_empty: "Buyurtmalar yo'q", pr_orders_empty_text: "Siz hali buyurtma bermagansiz.", pr_order_no: "Buyurtma №{n}",
+        st_new: "Qabul qilindi", st_confirmed: "Tasdiqlandi", st_shipping: "Yo'lda", st_delivered: "Yetkazildi", st_cancelled: "Bekor qilindi",
+        pr_total: "Jami", pr_address: "Manzil", pr_date: "Sana", pr_demo_deliver: "Demo: yetkazildi deb belgilash", pr_review_btn: "Sharh qoldirish", pr_reviewed: "Sharh qoldirilgan",
+        pr_rate_hint: "Yetkazilgan mahsulotlarga sharh qoldirishingiz mumkin", pr_edit_name: "Ismni o'zgartirish", pr_saved: "Saqlandi", pr_items: "Mahsulotlar"
+      },
+      ru: {
+        nav_home: "Главная", nav_catalog: "Каталог", nav_cart: "Корзина", nav_fav: "Избранное", nav_profile: "Профиль",
+        back: "Назад", close: "Закрыть", cancel: "Отмена", save: "Сохранить", ok: "Хорошо", yes: "Да", no: "Нет", loading: "Загрузка...",
+        error_generic: "Произошла ошибка. Попробуйте ещё раз.", currency: "сум", pcs: "шт", not_found: "Товар не найден", go_home: "На главную",
+        p_color: "Цвет", p_size: "Размер", p_size_guide: "Таблица размеров", p_material: "Ткань", p_country: "Страна производства", p_season: "Сезон",
+        p_specs: "Характеристики", p_about: "О товаре", p_show_all: "Показать полностью", p_hide: "Скрыть", p_reviews: "Отзывы", p_all_reviews: "Все отзывы",
+        p_no_reviews: "Отзывов пока нет", p_sold_week: "На этой неделе купили {n} чел.", p_left: "Осталось {n} шт.", p_out: "Нет в наличии",
+        p_add_cart: "Добавить в корзину", p_go_cart: "Перейти в корзину", p_notify: "Сообщить о поступлении", p_notified: "Сообщим",
+        p_similar: "Похожие товары", p_choose_size: "Выберите размер", p_choose_color: "Выберите цвет", p_variant_out: "Этого варианта нет в наличии",
+        p_added: "Добавлено в корзину", p_notify_on: "Сообщим, когда товар появится", p_notify_off: "Уведомление отключено", p_max: "На складе осталось только {n} шт.",
+        p_new: "Новинка", p_price_from: "Цена",
+        r_title: "Отзывы", r_anon: "Аноним", r_all: "Все", r_with_photos: "С фото", r_buyers_photos: "Фото покупателей",
+        r_write: "Оставить отзыв", r_rating_label: "Ваша оценка", r_text_ph: "Ваше мнение о товаре...", r_add_photo: "Добавить фото",
+        r_post_as: "От чьего имени опубликовать?", r_as_name: "От имени {name}", r_as_anon: "Анонимно", r_send: "Отправить", r_thanks: "Спасибо за отзыв!",
+        r_rate_required: "Пожалуйста, поставьте оценку звёздами", r_variant: "Цвет: {c}  ·  Размер: {s}", r_seller: "Ответ магазина", r_based: "На основе {n} отзывов",
+        r_count: "Отзывов: {n}", r_none_filter: "Нет отзывов по этому фильтру", r_photo_limit: "Не более 3 фото",
+        c_title: "Корзина", c_empty_title: "Корзина пуста", c_empty_text: "Вы пока не добавили товары для покупки.", c_go_shop: "Начать покупки",
+        c_select_all: "Выбрать всё", c_delete_selected: "Удалить выбранные", c_selected: "Выбрано: {n}", c_total: "Итого", c_checkout: "Оформить",
+        c_remove: "Удалить", c_choose_items: "Выберите товары для заказа", c_need_login_title: "Зарегистрируйтесь",
+        c_need_login_text: "Чтобы оформить заказ, подтвердите номер телефона и зарегистрируйтесь.", c_login_btn: "Войти / Регистрация",
+        c_checkout_title: "Оформление заказа", c_name: "Имя", c_phone: "Телефон", c_address: "Адрес доставки", c_address_ph: "Город, улица, дом",
+        c_comment: "Комментарий (необязательно)", c_payment: "Способ оплаты", c_cash: "Наличными при получении", c_confirm: "Оформить заказ", c_order_ok_title: "Заказ принят",
+        c_order_ok_text: "Заказ №{n} принят. Статус можно отслеживать в профиле.", c_my_orders: "Мои заказы", c_unavailable: "Нет в наличии",
+        c_limit: "На складе осталось только {n} шт.", c_need_address: "Укажите адрес", c_need_name: "Укажите имя", c_items_count: "Товары ({n})",
+        c_removed_out: "Товары, которых нет в наличии, не вошли в заказ", c_order_fail: "Не удалось отправить заказ", c_ask_delete: "Удалить выбранные товары из корзины?",
+        a_login_title: "Вход", a_login_text: "Введите номер телефона, мы отправим код подтверждения.", a_phone: "Номер телефона", a_name: "Ваше имя",
+        a_name_ph: "Например: Азиз", a_get_code: "Получить код", a_code: "Код подтверждения", a_code_sent: "Код отправлен на номер {phone}", a_confirm: "Подтвердить",
+        a_resend: "Отправить код ещё раз", a_resend_in: "Повторно через {s} с", a_wrong_code: "Код неверный или устарел", a_bad_phone: "Введите номер полностью (9 цифр)",
+        a_demo_note: "Демо-режим: SMS не отправляется. Код: {code}", a_logout: "Выйти", a_logout_ask: "Выйти из аккаунта?", a_welcome: "Добро пожаловать, {name}!",
+        a_guest: "Гость", a_guest_text: "Зарегистрируйтесь, чтобы оформлять заказы", a_need_name: "Введите имя", a_wait: "Подождите...",
+        pr_title: "Профиль", pr_orders: "Мои заказы", pr_favs: "Избранное", pr_settings: "Настройки", pr_lang: "Язык", pr_theme: "Тема",
+        pr_light: "Светлая", pr_dark: "Тёмная", pr_orders_empty: "Заказов нет", pr_orders_empty_text: "Вы пока не делали заказов.", pr_order_no: "Заказ №{n}",
+        st_new: "Принят", st_confirmed: "Подтверждён", st_shipping: "В пути", st_delivered: "Доставлен", st_cancelled: "Отменён",
+        pr_total: "Итого", pr_address: "Адрес", pr_date: "Дата", pr_demo_deliver: "Демо: отметить как доставленный", pr_review_btn: "Оставить отзыв", pr_reviewed: "Отзыв оставлен",
+        pr_rate_hint: "Вы можете оставить отзыв на доставленные товары", pr_edit_name: "Изменить имя", pr_saved: "Сохранено", pr_items: "Товары"
+      }
+    };
+    /* ---------------- Sozlama ---------------- */
+    // Ma'lumot manzili. Backend ulanganda:  'https://HOST/api/products?shop=mijoz1'
+    const DB_URL = 'database.json';
+    const IS_REMOTE = /^https?:\/\//i.test(DB_URL);
+    const API = IS_REMOTE ? new URL(DB_URL).origin : '';
+    const SHOP = IS_REMOTE ? (new URL(DB_URL).searchParams.get('shop') || '') : '';
+
+    /* ---------------- Xotira (har bir foydalanuvchining o'z telefonida) ---------------- */
+    const ls = {
+      get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+      set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+      raw(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } },
+      setRaw(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    };
+
+    /* ---------------- Til va tema ---------------- */
+    function lang() { const l = ls.raw('selected_lang', 'uz'); return l === 'ru' ? 'ru' : 'uz'; }
+    function theme() { return ls.raw('site_theme', 'light') === 'dark' ? 'dark' : 'light'; }
+    function applyTheme() { if (theme() === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); else document.documentElement.removeAttribute('data-theme'); }
+    function setTheme(v) { ls.setRaw('site_theme', v === 'dark' ? 'dark' : 'light'); applyTheme(); }
+    function setLang(v) { ls.setRaw('selected_lang', v === 'ru' ? 'ru' : 'uz'); document.documentElement.lang = lang(); }
+    function tr(key, params) {
+      let s = (DICT[lang()] && DICT[lang()][key]) || DICT.uz[key] || key;
+      if (params) for (const k in params) s = s.split('{' + k + '}').join(params[k]);
+      return s;
+    }
+    function applyI18n(root) {
+      (root || document).querySelectorAll('[data-i18n]').forEach(el => { el.textContent = tr(el.getAttribute('data-i18n')); });
+      (root || document).querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = tr(el.getAttribute('data-i18n-ph')); });
+    }
+    function loc(f) { if (!f) return ''; if (typeof f === 'string') return f; return f[lang()] || f.uz || Object.values(f)[0] || ''; }
+    function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+    const MONTHS = {
+      uz: ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'],
+      ru: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+    };
+    function fmtDate(d) {
+      const x = new Date(String(d).length <= 10 ? d + 'T12:00:00' : d);
+      if (isNaN(x)) return '';
+      return x.getDate() + ' ' + MONTHS[lang()][x.getMonth()] + (x.getFullYear() !== new Date().getFullYear() ? ' ' + x.getFullYear() : '');
+    }
+
+    /* ---------------- Ma'lumotlar bazasi (database.json yoki backend) ---------------- */
+    let db = { categories: [], products: [], reviews: [], settings: {} };
+    async function loadDB(onUpdate) {
+      const KEY = new URL(DB_URL, location.href).href;
+      let cache = null, cachedText = null;
+      try { cache = await caches.open('uzum-db-v1'); const hit = await cache.match(KEY); if (hit) cachedText = await hit.text(); } catch (e) {}
+      const fetchFresh = async () => {
+        const res = await fetch(KEY, { cache: 'no-cache' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const text = await res.text();
+        if (cache && text !== cachedText) { try { await cache.put(KEY, new Response(text, { headers: { 'Content-Type': 'application/json' } })); } catch (e) {} }
+        return text;
+      };
+      let data;
+      if (cachedText) {
+        try {
+          data = JSON.parse(cachedText);
+          fetchFresh().then(text => { if (text !== cachedText && onUpdate) { try { onUpdate(JSON.parse(text)); } catch (e) {} } }).catch(() => {});
+        } catch (e) { data = null; }
+      }
+      if (!data) data = JSON.parse(await fetchFresh());
+      return data;
+    }
+    function setDB(d) {
+      db = Object.assign({ categories: [], products: [], reviews: [], settings: {} }, d || {});
+      if (db.settings && db.settings.theme && ls.raw('site_theme', null) === null) ls.setRaw('site_theme', db.settings.theme);
+      return db;
+    }
+    function product(id) { return (db.products || []).find(p => String(p.id) === String(id)); }
+    function shopName() { return (db.settings && db.settings.shop_name) || 'Shop'; }
+
+    /* ---------------- Mahsulot: variant, qoldiq, narx ---------------- */
+    function num(s) { if (typeof s === 'number') return s; return parseInt(String(s || '').replace(/[^0-9]/g, ''), 10) || 0; }
+    function money(n) { return Math.round(n).toLocaleString('ru-RU').replace(/ /g, ' ') + ' ' + tr('currency'); }
+    function vkey(color, size) { return (color == null ? '' : color) + '|' + (size == null ? '' : size); }
+    function totalStock(p) {
+      if (p.variant_stock) { let s = 0; for (const k in p.variant_stock) s += Number(p.variant_stock[k]) || 0; return s; }
+      return p.stock !== undefined ? p.stock : 10;
+    }
+    // Tanlangan rang+o'lcham bo'yicha qoldiq
+    function stockFor(p, color, size) {
+      if (p.variant_stock) {
+        const v = p.variant_stock[vkey(color, size)];
+        if (v !== undefined) return Number(v) || 0;
+        // faqat rang yoki faqat o'lcham bo'yicha berilgan bo'lsa
+        const hasSizes = p.sizes && p.sizes.length, hasColors = p.colors && p.colors.length;
+        if (!hasSizes || !hasColors) return 0;
+        return 0;
+      }
+      return p.stock !== undefined ? p.stock : 10;
+    }
+    function colorOf(p, id) { return (p.colors || []).find(c => c.id === id) || null; }
+    function defaultColor(p) { return p.colors && p.colors.length ? p.colors[0].id : null; }
+    function defaultSize(p) { return p.sizes && p.sizes.length ? p.sizes[0] : null; }
+    function productImage(p, colorId) {
+      const c = colorId ? colorOf(p, colorId) : null;
+      return (c && c.images && c.images[0]) || (p.images && p.images[0]) || (p.colors && p.colors[0] && p.colors[0].images && p.colors[0].images[0]) || '';
+    }
+
+    /* ---------------- Savat va saralanganlar ---------------- */
+    function getCart() { const c = ls.get('cart_products', []); return Array.isArray(c) ? c : []; }
+    function saveCart(c) { ls.set('cart_products', c.map(i => ({ id: i.id, selectedSize: i.selectedSize === undefined ? null : i.selectedSize, selectedColor: i.selectedColor === undefined ? null : i.selectedColor, qty: i.qty || 1 }))); updateBadges(); }
+    function sameLine(i, id, size, color) { return String(i.id) === String(id) && (i.selectedSize == null ? null : i.selectedSize) == (size == null ? null : size) && (i.selectedColor == null ? null : i.selectedColor) == (color == null ? null : color); }
+    function cartFind(id, size, color) { return getCart().find(i => sameLine(i, id, size, color)); }
+    function cartSet(id, size, color, qty) {
+      let c = getCart(); const idx = c.findIndex(i => sameLine(i, id, size, color));
+      if (qty <= 0) { if (idx >= 0) c.splice(idx, 1); }
+      else if (idx >= 0) c[idx].qty = qty; else c.push({ id: id, selectedSize: size, selectedColor: color, qty: qty });
+      saveCart(c);
+    }
+    function getFavs() { const f = ls.get('fav_products', []); return Array.isArray(f) ? f : []; }
+    function toggleFav(id) { let f = getFavs(); const i = f.findIndex(x => String(x) === String(id)); if (i >= 0) f.splice(i, 1); else f.push(id); ls.set('fav_products', f); updateBadges(); return i < 0; }
+    function isFav(id) { return getFavs().some(x => String(x) === String(id)); }
+    function getNotified() { return ls.get('notified_products', []); }
+    function toggleNotify(id) { let n = getNotified(); const i = n.indexOf(id); if (i >= 0) n.splice(i, 1); else n.push(id); ls.set('notified_products', n); return i < 0; }
+    function updateBadges() {
+      const cb = document.getElementById('cartBadge'), fb = document.getElementById('favBadge');
+      const cnt = getCart().reduce((s, i) => s + (i.qty || 1), 0), fc = getFavs().length;
+      if (cb) { cb.textContent = cnt; cb.classList.toggle('show', cnt > 0); }
+      if (fb) { fb.textContent = fc; fb.classList.toggle('show', fc > 0); }
+    }
+
+    /* ---------------- Sharhlar ---------------- */
+    function allReviews() {
+      const seen = {}, out = [];
+      (db.reviews || []).concat(ls.get('local_reviews', [])).forEach(r => { const k = r.id; if (k != null && seen[k]) return; if (k != null) seen[k] = 1; out.push(r); });
+      return out;
+    }
+    function reviewsFor(pid) { return allReviews().filter(r => String(r.product_id) === String(pid)).sort((a, b) => String(b.date).localeCompare(String(a.date))); }
+    function ratingOf(p) {
+      const rs = reviewsFor(p.id);
+      if (rs.length) return { avg: rs.reduce((s, r) => s + (Number(r.rating) || 0), 0) / rs.length, count: rs.length };
+      if (p.rating && p.comments) return { avg: Number(p.rating), count: p.comments };
+      return { avg: 0, count: 0 };
+    }
+    const STAR_PATH = 'M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z';
+    function starsHtml(n, size) {
+      let h = '';
+      for (let i = 1; i <= 5; i++) h += `<svg class="sh-star ${i <= Math.round(n) ? 'on' : ''}" style="width:${size || 15}px;height:${size || 15}px" viewBox="0 0 24 24"><path d="${STAR_PATH}"/></svg>`;
+      return `<span class="sh-stars">${h}</span>`;
+    }
+    function reviewHtml(r, p) {
+      const anon = !r.name;
+      const name = anon ? tr('r_anon') : esc(r.name);
+      let variant = '';
+      if (p && (r.color || r.size)) {
+        const c = r.color ? colorOf(p, r.color) : null;
+        const parts = [];
+        if (c) parts.push(tr('p_color') + ': ' + esc(loc(c.name)));
+        if (r.size) parts.push(tr('p_size') + ': ' + esc(r.size));
+        variant = parts.join('  ·  ');
+      }
+      const photos = (r.photos || []).map((u, i) => `<img src="${esc(u)}" alt="" loading="lazy" data-lb="${i}">`).join('');
+      return `<div class="sh-review" data-rid="${esc(r.id)}">
+        <div class="sh-review-head">
+          <div class="sh-avatar ${anon ? 'anon' : ''}">${anon ? '<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' : esc(String(r.name).trim().charAt(0).toUpperCase())}</div>
+          <div class="sh-review-who"><div class="sh-review-name">${name}</div>${starsHtml(r.rating, 14)}</div>
+          <div class="sh-review-date">${esc(fmtDate(r.date))}</div>
+        </div>
+        ${variant ? `<div class="sh-review-variant">${variant}</div>` : ''}
+        ${r.pros ? `<div class="sh-review-text">${esc(r.pros)}</div>` : ''}
+        ${r.text ? `<div class="sh-review-text">${esc(r.text)}</div>` : ''}
+        ${r.cons ? `<div class="sh-review-text muted">${esc(r.cons)}</div>` : ''}
+        ${photos ? `<div class="sh-review-photos">${photos}</div>` : ''}
+        ${r.reply ? `<div class="sh-reply"><div class="sh-reply-name">${esc(r.reply.name || tr('r_seller'))}</div><div class="sh-reply-text">${esc(r.reply.text)}</div></div>` : ''}
+      </div>`;
+    }
+    // Sharh ichidagi rasmni bosganda katta ko'rsatish
+    function bindReviewPhotos(root, listFn) {
+      root.addEventListener('click', e => {
+        const img = e.target.closest('img[data-lb]'); if (!img) return;
+        const card = img.closest('.sh-review'); const rid = card && card.getAttribute('data-rid');
+        const r = listFn().find(x => String(x.id) === String(rid)); if (!r) return;
+        lightbox(r.photos, parseInt(img.getAttribute('data-lb'), 10) || 0);
+      });
+    }
+
+    /* ---------------- Oynalar (sheet / lightbox) va orqaga tugmasi ---------------- */
+    const overlays = [];
+    function pushOverlay(el) {
+      overlays.push(el); history.pushState({ sh: overlays.length }, '');
+      return () => { const i = overlays.indexOf(el); if (i === overlays.length - 1) history.back(); else if (i >= 0) { overlays.splice(i, 1); el.remove(); } };
+    }
+    window.addEventListener('popstate', () => {
+      if (overlays.length) { const el = overlays.pop(); el.classList.remove('show'); setTimeout(() => el.remove(), 220); }
+    });
+    function closeTop() { if (overlays.length) { history.back(); return true; } return false; }
+    function sheet(opts) {
+      const el = document.createElement('div'); el.className = 'sh-sheet-wrap';
+      el.innerHTML = `<div class="sh-sheet-bg"></div><div class="sh-sheet" role="dialog"><div class="sh-sheet-grab"></div>
+        ${opts.title ? `<div class="sh-sheet-title">${opts.title}</div>` : ''}<div class="sh-sheet-body">${opts.html || ''}</div></div>`;
+      document.body.appendChild(el);
+      requestAnimationFrame(() => el.classList.add('show'));
+      const close = pushOverlay(el);
+      el.querySelector('.sh-sheet-bg').addEventListener('click', close);
+      if (opts.onMount) opts.onMount(el.querySelector('.sh-sheet-body'), close);
+      return { el, close, body: el.querySelector('.sh-sheet-body') };
+    }
+    function confirmSheet(message, okLabel) {
+      return new Promise(resolve => {
+        let done = false;
+        const s = sheet({ html: `<div class="sh-confirm-text">${esc(message)}</div>
+          <div class="sh-row"><button class="sh-btn ghost" data-a="no">${esc(tr('cancel'))}</button><button class="sh-btn danger" data-a="yes">${esc(okLabel || tr('yes'))}</button></div>` });
+        s.el.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (!b) return; done = true; const yes = b.getAttribute('data-a') === 'yes'; s.close(); setTimeout(() => resolve(yes), 0); });
+        const obs = new MutationObserver(() => { if (!document.body.contains(s.el)) { obs.disconnect(); if (!done) resolve(false); } });
+        obs.observe(document.body, { childList: true });
+      });
+    }
+    function lightbox(images, start) {
+      if (!images || !images.length) return;
+      const el = document.createElement('div'); el.className = 'sh-lightbox';
+      el.innerHTML = `<button class="sh-lb-close" aria-label="close"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+        <div class="sh-lb-track">${images.map(u => `<div class="sh-lb-slide"><img src="${esc(u)}" alt=""></div>`).join('')}</div>
+        ${images.length > 1 ? `<div class="sh-lb-count"><span id="shLbN">${(start || 0) + 1}</span> / ${images.length}</div>` : ''}`;
+      document.body.appendChild(el);
+      requestAnimationFrame(() => { el.classList.add('show'); const tk = el.querySelector('.sh-lb-track'); tk.scrollLeft = (start || 0) * tk.clientWidth; });
+      const close = pushOverlay(el);
+      el.querySelector('.sh-lb-close').addEventListener('click', close);
+      const tk = el.querySelector('.sh-lb-track');
+      tk.addEventListener('scroll', () => { const n = el.querySelector('#shLbN'); if (n) n.textContent = Math.round(tk.scrollLeft / tk.clientWidth) + 1; });
+    }
+    let toastTimer = null;
+    function toast(msg) {
+      let t = document.getElementById('shToast');
+      if (!t) { t = document.createElement('div'); t.id = 'shToast'; t.className = 'sh-toast'; document.body.appendChild(t); }
+      t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+    function defaultBack() {
+      if (location.hash && history.length > 1) { history.back(); return; }
+      if (history.length > 1 && document.referrer) history.back(); else location.href = 'index.html';
+    }
+    let backHook = null;
+    function onBack(fn) { backHook = fn; }
+    function goBack() { if (closeTop()) return; if (backHook && backHook() === true) return; defaultBack(); }
+    function setupTelegram() {
+      const tg = window.Telegram && window.Telegram.WebApp; if (!tg) return;
+      try { tg.ready(); tg.expand(); } catch (e) {}
+      if (tg.BackButton) { try { tg.BackButton.offClick(goBack); } catch (e) {} tg.BackButton.onClick(goBack); tg.BackButton.show(); }
+      try { if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
+    }
+    function updateNavInset() {
+      const tg = window.Telegram && window.Telegram.WebApp; let sys = 0;
+      if (tg && tg.safeAreaInset && tg.safeAreaInset.bottom) sys = tg.safeAreaInset.bottom;
+      const cssVar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tg-safe-area-inset-bottom')); if (!isNaN(cssVar)) sys = Math.max(sys, cssVar);
+      const probe = document.createElement('div');
+      probe.style.cssText = 'position:fixed;left:0;bottom:0;height:0;visibility:hidden;pointer-events:none;padding-bottom:env(safe-area-inset-bottom, 0px);';
+      document.body.appendChild(probe); const envPx = parseFloat(getComputedStyle(probe).paddingBottom) || 0; probe.remove(); sys = Math.max(sys, envPx);
+      let extra = sys >= 32 ? Math.max(0, sys - envPx) : 0; const manual = parseFloat(ls.raw('nav_extra', NaN)); if (!isNaN(manual)) extra = manual;
+      document.documentElement.style.setProperty('--nav-extra', extra + 'px');
+    }
+    function init() {
+      applyTheme(); document.documentElement.lang = lang(); applyI18n(); updateNavInset(); setupTelegram(); updateBadges();
+      window.addEventListener('pageshow', e => { if (e.persisted) { applyTheme(); applyI18n(); updateBadges(); setupTelegram(); } });
+    }
+    /* ---------------- Kirish, buyurtma, sharh yuborish ---------------- */
+    function getAuth() { return ls.get('auth', null); }
+    function user() { const a = getAuth(); return (a && a.user) || null; }
+    function logout() { try { localStorage.removeItem('auth'); } catch (e) {} }
+    async function api(path, o) {
+      o = o || {};
+      const h = { 'Content-Type': 'application/json' }, a = getAuth();
+      if (o.auth !== false && a && a.token && a.token !== 'local') h.Authorization = 'Bearer ' + a.token;
+      const res = await fetch(API + path, { method: o.method || 'GET', headers: h, body: o.body ? JSON.stringify(o.body) : undefined });
+      let data = null; try { data = await res.json(); } catch (e) {}
+      if (!res.ok) { const err = new Error((data && (data.detail || data.error)) || ('HTTP ' + res.status)); err.status = res.status; throw err; }
+      return data;
+    }
+    function cleanPhone(v) { let d = String(v || '').replace(/\D/g, ''); if (d.startsWith('998')) d = d.slice(3); return d.slice(0, 9); }
+    function fmtPhoneInput(d) { return [d.slice(0, 2), d.slice(2, 5), d.slice(5, 7), d.slice(7, 9)].filter(Boolean).join(' '); }
+    function fullPhone(d9) { return '+998' + d9; }
+    function showPhone(p) { const d = cleanPhone(p); return '+998 ' + fmtPhoneInput(d); }
+
+    async function requestCode(phone) {
+      if (IS_REMOTE) return await api('/api/auth/request-code', { method: 'POST', auth: false, body: { shop: SHOP, phone: phone } });
+      const code = String(Math.floor(10000 + Math.random() * 90000));
+      ls.set('local_code', { phone: phone, code: code, exp: Date.now() + 5 * 60000 });
+      return { ok: true, dev_code: code };
+    }
+    async function verifyCode(phone, code, name) {
+      if (IS_REMOTE) {
+        const r = await api('/api/auth/verify', { method: 'POST', auth: false, body: { shop: SHOP, phone: phone, code: code, name: name } });
+        ls.set('auth', { token: r.token, user: r.user }); return r.user;
+      }
+      const c = ls.get('local_code', null);
+      if (!c || c.phone !== phone || c.code !== String(code) || Date.now() > c.exp) throw new Error('wrong_code');
+      const users = ls.get('local_users', {}); const u = users[phone] || { id: phone, phone: phone, name: '' };
+      if (name) u.name = name; users[phone] = u; ls.set('local_users', users); ls.set('auth', { token: 'local', user: u });
+      try { localStorage.removeItem('local_code'); } catch (e) {}
+      return u;
+    }
+    async function updateName(name) {
+      const a = getAuth(); if (!a) return;
+      if (IS_REMOTE) { const r = await api('/api/me', { method: 'PUT', body: { name: name } }); a.user = r; }
+      else { a.user.name = name; const users = ls.get('local_users', {}); if (users[a.user.phone]) users[a.user.phone].name = name; ls.set('local_users', users); }
+      ls.set('auth', a);
+    }
+
+    function openLogin(onDone) {
+      const lastName = ls.raw('last_name', '');
+      let phone9 = '', timer = null;
+      const s = sheet({
+        title: esc(tr('a_login_title')),
+        html: `<div class="sh-sub">${esc(tr('a_login_text'))}</div>
+          <div id="shStep1">
+            <label class="sh-label">${esc(tr('a_name'))}</label>
+            <input class="sh-input" id="shName" maxlength="40" placeholder="${esc(tr('a_name_ph'))}" value="${esc(lastName)}">
+            <label class="sh-label">${esc(tr('a_phone'))}</label>
+            <div class="sh-phone"><span>+998</span><input id="shPhone" inputmode="numeric" autocomplete="tel" placeholder="90 123 45 67"></div>
+            <div class="sh-err" id="shErr1"></div>
+            <button class="sh-btn" id="shGet">${esc(tr('a_get_code'))}</button>
+          </div>
+          <div id="shStep2" style="display:none">
+            <div class="sh-sent" id="shSent"></div>
+            <div class="sh-demo" id="shDemo" style="display:none"></div>
+            <label class="sh-label">${esc(tr('a_code'))}</label>
+            <input class="sh-input sh-code" id="shCode" inputmode="numeric" maxlength="6" placeholder="• • • • •" autocomplete="one-time-code">
+            <div class="sh-err" id="shErr2"></div>
+            <button class="sh-btn" id="shOk">${esc(tr('a_confirm'))}</button>
+            <button class="sh-btn ghost" id="shResend" disabled></button>
+          </div>`,
+        onMount(body, close) {
+          const $ = id => body.querySelector('#' + id);
+          $('shPhone').addEventListener('input', e => { phone9 = cleanPhone(e.target.value); e.target.value = fmtPhoneInput(phone9); });
+          function startTimer() {
+            let left = 60; clearInterval(timer);
+            const tick = () => { const b = $('shResend'); if (!b) return clearInterval(timer); if (left > 0) { b.disabled = true; b.textContent = tr('a_resend_in', { s: left }); left--; } else { b.disabled = false; b.textContent = tr('a_resend'); clearInterval(timer); } };
+            tick(); timer = setInterval(tick, 1000);
+          }
+          async function send() {
+            const name = $('shName').value.trim();
+            if (!name) { $('shErr1').textContent = tr('a_need_name'); return; }
+            if (phone9.length !== 9) { $('shErr1').textContent = tr('a_bad_phone'); return; }
+            $('shErr1').textContent = ''; const b = $('shGet'); b.disabled = true; b.textContent = tr('a_wait');
+            try {
+              const r = await requestCode(fullPhone(phone9));
+              ls.setRaw('last_name', name);
+              $('shStep1').style.display = 'none'; $('shStep2').style.display = '';
+              $('shSent').textContent = tr('a_code_sent', { phone: showPhone(phone9) });
+              if (r && r.dev_code) { const d = $('shDemo'); d.style.display = ''; d.textContent = tr('a_demo_note', { code: r.dev_code }); }
+              startTimer(); setTimeout(() => $('shCode').focus(), 50);
+            } catch (e) { $('shErr1').textContent = (e && e.message && e.status ? e.message : tr('error_generic')); }
+            b.disabled = false; b.textContent = tr('a_get_code');
+          }
+          $('shGet').addEventListener('click', send);
+          $('shResend').addEventListener('click', async () => { $('shResend').disabled = true; try { const r = await requestCode(fullPhone(phone9)); if (r && r.dev_code) { const d = $('shDemo'); d.style.display = ''; d.textContent = tr('a_demo_note', { code: r.dev_code }); } } catch (e) {} startTimer(); });
+          $('shOk').addEventListener('click', async () => {
+            const code = $('shCode').value.trim(); if (code.length < 4) { $('shErr2').textContent = tr('a_wrong_code'); return; }
+            const b = $('shOk'); b.disabled = true;
+            try {
+              const u = await verifyCode(fullPhone(phone9), code, $('shName').value.trim());
+              clearInterval(timer); close();
+              setTimeout(() => { toast(tr('a_welcome', { name: u.name || '' })); if (onDone) onDone(u); }, 260);
+            } catch (e) { $('shErr2').textContent = tr('a_wrong_code'); b.disabled = false; }
+          });
+        }
+      });
+      return s;
+    }
+
+    /* ---------------- Buyurtmalar ---------------- */
+    function makeSnapshot(it) {
+      const p = product(it.id) || {};
+      const c = it.color ? colorOf(p, it.color) : null;
+      return { product_id: it.id, name: p.name || '', image: productImage(p, it.color), price: num(p.price), color: it.color || null, color_name: c ? c.name : null, size: it.size == null ? null : it.size, qty: it.qty, reviewed: false };
+    }
+    async function listOrders() {
+      if (IS_REMOTE) return await api('/api/orders');
+      const u = user(); if (!u) return [];
+      return ls.get('local_orders', []).filter(o => o.phone === u.phone).sort((a, b) => String(b.created).localeCompare(String(a.created)));
+    }
+    async function placeOrder(d) {
+      if (IS_REMOTE) {
+        return await api('/api/orders', { method: 'POST', body: { name: d.name, address: d.address, comment: d.comment, items: d.items.map(i => ({ product_id: i.id, color: i.color, size: i.size, qty: i.qty })) } });
+      }
+      const u = user(); const all = ls.get('local_orders', []);
+      const items = d.items.map(makeSnapshot);
+      const order = { id: 'L' + Date.now().toString(36), number: all.length + 1001, status: 'new', created: new Date().toISOString(), phone: u.phone, name: d.name, address: d.address, comment: d.comment || '', items: items, total: items.reduce((s, i) => s + i.price * i.qty, 0) };
+      all.push(order); ls.set('local_orders', all); return order;
+    }
+    function localMarkDelivered(id) { const all = ls.get('local_orders', []); const o = all.find(x => x.id === id); if (o) { o.status = 'delivered'; ls.set('local_orders', all); } }
+    function isReviewed(orderId, pid, item) { return !!(item && item.reviewed) || ls.get('reviewed_items', []).indexOf(orderId + ':' + pid) >= 0; }
+
+    async function submitReview(d) {
+      // d: {order_id, product_id, rating, text, anonymous, photos, color, size}
+      const u = user(); let r;
+      if (IS_REMOTE) r = await api('/api/reviews', { method: 'POST', body: d });
+      else r = { id: 'R' + Date.now().toString(36), product_id: d.product_id, name: d.anonymous ? null : (u && u.name) || null, rating: d.rating, text: d.text, date: new Date().toISOString().slice(0, 10), color: d.color, size: d.size, photos: d.photos || [] };
+      const loc_ = ls.get('local_reviews', []); loc_.push(r); ls.set('local_reviews', loc_);
+      const ri = ls.get('reviewed_items', []); ri.push(d.order_id + ':' + d.product_id); ls.set('reviewed_items', ri);
+      return r;
+    }
+    function pickPhotos(files, max) {
+      const list = Array.prototype.slice.call(files || [], 0, max);
+      return Promise.all(list.map(f => new Promise(resolve => {
+        const fr = new FileReader();
+        fr.onload = () => { const img = new Image(); img.onload = () => {
+          const k = Math.min(1, 900 / Math.max(img.width, img.height)); const c = document.createElement('canvas');
+          c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          resolve(c.toDataURL('image/jpeg', 0.78)); }; img.onerror = () => resolve(null); img.src = fr.result; };
+        fr.onerror = () => resolve(null); fr.readAsDataURL(f);
+      }))).then(a => a.filter(Boolean));
+    }
+    function openReviewSheet(order, item, onDone) {
+      const u = user() || {}; const p = product(item.product_id) || {};
+      let rating = 0, photos = [];
+      const nm = loc(item.name);
+      const s = sheet({
+        title: esc(tr('r_write')),
+        html: `<div class="sh-rv-prod"><img src="${esc(item.image || productImage(p, item.color))}" alt=""><div><div class="sh-rv-name">${esc(nm)}</div></div></div>
+          <label class="sh-label">${esc(tr('r_rating_label'))}</label>
+          <div class="sh-rate-pick" id="shRate">${[1, 2, 3, 4, 5].map(i => `<button type="button" data-v="${i}" aria-label="${i}"><svg viewBox="0 0 24 24"><path d="${STAR_PATH}"/></svg></button>`).join('')}</div>
+          <textarea class="sh-input sh-ta" id="shText" maxlength="600" placeholder="${esc(tr('r_text_ph'))}"></textarea>
+          <div class="sh-photos" id="shPh"></div>
+          <input type="file" id="shFile" accept="image/*" multiple style="display:none">
+          <label class="sh-label">${esc(tr('r_post_as'))}</label>
+          <div class="sh-seg" id="shAs"><button type="button" class="${u.name ? 'on' : ''}" data-v="name" ${u.name ? '' : 'disabled'}>${esc(tr('r_as_name', { name: u.name || '—' }))}</button><button type="button" class="${u.name ? '' : 'on'}" data-v="anon">${esc(tr('r_as_anon'))}</button></div>
+          <div class="sh-err" id="shErr"></div>
+          <button class="sh-btn" id="shSend">${esc(tr('r_send'))}</button>`,
+        onMount(body, close) {
+          const $ = id => body.querySelector('#' + id); let asAnon = !u.name;
+          const paintStars = () => $('shRate').querySelectorAll('button').forEach(b => b.classList.toggle('on', parseInt(b.dataset.v, 10) <= rating));
+          $('shRate').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { rating = parseInt(b.dataset.v, 10); paintStars(); } });
+          $('shAs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; asAnon = b.dataset.v === 'anon'; $('shAs').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); });
+          const paintPhotos = () => { $('shPh').innerHTML = photos.map((src, i) => `<div class="sh-ph"><img src="${src}" alt=""><button type="button" data-i="${i}">×</button></div>`).join('') + (photos.length < 3 ? `<button type="button" class="sh-ph-add" id="shAdd"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="12" cy="12" r="3.2"/><path d="M8 5l1.5-2h5L16 5"/></svg><span>${esc(tr('r_add_photo'))}</span></button>` : ''); };
+          paintPhotos();
+          $('shPh').addEventListener('click', e => { if (e.target.closest('#shAdd')) $('shFile').click(); const x = e.target.closest('[data-i]'); if (x) { photos.splice(parseInt(x.dataset.i, 10), 1); paintPhotos(); } });
+          $('shFile').addEventListener('change', async e => { const got = await pickPhotos(e.target.files, 3 - photos.length); photos = photos.concat(got).slice(0, 3); e.target.value = ''; paintPhotos(); });
+          $('shSend').addEventListener('click', async () => {
+            if (!rating) { $('shErr').textContent = tr('r_rate_required'); return; }
+            const b = $('shSend'); b.disabled = true;
+            try {
+              const r = await submitReview({ order_id: order.id, product_id: item.product_id, rating: rating, text: $('shText').value.trim(), anonymous: asAnon, photos: photos, color: item.color, size: item.size });
+              close(); setTimeout(() => { toast(tr('r_thanks')); if (onDone) onDone(r); }, 260);
+            } catch (e) { $('shErr').textContent = tr('error_generic'); b.disabled = false; }
+          });
+        }
+      });
+      return s;
+    }
+
+    return {
+      DB_URL, IS_REMOTE, API, SHOP, ls, lang, theme, applyTheme, setTheme, setLang, tr, applyI18n, loc, esc, fmtDate,
+      loadDB, setDB, db: () => db, product, shopName, num, money, vkey, totalStock, stockFor, colorOf, defaultColor, defaultSize, productImage,
+      getCart, saveCart, cartFind, cartSet, getFavs, toggleFav, isFav, getNotified, toggleNotify, updateBadges,
+      allReviews, reviewsFor, ratingOf, starsHtml, reviewHtml, bindReviewPhotos, STAR_PATH,
+      sheet, confirmSheet, lightbox, toast, closeTop, goBack, onBack, defaultBack, updateNavInset, init,
+      user, getAuth, logout, openLogin, updateName, listOrders, placeOrder, localMarkDelivered, isReviewed, openReviewSheet, showPhone, cleanPhone,
+      requestCode, verifyCode
+    };
+  })();
+
+    </script>
+    <script>
+        const pid = new URLSearchParams(location.search).get('id');
+        let filter = 'all', eligible = null;
+        const page = document.getElementById('page');
+        function render() {
+            SH.applyTheme(); SH.applyI18n();
+            const p = SH.product(pid); if (!p) { page.innerHTML = `<div class="sh-empty"><h3>${SH.esc(SH.tr('not_found'))}</h3><a class="sh-btn" href="index.html">${SH.esc(SH.tr('go_home'))}</a></div>`; return; }
+            const all = SH.reviewsFor(p.id), R = SH.ratingOf(p);
+            const cnt = [0, 0, 0, 0, 0, 0]; all.forEach(r => { cnt[Math.max(1, Math.min(5, Math.round(r.rating)))]++; });
+            const photos = []; all.forEach(r => (r.photos || []).forEach(u => photos.push(u)));
+            let list = all;
+            if (filter === 'photo') list = all.filter(r => (r.photos || []).length); else if (filter !== 'all') list = all.filter(r => Math.round(r.rating) === parseInt(filter, 10));
+            const chip = (k, label) => `<button class="fchip ${filter === k ? 'on' : ''}" data-f="${k}">${label}</button>`;
+            const star = '<svg viewBox="0 0 24 24"><path d="' + SH.STAR_PATH + '"/></svg>';
+            page.innerHTML = `
+              <div class="box"><div class="pm" onclick="location.href='product.html?id=${SH.esc(p.id)}'"><img src="${SH.esc(SH.productImage(p))}" alt=""><div><div class="pm-name">${SH.esc(SH.loc(p.name))}</div></div></div></div>
+              <div class="box">${all.length ? `<div class="sum"><div class="sum-big"><b>${R.avg.toFixed(1)}</b>${SH.starsHtml(R.avg, 14)}<small>${SH.esc(SH.tr('r_based', { n: all.length }))}</small></div>
+                <div class="bars">${[5, 4, 3, 2, 1].map(n => `<div class="bar-row"><span>${n}</span><div class="bar"><i style="width:${all.length ? Math.round(cnt[n] * 100 / all.length) : 0}%"></i></div><span>${cnt[n]}</span></div>`).join('')}</div></div>`
+                : `<div class="sh-empty" style="padding:24px 0"><p>${SH.esc(SH.tr('p_no_reviews'))}</p></div>`}</div>
+              ${photos.length ? `<div class="box"><div class="ph-title">${SH.esc(SH.tr('r_buyers_photos'))}</div><div class="ph-row" id="phRow">${photos.map((u, i) => `<img src="${SH.esc(u)}" data-i="${i}" alt="" loading="lazy">`).join('')}</div></div>` : ''}
+              ${all.length ? `<div class="filters">${chip('all', SH.esc(SH.tr('r_all')))}${[5, 4, 3, 2, 1].map(n => chip(String(n), n + star)).join('')}${photos.length ? chip('photo', SH.esc(SH.tr('r_with_photos'))) : ''}</div>` : ''}
+              <div class="box" id="list">${list.length ? list.map(r => SH.reviewHtml(r, p)).join('') : (all.length ? `<div class="sh-empty" style="padding:24px 0"><p>${SH.esc(SH.tr('r_none_filter'))}</p></div>` : '')}</div>`;
+            if (!all.length) document.getElementById('list').style.display = 'none';
+            document.getElementById('phRow') && document.getElementById('phRow').addEventListener('click', e => { const im = e.target.closest('img[data-i]'); if (im) SH.lightbox(photos, parseInt(im.dataset.i, 10)); });
+            SH.bindReviewPhotos(document.getElementById('list'), () => list);
+            page.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => { filter = b.getAttribute('data-f'); render(); }));
+            renderWrite(p);
+        }
+        function renderWrite(p) {
+            const bar = document.getElementById('writeBar'); bar.innerHTML = '';
+            if (!eligible) return;
+            bar.innerHTML = `<button class="sh-btn" id="wr">${SH.esc(SH.tr('r_write'))}</button>`;
+            bar.querySelector('#wr').addEventListener('click', () => SH.openReviewSheet(eligible.order, eligible.item, () => { eligible = null; render(); }));
+        }
+        async function findEligible() {
+            if (!SH.user()) return;
+            try {
+                const os = await SH.listOrders();
+                for (const o of os) { if (o.status !== 'delivered') continue; const it = (o.items || []).find(i => String(i.product_id) === String(pid) && !SH.isReviewed(o.id, i.product_id, i)); if (it) { eligible = { order: o, item: it }; break; } }
+            } catch (e) {}
+        }
+        (async function start() {
+            SH.init(); SH.onBack(null);
+            try { SH.setDB(await SH.loadDB(fresh => { SH.setDB(fresh); render(); })); } catch (e) {}
+            const p = SH.product(pid); document.title = SH.tr('r_title') + (p ? ' - ' + SH.loc(p.name) : '');
+            render(); await findEligible(); if (eligible) renderWrite(p);
+        })();
+    </script>
+</body>
+</html>
