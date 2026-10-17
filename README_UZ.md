@@ -1,36 +1,49 @@
-Backend (FastAPI) — telefon bilan ishga tushirish
-1. Fayllar
-main.py, requirements.txt — GitHub'da yangi repo oching va ikkalasini yuklang.
-2. Bepul baza (PostgreSQL)
-neon.tech yoki supabase.com da ro'yxatdan o'ting, yangi baza yarating va "connection string" ni nusxalang
-(postgresql://...).
-SQLite bepul hostingda ishlamaydi: disk vaqtinchalik, ma'lumot o'chib ketadi. Shuning uchun PostgreSQL.
-3. Hosting (Render.com, bepul)
-New → Web Service → GitHub repo'ni tanlang.
-Build Command: pip install -r requirements.txt
-Start Command: uvicorn main:app --host 0.0.0.0 --port $PORT
-Environment:
-DATABASE_URL = Neon/Supabase manzili
-MASTER_KEY = o'zingiz o'ylab topgan uzun maxfiy parol
-CORS_ORIGINS = frontend manzili (yoki * sinov uchun)
+# Do'kon: o'rnatish (telefondan)
 
-Bepul Render 15 daqiqa ishlatilmasa uxlaydi, birinchi kirish sekin bo'ladi. Frontend keshdan ochgani uchun bu bilinmaydi.
-4. Birinchi mijoz (do'kon) yaratish
-https://HOST/docs ni oching (Swagger):
-POST /api/master/shops → Authorize/header X-Master-Key ni kiriting, body: {"slug":"mijoz1","name":"Mijoz do'koni","plan":"trial"}. Javobda api_key chiqadi, uni saqlang.
-POST /api/admin/mijoz1/import-file → header X-Admin-Key = api_key, database.json faylini yuklang.
-5. Frontend'ni ulash
-Har bir html faylda const DB_URL = 'database.json' qatori bor (index, products, categories, sales, product, heart, cart, profil, reviews; ba'zilarida 2 joyda).
-Backend manzili tayyor bo'lgach menga yuboring, hammasini o'zim almashtirib beraman. Yoki qo'lda:
-const DB_URL = 'https://HOST/api/products?shop=mijoz1'
-6. Tariflar va sinov
-PATCH /api/master/shops/mijoz1 (X-Master-Key) bilan plan, active, expires_at o'zgartiriladi.
-Muddat tugasa /api/products 402 qaytaradi.
-7. Mijozlar: kirish (SMS kod), buyurtma, sharh
-Frontend DB_URL ni backend manziliga o'zgartirsangiz, ro'yxatdan o'tish, buyurtmalar va sharhlar serverda saqlanadi (har bir mijozning o'ziniki, boshqasiga ko'rinmaydi).
-Qo'shimcha o'zgaruvchilar (Render > Environment):
-SECRET_KEY = uzun maxfiy qator (tokenlar uchun, o'zgarmasin)
-ESKIZ_EMAIL, ESKIZ_PASSWORD = eskiz.uz hisobingiz (SMS yuborish uchun). Bular bo'lmasa kod SMS bilan yuborilmaydi, javobda ko'rinadi (faqat sinov uchun!). Haqiqiy mijozga berishdan oldin Eskiz ulang va SMS_DEV=0 qo'ying.
-Buyurtma holatini o'zgartirish (Swagger): PATCH /api/orders-admin/{shop}/{id} body {"status":"delivered"}. Holat delivered bo'lgach mijoz sharh qoldira oladi.
-Buyurtmalar ro'yxati: GET /api/orders-admin/{shop} (X-Admin-Key).
-Eslatma: bu kod kompyuterimda kutubxonalar o'rnatilmagani uchun ishga tushirib sinalmagan. Birinchi ishga tushirishda xato chiqsa, Render logini yuboring, tuzataman.
+Hamma fayl BIR papkada turadi (server.js ham, html lar ham). Render shu papkadan ishlaydi.
+
+## 1. GitHub'ga yuklash
+Repozitoriyga shu fayllarni yuklang (eskilarini almashtiring):
+- `server.js`, `package.json` (yangilari; Express endi kerak emas)
+- `index, products, categories, sales, product, heart, cart, profil, reviews .html`
+- `style.css`, `script.js`
+- `admin.html`, `admin.css`, `admin.js`
+- `database.json` (sizning mahsulotlaringiz; hozirgisi namuna, kiyim)
+
+`stories.html` fayli sizda alohida bo'lsa, o'sha yerda qoladi.
+
+## 2. Render -> Environment (o'zgaruvchilar)
+| Nomi | Nima |
+|---|---|
+| `BOT_TOKEN` | BotFather bergan token |
+| `OWNER_CHAT_ID` | buyurtma xabari boradigan chat ID (bir nechta bo'lsa vergul bilan) |
+| `ADMIN_KEY` | admin.html paroli (uzun, o'zingiz o'ylab toping) |
+| `DATABASE_URL` | Neon.tech manzili (pastga qarang). BO'LMASA buyurtmalar yo'qoladi |
+| `BREVO_API_KEY` | brauzerda email kod yuborish uchun (ixtiyoriy) |
+| `EMAIL_FROM` | `Do'kon nomi <sizning@gmail.com>` |
+
+Saqlagach Render o'zi qayta ishga tushadi. Server ishga tushganda Telegram webhook'ni o'zi o'rnatadi (logda `webhook: OK`).
+
+## 3. Neon (bepul baza, buyurtmalar yo'qolmasligi uchun)
+neon.tech -> ro'yxatdan o'tish -> yangi loyiha -> "Connection string" ni nusxalang -> Render'da `DATABASE_URL` ga qo'ying. Jadvallarni server o'zi yaratadi.
+
+## 4. Brevo (email kodi, bepul)
+brevo.com -> ro'yxatdan o'tish -> Senders -> o'z gmail'ingizni tasdiqlang -> SMTP & API -> API key yarating -> `BREVO_API_KEY`.
+Telegram ichida email kerak emas, u faqat oddiy brauzer uchun.
+
+## 5. Telegram
+BotFather -> botingiz -> Menu Button / Web App manzili = Render manzilingiz (`https://...onrender.com`).
+Mijoz birinchi buyurtmada "Raqamni ulashish" tugmasini bosadi; bot raqamni Telegramdan oladi. Kod yozish kerak emas.
+
+## 6. Admin
+`https://SIZNING-MANZIL/admin.html` -> `ADMIN_KEY` ni kiriting. Buyurtma holatini o'zgartirsangiz, mijozga Telegramda xabar boradi. "Bekor" qilsangiz qoldiq qaytadi.
+
+## Fayllar tuzilishi (o'zgartirish uchun)
+- `style.css`: bo'limlarga bo'lingan (qidiruv, banner, storis, savat, profil...). Ranglar tepada `--primary`, `--bg`.
+- `script.js`: tepada `CONFIG`, so'ng umumiy kod, so'ng har sahifa uchun `PAGES.index`, `PAGES.cart`... Har bir bo'lim sarlavhali.
+- Sayt boshqa joyda (masalan GitHub Pages) bo'lsa, `script.js` tepasida `CONFIG.API_BASE` ga Render manzilini yozing.
+
+## Eslatma
+- Storis `created_at + duration_hours` o'tgach o'zi yashirinadi. Storislar qatori yo'qolsa, sanani yangilang.
+- Hafta aksiyasi `timer_end` o'tgach o'chadi.
+- Mahsulot qoldig'ini `database.json` da o'zgartirasiz; sotilganlari serverda alohida hisoblanadi (`/api/admin/reset-sold` bilan nolga tushiriladi).
