@@ -1,0 +1,51 @@
+/* ==========================================================================
+   admin.css  —  admin.html (buyurtmalar paneli) uslublari
+   ========================================================================== */
+
+/* ===== RANGLAR (kunduzgi va tungi rejim) ===== */
+:root { --bg: #f4f5f7; --card: #fff; --text: #1c1c1e; --muted: #7b7f87; --border: #e4e6ea; --primary: #7000ff; --primary-bg: #f1e8ff; }
+:root[data-theme="dark"] { --bg: #0f0f12; --card: #1b1b20; --text: #f2f2f4; --muted: #9a9aa3; --border: #2b2b32; --primary: #9a5cff; --primary-bg: #261a40; }
+
+/* ===== UMUMIY: shrift, fon, sahifa kengligi ===== */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 14px 12px 40px; }
+.wrap { max-width: 720px; margin: 0 auto; }
+h1 { font-size: 20px; margin: 4px 0 12px; }
+
+/* ===== FORMA ELEMENTLARI VA TUGMALAR ===== */
+input, select, button { font: inherit; }
+.inp { width: 100%; height: 44px; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 12px; padding: 0 12px; font-size: 16px; }
+.btn { height: 44px; border: none; border-radius: 12px; background: var(--primary); color: #fff; font-weight: 700; padding: 0 16px; cursor: pointer; }
+.btn.ghost { background: var(--primary-bg); color: var(--primary); }
+.btn.sm { height: 34px; font-size: 13px; padding: 0 12px; border-radius: 10px; }
+.btn.red { background: #ffe9e7; color: #e0352b; }
+
+/* ===== USTKI TUGMALAR QATORI va FILTR TABLARI (Hammasi / Yangi / Yo'lda ...) ===== */
+.row { display: flex; gap: 8px; margin-bottom: 10px; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; margin: 10px 0; padding-bottom: 4px; }
+.tab { flex-shrink: 0; border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 18px; padding: 7px 14px; font-size: 13px; cursor: pointer; }
+.tab.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* ===== BUYURTMA KARTOCHKASI: sarlavha, mijoz ma'lumoti, mahsulotlar, jami ===== */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 12px; }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+.no { font-weight: 800; font-size: 16px; }
+.date { font-size: 12px; color: var(--muted); }
+.kv { font-size: 14px; line-height: 1.6; }
+.kv span { color: var(--muted); }
+.kv a { color: var(--primary); text-decoration: none; font-weight: 600; }
+.tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: #e6f9ee; color: #00a650; margin-left: 4px; }
+.items { margin: 10px 0; border-top: 1px solid var(--border); padding-top: 8px; }
+.it { display: flex; gap: 10px; align-items: center; padding: 5px 0; font-size: 13px; }
+.it img { width: 42px; height: 54px; object-fit: cover; border-radius: 8px; background: var(--bg); }
+.total { font-weight: 800; font-size: 16px; text-align: right; }
+
+/* ===== HOLAT TANLASH (select) va QORA RO'YXAT TUGMASI ===== */
+.acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+select.st { height: 36px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); padding: 0 8px; font-weight: 600; }
+.st-new { color: #e8890c; } .st-confirmed { color: #2979ff; } .st-shipping { color: #7000ff; } .st-delivered { color: #00a650; } .st-cancelled { color: #e0352b; }
+
+/* ===== XABARLAR: bo'sh ro'yxat, xato, qora ro'yxat qatori ===== */
+.msg { text-align: center; color: var(--muted); padding: 30px 10px; }
+.err { color: #e0352b; font-size: 13px; min-height: 18px; margin: 6px 0; }
+.bans { font-size: 13px; color: var(--muted); margin-top: 18px; }
