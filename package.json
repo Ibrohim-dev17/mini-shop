@@ -1,14 +1,13 @@
 {
   "name": "namangan-online-shop",
-  "version": "1.0.0",
-  "description": "Uzum Market custom web app",
+  "version": "2.0.0",
+  "description": "Telegram Web App kiyim do'koni",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "pg": "^8.11.5"
   },
   "engines": {
     "node": ">=18.0.0"
