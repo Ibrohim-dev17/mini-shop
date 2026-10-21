@@ -1,28 +1,16 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
-    <meta name="robots" content="noindex">
-    <script>try{if(localStorage.getItem('site_theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
-    <link rel="stylesheet" href="admin.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Admin</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="admin.css">
 </head>
 <body>
-<div class="wrap">
-    <h1>Buyurtmalar (admin)</h1>
-    <div id="login">
-        <input class="inp" id="key" type="password" placeholder="Admin paroli (ADMIN_KEY)" autocomplete="current-password">
-        <div class="err" id="loginErr"></div>
-        <button class="btn" id="go" style="width:100%">Kirish</button>
-    </div>
-    <div id="main" style="display:none">
-        <div class="row"><button class="btn ghost sm" id="refresh">Yangilash</button><button class="btn ghost sm" id="out">Chiqish</button></div>
-        <div class="tabs" id="tabs"></div>
-        <div id="list"></div>
-        <div class="bans" id="bans"></div>
-    </div>
-</div>
-    <script src="admin.js"></script>
+<!-- Menyu va sahifa qobig'i admin.js tomonidan chiziladi. Bu sahifaning ichki kodi: admin-dashboard.js -->
+<script src="admin.js"></script>
+<script src="admin-dashboard.js"></script>
 </body>
 </html>
