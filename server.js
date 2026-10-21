@@ -85,16 +85,24 @@ const store = process.env.DATABASE_URL ? pgStore(process.env.DATABASE_URL) : fil
 if (store.kind === 'fayl') console.warn("[OGOHLANTIRISH] DATABASE_URL yo'q: buyurtmalar data.json faylida saqlanadi. Bepul Render qayta ishga tushganda bu fayl O'CHADI. Neon/Supabase ulang.");
 
 /* ============================ database.json + qo'shimchalar ============================ */
-let baseCache = { mtime: 0, data: null };
-function loadBase() {
+let baseCache = { mtime: 0, data: null, sig: '' };
+function fileBase() {
   const st = fs.statSync(DB_FILE);
   if (baseCache.mtime !== st.mtimeMs) {
-    const j = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    const raw = fs.readFileSync(DB_FILE, 'utf8'); const j = JSON.parse(raw);
     delete j.orders; delete j.users; // eski fayldagi maxfiy bo'limlar saytga chiqmasin
-    baseCache = { mtime: st.mtimeMs, data: j };
+    baseCache = { mtime: st.mtimeMs, data: j, sig: crypto.createHash('sha1').update(raw).digest('hex') };
   }
   return baseCache.data;
 }
+// KATALOG: admin panel tahrirlagandan keyin katalog bazada (Postgres) saqlanadi va database.json o'rniga SHU ishlatiladi.
+let CATALOG = null, CATALOG_SIG = '', CATALOG_VER = 0;
+function loadBase() { return CATALOG || fileBase(); }
+const baseKey = () => CATALOG ? 'c' + CATALOG_VER : 'f' + baseCache.mtime;
+const catalogReady = (async () => {
+  try { const r = await store.get('meta', 'catalog'); if (r && r.cat) { CATALOG = r.cat; CATALOG_SIG = r.sig || ''; CATALOG_VER++; console.log("[Katalog] admin tahrirlagan katalog bazadan yuklandi"); } }
+  catch (e) { console.error('[Katalog]', e.message); }
+})();
 const vkey = (pid, color, size) => pid + '#' + (color == null ? '' : color) + '|' + (size == null ? '' : size);
 async function soldMap() { return (await store.get('meta', 'sold')) || {}; }
 function soldTotal(sold, pid) { let s = 0; const pre = pid + '#'; for (const k in sold) if (k.startsWith(pre)) s += sold[k]; return s; }
@@ -110,21 +118,27 @@ function effTotal(p, sold) {
 let merged = { body: null, gz: null, etag: '', ts: 0, mtime: 0 };
 function bump() { merged.ts = 0; }
 async function mergedDB() {
-  loadBase();
-  if (merged.body && merged.mtime === baseCache.mtime && Date.now() - merged.ts < 30000) return merged;
-  const base = baseCache.data, sold = await soldMap();
+  if (merged.body && merged.mtime === baseKey() && Date.now() - merged.ts < 30000) return merged;
+  const base = loadBase(), sold = await soldMap();
   const orders = await store.list('orders'), since = Date.now() - 7 * 86400000, week = {};
   orders.forEach(o => { if (o.status !== 'cancelled' && new Date(o.created).getTime() >= since) (o.items || []).forEach(i => { week[i.product_id] = (week[i.product_id] || 0) + (i.qty || 0); }); });
-  const products = (base.products || []).map(p => {
+  const archCats = new Set((base.categories || []).filter(c => c.archived).map(c => String(c.id)));
+  const products = (base.products || []).filter(p => !p.archived && !archCats.has(String(p.category_id))).map(p => {
     const q = Object.assign({}, p);
     if (p.variant_stock) { q.variant_stock = {}; let tot = 0; for (const k in p.variant_stock) { const v = Math.max(0, (Number(p.variant_stock[k]) || 0) - (sold[p.id + '#' + k] || 0)); q.variant_stock[k] = v; tot += v; } q.stock = tot; }
     else if (p.stock !== undefined) q.stock = effStock(p, sold);
     if (week[p.id]) q.sold_week = Math.max(Number(p.sold_week) || 0, week[p.id]);
+    delete q.cost; delete q.note; delete q.archived; delete q.archived_at; // tan narx va ichki izohlar saytga chiqmaydi
     return q;
   });
   const reviews = (base.reviews || []).concat(await store.list('reviews'));
-  const body = Buffer.from(JSON.stringify(Object.assign({}, base, { products, reviews })));
-  merged = { body, gz: zlib.gzipSync(body), etag: '"' + crypto.createHash('sha1').update(body).digest('hex') + '"', ts: Date.now(), mtime: baseCache.mtime };
+  const body = Buffer.from(JSON.stringify(Object.assign({}, base, {
+    products, reviews,
+    categories: (base.categories || []).filter(c => !c.archived).map(c => Object.assign({}, c, { subcats: (c.subcats || []).filter(x => !x.archived) })),
+    banners: (base.banners || []).filter(b => !b.archived), stories: (base.stories || []).filter(x => !x.archived),
+    home_sections: (base.home_sections || []).map(x => Object.assign({}, x, { product_ids: (x.product_ids || []).filter(id => products.some(p => p.id === id)) })),
+  })));
+  merged = { body, gz: zlib.gzipSync(body), etag: '"' + crypto.createHash('sha1').update(body).digest('hex') + '"', ts: Date.now(), mtime: baseKey() };
   return merged;
 }
 
@@ -239,9 +253,20 @@ async function handleTgUpdate(upd) {
     return;
   }
   const u = await upsertTgUser(m.from, { lang });
+  if ((m.text && !m.text.startsWith('/')) || (!m.text && (m.caption || m.photo || m.document || m.voice))) { await chatIncoming(u, m, lang); return; }
   const open = webBtn(lang, 'index.html');
   await tgApi('sendMessage', { chat_id: m.chat.id, text: tt(lang, 'hello'), reply_markup: open });
   if (!u.phone_verified) await tgApi('sendMessage', { chat_id: m.chat.id, text: tt(lang, 'share'), reply_markup: { keyboard: [[{ text: tt(lang, 'shareBtn'), request_contact: true }]], resize_keyboard: true, one_time_keyboard: true } });
+}
+// Mijozning botga yozgan oddiy xabari: admin panelning "Chat" bo'limiga tushadi
+async function chatIncoming(u, m, lang) {
+  const th = (await store.get('chat', u.id)) || { uid: u.id, tg: u.tg, msgs: [], unread: 0 };
+  const text = String(m.text || m.caption || (m.photo ? '[rasm]' : m.voice ? '[ovozli xabar]' : '[fayl]')).slice(0, 2000);
+  const prev = th.msgs.length ? th.msgs[th.msgs.length - 1].ts : 0;
+  th.name = u.name; th.username = u.username || ''; th.msgs.push({ from: 'u', text, ts: Date.now() }); th.msgs = th.msgs.slice(-200);
+  th.unread = (th.unread || 0) + 1; th.updated = new Date().toISOString(); await store.put('chat', u.id, th);
+  tellOwners('💬 <b>' + escHtml(u.name || 'Mijoz') + '</b>' + (u.username ? ' @' + escHtml(u.username) : '') + ': ' + escHtml(text.slice(0, 300)) + '\n<i>Javob berish: admin panel → Chat</i>').catch(() => {});
+  if (Date.now() - prev > 6 * 3600000) await tgApi('sendMessage', { chat_id: m.chat.id, text: lang === 'ru' ? 'Сообщение получено, скоро ответим.' : "Xabaringiz qabul qilindi, tez orada javob beramiz." });
 }
 async function tellOwners(html) { for (const id of OWNER_IDS) await tgApi('sendMessage', { chat_id: id, text: html, parse_mode: 'HTML', disable_web_page_preview: true }); }
 async function tellUser(u, text, page, label) {
@@ -268,7 +293,13 @@ async function authUser(req) {
 }
 const pubUser = u => ({ id: u.id, kind: u.kind, tg: u.tg || null, username: u.username || '', name: u.name || '', phone: u.phone || '', phone_verified: !!u.phone_verified, email: u.email || '', lang: u.lang || '' });
 const tokenFor = u => sign({ uid: u.id, exp: Date.now() + 30 * 86400000 });
-function checkAdmin(req) { if (!ADMIN_KEY || !safeEq(req.headers['x-admin-key'] || '', ADMIN_KEY)) throw new HttpError(401, "Admin kaliti noto'g'ri"); }
+const adminFails = new Map();
+function checkAdmin(req) {
+  const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim(), now = Date.now();
+  const a = (adminFails.get(ip) || []).filter(t => now - t < 600000);
+  if (a.length >= 10) throw new HttpError(429, "Juda ko'p noto'g'ri urinish. 10 daqiqadan keyin qayta urining");
+  if (!ADMIN_KEY || !safeEq(req.headers['x-admin-key'] || '', ADMIN_KEY)) { a.push(now); adminFails.set(ip, a); throw new HttpError(401, "Admin kaliti noto'g'ri"); }
+}
 const STATUSES = ['new', 'confirmed', 'shipping', 'delivered', 'cancelled'];
 async function isBanned(vals) { for (const v of vals) if (v && await store.get('bans', String(v).toLowerCase())) return true; return false; }
 
@@ -338,7 +369,7 @@ route('POST', '/api/orders', (req, body) => withLock(async () => {
   if (cid) { const old = await store.get('idem', u.id + ':' + cid); if (old) { const o = await store.get('orders', String(old.number)); if (o) return o; } }
   const raw = body.items;
   if (!Array.isArray(raw) || !raw.length || raw.length > 50) throw new HttpError(400, "Buyurtmada mahsulot yo'q");
-  const base = loadBase(), prods = new Map((base.products || []).map(p => [String(p.id), p])), sold = await soldMap();
+  const base = loadBase(), prods = new Map((base.products || []).filter(p => !p.archived).map(p => [String(p.id), p])), sold = await soldMap();
   const lines = new Map();
   for (const it of raw) {
     const p = prods.get(String(it.product_id)), qty = parseInt(it.qty, 10) || 1;
@@ -353,7 +384,7 @@ route('POST', '/api/orders', (req, body) => withLock(async () => {
   for (const [k, l] of lines) {
     sold[k] = (sold[k] || 0) + l.qty;
     const col = (l.p.colors || []).find(c => c.id === l.color), price = digits(l.p.price); total += price * l.qty;
-    items.push({ product_id: l.p.id, name: l.p.name, image: ((col && col.images) || l.p.images || [''])[0], price, color: l.color, color_name: col ? col.name : null, size: l.size, qty: l.qty, reviewed: false });
+    items.push({ product_id: l.p.id, name: l.p.name, image: ((col && col.images) || l.p.images || [''])[0], price, cost: digits(l.p.cost), color: l.color, color_name: col ? col.name : null, size: l.size, qty: l.qty, reviewed: false });
   }
   const number = 1000 + await store.next('orders');
   const order = {
@@ -397,7 +428,7 @@ route('POST', '/api/notify', async (req, body) => {
 async function checkRestock() {
   try {
     const subs = await store.list('notify'); if (!subs.length) return;
-    const base = loadBase(), sold = await soldMap(), prods = new Map((base.products || []).map(p => [String(p.id), p]));
+    const base = loadBase(), sold = await soldMap(), prods = new Map((base.products || []).filter(p => !p.archived).map(p => [String(p.id), p]));
     for (const s of subs) {
       const p = prods.get(String(s.product_id)); if (!p || effTotal(p, sold) <= 0) continue;
       const u = await store.get('users', s.uid); await store.del('notify', s.uid + '|' + s.product_id); if (!u) continue;
@@ -407,7 +438,7 @@ async function checkRestock() {
 }
 
 // --- Admin ---
-route('GET', '/api/admin/orders', async req => { checkAdmin(req); return (await store.list('orders')).sort((a, b) => b.number - a.number).slice(0, 300); });
+route('GET', '/api/admin/orders', async req => { checkAdmin(req); return (await store.list('orders')).sort((a, b) => b.number - a.number).slice(0, 5000); });
 route('PATCH', '/api/admin/orders', async (req, body) => {
   checkAdmin(req); const o = await store.get('orders', String(body.id)); if (!o) throw new HttpError(404, 'Buyurtma topilmadi');
   if (!STATUSES.includes(body.status)) throw new HttpError(400, 'status: ' + STATUSES.join(', '));
@@ -427,6 +458,247 @@ route('POST', '/api/admin/ban', async (req, body) => {
 });
 route('POST', '/api/admin/reset-sold', async req => { checkAdmin(req); await store.put('meta', 'sold', {}); bump(); return { ok: true }; });
 route('POST', '/api/admin/telegram-setup', async req => { checkAdmin(req); return await setupTelegram(); });
+
+/* ============================================================================
+ *  ADMIN API: katalog (mahsulot, kategoriya, banner, storis, aksiya), ombor, rasm, foydalanuvchi, chat
+ *  Hammasi X-Admin-Key bilan himoyalangan. Katalog o'zgarsa SAYT HAM O'ZGARADI (sayt shu katalogdan o'qiydi).
+ * ============================================================================ */
+const S = (v, n) => String(v == null ? '' : v).trim().slice(0, n);
+const L = (v, n) => { const o = (v && typeof v === 'object') ? v : { uz: v }; const uz = S(o.uz, n), ru = S(o.ru, n) || uz; return { uz, ru }; };
+const urlOk = u => typeof u === 'string' && u.length < 700000 && (/^https?:\/\//i.test(u) || u.startsWith('/img/') || /^data:(image|video)\//.test(u));
+const nextId = arr => arr.reduce((m, x) => Math.max(m, Number(x && x.id) || 0), 0) + 1;
+const fmtMoney = n => Math.round(n).toLocaleString('ru-RU').replace(/[  ]/g, ' ') + " so'm";
+const isoOrEmpty = v => { if (!v) return ''; const t = Date.parse(String(v)); return isNaN(t) ? '' : new Date(t).toISOString(); };
+
+function ensureCatalog() {
+  if (!CATALOG) { CATALOG = JSON.parse(JSON.stringify(fileBase())); CATALOG_SIG = baseCache.sig; }
+  ['categories', 'products', 'banners', 'stories', 'home_sections', 'reviews'].forEach(k => { if (!Array.isArray(CATALOG[k])) CATALOG[k] = []; });
+  if (!CATALOG.settings || typeof CATALOG.settings !== 'object') CATALOG.settings = {};
+  return CATALOG;
+}
+async function saveCatalog() { CATALOG_VER++; await store.put('meta', 'catalog', { cat: CATALOG, sig: CATALOG_SIG, saved: new Date().toISOString() }); bump(); }
+const bad = m => new HttpError(400, m);
+
+/* ---- Mahsulot ---- */
+async function saveProduct(C, inp) {
+  const old = inp.id ? C.products.find(p => String(p.id) === String(inp.id)) : null;
+  if (inp.id && !old) throw new HttpError(404, 'Mahsulot topilmadi');
+  const p = old || { id: Math.max(nextId(C.products), (Number(C.next_product_id) || 0) + 1) };
+  if (!old) C.next_product_id = p.id; // o'chirilgan mahsulot raqami qayta ishlatilmasin (sotuv hisobi aralashmasligi uchun)
+  const name = L(inp.name, 120); if (!name.uz) throw bad('Mahsulot nomini kiriting');
+  const price = digits(inp.price); if (!price) throw bad('Narxini kiriting');
+  const cat = C.categories.find(c => String(c.id) === String(inp.category_id)); if (!cat) throw bad('Kategoriyani tanlang');
+  p.name = name; p.price = fmtMoney(price);
+  const op = digits(inp.oldPrice);
+  if (op > price) { p.oldPrice = fmtMoney(op); p.discount = '-' + Math.round((op - price) / op * 100) + '%'; } else { delete p.oldPrice; delete p.discount; }
+  p.cost = digits(inp.cost);
+  p.category_id = cat.id;
+  const sub = inp.subcat && (inp.subcat.uz || inp.subcat.ru) ? L(inp.subcat, 80) : null; if (sub) p.subcat = sub; else delete p.subcat;
+  p.images = (Array.isArray(inp.images) ? inp.images : []).filter(urlOk).slice(0, 12);
+  const colors = []; const seen = new Set();
+  (Array.isArray(inp.colors) ? inp.colors : []).slice(0, 20).forEach((c, i) => {
+    const nm = L(c && c.name, 40); if (!nm.uz) return;
+    let id = S(c.id, 30).replace(/[^a-zA-Z0-9_-]/g, '') || ('c' + (i + 1)); while (seen.has(id)) id += '_'; seen.add(id);
+    colors.push({ id, name: nm, hex: /^#[0-9a-f]{6}$/i.test(c.hex || '') ? c.hex : '#999999', images: (Array.isArray(c.images) ? c.images : []).filter(urlOk).slice(0, 10) });
+  });
+  if (colors.length) p.colors = colors; else delete p.colors;
+  const sizes = (Array.isArray(inp.sizes) ? inp.sizes : []).map(x => S(x, 20)).filter(Boolean).slice(0, 30); if (sizes.length) p.sizes = sizes; else delete p.sizes;
+  ['material', 'country', 'season'].forEach(k => { const v = inp[k] && L(inp[k], 60); if (v && v.uz) p[k] = v; else delete p[k]; });
+  const d = L(inp.description, 3000); if (d.uz) p.description = d; else delete p.description;
+  p.badgeType = S(inp.badgeType, 20) || p.badgeType || 'original';
+  if (inp.sold_week !== undefined) p.sold_week = digits(inp.sold_week);
+  p.note = S(inp.note, 300); if (!p.note) delete p.note;
+  // Omborga yozilgan son = HOZIRGI qoldiq (sotilganlar hisobga olinadi)
+  const sold = await soldMap();
+  const vs = inp.variant_stock && typeof inp.variant_stock === 'object' ? Object.keys(inp.variant_stock) : [];
+  if (vs.length) { p.variant_stock = {}; vs.slice(0, 400).forEach(k => { p.variant_stock[k] = digits(inp.variant_stock[k]) + (sold[p.id + '#' + k] || 0); }); delete p.stock; }
+  else { p.stock = digits(inp.stock) + soldTotal(sold, p.id); delete p.variant_stock; }
+  if (!old) { p.created = new Date().toISOString(); C.products.unshift(p); }
+  return p;
+}
+function effProduct(p, sold) { // adminga: HOZIRGI qoldiq bilan
+  const q = Object.assign({}, p);
+  if (p.variant_stock) { q.variant_stock = {}; let t = 0; for (const k in p.variant_stock) { const v = Math.max(0, (Number(p.variant_stock[k]) || 0) - (sold[p.id + '#' + k] || 0)); q.variant_stock[k] = v; t += v; } q.stock = t; }
+  else q.stock = effStock(p, sold);
+  return q;
+}
+
+/* ---- Kategoriya + ichki kategoriyalar ---- */
+function saveCategory(C, inp) {
+  const old = inp.id ? C.categories.find(c => String(c.id) === String(inp.id)) : null;
+  if (inp.id && !old) throw new HttpError(404, 'Kategoriya topilmadi');
+  const c = old || { id: nextId(C.categories), order: C.categories.reduce((m, x) => Math.max(m, x.order || 0), 0) + 1, subcats: [] };
+  const name = L(inp.name, 60); if (!name.uz) throw bad('Kategoriya nomini kiriting');
+  c.name = name; if (inp.img !== undefined) { if (urlOk(inp.img)) c.img = inp.img; else delete c.img; }
+  let maxSub = 0; C.categories.forEach(x => (x.subcats || []).forEach(s => { maxSub = Math.max(maxSub, Number(s.id) || 0); }));
+  const oldSubs = new Map((c.subcats || []).map(s => [String(s.id), s]));
+  const subs = [];
+  (Array.isArray(inp.subcats) ? inp.subcats : []).slice(0, 60).forEach(s => {
+    const nm = L(s && s.name, 60); if (!nm.uz) return;
+    const o = s.id ? oldSubs.get(String(s.id)) : null; const id = o ? o.id : ++maxSub;
+    const item = { id, name: nm }; if (urlOk(s.img)) item.img = s.img; if (s.archived) item.archived = true;
+    if (o) { oldSubs.delete(String(o.id)); if (o.name.uz !== nm.uz) { C.products.forEach(p => { if (String(p.category_id) === String(c.id) && p.subcat && p.subcat.uz === o.name.uz) p.subcat = nm; }); C.banners.forEach(b => { if (b.subcat === o.name.uz) b.subcat = nm.uz; }); } }
+    subs.push(item);
+  });
+  // o'chirilgan ichki kategoriya: mahsulotlardan ham olib tashlanadi
+  oldSubs.forEach(o => { C.products.forEach(p => { if (String(p.category_id) === String(c.id) && p.subcat && p.subcat.uz === o.name.uz) delete p.subcat; }); });
+  c.subcats = subs;
+  if (!old) C.categories.push(c);
+  return c;
+}
+
+/* ---- Banner, storis, aksiya, sozlama ---- */
+function saveBanner(C, inp) {
+  const old = inp.id ? C.banners.find(b => String(b.id) === String(inp.id)) : null;
+  const b = old || { id: 'b' + crypto.randomBytes(5).toString('hex') };
+  if (!urlOk(inp.img)) throw bad('Banner rasmini yuklang');
+  b.img = inp.img; delete b.category_id; delete b.subcat; delete b.product_id;
+  if (inp.product_id) b.product_id = Number(inp.product_id) || inp.product_id;
+  else if (inp.category_id) { b.category_id = Number(inp.category_id); if (inp.subcat) b.subcat = S(inp.subcat, 80); }
+  b.start_at = isoOrEmpty(inp.start_at); b.end_at = isoOrEmpty(inp.end_at); if (!b.start_at) delete b.start_at; if (!b.end_at) delete b.end_at;
+  if (!old) C.banners.push(b);
+  return b;
+}
+function saveStory(C, inp) {
+  const old = inp.id ? C.stories.find(x => String(x.id) === String(inp.id)) : null;
+  const st = old || { id: nextId(C.stories), created: new Date().toISOString() };
+  if (!urlOk(inp.media)) throw bad('Storis rasmi yoki videosini kiriting');
+  st.media = inp.media; st.type = inp.type === 'video' ? 'video' : 'image'; st.title = L(inp.title, 40);
+  if (inp.product_id) st.product_id = Number(inp.product_id) || inp.product_id; else delete st.product_id;
+  st.start_at = isoOrEmpty(inp.start_at); st.expires_at = isoOrEmpty(inp.expires_at); if (!st.start_at) delete st.start_at; if (!st.expires_at) delete st.expires_at;
+  if (!old) C.stories.unshift(st);
+  return st;
+}
+function saveSection(C, inp) {
+  let s = C.home_sections.find(x => x.id === 'weekly_discounts');
+  if (!s) { s = { id: 'weekly_discounts' }; C.home_sections.push(s); }
+  s.enabled = !!inp.enabled; s.title = L(inp.title, 60); if (!s.title.uz) s.title = { uz: 'Hafta aksiyalari', ru: 'Акции недели' };
+  s.product_ids = [...new Set((Array.isArray(inp.product_ids) ? inp.product_ids : []).map(Number).filter(n => C.products.some(p => p.id === n)))].slice(0, 40);
+  const te = isoOrEmpty(inp.timer_end); if (te) s.timer_end = te; else delete s.timer_end;
+  return s;
+}
+function saveSettings(C, inp) {
+  ['shop_name', 'phone', 'address', 'work_hours'].forEach(k => { if (inp[k] !== undefined) C.settings[k] = S(inp[k], 120); });
+  if (inp.theme === 'light' || inp.theme === 'dark') C.settings.theme = inp.theme;
+  return C.settings;
+}
+
+route('GET', '/api/admin/counts', async req => {
+  checkAdmin(req); const o = await store.list('orders'), c = await store.list('chat');
+  return { new_orders: o.filter(x => x.status === 'new').length, unread: c.reduce((s, t) => s + (t.unread || 0), 0) };
+});
+route('GET', '/api/admin/catalog', async req => {
+  checkAdmin(req); const C = ensureCatalog(); const sold = await soldMap();
+  let fileChanged = false; try { fileBase(); fileChanged = !!CATALOG_SIG && baseCache.sig !== CATALOG_SIG; } catch (e) {}
+  return { categories: C.categories, products: C.products.map(p => effProduct(p, sold)), banners: C.banners, stories: C.stories, home_sections: C.home_sections, settings: C.settings, file_changed: fileChanged, store: store.kind, from_store: !!CATALOG };
+});
+route('POST', '/api/admin/save', (req, body) => withLock(async () => {
+  checkAdmin(req); const C = ensureCatalog(); const t = body.type, inp = body.item || {}; let out;
+  if (t === 'product') out = await saveProduct(C, inp);
+  else if (t === 'category') out = saveCategory(C, inp);
+  else if (t === 'banner') out = saveBanner(C, inp);
+  else if (t === 'story') out = saveStory(C, inp);
+  else if (t === 'section') out = saveSection(C, inp);
+  else if (t === 'settings') out = saveSettings(C, inp);
+  else throw bad("noma'lum tur");
+  await saveCatalog(); return { ok: true, item: out };
+}));
+const LISTS = { product: 'products', category: 'categories', banner: 'banners', story: 'stories' };
+route('POST', '/api/admin/archive', (req, body) => withLock(async () => {
+  checkAdmin(req); const C = ensureCatalog(); const key = LISTS[body.type]; if (!key) throw bad('tur?');
+  let it = C[key].find(x => String(x.id) === String(body.id)); let sub = null;
+  if (!it && body.type === 'category' && body.sub_of) { const c = C.categories.find(x => String(x.id) === String(body.sub_of)); sub = c && (c.subcats || []).find(s => String(s.id) === String(body.id)); it = sub; }
+  if (!it) throw new HttpError(404, 'Topilmadi');
+  if (body.archived === false) { delete it.archived; delete it.archived_at; } else { it.archived = true; it.archived_at = new Date().toISOString(); }
+  await saveCatalog(); return { ok: true };
+}));
+route('POST', '/api/admin/remove', (req, body) => withLock(async () => {
+  checkAdmin(req); const C = ensureCatalog(); const key = LISTS[body.type]; if (!key) throw bad('tur?'); const id = String(body.id);
+  const idx = C[key].findIndex(x => String(x.id) === id); if (idx < 0) throw new HttpError(404, 'Topilmadi');
+  if (body.type === 'category' && C.products.some(p => String(p.category_id) === id)) throw new HttpError(409, "Bu kategoriyada mahsulotlar bor. Avval mahsulotlarni boshqa kategoriyaga ko'chiring, o'chiring yoki kategoriyani ARXIVLANG.");
+  const removed = C[key].splice(idx, 1)[0];
+  if (body.type === 'product') {
+    C.next_product_id = Math.max(Number(C.next_product_id) || 0, Number(removed.id) || 0);
+    const sd = await soldMap(), pre = removed.id + '#'; let ch = false; for (const k of Object.keys(sd)) if (k.startsWith(pre)) { delete sd[k]; ch = true; } if (ch) await store.put('meta', 'sold', sd);
+    C.home_sections.forEach(s => { s.product_ids = (s.product_ids || []).filter(x => String(x) !== id); });
+    C.stories.forEach(s => { if (String(s.product_id) === id) delete s.product_id; });
+    C.banners.forEach(b => { if (String(b.product_id) === id) delete b.product_id; });
+  }
+  await saveCatalog(); return { ok: true };
+}));
+route('POST', '/api/admin/reorder', (req, body) => withLock(async () => {
+  checkAdmin(req); const C = ensureCatalog(); const key = LISTS[body.type]; if (!key) throw bad('tur?');
+  const ids = (Array.isArray(body.ids) ? body.ids : []).map(String); const map = new Map(C[key].map(x => [String(x.id), x]));
+  const out = ids.map(i => map.get(i)).filter(Boolean); C[key].forEach(x => { if (!ids.includes(String(x.id))) out.push(x); });
+  C[key] = out; if (body.type === 'category') C.categories.forEach((c, i) => { c.order = i + 1; });
+  await saveCatalog(); return { ok: true };
+}));
+
+/* ---- Ombor: tez o'zgartirish (qoldiqni belgilash yoki qo'shish) + tarix ---- */
+route('POST', '/api/admin/stock', (req, body) => withLock(async () => {
+  checkAdmin(req); const C = ensureCatalog(); const p = C.products.find(x => String(x.id) === String(body.id)); if (!p) throw new HttpError(404, 'Mahsulot topilmadi');
+  if (body.mode === 'cost') { p.cost = digits(body.cost); await saveCatalog(); return { ok: true }; }
+  const sold = await soldMap(); const val = Math.max(0, parseInt(body.value, 10) || 0); const key = body.variant == null ? null : String(body.variant);
+  let before, after;
+  if (key !== null) {
+    if (!p.variant_stock) throw bad("Bu mahsulotda rang/o'lcham bo'yicha qoldiq yo'q");
+    const s = sold[p.id + '#' + key] || 0; before = Math.max(0, (Number(p.variant_stock[key]) || 0) - s); after = body.mode === 'add' ? Math.max(0, before + val * (body.sign === -1 ? -1 : 1)) : val;
+    p.variant_stock[key] = after + s;
+  } else {
+    if (p.variant_stock) throw bad("Bu mahsulotda qoldiq rang/o'lcham bo'yicha");
+    const s = soldTotal(sold, p.id); before = effStock(p, sold); after = body.mode === 'add' ? Math.max(0, before + val * (body.sign === -1 ? -1 : 1)) : val; p.stock = after + s;
+  }
+  if (body.cost !== undefined && body.cost !== null && body.cost !== '') p.cost = digits(body.cost);
+  const lid = Date.now() + '-' + crypto.randomBytes(2).toString('hex');
+  await store.put('stocklog', lid, { id: lid, ts: new Date().toISOString(), product_id: p.id, name: p.name, variant: key, before, after, note: S(body.note, 100) });
+  await saveCatalog(); return { ok: true, before, after };
+}));
+route('GET', '/api/admin/stocklog', async req => { checkAdmin(req); return (await store.list('stocklog')).sort((a, b) => b.ts.localeCompare(a.ts)).slice(0, 300); });
+
+/* ---- Rasm yuklash (brauzerda siqilgan JPEG/WEBP/PNG) ---- */
+route('POST', '/api/admin/upload', async (req, body) => {
+  checkAdmin(req); const m = /^data:(image\/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(String(body.data || ''));
+  if (!m) throw bad("Faqat rasm (jpg, png, webp) yuklash mumkin"); if (m[2].length > 1300000) throw bad('Rasm juda katta (1 MB dan kichik bo\'lsin)');
+  const id = crypto.randomBytes(8).toString('hex'); await store.put('img', id, { type: m[1], b64: m[2] });
+  const proto = String(req.headers['x-forwarded-proto'] || 'https').split(',')[0]; const base = PUBLIC_URL || (proto + '://' + req.headers.host);
+  return { url: base + '/img/' + id + '.' + (m[1].split('/')[1].replace('jpeg', 'jpg')) };
+});
+
+/* ---- Zaxira nusxa / tiklash ---- */
+route('GET', '/api/admin/export', async req => { checkAdmin(req); return ensureCatalog(); });
+route('POST', '/api/admin/import', (req, body) => withLock(async () => {
+  checkAdmin(req); const c = body.catalog; if (!c || !Array.isArray(c.products) || !Array.isArray(c.categories)) throw bad("Zaxira fayli noto'g'ri (products va categories kerak)");
+  CATALOG = c; ensureCatalog(); await saveCatalog(); return { ok: true, products: CATALOG.products.length };
+}));
+route('POST', '/api/admin/restore-file', (req) => withLock(async () => {
+  checkAdmin(req); await store.del('meta', 'catalog'); CATALOG = null; CATALOG_SIG = ''; CATALOG_VER++; bump(); return { ok: true };
+}));
+
+/* ---- Foydalanuvchilar ---- */
+route('GET', '/api/admin/users', async req => {
+  checkAdmin(req); const users = await store.list('users'), orders = await store.list('orders'), bans = new Set((await store.list('bans')).map(b => b.value)), st = new Map();
+  orders.forEach(o => { const id = o.user && o.user.id; if (!id) return; const x = st.get(id) || { n: 0, sum: 0, last: '' }; if (o.status !== 'cancelled') { x.n++; x.sum += o.total || 0; } if (!x.last || o.created > x.last) x.last = o.created; st.set(id, x); });
+  return users.map(u => { const x = st.get(u.id) || { n: 0, sum: 0, last: '' }; return { id: u.id, kind: u.kind, tg: u.tg || null, username: u.username || '', name: u.name || '', phone: u.phone || '', phone_verified: !!u.phone_verified, email: u.email || '', created: u.created || '', orders: x.n, spent: x.sum, last_order: x.last, banned: [u.id, u.phone, u.email].some(v => v && bans.has(String(v).toLowerCase())) }; })
+    .sort((a, b) => (b.last_order || b.created || '').localeCompare(a.last_order || a.created || ''));
+});
+
+/* ---- Chat (Telegram bot orqali) ---- */
+route('GET', '/api/admin/chats', async req => {
+  checkAdmin(req); return (await store.list('chat')).map(t => ({ uid: t.uid, name: t.name || '', username: t.username || '', unread: t.unread || 0, updated: t.updated || '', last: t.msgs.length ? t.msgs[t.msgs.length - 1] : null })).sort((a, b) => (b.updated || '').localeCompare(a.updated || ''));
+});
+route('POST', '/api/admin/chat', async (req, body) => {
+  checkAdmin(req); const th = await store.get('chat', String(body.uid)); if (!th) return { uid: body.uid, msgs: [] };
+  if (th.unread) { th.unread = 0; await store.put('chat', th.uid, th); } return th;
+});
+route('POST', '/api/admin/chat/send', async (req, body) => {
+  checkAdmin(req); const uid = String(body.uid || ''), text = S(body.text, 2000); if (!uid || !text) throw bad('Xabar matni kerak');
+  const u = await store.get('users', uid); if (!u) throw new HttpError(404, 'Foydalanuvchi topilmadi');
+  if (u.kind === 'tg') { const r = await tgApi('sendMessage', { chat_id: u.tg, text }); if (!r || !r.ok) throw new HttpError(502, "Telegramga yuborib bo'lmadi (mijoz botni bloklagan bo'lishi mumkin)"); }
+  else if (u.email) await sendEmail(u.email, 'Do\'kondan xabar', '<p>' + escHtml(text).replace(/\n/g, '<br>') + '</p>');
+  else throw bad("Bu mijozga yozib bo'lmaydi (Telegram ham, email ham yo'q)");
+  const th = (await store.get('chat', uid)) || { uid, tg: u.tg, name: u.name, username: u.username || '', msgs: [], unread: 0 };
+  th.msgs.push({ from: 'a', text, ts: Date.now() }); th.msgs = th.msgs.slice(-200); th.updated = new Date().toISOString(); await store.put('chat', uid, th); return th;
+});
 
 // Telegram webhook (maxfiy sarlavha bilan himoyalangan)
 route('POST', '/api/tg/webhook', async (req, body) => {
@@ -478,9 +750,14 @@ const server = http.createServer(async (req, res) => {
       if (/\bgzip\b/.test(req.headers['accept-encoding'] || '')) { h['Content-Encoding'] = 'gzip'; return send(res, 200, req.method === 'HEAD' ? '' : m.gz, h); }
       return send(res, 200, req.method === 'HEAD' ? '' : m.body, h);
     }
+    if (pathname.startsWith('/img/') && (req.method === 'GET' || req.method === 'HEAD')) {
+      const id = pathname.slice(5).replace(/\.[a-z0-9]+$/i, ''); const r = /^[a-f0-9]{8,32}$/.test(id) && await store.get('img', id);
+      if (!r) return send(res, 404, 'Not found');
+      return send(res, 200, req.method === 'HEAD' ? '' : Buffer.from(r.b64, 'base64'), { 'Content-Type': r.type, 'Cache-Control': 'public, max-age=31536000, immutable' });
+    }
     if (pathname.startsWith('/api/')) {
       const fn = routes[req.method + ' ' + pathname]; if (!fn) return sendJson(res, 404, { error: 'Topilmadi' });
-      const body = (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') ? await readBody(req, pathname === '/api/reviews' ? 2e6 : 2e5) : {};
+      const body = (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') ? await readBody(req, (pathname === '/api/reviews' || pathname === '/api/admin/upload') ? 2e6 : (pathname === '/api/admin/import' ? 2e7 : 2e5)) : {};
       const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
       return sendJson(res, 200, await fn(req, body, ip));
     }
@@ -493,10 +770,10 @@ const server = http.createServer(async (req, res) => {
 });
 process.on('unhandledRejection', e => console.error('[unhandledRejection]', e && e.message || e));
 if (require.main === module) {
-  server.listen(PORT, () => {
+  catalogReady.then(() => server.listen(PORT, () => {
     console.log('Server ' + PORT + '-portda ishga tushdi! Saqlash: ' + store.kind);
     setupTelegram().catch(() => {});
     setInterval(checkRestock, 5 * 60000).unref();
-  });
+  }));
 }
-module.exports = { server, store, checkRestock, handleTgUpdate, webhookSecret };
+module.exports = { server, store, checkRestock, handleTgUpdate, webhookSecret, catalogReady };
