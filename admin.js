@@ -272,8 +272,15 @@ const ADMIN_CONFIG = { API_BASE: 'https://mini-shop-w7s5.onrender.com' };
       $$('.nav a.lnk, .tabbar a').forEach(a => { const n = NAV.find(x => x.href === a.getAttribute('href')); if (n && n.badge) a.insertAdjacentHTML('beforeend', badgeHtml(n.badge)); }); } catch (e) {}
   }
   function page(id, title, init) { pageDef = { id, title, init }; }
+  // Fayl yetib kelmasa (GitHub'ga yuklanmagan), sahifa oppoq qolmasin: nima yetishmayotganini ko'rsatamiz
+  const failedScripts = [];
+  window.addEventListener('error', e => { if (e.target && e.target.tagName === 'SCRIPT') failedScripts.push((e.target.getAttribute('src') || '').split('/').pop()); }, true);
+  function showMissing() {
+    const here = location.pathname.split('/').pop() || 'admin.html';
+    document.body.innerHTML = '<div style="max-width:520px;margin:40px auto;padding:0 16px;font:16px/1.5 system-ui,sans-serif"><h2>Sahifa kodi yuklanmadi</h2><p>' + (failedScripts.length ? 'Quyidagi fayl topilmadi: <b>' + failedScripts.map(esc).join(', ') + '</b>' : 'Sahifa kodi (admin-*.js) topilmadi yoki xato bor.') + '</p><p>Bu fayl <b>' + esc(location.host) + '</b> serveriga yuklanmagan. Uni GitHub\'dagi <code>mini-shop</code> repoga asosiy ro\'yxatga (papka ichiga emas) yuklang, so\'ng Render\'da <b>Manual Deploy</b> qiling.</p><p style="color:#777">Sahifa: ' + esc(here) + '</p></div>';
+  }
   async function start() {
-    if (!pageDef) return;
+    if (!pageDef) { showMissing(); return; }
     if (!KEY) { buildShell(pageDef); showLogin(''); return; }
     buildShell(pageDef);
     const app = $('#app'); app.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>';
