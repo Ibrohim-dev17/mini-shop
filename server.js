@@ -86,16 +86,28 @@ if (store.kind === 'fayl') console.warn("[OGOHLANTIRISH] DATABASE_URL yo'q: buyu
 
 /* ============================ database.json + qo'shimchalar ============================ */
 let baseCache = { mtime: 0, data: null, sig: '' };
+const EMPTY_CATALOG = () => ({ settings: { shop_name: 'Do\'kon', theme: 'light' }, categories: [], products: [], reviews: [], banners: [], stories: [], home_sections: [] });
+let fileWarned = '';
 function fileBase() {
-  const st = fs.statSync(DB_FILE);
+  let st;
+  try { st = fs.statSync(DB_FILE); } catch (e) {
+    if (fileWarned !== 'missing') { fileWarned = 'missing'; console.error("[database.json] TOPILMADI (" + DB_FILE + "). Bo'sh katalog bilan ishlayapman. Faylni GitHub'ga asosiy ro'yxatga yuklang yoki admin paneldan mahsulot qo'shing."); }
+    return baseCache.data || (baseCache = { mtime: 0, data: EMPTY_CATALOG(), sig: 'empty' }).data;
+  }
   if (baseCache.mtime !== st.mtimeMs) {
-    const raw = fs.readFileSync(DB_FILE, 'utf8'); const j = JSON.parse(raw);
-    delete j.orders; delete j.users; // eski fayldagi maxfiy bo'limlar saytga chiqmasin
-    baseCache = { mtime: st.mtimeMs, data: j, sig: crypto.createHash('sha1').update(raw).digest('hex') };
+    try {
+      const raw = fs.readFileSync(DB_FILE, 'utf8'); const j = JSON.parse(raw);
+      if (!j || typeof j !== 'object' || Array.isArray(j)) throw new Error("fayl ob'ekt emas");
+      delete j.orders; delete j.users; // eski fayldagi maxfiy bo'limlar saytga chiqmasin
+      baseCache = { mtime: st.mtimeMs, data: j, sig: crypto.createHash('sha1').update(raw).digest('hex') }; fileWarned = '';
+    } catch (e) {
+      if (fileWarned !== 'bad:' + st.mtimeMs) { fileWarned = 'bad:' + st.mtimeMs; console.error("[database.json] O'QIB BO'LMADI: " + e.message + ". Fayl buzilgan (JSON xato). Avvalgi yoki bo'sh katalog bilan ishlayapman."); }
+      if (!baseCache.data) baseCache = { mtime: 0, data: EMPTY_CATALOG(), sig: 'empty' };
+      else baseCache.mtime = st.mtimeMs;
+    }
   }
   return baseCache.data;
 }
-// KATALOG: admin panel tahrirlagandan keyin katalog bazada (Postgres) saqlanadi va database.json o'rniga SHU ishlatiladi.
 let CATALOG = null, CATALOG_SIG = '', CATALOG_VER = 0;
 function loadBase() { return CATALOG || fileBase(); }
 const baseKey = () => CATALOG ? 'c' + CATALOG_VER : 'f' + baseCache.mtime;
