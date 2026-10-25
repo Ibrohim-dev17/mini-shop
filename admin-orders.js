@@ -27,7 +27,7 @@ Admin.page('orders', 'Buyurtmalar', async app => {
         <div style="display:flex;gap:-8px">${(o.items || []).slice(0, 3).map(i => `<img class="th sq" style="width:46px;height:56px;margin-right:-14px;border:2px solid var(--surface)" src="${A.esc(i.image)}" alt="">`).join('')}</div>
         <div class="body" style="margin-left:18px">
           <div class="ttl">№${o.number} · ${A.esc(o.name)} ${isBanned(o) ? '<span class="badge danger">bloklangan</span>' : ''}</div>
-          <div class="meta">${A.dt(o.created)} · ${A.esc(o.phone)} · ${(o.items || []).reduce((s, i) => s + i.qty, 0)} dona</div>
+          <div class="meta">${A.dt(o.created)} · ${A.esc(o.phone)}${o.geo ? ' · ' + A.ic('pin') : ''} · ${(o.items || []).reduce((s, i) => s + i.qty, 0)} dona</div>
         </div>
         <div style="text-align:right"><div style="font-weight:800">${A.money(o.total)}</div><span class="badge ${A.STC[o.status]}">${A.ST[o.status]}</span></div>
       </div>`).join('') : '<div class="empty"><b>Buyurtma topilmadi</b>Boshqa filtrni sinab ko\'ring</div>';
@@ -46,16 +46,16 @@ Admin.page('orders', 'Buyurtmalar', async app => {
         ${u.verified_phone ? `<dt>Tasdiqlangan raqam</dt><dd><a href="tel:${A.esc(u.verified_phone)}">${A.esc(u.verified_phone)}</a> <span class="badge ok">Telegram</span></dd>` : ''}
         ${u.email ? `<dt>Email</dt><dd><a href="mailto:${A.esc(u.email)}">${A.esc(u.email)}</a> <span class="badge ok">tasdiqlangan</span></dd>` : ''}
         ${tg ? `<dt>Telegram</dt><dd>${tg}</dd>` : ''}
-        <dt>Manzil</dt><dd>${A.esc(o.address)}</dd>
+        <dt>Manzil</dt><dd>${A.esc(o.address)}${o.geo ? `<div style="margin-top:6px"><span class="muted small">${A.esc(o.geo.label || '')}</span><div class="btns" style="margin-top:6px"><a class="btn sm maplink" target="_blank" rel="noopener" href="https://www.google.com/maps?q=${o.geo.lat},${o.geo.lng}">${A.ic('pin')}<span>Google xarita</span></a><a class="btn sm maplink" target="_blank" rel="noopener" href="https://yandex.com/maps/?pt=${o.geo.lng},${o.geo.lat}&z=17&l=map">${A.ic('pin')}<span>Yandex xarita</span></a></div><div class="geo-box"><iframe loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=${o.geo.lng - 0.004},${o.geo.lat - 0.0025},${o.geo.lng + 0.004},${o.geo.lat + 0.0025}&layer=mapnik&marker=${o.geo.lat},${o.geo.lng}"></iframe></div></div>` : ''}</dd>
         ${o.comment ? `<dt>Izoh</dt><dd>${A.esc(o.comment)}</dd>` : ''}
       </dl>
-      <div class="list" style="margin:14px 0">${(o.items || []).map(i => `<div class="item" style="box-shadow:none"><img class="th sq" src="${A.esc(i.image)}" alt=""><div class="body"><div class="ttl">${A.esc(A.nm(i.name))}</div><div class="meta">${[i.color_name ? A.nm(i.color_name) : '', i.size ? "o'lcham " + i.size : ''].filter(Boolean).map(A.esc).join(', ')}${i.color_name || i.size ? ' · ' : ''}${i.qty} × ${A.grp(i.price)}</div></div><b>${A.grp(i.price * i.qty)}</b></div>`).join('')}</div>
+      <div class="list" style="margin:14px 0">${(o.items || []).map(i => `<div class="item" style="box-shadow:none"><img class="th sq" src="${A.esc(i.image)}" alt=""><div class="body"><div class="ttl">${A.esc(A.nm(i.name))}</div><div class="meta">${(i.opts ? i.opts.map(x => A.nm(x.name) + ': ' + A.nm(x.value)) : [i.color_name ? A.nm(i.color_name) : '', i.size ? "o'lcham " + i.size : '']).filter(Boolean).map(A.esc).join(', ')}${i.opts || i.color_name || i.size ? ' · ' : ''}${i.qty} × ${A.grp(i.price)}</div></div><b>${A.grp(i.price * i.qty)}</b></div>`).join('')}</div>
       <div class="stat-line"><span>Jami</span><b style="font-size:17px">${A.money(o.total)}</b></div>
       ${costTotal ? `<div class="stat-line"><span class="muted">Tan narx / foyda</span><span>${A.money(costTotal)} / <b style="color:var(--ok)">${A.money(o.total - costTotal)}</b></span></div>` : ''}`;
     const btns = [{ text: 'Yopish' }];
     if (o.status !== 'cancelled' && o.status !== 'delivered') btns.push({ text: 'Bekor qilish', cls: 'danger', fn: async () => { if (!(await A.confirm("Buyurtma №" + o.number + " bekor qilinsinmi?\nMahsulotlar omborga qaytariladi, mijozga xabar boradi.", { danger: true, ok: 'Bekor qilish' }))) return false; await setStatus(o, 'cancelled'); } });
     nextBtns.forEach(([st, txt, cls]) => btns.push({ text: txt, cls, fn: async () => { await setStatus(o, st); } }));
-    if (u.kind === 'tg') btns.unshift({ text: 'Chat', fn: () => { location.href = 'admin-chat.html?uid=' + encodeURIComponent(u.id); return false; } });
+    if (u.id) btns.unshift({ text: 'Chat', fn: () => { location.href = 'admin-chat.html?uid=' + encodeURIComponent(u.id); return false; } });
     const banned = isBanned(o);
     btns.unshift({ text: banned ? 'Blokdan chiqarish' : 'Bloklash', cls: banned ? '' : 'danger', fn: async () => { await toggleBan(o, !banned); } });
     A.modal({ title: 'Buyurtma №' + o.number, body, wide: true, buttons: btns });
@@ -76,7 +76,7 @@ Admin.page('orders', 'Buyurtmalar', async app => {
   A.$('#q').addEventListener('input', A.debounce(e => { q = e.target.value; render(); }, 150));
   A.$('#refresh').onclick = async () => { ORDERS = await A.orders(true); render(); A.toast('Yangilandi', 'ok'); };
   A.$('#csv').onclick = () => {
-    const rows = [['№', 'Sana', 'Holat', 'Ism', 'Telefon', 'Tasdiqlangan tel', 'Email', 'Manzil', 'Mahsulotlar', 'Jami']].concat(filtered().map(o => [o.number, A.dt(o.created), A.ST[o.status], o.name, o.phone, (o.user || {}).verified_phone || '', (o.user || {}).email || '', o.address, (o.items || []).map(i => A.nm(i.name) + ' x' + i.qty).join('; '), o.total]));
+    const rows = [['№', 'Sana', 'Holat', 'Ism', 'Telefon', 'Tasdiqlangan tel', 'Email', 'Manzil', 'Xarita', 'Mahsulotlar', 'Jami']].concat(filtered().map(o => [o.number, A.dt(o.created), A.ST[o.status], o.name, o.phone, (o.user || {}).verified_phone || '', (o.user || {}).email || '', o.address, o.geo ? 'https://www.google.com/maps?q=' + o.geo.lat + ',' + o.geo.lng : '', (o.items || []).map(i => A.nm(i.name) + (i.opts ? ' (' + i.opts.map(x => A.nm(x.value)).join(', ') + ')' : '') + ' x' + i.qty).join('; '), o.total]));
     const csv = '﻿' + rows.map(r => r.map(c => '"' + String(c == null ? '' : c).replace(/"/g, '""') + '"').join(';')).join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'buyurtmalar.csv'; a.click();
   };
