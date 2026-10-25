@@ -35,24 +35,24 @@ Admin.page('categories', 'Kategoriyalar', async app => {
 
   function editor(c) {
     const isNew = !c; c = c || { subcats: [] };
-    const img = A.imgs({ value: c.img ? [c.img] : [], shape: 'sq' }); let subs = (c.subcats || []).map(s => ({ id: s.id, nu: A.nm(s.name), nr: (s.name && s.name.ru) || '', img: s.img || '', archived: !!s.archived }));
+    const img = A.imgs({ value: c.img ? [c.img] : [], shape: 'sq' }); let subs = (c.subcats || []).map(s => ({ id: s.id, nu: (s.name && s.name.uz) || '', nr: (s.name && s.name.ru) || '', img: s.img || '', archived: !!s.archived }));
     const body = document.createElement('div');
-    body.innerHTML = `<div class="grid2"><div class="fld"><label>Nomi (o'zbekcha) *</label><input class="inp" id="nu" value="${A.esc(A.nm(c.name))}" placeholder="Ayollar"></div><div class="fld"><label>Nomi (ruscha)</label><input class="inp" id="nr" value="${A.esc((c.name && c.name.ru) || '')}"></div></div>
+    body.innerHTML = `<div id="clb"></div>${A.bi({ id: 'n', label: 'Nomi', uz: c.name && c.name.uz, ru: c.name && c.name.ru, ph: 'Ayollar', max: 60 })}
       <div class="fld"><label>Rasm</label><div id="im"></div></div>
       <div class="fld"><label>Ichki kategoriyalar</label><div id="subs"></div><button class="btn sm" type="button" id="addSub">${A.ic('plus')}<span>Ichki kategoriya qo'shish</span></button></div>`;
-    A.$('#im', body).appendChild(img.el);
+    A.$('#im', body).appendChild(img.el); A.$('#clb', body).appendChild(A.clBar());
     function draw() {
       const box = A.$('#subs', body); box.innerHTML = '';
       subs.forEach((s, i) => { const row = document.createElement('div'); row.className = 'colrow'; row.style.gridTemplateColumns = '1fr auto';
-        row.innerHTML = `<div><div class="grid2 keep"><input class="inp sm" data-nu placeholder="Nomi" value="${A.esc(s.nu)}"><input class="inp sm" data-nr placeholder="ruscha" value="${A.esc(s.nr)}"></div><div data-im style="margin-top:8px"></div>${s.archived ? '<span class="badge warn" style="margin-top:6px">arxivda</span>' : ''}</div><button class="btn sm icon danger" type="button" data-rm title="O'chirish">${A.ic('trash')}</button>`;
+        row.innerHTML = `<div><div class="grid2 keep bi"><div data-lg="uz"><input class="inp sm" data-nu placeholder="Nomi (o'zbekcha)" value="${A.esc(s.nu)}"></div><div data-lg="ru"><input class="inp sm" data-nr placeholder="Nomi (ruscha)" value="${A.esc(s.nr)}"></div></div><div data-im style="margin-top:8px"></div>${s.archived ? '<span class="badge warn" style="margin-top:6px">arxivda</span>' : ''}</div><button class="btn sm icon danger" type="button" data-rm title="O'chirish">${A.ic('trash')}</button>`;
         const w = A.imgs({ value: s.img ? [s.img] : [], shape: 'sq', onChange: v => { s.img = v[0] || ''; } }); A.$('[data-im]', row).appendChild(w.el);
         A.$('[data-nu]', row).oninput = e => { s.nu = e.target.value; }; A.$('[data-nr]', row).oninput = e => { s.nr = e.target.value; };
         A.$('[data-rm]', row).onclick = () => { subs.splice(i, 1); draw(); }; box.appendChild(row); });
     }
     A.$('#addSub', body).onclick = () => { subs.push({ nu: '', nr: '', img: '', id: null }); draw(); }; draw();
     A.modal({ title: isNew ? 'Yangi kategoriya' : 'Tahrirlash: ' + A.nm(c.name), body, wide: true, sticky: true, buttons: [{ text: 'Bekor qilish' }, { text: isNew ? "Qo'shish" : 'Saqlash', cls: 'primary', fn: async () => {
-      const nu = A.$('#nu', body).value.trim(); if (!nu) { A.toast('Kategoriya nomini kiriting', 'err'); return false; }
-      await A.save('category', { id: c.id, name: { uz: nu, ru: A.$('#nr', body).value.trim() }, img: img.get()[0] || '', subcats: subs.filter(s => s.nu.trim()).map(s => ({ id: s.id, name: { uz: s.nu.trim(), ru: s.nr.trim() }, img: s.img, archived: s.archived })) });
+      const nn = A.biVal(body, 'n'); if (!nn.uz && !nn.ru) { A.toast('Kategoriya nomini kiriting', 'err'); return false; }
+      await A.save('category', { id: c.id, name: nn, img: img.get()[0] || '', subcats: subs.filter(s => s.nu.trim() || s.nr.trim()).map(s => ({ id: s.id, name: { uz: s.nu.trim() || s.nr.trim(), ru: s.nr.trim() || s.nu.trim() }, img: s.img, archived: s.archived })) });
       A.toast('Saqlandi. Sayt yangilandi', 'ok'); await reload();
     } }] });
   }
