@@ -11,6 +11,9 @@ Admin.page('settings', 'Sozlamalar', async app => {
       <div class="fld"><label>Telefon</label><input class="inp" id="p" value="${A.esc(s.phone || '')}" placeholder="+998 90 123 45 67"></div>
       <div class="fld"><label>Manzil</label><input class="inp" id="a" value="${A.esc(s.address || '')}"></div>
       <div class="fld"><label>Ish vaqti</label><input class="inp" id="h" value="${A.esc(s.work_hours || '')}" placeholder="09:00 - 20:00"></div>
+      <div class="fld"><label>Telegram (sotuvchi, @siz)</label><input class="inp" id="tgu" value="${A.esc(s.tg_username || '')}" placeholder="@do_kon_nomi"></div>
+      <div class="fld"><label>Instagram</label><input class="inp" id="ig" value="${A.esc(s.instagram || '')}" placeholder="@instagram_nomi"></div>
+      <div class="fld"><label>Biznes turi</label><input class="inp" id="bt" value="${A.esc(s.business_type || '')}" placeholder="Masalan: kiyim, elektronika, oziq-ovqat"><div class="hint">Mahsulot qo'shishda xususiyatlar (rang, o'lcham, voltaj...) ni o'zingiz yaratasiz, bu faqat eslatma uchun.</div></div>
       <div class="fld"><label>Sayt rangi (birinchi kirganlarga)</label><select class="sel" id="t"><option value="light">Kunduzgi</option><option value="dark">Tungi</option></select></div></div>
       <button class="btn primary" id="save">Saqlash</button></div>
     <div class="card"><div class="hd"><h2>Server holati</h2></div>
@@ -25,7 +28,7 @@ Admin.page('settings', 'Sozlamalar', async app => {
       <p class="muted small" style="margin-top:0"><b>Sotilganlar hisobini nolga tushirish:</b> qoldiqlar katalogdagi qiymatga qaytadi (sotuvlar tarixi o'chmaydi). <b>Boshlang'ich katalogga qaytish:</b> admin panelda qilingan barcha o'zgarishlar o'chib, GitHub'dagi <code>database.json</code> qaytadan ishlatiladi.</p>
       <div class="btns"><button class="btn danger" id="rs">Sotilganlar hisobini nolga tushirish</button><button class="btn danger" id="rf">Boshlang'ich katalogga qaytish</button></div></div>`;
   A.$('#t').value = s.theme || 'light';
-  A.$('#save').onclick = async () => { await A.save('settings', { shop_name: A.$('#n').value, phone: A.$('#p').value, address: A.$('#a').value, work_hours: A.$('#h').value, theme: A.$('#t').value }); A.toast('Saqlandi', 'ok'); };
+  A.$('#save').onclick = async () => { await A.save('settings', { shop_name: A.$('#n').value, phone: A.$('#p').value, address: A.$('#a').value, work_hours: A.$('#h').value, tg_username: A.$('#tgu').value, instagram: A.$('#ig').value, business_type: A.$('#bt').value, theme: A.$('#t').value }); A.toast('Saqlandi', 'ok'); };
   A.$('#tg').onclick = async () => { try { const r = await A.api('/api/admin/telegram-setup', 'POST', {}); A.toast(r && r.ok === false ? 'Xato: ' + (r.error || '') : 'Bot qayta ulandi', r && r.ok === false ? 'err' : 'ok'); } catch (e) { A.toast(e.message, 'err'); } };
   A.$('#exp').onclick = async () => { const d = await A.api('/api/admin/export'); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(d)], { type: 'application/json' })); a.download = 'zaxira-' + A.dayKey(new Date().toISOString()) + '.json'; a.click(); };
   A.$('#imp').onchange = async e => { const f = e.target.files[0]; if (!f) return; let d; try { d = JSON.parse(await f.text()); } catch (x) { return A.toast("Fayl o'qilmadi", 'err'); }
