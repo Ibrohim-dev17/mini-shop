@@ -37,14 +37,17 @@ Admin.page('stories', 'Storislar', async app => {
   function editor(s) {
     const isNew = !s; s = s || {}; let prod = s.product_id || null;
     const img = A.imgs({ value: s.type !== 'video' && s.media ? [s.media] : [], shape: 'tall', maxPx: 1080 });
+    const vid = A.video({ value: s.type === 'video' ? s.media : '' });
     const body = document.createElement('div');
     const defEnd = isNew ? A.toLocalInput(new Date(Date.now() + 24 * 3600e3).toISOString()) : A.toLocalInput(s.expires_at);
-    body.innerHTML = `<div class="fld"><label>Turi</label><select class="sel" id="type"><option value="image">Rasm</option><option value="video">Video (havola)</option></select></div>
-      <div class="fld" id="imBox"><label>Storis rasmi *</label><div id="im"></div><div class="hint">Tik (9:16) rasm yaxshi: 1080×1920.</div></div>
-      <div class="fld" id="vidBox"><label>Video havolasi * (.mp4)</label><input class="inp" id="vid" type="url" placeholder="https://.../video.mp4" value="${s.type === 'video' ? A.esc(s.media) : ''}"><div class="hint">Video faylni biror joyga (masalan, Telegram kanal yoki hosting) joylab, to'g'ridan-to'g'ri havolasini qo'ying.</div></div>
-      <div class="grid2"><div class="fld"><label>Sarlavha (o'zbekcha) *</label><input class="inp" id="tu" maxlength="40" value="${A.esc((s.title && s.title.uz) || '')}"></div><div class="fld"><label>Sarlavha (ruscha)</label><input class="inp" id="tr" maxlength="40" value="${A.esc((s.title && s.title.ru) || '')}"></div></div>
+    body.innerHTML = `<div id="clb"></div><div class="fld"><label>Turi</label><select class="sel" id="type"><option value="image">Rasm</option><option value="video">Video</option></select></div>
+      <div class="fld" id="imBox"><label>Storis rasmi *</label><div id="im"></div><div class="hint">Tik (9:16) rasm yaxshi: 1080×1920. Rasm galereyadan olinadi.</div></div>
+      <div class="fld" id="vidBox"><label>Storis videosi *</label><div id="vd"></div></div>
+      ${A.bi({ id: 't', label: 'Sarlavha', uz: s.title && s.title.uz, ru: s.title && s.title.ru, max: 40 })}
       <div class="fld"><label>Mahsulotni "mention" qilish</label><div class="inputrow"><div class="inp" id="pname" style="display:flex;align-items:center"></div><button class="btn" type="button" id="pick">Tanlash</button><button class="btn icon" type="button" id="unpick" title="Olib tashlash">${A.ic('close')}</button></div></div>
       <div class="grid2"><div class="fld"><label>Boshlanishi</label><input class="inp" type="datetime-local" id="st" value="${A.toLocalInput(s.start_at)}"><div class="hint">Bo'sh = darhol</div></div><div class="fld"><label>Tugashi</label><input class="inp" type="datetime-local" id="en" value="${defEnd}"><div class="hint">Bo'sh = cheksiz. Odatda 24 soat.</div></div></div>`;
+    A.$('#clb', body).appendChild(A.clBar());
+    A.$('#vd', body).appendChild(vid.el);
     A.$('#im', body).appendChild(img.el);
     const type = A.$('#type', body); type.value = s.type === 'video' ? 'video' : 'image';
     const vis = () => { A.$('#imBox', body).style.display = type.value === 'image' ? '' : 'none'; A.$('#vidBox', body).style.display = type.value === 'video' ? '' : 'none'; };
@@ -54,10 +57,10 @@ Admin.page('stories', 'Storislar', async app => {
     A.$('#pick', body).onclick = async () => { const r = await A.pickProducts({ selected: prod ? [prod] : [] }); if (r) { prod = r[0]; pn(); } };
     A.$('#unpick', body).onclick = () => { prod = null; pn(); };
     A.modal({ title: isNew ? 'Yangi storis' : 'Storisni tahrirlash', body, wide: true, sticky: true, buttons: [{ text: 'Bekor qilish' }, { text: isNew ? "Qo'shish" : 'Saqlash', cls: 'primary', fn: async () => {
-      const media = type.value === 'video' ? A.$('#vid', body).value.trim() : img.get()[0];
-      if (!media) { A.toast(type.value === 'video' ? 'Video havolasini kiriting' : 'Storis rasmini yuklang', 'err'); return false; }
-      if (!A.$('#tu', body).value.trim()) { A.toast('Sarlavhani yozing', 'err'); return false; }
-      await A.save('story', { id: s.id, type: type.value, media, title: { uz: A.$('#tu', body).value, ru: A.$('#tr', body).value }, product_id: prod, start_at: A.fromLocalInput(A.$('#st', body).value), expires_at: A.fromLocalInput(A.$('#en', body).value) });
+      const media = type.value === 'video' ? vid.get() : img.get()[0];
+      if (!media) { A.toast(type.value === 'video' ? 'Videoni galereyadan yuklang' : 'Storis rasmini yuklang', 'err'); return false; }
+      const tt = A.biVal(body, 't'); if (!tt.uz && !tt.ru) { A.toast('Sarlavhani yozing', 'err'); return false; }
+      await A.save('story', { id: s.id, type: type.value, media, title: tt, product_id: prod, start_at: A.fromLocalInput(A.$('#st', body).value), expires_at: A.fromLocalInput(A.$('#en', body).value) });
       A.toast('Saqlandi. Sayt yangilandi', 'ok'); await reload();
     } }] });
   }
