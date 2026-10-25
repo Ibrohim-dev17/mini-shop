@@ -32,15 +32,16 @@ Admin.page('banners', 'Bannerlar', async app => {
   });
 
   function editor(b) {
-    const isNew = !b; b = b || {}; const img = A.imgs({ value: b.img ? [b.img] : [], shape: 'wide', maxPx: 1600 });
+    const isNew = !b; b = b || {}; const img = A.imgs({ value: b.img ? [b.img] : [], shape: 'wide', maxPx: 1600 }); const imgRu = A.imgs({ value: b.img_ru ? [b.img_ru] : [], shape: 'wide', maxPx: 1600 });
     const mode0 = b.product_id ? 'product' : b.category_id ? 'category' : 'none'; let prod = b.product_id || null;
     const body = document.createElement('div');
-    body.innerHTML = `<div class="fld"><label>Banner rasmi *</label><div id="im"></div><div class="hint">Keng (gorizontal) rasm yaxshi: taxminan 1600×700.</div></div>
+    body.innerHTML = `<div id="clb"></div><div class="fld" data-lg="uz"><label>Banner rasmi (o'zbekcha) *</label><div id="im"></div><div class="hint">Keng (gorizontal) rasm yaxshi: taxminan 1600×700. Rasm galereyadan olinadi.</div></div>
+      <div class="fld" data-lg="ru"><label>Banner rasmi (ruscha)</label><div id="imr"></div><div class="hint">Rus tilida alohida rasm bo'lsa, shu yerga yuklang. Bo'sh qolsa, sayt rus tilida ham o'zbekcha rasmni ko'rsatadi.</div></div>
       <div class="fld"><label>Bosilganda qayerga o'tsin?</label><select class="sel" id="mode"><option value="none">Hech qayerga</option><option value="category">Kategoriyaga</option><option value="product">Mahsulotga</option></select></div>
       <div id="catBox" class="grid2"><div class="fld"><label>Kategoriya</label><select class="sel" id="cat">${C.categories.filter(c => !c.archived).map(c => `<option value="${c.id}">${A.esc(A.nm(c.name))}</option>`).join('')}</select></div><div class="fld"><label>Ichki kategoriya</label><select class="sel" id="sub"></select></div></div>
       <div id="prodBox" class="fld"><label>Mahsulot</label><div class="inputrow"><div class="inp" id="pname" style="display:flex;align-items:center"></div><button class="btn" type="button" id="pick">Tanlash</button></div></div>
       <div class="grid2"><div class="fld"><label>Ko'rsatish boshlanishi</label><input class="inp" type="datetime-local" id="s" value="${A.toLocalInput(b.start_at)}"><div class="hint">Bo'sh = darhol</div></div><div class="fld"><label>Ko'rsatish tugashi</label><input class="inp" type="datetime-local" id="e" value="${A.toLocalInput(b.end_at)}"><div class="hint">Bo'sh = cheksiz</div></div></div>`;
-    A.$('#im', body).appendChild(img.el);
+    A.$('#im', body).appendChild(img.el); A.$('#imr', body).appendChild(imgRu.el); A.$('#clb', body).appendChild(A.clBar());
     const mode = A.$('#mode', body), cat = A.$('#cat', body), sub = A.$('#sub', body);
     mode.value = mode0; if (b.category_id) cat.value = b.category_id;
     function fillSub() { const c = C.categories.find(x => String(x.id) === cat.value); sub.innerHTML = '<option value="">- butun kategoriya -</option>' + ((c && c.subcats) || []).filter(s => !s.archived).map(s => `<option ${A.nm(s.name) === b.subcat ? 'selected' : ''}>${A.esc(A.nm(s.name))}</option>`).join(''); }
@@ -50,9 +51,9 @@ Admin.page('banners', 'Bannerlar', async app => {
     mode.onchange = vis; vis(); pn();
     A.$('#pick', body).onclick = async () => { const r = await A.pickProducts({ selected: prod ? [prod] : [] }); if (r) { prod = r[0]; pn(); } };
     A.modal({ title: isNew ? 'Yangi banner' : 'Bannerni tahrirlash', body, wide: true, sticky: true, buttons: [{ text: 'Bekor qilish' }, { text: isNew ? "Qo'shish" : 'Saqlash', cls: 'primary', fn: async () => {
-      if (!img.get()[0]) { A.toast('Banner rasmini yuklang', 'err'); return false; }
+      const mainImg = img.get()[0] || imgRu.get()[0]; if (!mainImg) { A.toast('Banner rasmini yuklang', 'err'); return false; }
       if (mode.value === 'product' && !prod) { A.toast('Mahsulotni tanlang', 'err'); return false; }
-      await A.save('banner', { id: b.id, img: img.get()[0], product_id: mode.value === 'product' ? prod : null, category_id: mode.value === 'category' ? Number(cat.value) : null, subcat: mode.value === 'category' ? sub.value : '', start_at: A.fromLocalInput(A.$('#s', body).value), end_at: A.fromLocalInput(A.$('#e', body).value) });
+      await A.save('banner', { id: b.id, img: mainImg, img_ru: imgRu.get()[0] && imgRu.get()[0] !== mainImg ? imgRu.get()[0] : '', product_id: mode.value === 'product' ? prod : null, category_id: mode.value === 'category' ? Number(cat.value) : null, subcat: mode.value === 'category' ? sub.value : '', start_at: A.fromLocalInput(A.$('#s', body).value), end_at: A.fromLocalInput(A.$('#e', body).value) });
       A.toast('Saqlandi. Sayt yangilandi', 'ok'); await reload();
     } }] });
   }
