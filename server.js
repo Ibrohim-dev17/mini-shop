@@ -96,7 +96,7 @@ function fileBase() {
   }
   if (baseCache.mtime !== st.mtimeMs) {
     try {
-      const raw = fs.readFileSync(DB_FILE, 'utf8'); const j = JSON.parse(raw);
+      const raw = fs.readFileSync(DB_FILE, 'utf8').replace(/^\uFEFF/, ''); const j = JSON.parse(raw); // BOM (Windows/telefon muharrirlari qo'yadigan ko'rinmas belgi) olib tashlanadi
       if (!j || typeof j !== 'object' || Array.isArray(j)) throw new Error("fayl ob'ekt emas");
       delete j.orders; delete j.users; // eski fayldagi maxfiy bo'limlar saytga chiqmasin
       baseCache = { mtime: st.mtimeMs, data: j, sig: crypto.createHash('sha1').update(raw).digest('hex') }; fileWarned = '';
@@ -112,15 +112,24 @@ let CATALOG = null, CATALOG_SIG = '', CATALOG_VER = 0;
 function loadBase() { return CATALOG || fileBase(); }
 const baseKey = () => CATALOG ? 'c' + CATALOG_VER : 'f' + baseCache.mtime;
 const catalogReady = (async () => {
+  try { const a = await store.get('meta', 'admin_seen'); if (a && a.ts) adminSeen = Math.min(a.ts, Date.now()); } catch (e) {}
   try { const r = await store.get('meta', 'catalog'); if (r && r.cat) { CATALOG = r.cat; CATALOG_SIG = r.sig || ''; CATALOG_VER++; console.log("[Katalog] admin tahrirlagan katalog bazadan yuklandi"); } }
   catch (e) { console.error('[Katalog]', e.message); }
 })();
 const vkey = (pid, color, size) => pid + '#' + (color == null ? '' : color) + '|' + (size == null ? '' : size);
+// Mahsulotning "tanlanadigan xususiyatlari" (admin yaratadi: rang, o'lcham, voltaj, xotira...). Eski mahsulotlarda rang+o'lcham.
+const axesOfP = p => (Array.isArray(p && p.options) ? p.options : []).filter(a => a && a.key && Array.isArray(a.values) && a.values.length);
+// Ombor kaliti: xususiyat qiymatlari tartib bilan '|' orqali ulanadi (eski mahsulotda "rang|o'lcham")
+const stockKey = (p, it) => {
+  const ax = axesOfP(p); it = it || {};
+  if (ax.length) { const sel = it.sel || {}; return ax.map(a => sel[a.key] == null ? '' : String(sel[a.key])).join('|'); }
+  return (it.color != null ? it.color : '') + '|' + (it.size != null ? it.size : '');
+};
 async function soldMap() { return (await store.get('meta', 'sold')) || {}; }
 function soldTotal(sold, pid) { let s = 0; const pre = pid + '#'; for (const k in sold) if (k.startsWith(pre)) s += sold[k]; return s; }
 // Haqiqiy qoldiq = database.json dagi qoldiq - sotilgan
-function effStock(p, sold, color, size) {
-  if (p.variant_stock) { const k = (color == null ? '' : color) + '|' + (size == null ? '' : size); return Math.max(0, (Number(p.variant_stock[k]) || 0) - (sold[vkey(p.id, color, size)] || 0)); }
+function effStock(p, sold, color, size, key) {
+  if (p.variant_stock) { const k = key !== undefined ? key : (color == null ? '' : color) + '|' + (size == null ? '' : size); return Math.max(0, (Number(p.variant_stock[k]) || 0) - (sold[p.id + '#' + k] || 0)); }
   return Math.max(0, (p.stock !== undefined ? Number(p.stock) : 10) - soldTotal(sold, p.id));
 }
 function effTotal(p, sold) {
@@ -143,9 +152,9 @@ async function mergedDB() {
     delete q.cost; delete q.note; delete q.archived; delete q.archived_at; // tan narx va ichki izohlar saytga chiqmaydi
     return q;
   });
-  const reviews = (base.reviews || []).concat(await store.list('reviews'));
+  const reviews = (base.reviews || []).concat((await store.list('reviews')).map(r => { const q = Object.assign({}, r); delete q.uid; delete q.order_id; return q; }));
   const body = Buffer.from(JSON.stringify(Object.assign({}, base, {
-    products, reviews,
+    products, reviews, settings: Object.assign({}, base.settings || {}, { bot: BOT_USERNAME, admin_online: Date.now() - adminSeen < 150000 }),
     categories: (base.categories || []).filter(c => !c.archived).map(c => Object.assign({}, c, { subcats: (c.subcats || []).filter(x => !x.archived) })),
     banners: (base.banners || []).filter(b => !b.archived), stories: (base.stories || []).filter(x => !x.archived),
     home_sections: (base.home_sections || []).map(x => Object.assign({}, x, { product_ids: (x.product_ids || []).filter(id => products.some(p => p.id === id)) })),
@@ -177,6 +186,13 @@ function readBody(req, limit) {
     req.on('data', c => { n += c.length; if (n > limit) { rej(new HttpError(413, 'Juda katta')); req.destroy(); } else ch.push(c); });
     req.on('end', () => { try { res(ch.length ? JSON.parse(Buffer.concat(ch).toString()) : {}); } catch (e) { rej(new HttpError(400, "JSON noto'g'ri")); } });
     req.on('error', rej);
+  });
+}
+function readRaw(req, limit) {
+  return new Promise((res, rej) => {
+    let n = 0; const ch = [];
+    req.on('data', c => { n += c.length; if (n > limit) { rej(new HttpError(413, 'Fayl juda katta')); req.destroy(); } else ch.push(c); });
+    req.on('end', () => res(Buffer.concat(ch))); req.on('error', rej);
   });
 }
 // Oddiy tezlik cheklovi (faqat kod so'rash/kirishga; BUYURTMAGA CHEKLOV YO'Q)
@@ -270,14 +286,33 @@ async function handleTgUpdate(upd) {
   await tgApi('sendMessage', { chat_id: m.chat.id, text: tt(lang, 'hello'), reply_markup: open });
   if (!u.phone_verified) await tgApi('sendMessage', { chat_id: m.chat.id, text: tt(lang, 'share'), reply_markup: { keyboard: [[{ text: tt(lang, 'shareBtn'), request_contact: true }]], resize_keyboard: true, one_time_keyboard: true } });
 }
-// Mijozning botga yozgan oddiy xabari: admin panelning "Chat" bo'limiga tushadi
+/* ============================================================================
+ *  CHAT (mijoz <-> admin). Ikki alohida kanal:
+ *    src:'site' : saytdagi chat (Profil -> Sotuvchiga murojaat) <-> admin panel. Telegram botga HECH QACHON bormaydi.
+ *    src:'bot'  : mijoz botga yozgan xabar. Admin panelda "Botdan" deb ko'rinadi, javob ham bot orqali ketadi
+ *                 (Telegramda "reply" qilib: mijoz qaysi xabarga javob berilganini ko'radi).
+ *  Xabar: {id, from:'u'|'a', src, text, ts, tg (telegram message_id), rt:{id,from,text} (javob berilgan xabar), read (o'qilgan vaqt)}
+ * ============================================================================ */
+function chatNorm(th) {
+  th.msgs = th.msgs || []; let mx = 0;
+  th.msgs.forEach((m, i) => { if (!m.id) m.id = i + 1; if (!m.src) m.src = 'bot'; mx = Math.max(mx, m.id); });
+  th.seq = Math.max(th.seq || 0, mx); return th;
+}
+async function chatGet(u) { return chatNorm((await store.get('chat', u.id)) || { uid: u.id, tg: u.tg || null, msgs: [], unread: 0, seq: 0 }); }
+function chatPush(th, m) { m.id = ++th.seq; m.ts = m.ts || Date.now(); th.msgs.push(m); if (th.msgs.length > 300) th.msgs = th.msgs.slice(-300); th.updated = new Date().toISOString(); return m; }
+const quote = m => m ? { id: m.id, from: m.from, text: String(m.text || '').slice(0, 140) } : null;
+// Mijozning botga yozgan xabari: admin panelning "Chat" bo'limiga ("Botdan" belgisi bilan) tushadi
 async function chatIncoming(u, m, lang) {
-  const th = (await store.get('chat', u.id)) || { uid: u.id, tg: u.tg, msgs: [], unread: 0 };
+  const th = await chatGet(u);
   const text = String(m.text || m.caption || (m.photo ? '[rasm]' : m.voice ? '[ovozli xabar]' : '[fayl]')).slice(0, 2000);
   const prev = th.msgs.length ? th.msgs[th.msgs.length - 1].ts : 0;
-  th.name = u.name; th.username = u.username || ''; th.msgs.push({ from: 'u', text, ts: Date.now() }); th.msgs = th.msgs.slice(-200);
-  th.unread = (th.unread || 0) + 1; th.updated = new Date().toISOString(); await store.put('chat', u.id, th);
-  tellOwners('💬 <b>' + escHtml(u.name || 'Mijoz') + '</b>' + (u.username ? ' @' + escHtml(u.username) : '') + ': ' + escHtml(text.slice(0, 300)) + '\n<i>Javob berish: admin panel → Chat</i>').catch(() => {});
+  let rt = null; const rp = m.reply_to_message;      // mijoz Telegramda biror xabarga "reply" qilgan
+  if (rp) { const hit = th.msgs.find(x => x.tg && x.tg === rp.message_id); rt = hit ? quote(hit) : { id: 0, from: rp.from && rp.from.is_bot ? 'a' : 'u', text: String(rp.text || rp.caption || '[xabar]').slice(0, 140) }; }
+  th.name = u.name; th.username = u.username || '';
+  chatPush(th, { from: 'u', src: 'bot', text, tg: m.message_id, rt });
+  th.unread = (th.unread || 0) + 1; await store.put('chat', u.id, th);
+  u.seen = Date.now(); store.put('users', u.id, u).catch(() => {});
+  tellOwners('💬 <b>' + escHtml(u.name || 'Mijoz') + '</b>' + (u.username ? ' @' + escHtml(u.username) : '') + ' (bot): ' + escHtml(text.slice(0, 300)) + '\n<i>Javob berish: admin panel → Chat</i>').catch(() => {});
   if (Date.now() - prev > 6 * 3600000) await tgApi('sendMessage', { chat_id: m.chat.id, text: lang === 'ru' ? 'Сообщение получено, скоро ответим.' : "Xabaringiz qabul qilindi, tez orada javob beramiz." });
 }
 async function tellOwners(html) { for (const id of OWNER_IDS) await tgApi('sendMessage', { chat_id: id, text: html, parse_mode: 'HTML', disable_web_page_preview: true }); }
@@ -301,16 +336,21 @@ async function sendEmail(to, subject, html) {
 async function authUser(req) {
   const m = /^Bearer (.+)$/.exec(req.headers.authorization || ''); const t = m && unsign(m[1]);
   const u = t && await store.get('users', t.uid); if (!u) throw new HttpError(401, 'Kirish kerak', 'auth');
+  // "oxirgi online": har 45 soniyada bir marta yoziladi (bazani zo'riqtirmaslik uchun)
+  if (!u.seen || Date.now() - u.seen > 45000) { u.seen = Date.now(); store.put('users', u.id, u).catch(() => {}); }
   return u;
 }
 const pubUser = u => ({ id: u.id, kind: u.kind, tg: u.tg || null, username: u.username || '', name: u.name || '', phone: u.phone || '', phone_verified: !!u.phone_verified, email: u.email || '', lang: u.lang || '' });
 const tokenFor = u => sign({ uid: u.id, exp: Date.now() + 30 * 86400000 });
 const adminFails = new Map();
+let adminSeen = 0, adminSeenSaved = 0;
+function touchAdmin() { adminSeen = Date.now(); if (adminSeen - adminSeenSaved > 120000) { adminSeenSaved = adminSeen; store.put('meta', 'admin_seen', { ts: adminSeen }).catch(() => {}); } }
 function checkAdmin(req) {
   const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim(), now = Date.now();
   const a = (adminFails.get(ip) || []).filter(t => now - t < 600000);
   if (a.length >= 10) throw new HttpError(429, "Juda ko'p noto'g'ri urinish. 10 daqiqadan keyin qayta urining");
   if (!ADMIN_KEY || !safeEq(req.headers['x-admin-key'] || '', ADMIN_KEY)) { a.push(now); adminFails.set(ip, a); throw new HttpError(401, "Admin kaliti noto'g'ri"); }
+  touchAdmin();
 }
 const STATUSES = ['new', 'confirmed', 'shipping', 'delivered', 'cancelled'];
 async function isBanned(vals) { for (const v of vals) if (v && await store.get('bans', String(v).toLowerCase())) return true; return false; }
@@ -371,6 +411,12 @@ route('GET', '/api/profile', async req => { try { const u = await authUser(req);
 route('PUT', '/api/profile', async (req, body) => { try { const u = await authUser(req); if (body.language) { u.lang = body.language === 'ru' ? 'ru' : 'uz'; await store.put('users', u.id, u); } return { success: true, language: u.lang || 'uz' }; } catch (e) { return { success: true, language: body.language || 'uz' }; } });
 
 // --- Buyurtmalar (CHEKLOV YO'Q) ---
+// Xaritadan tanlangan joy: {lat, lng, label}. Noto'g'ri bo'lsa e'tiborsiz qoldiriladi
+function cleanGeo(g) {
+  if (!g || typeof g !== 'object') return null; const lat = Number(g.lat), lng = Number(g.lng);
+  if (!isFinite(lat) || !isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+  return { lat: Math.round(lat * 1e6) / 1e6, lng: Math.round(lng * 1e6) / 1e6, label: String(g.label || '').slice(0, 200) };
+}
 route('GET', '/api/orders', async req => { const u = await authUser(req); return (await store.list('orders', u.id)).sort((a, b) => b.number - a.number); });
 route('POST', '/api/orders', (req, body) => withLock(async () => {
   const u = await authUser(req);
@@ -386,23 +432,33 @@ route('POST', '/api/orders', (req, body) => withLock(async () => {
   for (const it of raw) {
     const p = prods.get(String(it.product_id)), qty = parseInt(it.qty, 10) || 1;
     if (!p || qty < 1 || qty > 99) throw new HttpError(400, 'Mahsulot topilmadi');
-    const k = vkey(p.id, it.color, it.size); const cur = lines.get(k) || { p, color: it.color == null ? null : it.color, size: it.size == null ? null : it.size, qty: 0 }; cur.qty += qty; lines.set(k, cur);
+    const ax = axesOfP(p); let sel = null;
+    if (ax.length) {                                   // admin yaratgan xususiyatlar: har biri to'g'ri qiymat bo'lishi shart
+      sel = {}; const src = (it.sel && typeof it.sel === 'object') ? it.sel : {};
+      for (const a of ax) { const v = a.values.find(x => String(x.id) === String(src[a.key])); if (!v) throw new HttpError(400, 'Variant tanlanmagan: ' + locName(p.name, 'uz')); sel[a.key] = String(v.id); }
+    }
+    const probe = { sel, color: it.color, size: it.size }, k = stockKey(p, probe), lk = p.id + '#' + k;
+    const cur = lines.get(lk) || { p, key: k, sel, color: it.color == null ? null : it.color, size: it.size == null ? null : it.size, qty: 0 }; cur.qty += qty; lines.set(lk, cur);
   }
   const items = []; let total = 0;
-  for (const [k, l] of lines) {
-    const avail = effStock(l.p, sold, l.color, l.size);
+  for (const [lk, l] of lines) {
+    const avail = effStock(l.p, sold, null, null, l.key);
     if (l.qty > avail) throw new HttpError(409, 'Omborda yetarli emas: ' + locName(l.p.name, 'uz') + ' (' + avail + ' ta qolgan)', 'stock');
   }
-  for (const [k, l] of lines) {
-    sold[k] = (sold[k] || 0) + l.qty;
-    const col = (l.p.colors || []).find(c => c.id === l.color), price = digits(l.p.price); total += price * l.qty;
-    items.push({ product_id: l.p.id, name: l.p.name, image: ((col && col.images) || l.p.images || [''])[0], price, cost: digits(l.p.cost), color: l.color, color_name: col ? col.name : null, size: l.size, qty: l.qty, reviewed: false });
+  for (const [lk, l] of lines) {
+    sold[lk] = (sold[lk] || 0) + l.qty;
+    const ax = axesOfP(l.p); const price = digits(l.p.price); total += price * l.qty;
+    let image = (l.p.images || [''])[0], opts = null, col = null;
+    if (ax.length) {
+      opts = ax.map(a => { const v = a.values.find(x => String(x.id) === String(l.sel[a.key])); if (a.type === 'color' && v && v.images && v.images[0]) image = v.images[0]; return { name: a.name, value: v.name }; });
+    } else { col = (l.p.colors || []).find(c => c.id === l.color); if (col && col.images && col.images[0]) image = col.images[0]; }
+    items.push({ product_id: l.p.id, name: l.p.name, image, price, cost: digits(l.p.cost), color: l.color, color_name: col ? col.name : null, size: l.size, sel: l.sel || undefined, opts: opts || undefined, vk: l.key, qty: l.qty, reviewed: false });
   }
   const number = 1000 + await store.next('orders');
   const order = {
     id: number, number, status: 'new', created: new Date().toISOString(),
     name: String(body.name || u.name || '').trim().slice(0, 80), phone: contact,
-    address: String(body.address || '').slice(0, 300), comment: String(body.comment || '').slice(0, 300), items, total,
+    address: String(body.address || '').slice(0, 300), geo: cleanGeo(body.geo), comment: String(body.comment || '').slice(0, 300), items, total,
     user: { id: u.id, kind: u.kind, tg: u.tg || null, username: u.username || '', email: u.email || '', verified_phone: u.phone_verified ? u.phone : '' },
   };
   await store.put('orders', String(number), order, u.id); await store.put('meta', 'sold', sold);
@@ -412,9 +468,10 @@ route('POST', '/api/orders', (req, body) => withLock(async () => {
   const who = u.kind === 'tg' ? ('<a href="tg://user?id=' + u.tg + '">' + escHtml(u.name || 'Telegram') + '</a>' + (u.username ? ' @' + escHtml(u.username) : '') + ' (ID ' + u.tg + ')') : escHtml(u.email);
   tellOwners('🛒 <b>Yangi buyurtma №' + number + '</b>\n👤 ' + escHtml(order.name) + '\n📞 Aloqa: ' + escHtml(contact) +
     (u.phone_verified && u.phone !== contact ? '\n✅ Tasdiqlangan raqam: ' + escHtml(u.phone) : (u.phone_verified ? ' ✅' : '')) +
-    (u.email ? '\n✉️ ' + escHtml(u.email) : '') + '\n💬 ' + who + '\n📍 ' + escHtml(order.address) + (order.comment ? '\n📝 ' + escHtml(order.comment) : '') + '\n\n' +
-    items.map(i => '• ' + escHtml(locName(i.name, 'uz')) + (i.color_name ? ', ' + escHtml(locName(i.color_name, 'uz')) : '') + (i.size ? ', ' + escHtml(i.size) : '') + ' × ' + i.qty).join('\n') +
+    (u.email ? '\n✉️ ' + escHtml(u.email) : '') + '\n💬 ' + who + '\n📍 ' + escHtml(order.address) + (order.geo ? '\n🗺 <a href="https://www.google.com/maps?q=' + order.geo.lat + ',' + order.geo.lng + '">Xaritada ko\'rish</a>' : '') + (order.comment ? '\n📝 ' + escHtml(order.comment) : '') + '\n\n' +
+    items.map(i => '• ' + escHtml(locName(i.name, 'uz')) + (i.opts ? ', ' + i.opts.map(o => escHtml(locName(o.value, 'uz'))).join(', ') : (i.color_name ? ', ' + escHtml(locName(i.color_name, 'uz')) : '') + (i.size ? ', ' + escHtml(i.size) : '')) + ' × ' + i.qty).join('\n') +
     "\n\n💰 Jami: <b>" + total.toLocaleString('ru-RU') + " so'm</b>").catch(() => {});
+  if (order.geo) OWNER_IDS.forEach(id => tgApi('sendLocation', { chat_id: id, latitude: order.geo.lat, longitude: order.geo.lng }).catch(() => {}));
   return order;
 }));
 
@@ -426,15 +483,39 @@ route('POST', '/api/reviews', async (req, body) => {
   const rating = parseInt(body.rating, 10); if (!(rating >= 1 && rating <= 5)) throw new HttpError(400, 'Baho 1 dan 5 gacha');
   const photos = (Array.isArray(body.photos) ? body.photos : []).slice(0, 3).filter(p => typeof p === 'string' && p.startsWith('data:image/') && p.length < 450000);
   const id = 'u' + await store.next('reviews');
-  const r = { id, product_id: it.product_id, name: body.anonymous ? null : (u.name || null), rating, text: String(body.text || '').slice(0, 600), date: new Date().toISOString().slice(0, 10), color: body.color == null ? null : body.color, size: body.size == null ? null : body.size, photos };
-  it.reviewed = true; await store.put('orders', String(order.number), order, u.id); await store.put('reviews', id, r); bump(); return r;
+  const r = { id, uid: u.id, order_id: order.number, product_id: it.product_id, name: body.anonymous ? null : (u.name || null), anon: !!body.anonymous, rating, text: String(body.text || '').slice(0, 600), date: new Date().toISOString().slice(0, 10), color: body.color == null ? null : body.color, size: body.size == null ? null : body.size, photos };
+  if (it.opts) r.opts = it.opts;
+  it.reviewed = true; await store.put('orders', String(order.number), order, u.id); await store.put('reviews', id, r, u.id); bump(); return pubReview(r);
+});
+const pubReview = r => { const q = Object.assign({}, r); delete q.uid; delete q.order_id; return q; };
+// Mening sharhlarim (profil -> Sharhlarim)
+route('GET', '/api/my-reviews', async req => { const u = await authUser(req); return (await store.list('reviews', u.id)).sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.id).localeCompare(String(a.id))); });
+route('POST', '/api/reviews/edit', async (req, body) => {
+  const u = await authUser(req); const r = await store.get('reviews', String(body.id));
+  if (!r || r.uid !== u.id) throw new HttpError(404, 'Sharh topilmadi');
+  const rating = parseInt(body.rating, 10); if (!(rating >= 1 && rating <= 5)) throw new HttpError(400, 'Baho 1 dan 5 gacha');
+  r.rating = rating; r.text = String(body.text || '').slice(0, 600); r.anon = !!body.anonymous; r.name = r.anon ? null : (u.name || null); r.edited = new Date().toISOString().slice(0, 10);
+  if (Array.isArray(body.photos)) r.photos = body.photos.slice(0, 3).filter(p => typeof p === 'string' && ((p.startsWith('data:image/') && p.length < 450000) || /^https?:\/\//.test(p) || p.startsWith('/img/')));
+  await store.put('reviews', r.id, r, u.id); bump(); return pubReview(r);
+});
+route('POST', '/api/reviews/delete', async (req, body) => {
+  const u = await authUser(req); const r = await store.get('reviews', String(body.id));
+  if (!r || r.uid !== u.id) throw new HttpError(404, 'Sharh topilmadi');
+  await store.del('reviews', r.id);
+  const o = r.order_id && await store.get('orders', String(r.order_id));   // qaytadan sharh yozish imkoni qaytadi
+  if (o && o.user && o.user.id === u.id) { const it = o.items.find(i => String(i.product_id) === String(r.product_id) && i.reviewed); if (it) { it.reviewed = false; await store.put('orders', String(o.number), o, u.id); } }
+  bump(); return { ok: true };
 });
 
 // --- "Kelganda xabar qil" ---
 route('POST', '/api/notify', async (req, body) => {
   const u = await authUser(req); const pid = String(body.product_id || ''); if (!pid) throw new HttpError(400, 'product_id kerak');
   const id = u.id + '|' + pid;
-  if (body.off) await store.del('notify', id); else await store.put('notify', id, { uid: u.id, product_id: pid, created: new Date().toISOString() });
+  if (body.off) await store.del('notify', id);
+  else {
+    const old = await store.get('notify', id);
+    if (!old || old.status === 'notified') await store.put('notify', id, { id, uid: u.id, product_id: pid, created: new Date().toISOString(), status: 'pending', name: u.name || '', phone: u.phone || '', username: u.username || '', email: u.email || '', kind: u.kind, lang: u.lang || '' });
+  }
   return { ok: true };
 });
 async function checkRestock() {
@@ -442,8 +523,9 @@ async function checkRestock() {
     const subs = await store.list('notify'); if (!subs.length) return;
     const base = loadBase(), sold = await soldMap(), prods = new Map((base.products || []).filter(p => !p.archived).map(p => [String(p.id), p]));
     for (const s of subs) {
+      if (s.status === 'notified') continue;
       const p = prods.get(String(s.product_id)); if (!p || effTotal(p, sold) <= 0) continue;
-      const u = await store.get('users', s.uid); await store.del('notify', s.uid + '|' + s.product_id); if (!u) continue;
+      const u = await store.get('users', s.uid); s.status = 'notified'; s.notified_at = new Date().toISOString(); await store.put('notify', s.uid + '|' + s.product_id, s); if (!u) continue;
       await tellUser(u, tt(u.lang, 'back_in', { n: locName(p.name, u.lang || 'uz') }), 'product.html?id=' + encodeURIComponent(p.id), tt(u.lang, 'open'));
     }
   } catch (e) { console.error('[restock]', e.message); }
@@ -456,11 +538,23 @@ route('PATCH', '/api/admin/orders', async (req, body) => {
   if (!STATUSES.includes(body.status)) throw new HttpError(400, 'status: ' + STATUSES.join(', '));
   if (o.status === 'cancelled') throw new HttpError(409, "Bekor qilingan buyurtmani o'zgartirib bo'lmaydi");
   if (o.status === body.status) return o;
-  if (body.status === 'cancelled') { const sold = await soldMap(); o.items.forEach(i => { const k = vkey(i.product_id, i.color, i.size); sold[k] = Math.max(0, (sold[k] || 0) - i.qty); }); await store.put('meta', 'sold', sold); }
+  if (body.status === 'cancelled') { const sold = await soldMap(); o.items.forEach(i => { const k = i.product_id + '#' + (i.vk != null ? i.vk : (i.color == null ? '' : i.color) + '|' + (i.size == null ? '' : i.size)); sold[k] = Math.max(0, (sold[k] || 0) - i.qty); }); await store.put('meta', 'sold', sold); }
   o.status = body.status; await store.put('orders', String(o.number), o, o.user && o.user.id); bump();
   const u = o.user && await store.get('users', o.user.id);
   if (u && body.status !== 'new') tellUser(u, tt(u.lang, 'order', { n: o.number, s: tt(u.lang, 'st')[body.status] }) + (body.status === 'delivered' ? '\n' + tt(u.lang, 'review') : ''), body.status === 'delivered' ? 'profil.html#orders' : 'profil.html#orders', tt(u.lang, 'open')).catch(() => {});
   return o;
+});
+// Admin: kim qaysi mahsulot kelishini kutmoqda va unga xabar berildimi
+route('GET', '/api/admin/notify', async req => {
+  checkAdmin(req); const subs = await store.list('notify'); const base = ensureCatalog(), sold = await soldMap(), pm = new Map(base.products.map(p => [String(p.id), p]));
+  return subs.map(x => { const p = pm.get(String(x.product_id)); return Object.assign({}, x, { product_name: p ? p.name : null, product_image: p ? ((p.images && p.images[0]) || '') : '', stock_now: p ? effTotal(p, sold) : 0, product_gone: !p || !!p.archived }); }).sort((a, b) => String(b.created).localeCompare(String(a.created)));
+});
+route('POST', '/api/admin/notify/remove', async (req, body) => { checkAdmin(req); await store.del('notify', String(body.id)); return { ok: true }; });
+route('POST', '/api/admin/notify/send', async (req, body) => {   // qo'lda yuborish
+  checkAdmin(req); const x = await store.get('notify', String(body.id)); if (!x) throw new HttpError(404, 'Topilmadi');
+  const base = ensureCatalog(), p = base.products.find(q => String(q.id) === String(x.product_id)); const u = await store.get('users', x.uid); if (!p || !u) throw bad("Mahsulot yoki mijoz topilmadi");
+  await tellUser(u, tt(u.lang, 'back_in', { n: locName(p.name, u.lang || 'uz') }), 'product.html?id=' + encodeURIComponent(p.id), tt(u.lang, 'open'));
+  x.status = 'notified'; x.notified_at = new Date().toISOString(); await store.put('notify', x.id, x); return { ok: true };
 });
 route('GET', '/api/admin/bans', async req => { checkAdmin(req); return await store.list('bans'); });
 route('POST', '/api/admin/ban', async (req, body) => {
@@ -476,7 +570,8 @@ route('POST', '/api/admin/telegram-setup', async req => { checkAdmin(req); retur
  *  Hammasi X-Admin-Key bilan himoyalangan. Katalog o'zgarsa SAYT HAM O'ZGARADI (sayt shu katalogdan o'qiydi).
  * ============================================================================ */
 const S = (v, n) => String(v == null ? '' : v).trim().slice(0, n);
-const L = (v, n) => { const o = (v && typeof v === 'object') ? v : { uz: v }; const uz = S(o.uz, n), ru = S(o.ru, n) || uz; return { uz, ru }; };
+// Ikki tilli matn: admin faqat bittasini kiritsa, ikkinchisi shu bilan to'ldiriladi (sayt har doim matn ko'rsatadi)
+const L = (v, n) => { const o = (v && typeof v === 'object') ? v : { uz: v }; const uz = S(o.uz, n), ru = S(o.ru, n); return { uz: uz || ru, ru: ru || uz }; };
 const urlOk = u => typeof u === 'string' && u.length < 700000 && (/^https?:\/\//i.test(u) || u.startsWith('/img/') || /^data:(image|video)\//.test(u));
 const nextId = arr => arr.reduce((m, x) => Math.max(m, Number(x && x.id) || 0), 0) + 1;
 const fmtMoney = n => Math.round(n).toLocaleString('ru-RU').replace(/[  ]/g, ' ') + " so'm";
@@ -507,15 +602,39 @@ async function saveProduct(C, inp) {
   p.category_id = cat.id;
   const sub = inp.subcat && (inp.subcat.uz || inp.subcat.ru) ? L(inp.subcat, 80) : null; if (sub) p.subcat = sub; else delete p.subcat;
   p.images = (Array.isArray(inp.images) ? inp.images : []).filter(urlOk).slice(0, 12);
+  // --- Admin yaratgan xususiyatlar (rang, o'lcham, voltaj...) ---
+  const optsIn = Array.isArray(inp.options) ? inp.options : null;
+  if (optsIn) {
+    const axes = [], akeys = new Set();
+    optsIn.slice(0, 6).forEach((a, ai) => {
+      const an = L(a && a.name, 40); if (!an.uz) return; const type = a.type === 'color' ? 'color' : 'text';
+      let key = S(a.key, 30).replace(/[^a-zA-Z0-9_-]/g, '') || (type === 'color' ? 'color' : 'o' + (ai + 1)); while (akeys.has(key)) key += '_'; akeys.add(key);
+      const vals = [], vk = new Set();
+      (Array.isArray(a.values) ? a.values : []).slice(0, 60).forEach((v, vi) => {
+        const vn = L(v && v.name, 40); if (!vn.uz) return;
+        let id = S(v.id, 30).replace(/[^a-zA-Z0-9_.-]/g, '') || (vn.uz.replace(/['`ʻʼ‘’]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '') || ('v' + (vi + 1))); while (vk.has(id)) id += '_'; vk.add(id);
+        const o = { id, name: vn }; if (type === 'color') { o.hex = /^#[0-9a-f]{6}$/i.test((v && v.hex) || '') ? v.hex : '#999999'; o.images = (Array.isArray(v.images) ? v.images : []).filter(urlOk).slice(0, 10); }
+        vals.push(o);
+      });
+      if (vals.length) axes.push({ key, name: an, type, values: vals });
+    });
+    if (axes.length) { p.options = axes; delete p.colors; delete p.sizes; } else delete p.options;
+  }
+  if (Array.isArray(inp.attrs)) {    // oddiy xususiyatlar jadvali: "Material — Paxta", "Kafolat — 12 oy"
+    const at = inp.attrs.slice(0, 30).map(x => ({ name: L(x && x.name, 40), value: L(x && x.value, 120) })).filter(x => x.name.uz && x.value.uz);
+    if (at.length) p.attrs = at; else delete p.attrs; delete p.material; delete p.country; delete p.season;
+  }
   const colors = []; const seen = new Set();
-  (Array.isArray(inp.colors) ? inp.colors : []).slice(0, 20).forEach((c, i) => {
+  if (!p.options) (Array.isArray(inp.colors) ? inp.colors : []).slice(0, 20).forEach((c, i) => {
     const nm = L(c && c.name, 40); if (!nm.uz) return;
     let id = S(c.id, 30).replace(/[^a-zA-Z0-9_-]/g, '') || ('c' + (i + 1)); while (seen.has(id)) id += '_'; seen.add(id);
     colors.push({ id, name: nm, hex: /^#[0-9a-f]{6}$/i.test(c.hex || '') ? c.hex : '#999999', images: (Array.isArray(c.images) ? c.images : []).filter(urlOk).slice(0, 10) });
   });
-  if (colors.length) p.colors = colors; else delete p.colors;
-  const sizes = (Array.isArray(inp.sizes) ? inp.sizes : []).map(x => S(x, 20)).filter(Boolean).slice(0, 30); if (sizes.length) p.sizes = sizes; else delete p.sizes;
-  ['material', 'country', 'season'].forEach(k => { const v = inp[k] && L(inp[k], 60); if (v && v.uz) p[k] = v; else delete p[k]; });
+  if (!p.options) {
+    if (colors.length) p.colors = colors; else delete p.colors;
+    const sizes = (Array.isArray(inp.sizes) ? inp.sizes : []).map(x => S(x, 20)).filter(Boolean).slice(0, 30); if (sizes.length) p.sizes = sizes; else delete p.sizes;
+  }
+  if (!Array.isArray(inp.attrs)) ['material', 'country', 'season'].forEach(k => { const v = inp[k] && L(inp[k], 60); if (v && v.uz) p[k] = v; else delete p[k]; });
   const d = L(inp.description, 3000); if (d.uz) p.description = d; else delete p.description;
   p.badgeType = S(inp.badgeType, 20) || p.badgeType || 'original';
   if (inp.sold_week !== undefined) p.sold_week = digits(inp.sold_week);
@@ -564,7 +683,7 @@ function saveBanner(C, inp) {
   const old = inp.id ? C.banners.find(b => String(b.id) === String(inp.id)) : null;
   const b = old || { id: 'b' + crypto.randomBytes(5).toString('hex') };
   if (!urlOk(inp.img)) throw bad('Banner rasmini yuklang');
-  b.img = inp.img; delete b.category_id; delete b.subcat; delete b.product_id;
+  b.img = inp.img; if (urlOk(inp.img_ru)) b.img_ru = inp.img_ru; else delete b.img_ru; delete b.category_id; delete b.subcat; delete b.product_id;
   if (inp.product_id) b.product_id = Number(inp.product_id) || inp.product_id;
   else if (inp.category_id) { b.category_id = Number(inp.category_id); if (inp.subcat) b.subcat = S(inp.subcat, 80); }
   b.start_at = isoOrEmpty(inp.start_at); b.end_at = isoOrEmpty(inp.end_at); if (!b.start_at) delete b.start_at; if (!b.end_at) delete b.end_at;
@@ -590,14 +709,14 @@ function saveSection(C, inp) {
   return s;
 }
 function saveSettings(C, inp) {
-  ['shop_name', 'phone', 'address', 'work_hours'].forEach(k => { if (inp[k] !== undefined) C.settings[k] = S(inp[k], 120); });
+  ['shop_name', 'phone', 'address', 'work_hours', 'tg_username', 'instagram', 'business_type'].forEach(k => { if (inp[k] !== undefined) C.settings[k] = S(inp[k], 120); });
   if (inp.theme === 'light' || inp.theme === 'dark') C.settings.theme = inp.theme;
   return C.settings;
 }
 
 route('GET', '/api/admin/counts', async req => {
   checkAdmin(req); const o = await store.list('orders'), c = await store.list('chat');
-  return { new_orders: o.filter(x => x.status === 'new').length, unread: c.reduce((s, t) => s + (t.unread || 0), 0) };
+  const nf = await store.list('notify'); return { new_orders: o.filter(x => x.status === 'new').length, unread: c.reduce((s, t) => s + (t.unread || 0), 0), notify: nf.filter(x => x.status !== 'notified').length };
 });
 route('GET', '/api/admin/catalog', async req => {
   checkAdmin(req); const C = ensureCatalog(); const sold = await soldMap();
@@ -676,6 +795,19 @@ route('POST', '/api/admin/upload', async (req, body) => {
   return { url: base + '/img/' + id + '.' + (m[1].split('/')[1].replace('jpeg', 'jpg')) };
 });
 
+// Video (galereyadan). Agar CLOUDINARY_CLOUD_NAME va CLOUDINARY_UPLOAD_PRESET berilsa, admin panel to'g'ridan-to'g'ri Cloudinary'ga yuklaydi (tavsiya).
+// Aks holda shu yerda saqlanadi (kichik videolar uchun: 15 MB gacha).
+const VIDEO_MAX = 15 * 1024 * 1024;
+route('GET', '/api/admin/upload-config', async req => { checkAdmin(req); return { cloud: process.env.CLOUDINARY_CLOUD_NAME || '', preset: process.env.CLOUDINARY_UPLOAD_PRESET || '', video_max: VIDEO_MAX }; });
+route('POST', '/api/admin/upload-video', async (req, buf) => {
+  checkAdmin(req); const mime = String(req.headers['x-mime'] || req.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+  if (!/^video\/(mp4|webm|quicktime)$/.test(mime)) throw bad("Faqat video (mp4, webm, mov) yuklash mumkin");
+  if (!Buffer.isBuffer(buf) || !buf.length) throw bad('Video fayl bo\'sh'); if (buf.length > VIDEO_MAX) throw bad("Video juda katta (" + Math.round(buf.length / 1048576) + " MB). Server uchun 15 MB gacha. Kattaroq video uchun Cloudinary ulang.");
+  const id = crypto.randomBytes(8).toString('hex'); await store.put('img', id, { type: mime === 'video/quicktime' ? 'video/mp4' : mime, b64: buf.toString('base64'), size: buf.length });
+  const proto = String(req.headers['x-forwarded-proto'] || 'https').split(',')[0]; const base = PUBLIC_URL || (proto + '://' + req.headers.host);
+  return { url: base + '/img/' + id + '.' + (mime === 'video/webm' ? 'webm' : 'mp4') };
+});
+
 /* ---- Zaxira nusxa / tiklash ---- */
 route('GET', '/api/admin/export', async req => { checkAdmin(req); return ensureCatalog(); });
 route('POST', '/api/admin/import', (req, body) => withLock(async () => {
@@ -694,22 +826,63 @@ route('GET', '/api/admin/users', async req => {
     .sort((a, b) => (b.last_order || b.created || '').localeCompare(a.last_order || a.created || ''));
 });
 
-/* ---- Chat (Telegram bot orqali) ---- */
+/* ---- Chat: admin tomoni ---- */
+const isOnline = ts => !!ts && Date.now() - ts < 150000;
 route('GET', '/api/admin/chats', async req => {
-  checkAdmin(req); return (await store.list('chat')).map(t => ({ uid: t.uid, name: t.name || '', username: t.username || '', unread: t.unread || 0, updated: t.updated || '', last: t.msgs.length ? t.msgs[t.msgs.length - 1] : null })).sort((a, b) => (b.updated || '').localeCompare(a.updated || ''));
+  checkAdmin(req); const users = new Map((await store.list('users')).map(u => [u.id, u]));
+  return (await store.list('chat')).map(t => { chatNorm(t); const u = users.get(t.uid) || {}; const lastU = [...t.msgs].reverse().find(m => m.from === 'u');
+    return { uid: t.uid, name: t.name || u.name || '', username: t.username || u.username || '', kind: u.kind || (t.tg ? 'tg' : 'email'), unread: t.unread || 0, updated: t.updated || '', last: t.msgs.length ? t.msgs[t.msgs.length - 1] : null, last_src: lastU ? lastU.src : '', seen: u.seen || 0, online: isOnline(u.seen) }; })
+    .sort((a, b) => (b.updated || '').localeCompare(a.updated || ''));
 });
 route('POST', '/api/admin/chat', async (req, body) => {
-  checkAdmin(req); const th = await store.get('chat', String(body.uid)); if (!th) return { uid: body.uid, msgs: [] };
-  if (th.unread) { th.unread = 0; await store.put('chat', th.uid, th); } return th;
+  checkAdmin(req); const uid = String(body.uid); const u = (await store.get('users', uid)) || {}; const th = await store.get('chat', uid);
+  const info = { seen: u.seen || 0, online: isOnline(u.seen), kind: u.kind || '', phone: u.phone || '', username: u.username || '', email: u.email || '', has_bot: u.kind === 'tg' };
+  if (!th) return Object.assign({ uid, msgs: [] }, info);
+  chatNorm(th); let ch = false; const now = Date.now();
+  th.msgs.forEach(m => { if (m.from === 'u' && !m.read) { m.read = now; ch = true; } });   // mijozga "ko'rildi" belgisi
+  if (th.unread) { th.unread = 0; ch = true; } if (ch) await store.put('chat', th.uid, th);
+  return Object.assign({}, th, info);
 });
 route('POST', '/api/admin/chat/send', async (req, body) => {
   checkAdmin(req); const uid = String(body.uid || ''), text = S(body.text, 2000); if (!uid || !text) throw bad('Xabar matni kerak');
   const u = await store.get('users', uid); if (!u) throw new HttpError(404, 'Foydalanuvchi topilmadi');
-  if (u.kind === 'tg') { const r = await tgApi('sendMessage', { chat_id: u.tg, text }); if (!r || !r.ok) throw new HttpError(502, "Telegramga yuborib bo'lmadi (mijoz botni bloklagan bo'lishi mumkin)"); }
-  else if (u.email) await sendEmail(u.email, 'Do\'kondan xabar', '<p>' + escHtml(text).replace(/\n/g, '<br>') + '</p>');
-  else throw bad("Bu mijozga yozib bo'lmaydi (Telegram ham, email ham yo'q)");
-  const th = (await store.get('chat', uid)) || { uid, tg: u.tg, name: u.name, username: u.username || '', msgs: [], unread: 0 };
-  th.msgs.push({ from: 'a', text, ts: Date.now() }); th.msgs = th.msgs.slice(-200); th.updated = new Date().toISOString(); await store.put('chat', uid, th); return th;
+  const th = chatNorm((await store.get('chat', uid)) || { uid, tg: u.tg, name: u.name, username: u.username || '', msgs: [], unread: 0, seq: 0 });
+  const target = body.reply_to ? th.msgs.find(m => m.id === Number(body.reply_to)) : null;
+  // Kanal: javob berilayotgan xabar qaysi kanaldan kelgan bo'lsa, shu kanal. Aks holda mijozning oxirgi xabari kanali.
+  const lastU = [...th.msgs].reverse().find(m => m.from === 'u');
+  let via = body.via === 'bot' || body.via === 'site' ? body.via : (target ? target.src : (lastU ? lastU.src : (u.kind === 'tg' ? 'bot' : 'site')));
+  if (via === 'bot' && u.kind !== 'tg') via = 'site';
+  const msg = { from: 'a', src: via, text, rt: quote(target), sent: Date.now() };
+  if (via === 'bot') {
+    const payload = { chat_id: u.tg, text }; if (target && target.tg && target.src === 'bot') { payload.reply_to_message_id = target.tg; payload.allow_sending_without_reply = true; }
+    const r = await tgApi('sendMessage', payload); if (!r || !r.ok) throw new HttpError(502, "Telegramga yuborib bo'lmadi (mijoz botni bloklagan bo'lishi mumkin)");
+    msg.tg = r.result.message_id;
+  }
+  chatPush(th, msg); th.name = th.name || u.name; await store.put('chat', uid, th); return th;
+});
+route('POST', '/api/admin/chat/delete', async (req, body) => { checkAdmin(req); await store.del('chat', String(body.uid)); return { ok: true }; });
+
+/* ---- Chat: mijoz tomoni (saytdagi "Sotuvchiga murojaat") ---- */
+route('GET', '/api/chat', async req => {
+  const u = await authUser(req); const th = await chatGet(u); const now = Date.now(); let ch = false;
+  th.msgs.forEach(m => { if (m.from === 'a' && !m.read) { m.read = now; ch = true; } });   // admin xabari mijozda ochildi = "ko'rildi"
+  if (ch) await store.put('chat', u.id, th);
+  const as = adminSeen || ((await store.get('meta', 'admin_seen')) || {}).ts || 0;
+  return { msgs: th.msgs.slice(-150), admin: { online: isOnline(as), seen: as } };
+});
+route('GET', '/api/chat/status', async req => {
+  const u = await authUser(req); const th = await store.get('chat', u.id); const unread = th ? chatNorm(th).msgs.filter(m => m.from === 'a' && !m.read).length : 0;
+  return { unread, admin_online: isOnline(adminSeen) };
+});
+route('POST', '/api/chat/send', async (req, body) => {
+  const u = await authUser(req); rate('chat:' + u.id, 20, 60000);
+  if (await isBanned([u.id, u.phone, u.email])) throw new HttpError(403, "Xabar yuborib bo'lmaydi", 'banned');
+  const text = S(body.text, 1500); if (!text) throw bad('Xabar yozing');
+  const th = await chatGet(u); const target = body.reply_to ? th.msgs.find(m => m.id === Number(body.reply_to)) : null;
+  th.name = u.name; th.username = u.username || '';
+  const m = chatPush(th, { from: 'u', src: 'site', text, rt: quote(target) });
+  th.unread = (th.unread || 0) + 1; await store.put('chat', u.id, th);     // Telegram botga yuborilmaydi
+  return { ok: true, msg: m };
 });
 
 // Telegram webhook (maxfiy sarlavha bilan himoyalangan)
@@ -755,7 +928,7 @@ async function serveStatic(req, res, pathname) {
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://x'); const pathname = url.pathname;
-    if (req.method === 'OPTIONS') return send(res, 204, '', { 'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Admin-Key', 'Access-Control-Max-Age': '86400' });
+    if (req.method === 'OPTIONS') return send(res, 204, '', { 'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Admin-Key,X-Mime', 'Access-Control-Max-Age': '86400' });
     if ((pathname === '/database.json' || pathname === '/api/products') && (req.method === 'GET' || req.method === 'HEAD')) {
       const m = await mergedDB(); const h = { 'Content-Type': 'application/json; charset=utf-8', ETag: m.etag, 'Cache-Control': 'no-cache', Vary: 'Accept-Encoding' };
       if (req.headers['if-none-match'] === m.etag) return send(res, 304, '', h);
@@ -765,11 +938,22 @@ const server = http.createServer(async (req, res) => {
     if (pathname.startsWith('/img/') && (req.method === 'GET' || req.method === 'HEAD')) {
       const id = pathname.slice(5).replace(/\.[a-z0-9]+$/i, ''); const r = /^[a-f0-9]{8,32}$/.test(id) && await store.get('img', id);
       if (!r) return send(res, 404, 'Not found');
-      return send(res, 200, req.method === 'HEAD' ? '' : Buffer.from(r.b64, 'base64'), { 'Content-Type': r.type, 'Cache-Control': 'public, max-age=31536000, immutable' });
+      const buf = Buffer.from(r.b64, 'base64'), hd = { 'Content-Type': r.type, 'Cache-Control': 'public, max-age=31536000, immutable', 'Accept-Ranges': 'bytes' };
+      const rg = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+      if (rg && (rg[1] || rg[2])) {   // video oldinga surish uchun (iPhone ham shuni talab qiladi)
+        let st = rg[1] ? parseInt(rg[1], 10) : Math.max(0, buf.length - parseInt(rg[2], 10)), en = rg[1] && rg[2] ? parseInt(rg[2], 10) : buf.length - 1; en = Math.min(en, buf.length - 1);
+        if (st > en || st >= buf.length) return send(res, 416, '', { 'Content-Range': 'bytes */' + buf.length });
+        return send(res, 206, req.method === 'HEAD' ? '' : buf.subarray(st, en + 1), Object.assign(hd, { 'Content-Range': 'bytes ' + st + '-' + en + '/' + buf.length, 'Content-Length': en - st + 1 }));
+      }
+      return send(res, 200, req.method === 'HEAD' ? '' : buf, hd);
     }
     if (pathname.startsWith('/api/')) {
       const fn = routes[req.method + ' ' + pathname]; if (!fn) return sendJson(res, 404, { error: 'Topilmadi' });
-      const body = (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') ? await readBody(req, (pathname === '/api/reviews' || pathname === '/api/admin/upload') ? 2e6 : (pathname === '/api/admin/import' ? 2e7 : 2e5)) : {};
+      let body = {};
+      if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
+        if (pathname === '/api/admin/upload-video') { checkAdmin(req); body = await readRaw(req, VIDEO_MAX + 1024); }
+        else body = await readBody(req, (pathname === '/api/reviews' || pathname === '/api/reviews/edit' || pathname === '/api/admin/upload') ? 2e6 : (pathname === '/api/admin/import' ? 2e7 : 2e5));
+      }
       const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
       return sendJson(res, 200, await fn(req, body, ip));
     }
