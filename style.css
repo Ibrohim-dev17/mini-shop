@@ -1,0 +1,3950 @@
+/* ==========================================================================
+   style.css  —  BUTUN SAYTNING USLUBLARI (bitta fayl)
+   --------------------------------------------------------------------------
+   Qanday ishlaydi:
+   • Fayl BO'LIMLARGA bo'lingan (pastdagi "=====" sarlavhalarga qarang): qidiruv, banner, storis, savat, profil va h.k.
+   • Hamma sahifaga tegishli qoida oddiy yoziladi. Faqat bitta yoki bir nechta sahifaga tegishli qoidaning
+     tepasida "sahifa: cart, profil" kabi izoh bor va u :where(html[data-page="cart"]) bilan cheklangan,
+     ya'ni boshqa sahifalarga ta'sir qilmaydi.
+   • Rang o'zgartirish: "ASOSIY" bo'limidagi --primary, --bg, --card, --text kabi o'zgaruvchilar.
+     Tungi rejim ranglari: :root[data-theme="dark"] qoidasida.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   ASOSIY: rang o'zgaruvchilari, tungi rejim, umumiy shrift va fon
+   ========================================================================== */
+/* sahifa: index, products, product, heart, cart, profil, reviews */
+:root:where([data-page="index"],[data-page="products"],[data-page="product"],[data-page="heart"],[data-page="cart"],[data-page="profil"],[data-page="reviews"]) {
+  --primary: #7000ff;
+  --primary-bg: #eef0ff;
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --text: #1f2026;
+  --muted: #8b8e99;
+  --border: #e2e5eb;
+  --star: #ffb800;
+  --discount-bg: #f1e5ff;
+  --discount-text: #7000ff;
+  --danger: #ff3b30;
+}
+/* sahifa: categories */
+:root:where([data-page="categories"]) {
+  --primary: #7000ff;
+  --primary-bg: #eef0ff;
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --text: #1f2026;
+  --muted: #8b8e99;
+  --border: #e2e5eb;
+}
+/* sahifa: sales */
+:root:where([data-page="sales"]) {
+  --primary: #7000ff;
+  --primary-bg: #eef0ff;
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --text: #1f2026;
+  --muted: #8b8e99;
+  --border: #e2e5eb;
+  --star: #ffb800;
+  --danger: #ff3b30;
+}
+/* sahifa: hammasi */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+/* sahifa: index, sales */
+:where(html[data-page="index"],html[data-page="sales"]) body {
+  background-color: var(--bg);
+  color: var(--text);
+  padding-top: 125px;
+  padding-bottom: calc(120px + var(--nav-extra, 0px));
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+/* sahifa: products, product, heart, cart, profil, reviews */
+:where(html[data-page="products"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) body {
+  background-color: var(--bg);
+  color: var(--text);
+  padding-bottom: calc(120px + var(--nav-extra, 0px));
+  overflow-x: hidden;
+}
+/* sahifa: categories */
+:where(html[data-page="categories"]) body {
+  background-color: var(--bg);
+  color: var(--text);
+  padding-bottom: 120px;
+  overflow: hidden;
+  height: 100vh;
+}
+/* sahifa: product */
+:where(html[data-page="product"]) body {
+  padding-bottom: calc(210px + var(--nav-extra, 0px));
+}
+/* sahifa: cart */
+:where(html[data-page="cart"]) body {
+  padding-bottom: calc(190px + var(--nav-extra, 0px));
+}
+/* sahifa: reviews */
+:where(html[data-page="reviews"]) body {
+  padding-bottom: calc(170px + var(--nav-extra, 0px));
+}
+
+/* ==========================================================================
+   YUQORI QISM: sarlavha va 'orqaga' tugmasi
+   ========================================================================== */
+/* sahifa: index, sales */
+:where(html[data-page="index"],html[data-page="sales"]) .sticky-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-top: 55px;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* sahifa: products, categories, product, heart, cart, profil, reviews */
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .sticky-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: 55px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* sahifa: hammasi */
+.sticky-header::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--card);
+  z-index: -1;
+}
+/* sahifa: products, product, heart, cart, profil, reviews */
+:where(html[data-page="products"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+/* sahifa: sales */
+:where(html[data-page="sales"]) .back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+/* sahifa: products, sales, product, heart, cart, profil, reviews */
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .back-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* sahifa: products, product, heart */
+:where(html[data-page="products"],html[data-page="product"],html[data-page="heart"]) .page-title-bar {
+  padding: 130px 16px 10px 16px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  max-width: 1300px;
+  margin: 0 auto;
+}
+/* sahifa: sales */
+:where(html[data-page="sales"]) .header-title {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* sahifa: cart, profil, reviews */
+:where(html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .hdr-title {
+  font-size: 18px;
+  font-weight: 800;
+  flex: 1;
+}
+
+/* ==========================================================================
+   QIDIRUV: qidiruv qatori, takliflar, qidiruv tarixi
+   ========================================================================== */
+/* sahifa: index, products, categories, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-box-wrapper {
+  position: relative;
+  width: 100%;
+  flex: 1;
+}
+/* sahifa: index */
+:where(html[data-page="index"]) .search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 8px 12px;
+  gap: 8px;
+  border: 1px solid var(--border);
+  width: 100%;
+  position: relative;
+  z-index: 1001;
+}
+/* sahifa: products, product, heart */
+:where(html[data-page="products"],html[data-page="product"],html[data-page="heart"]) .search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 8px 12px;
+  gap: 8px;
+  border: 1px solid var(--border);
+  width: 100%;
+  transition: border-color 0.2s;
+}
+/* sahifa: categories */
+:where(html[data-page="categories"]) .search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 8px 12px;
+  gap: 8px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+  width: 100%;
+}
+/* sahifa: index, products, categories, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-box:focus-within {
+  border-color: var(--primary);
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-box svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  width: 100%;
+  color: var(--text);
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-box input::placeholder {
+  color: var(--muted);
+}
+/* sahifa: products, categories, product, heart */
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-top: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  max-height: 350px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+/* sahifa: index */
+:where(html[data-page="index"]) .search-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 998;
+  display: none;
+}
+:where(html[data-page="index"]) .search-backdrop.show {
+  display: block;
+}
+:where(html[data-page="index"]) .search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-top: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  max-height: 350px;
+  overflow-y: auto;
+  z-index: 1002;
+  display: none;
+}
+/* sahifa: index, products, categories, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-dropdown.show {
+  display: block;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-suggestion-item {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+}
+/* sahifa: products, categories, product, heart */
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-suggestion-item:last-child {
+  border-bottom: none;
+}
+/* sahifa: index, products, categories, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-suggestion-item:hover {
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .suggestion-type {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+/* sahifa: products, categories, product, heart */
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 998;
+  display: none;
+}
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .search-backdrop.show {
+  display: block;
+}
+
+/* ==========================================================================
+   STORISLAR: yuqoridagi aylana storislar va to'liq ekranli oyna (index)
+   ========================================================================== */
+/* sahifa: index, products, categories, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .clear-history-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 12px;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .history-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .remove-history-item {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 16px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+/* sahifa: index */
+:where(html[data-page="index"]) #storyModal,
+:where(html[data-page="index"]) #storyModal * {
+  -webkit-touch-callout: none;
+}
+:where(html[data-page="index"]) .stories-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 12px 16px 8px 16px;
+  scrollbar-width: none;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+:where(html[data-page="index"]) .stories-container::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="index"]) .story-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+:where(html[data-page="index"]) .story-ring {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+:where(html[data-page="index"]) .story-ring.type-sale {
+  background: linear-gradient(45deg, #ff3b30, #ff9500, #ffcc00);
+}
+:where(html[data-page="index"]) .story-ring.type-new {
+  background: linear-gradient(45deg, #7000ff, #00c853, #00b0ff);
+}
+:where(html[data-page="index"]) .story-ring.type-special {
+  background: linear-gradient(45deg, #ff007f, #7000ff, #ff3b30);
+}
+:where(html[data-page="index"]) .story-ring.viewed {
+  background: var(--border) !important;
+}
+:where(html[data-page="index"]) .story-img,
+:where(html[data-page="index"]) .story-video {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--card);
+  background: #000;
+}
+:where(html[data-page="index"]) .story-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text);
+  max-width: 70px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* sahifa: products, categories, product, heart */
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"]) .remove-history-item:hover {
+  color: #ff3b30;
+}
+
+/* ==========================================================================
+   BANNER: bosh sahifadagi aylanuvchi rasmlar (index)
+   ========================================================================== */
+/* sahifa: index */
+:where(html[data-page="index"]) .banner-carousel-container {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 12px 0 4px 0;
+  max-width: 1300px;
+  margin: 0 auto;
+  touch-action: pan-y;
+}
+:where(html[data-page="index"]) .banner-track {
+  display: flex;
+  padding-left: 10vw;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+:where(html[data-page="index"]) .banner-slide {
+  flex: 0 0 80vw;
+  margin-right: 10px;
+  height: 118px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  background: var(--border);
+  cursor: pointer;
+}
+:where(html[data-page="index"]) .banner-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+:where(html[data-page="index"]) .banner-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 8px 0;
+}
+:where(html[data-page="index"]) .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.3s;
+}
+:where(html[data-page="index"]) .dot.active {
+  width: 22px;
+  border-radius: 10px;
+  background: var(--primary);
+}
+
+/* ==========================================================================
+   HAFTA AKSIYALARI va taymer (index, sales)
+   ========================================================================== */
+/* sahifa: index */
+:where(html[data-page="index"]) .weekly-sale-box {
+  background: #7000ff;
+  border-radius: 20px;
+  padding: 16px;
+  max-width: 1300px;
+  margin: 16px auto;
+  color: #fff;
+}
+:where(html[data-page="index"]) .weekly-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+:where(html[data-page="index"]) .weekly-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+:where(html[data-page="index"]) .weekly-title-row svg {
+  width: 20px;
+  height: 20px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2;
+}
+:where(html[data-page="index"]) .weekly-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+:where(html[data-page="index"]) .weekly-all-btn {
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+}
+:where(html[data-page="index"]) .weekly-track-wrapper {
+  overflow-x: auto;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+:where(html[data-page="index"]) .weekly-track-wrapper:active {
+  cursor: grabbing;
+}
+:where(html[data-page="index"]) .weekly-track-wrapper::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="index"]) .weekly-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  padding-bottom: 4px;
+}
+:where(html[data-page="index"]) .weekly-more-card {
+  flex: 0 0 155px;
+  width: 155px;
+  background: var(--card);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+:where(html[data-page="index"]) .weekly-more-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:where(html[data-page="index"]) .weekly-more-circle svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="index"]) .weekly-more-text {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+}
+/* sahifa: sales */
+:where(html[data-page="sales"]) .header-timer {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  background: #8b3dff;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+:where(html[data-page="sales"]) .header-timer.show {
+  display: flex;
+}
+:where(html[data-page="sales"]) .header-timer svg {
+  width: 15px;
+  height: 15px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ==========================================================================
+   KATEGORIYALAR: chap ro'yxat, kichik toifalar (categories, index)
+   ========================================================================== */
+/* sahifa: index */
+:where(html[data-page="index"]) .categories-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 16px;
+  max-width: 1300px;
+  margin: 8px auto;
+}
+:where(html[data-page="index"]) .categories-scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="index"]) .categories-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+}
+:where(html[data-page="index"]) .cat-text-pill {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+:where(html[data-page="index"]) .cat-text-pill.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+:where(html[data-page="index"]) .subcats-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 16px 12px 16px;
+  scrollbar-width: none;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+:where(html[data-page="index"]) .subcats-row::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="index"]) .subcat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 64px;
+  text-decoration: none;
+  color: var(--text);
+}
+:where(html[data-page="index"]) .subcat-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+:where(html[data-page="index"]) .subcat-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+:where(html[data-page="index"]) .subcat-name {
+  font-size: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+/* sahifa: categories */
+:where(html[data-page="categories"]) .sidebar-categories {
+  position: relative;
+}
+:where(html[data-page="categories"]) .catalog-container {
+  max-width: 1300px;
+  margin: 125px auto 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  gap: 10px;
+  height: calc(100vh - 130px);
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  :where(html[data-page="categories"]) .catalog-container {
+    padding: 6px 8px;
+    gap: 8px;
+    height: calc(100vh - 110px);
+  }
+}
+:where(html[data-page="categories"]) .sidebar-categories {
+  width: 105px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
+  padding: 4px;
+  height: 100%;
+  scrollbar-width: none;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="categories"]) .sidebar-categories {
+    width: 180px;
+    padding: 8px;
+  }
+}
+:where(html[data-page="categories"]) .sidebar-categories::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="categories"]) .sidebar-item {
+  padding: 10px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.3;
+  border-radius: 8px;
+  position: relative;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="categories"]) .sidebar-item {
+    padding: 12px 12px;
+    font-size: 13px;
+  }
+}
+:where(html[data-page="categories"]) .sidebar-item.active {
+  color: var(--primary);
+  font-weight: 700;
+  background: var(--primary-bg);
+}
+:where(html[data-page="categories"]) .sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 16px;
+  background: var(--primary);
+  border-radius: 0 4px 4px 0;
+}
+:where(html[data-page="categories"]) .subcats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 6px;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="categories"]) .subcats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px 16px;
+  }
+}
+@media (min-width: 1024px) {
+  :where(html[data-page="categories"]) .subcats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px 20px;
+  }
+}
+:where(html[data-page="categories"]) .subcat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+  width: 100%;
+}
+:where(html[data-page="categories"]) .subcat-img-wrap {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--bg);
+  overflow: hidden;
+  margin-bottom: 6px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  flex-shrink: 0;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="categories"]) .subcat-img-wrap {
+    width: 85px;
+    height: 85px;
+  }
+}
+:where(html[data-page="categories"]) .subcat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+:where(html[data-page="categories"]) .subcat-name {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="categories"]) .subcat-name {
+    font-size: 12px;
+  }
+}
+
+/* ==========================================================================
+   MAHSULOT KARTASI va mahsulotlar to'ri (index, products, sales, heart, product)
+   ========================================================================== */
+/* sahifa: index */
+:where(html[data-page="index"]) .badge-action-ribbon {
+  position: absolute;
+  top: 14px;
+  left: -4px;
+  background: #8139f8;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.7px;
+  padding: 6px 9px;
+  border-radius: 5px;
+  z-index: 4;
+  pointer-events: none;
+  transform: rotate(-3deg);
+  transform-origin: left center;
+  -webkit-mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat;
+}
+:where(html[data-page="index"]) .img-wrap {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+}
+:where(html[data-page="index"]) .card-image-badges {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  z-index: 4;
+  pointer-events: none;
+  flex-wrap: wrap;
+}
+:where(html[data-page="index"]) .card-timer-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: rgba(139, 61, 255, 0.92);
+  padding: 3px 6px 3px 4px;
+  border-radius: 8px;
+}
+:where(html[data-page="index"]) .card-timer-badge svg {
+  width: 10px;
+  height: 10px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="index"]) .badge-original-sm {
+  background: #00c853;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 7px 3px 3px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+:where(html[data-page="index"]) .badge-original-sm svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+:where(html[data-page="index"]) .last-item-badge {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #ff3d00;
+  font-weight: 700;
+  font-size: 10px;
+  background: #fff2ee;
+  padding: 2px 5px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+[data-theme="dark"]:where([data-page="index"]) .last-item-badge {
+  background: #3b1d12;
+}
+:where(html[data-page="index"]) .last-item-badge svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px 12px;
+  max-width: 1300px;
+  margin: 0 auto;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .products-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  :where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1280px) {
+  :where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .products-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+/* sahifa: index, products, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="product"],html[data-page="heart"]) .product-card {
+  min-width: 0;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+/* sahifa: sales */
+:where(html[data-page="sales"]) .product-card {
+  min-width: 0;
+  background: transparent;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+/* sahifa: products, sales, product, heart */
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .img-wrap {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+}
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .badge-action-ribbon {
+  position: absolute;
+  top: 14px;
+  left: -4px;
+  background: #8139f8;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.7px;
+  padding: 6px 9px;
+  border-radius: 5px;
+  z-index: 4;
+  pointer-events: none;
+  transform: rotate(-3deg);
+  transform-origin: left center;
+  -webkit-mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle at 0 50%, transparent 3.5px, #000 4px) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 3.5px, #000 4px) right / 51% 100% no-repeat;
+}
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .heart-icon-sm {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(110, 110, 120, 0.55);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .heart-icon-sm svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .heart-icon-sm.liked svg {
+  fill: #8b4dff;
+  stroke: #8b4dff;
+}
+/* sahifa: products, sales, product, heart */
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-image-badges {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  z-index: 4;
+  pointer-events: none;
+  flex-wrap: wrap;
+}
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-timer-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: rgba(139, 61, 255, 0.92);
+  padding: 3px 6px 3px 4px;
+  border-radius: 8px;
+}
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-timer-badge svg {
+  width: 10px;
+  height: 10px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .badge-original-sm {
+  background: #00c853;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 7px 3px 3px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .badge-original-sm svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+/* sahifa: products, product, heart */
+:where(html[data-page="products"],html[data-page="product"],html[data-page="heart"]) .badge-text-sm {
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 4px 7px;
+  border-radius: 8px;
+}
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .product-img-box {
+  width: 100%;
+  min-width: 0;
+  height: 260px;
+  background: var(--bg);
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  flex-shrink: 0;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .product-img-box {
+    height: 300px;
+  }
+}
+/* sahifa: index */
+:where(html[data-page="index"]) .weekly-card-item .product-img-box {
+  height: 200px;
+  border-radius: 16px;
+  box-shadow: none;
+}
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-slider-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-slider-container::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+}
+/* sahifa: index */
+:where(html[data-page="index"]) .weekly-card-item .card-slide img {
+  border-radius: 16px;
+}
+:where(html[data-page="index"]) .card-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0 2px 0;
+  z-index: 4;
+}
+/* sahifa: products, sales, product, heart */
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0 2px 0;
+}
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.2s;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-dot.active {
+  width: 12px;
+  border-radius: 3px;
+  background: var(--primary);
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .product-info {
+  padding: 6px 4px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+  min-width: 0;
+}
+/* sahifa: index */
+:where(html[data-page="index"]) .weekly-card-item .product-info {
+  padding: 8px 2px 2px 2px;
+}
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .product-info-top {
+  display: flex;
+  flex-direction: column;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .price-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .main-price {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .main-price.out-of-stock {
+  color: var(--danger);
+  font-size: 14px;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .discount-tag {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e0218a;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .discount-tag svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .old-prices {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .price-old {
+  text-decoration: line-through;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .product-title {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 6px;
+  height: 34px;
+  cursor: pointer;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .product-rating {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  margin: 8px 0;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .rating-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .rating-box,
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .comment-box {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .rating-box svg {
+  width: 13px;
+  height: 13px;
+  fill: var(--star);
+  flex-shrink: 0;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .comment-box svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .rating-num {
+  font-weight: 700;
+  color: var(--text);
+}
+/* sahifa: products, sales, product, heart */
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .last-item-badge {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #ff3d00;
+  font-weight: 700;
+  font-size: 10px;
+  background: #fff2ee;
+  padding: 2px 5px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+[data-theme="dark"]:where([data-page="products"],[data-page="sales"],[data-page="product"],[data-page="heart"]) .last-item-badge {
+  background: #3b1d12;
+}
+:where(html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .last-item-badge svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .card-action-container {
+  width: 100%;
+  margin-top: auto;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .notify-btn-sm {
+  width: 100%;
+  height: 36px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border: none;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .notify-btn-sm.active-notified {
+  background: #00c853;
+  color: #ffffff;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .counter-btn-sm {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .counter-btn-sm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .counter-val-sm {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+/* sahifa: hammasi */
+.badge-count {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  background: #000;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 17px;
+  height: 17px;
+  border-radius: 10px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.badge-count.show {
+  display: flex;
+}
+/* sahifa: cart */
+:where(html[data-page="cart"]) .notify-mini {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+:where(html[data-page="cart"]) .notify-mini.on {
+  background: #00c853;
+  color: #fff;
+}
+
+/* ==========================================================================
+   PASTKI MENYU (barcha sahifalarda)
+   ========================================================================== */
+/* sahifa: hammasi */
+.bottom-nav {
+  position: fixed;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px));
+  left: 16px;
+  right: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.97);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+[data-theme="dark"] .bottom-nav {
+  background: rgba(28, 29, 34, 0.95);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+/* sahifa: index, products, categories, product, heart, cart, profil, reviews */
+@media (min-width: 1024px) {
+  :where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .bottom-nav {
+    max-width: 550px;
+  }
+}
+/* sahifa: index, sales */
+:where(html[data-page="index"],html[data-page="sales"]) .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #808080;
+  font-size: 10px;
+  font-weight: 500;
+  width: 20%;
+  position: relative;
+  padding: 8px 0;
+}
+:where(html[data-page="index"],html[data-page="sales"]) .nav-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* sahifa: index */
+:where(html[data-page="index"]) .nav-item svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: #808080;
+  stroke-width: 1.8;
+  transition: all 0.2s;
+}
+/* sahifa: products, product, heart, cart, profil, reviews */
+:where(html[data-page="products"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #808080;
+  font-size: 10px;
+  font-weight: 500;
+  width: 20%;
+  position: relative;
+  cursor: pointer;
+  padding: 8px 0;
+}
+/* sahifa: categories */
+:where(html[data-page="categories"]) .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #808080;
+  font-size: 10px;
+  font-weight: 500;
+  width: 20%;
+  position: relative;
+  cursor: pointer;
+  padding: 8px 0;
+  touch-action: manipulation;
+}
+/* sahifa: products, categories, product, heart, cart, profil, reviews */
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .nav-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .nav-item span {
+  pointer-events: none;
+}
+:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .nav-item svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: #808080;
+  stroke-width: 1.8;
+  transition: all 0.2s ease;
+}
+/* sahifa: index, products, categories, product, heart, cart, profil, reviews */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .nav-item.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .nav-item.active svg {
+  stroke: var(--primary);
+  fill: var(--primary-bg);
+  transform: scale(1.05);
+}
+/* sahifa: sales */
+:where(html[data-page="sales"]) .nav-item svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: #808080;
+  stroke-width: 1.8;
+}
+
+/* ==========================================================================
+   UMUMIY OYNALAR (sheet), formalar, tugmalar, toast, katta rasm (lightbox)
+   ========================================================================== */
+/* sahifa: product, heart, cart, profil, reviews */
+:where(html[data-page]) .sh-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 14px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+:where(html[data-page]) .sh-btn:disabled {
+  opacity: .55;
+  cursor: default;
+}
+:where(html[data-page]) .sh-btn.ghost {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+:where(html[data-page]) .sh-btn.danger {
+  background: #ff3b30;
+}
+:where(html[data-page]) .sh-btn.soft {
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+:where(html[data-page]) .sh-row {
+  display: flex;
+  gap: 10px;
+}
+:where(html[data-page]) .sh-row .sh-btn {
+  flex: 1;
+}
+:where(html[data-page]) .sh-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 14px 0 6px;
+}
+:where(html[data-page]) .sh-input {
+  width: 100%;
+  height: 46px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 15px;
+  outline: none;
+}
+:where(html[data-page]) .sh-input:focus {
+  border-color: var(--primary);
+}
+:where(html[data-page]) .sh-code {
+  text-align: center;
+  letter-spacing: 8px;
+  font-size: 22px;
+  font-weight: 700;
+}
+:where(html[data-page]) .sh-phone {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 12px;
+  height: 46px;
+  padding: 0 14px;
+  gap: 8px;
+}
+:where(html[data-page]) .sh-phone:focus-within {
+  border-color: var(--primary);
+}
+:where(html[data-page]) .sh-phone span {
+  font-weight: 700;
+  color: var(--text);
+}
+:where(html[data-page]) .sh-phone input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--text);
+}
+:where(html[data-page]) .sh-err {
+  color: #ff3b30;
+  font-size: 13px;
+  min-height: 18px;
+  margin-top: 8px;
+}
+:where(html[data-page]) .sh-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-top: 8px;
+}
+:where(html[data-page]) .sh-btn-ic {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-right: 8px;
+  vertical-align: -3px;
+}
+:where(html[data-page]) .sh-sub {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+:where(html[data-page]) .sh-sent {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+:where(html[data-page]) .sh-demo {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+:where(html[data-page]) .sh-confirm-text {
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 6px 0 12px;
+}
+:where(html[data-page]) .sh-sheet-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  visibility: hidden;
+}
+:where(html[data-page]) .sh-sheet-wrap.show {
+  visibility: visible;
+}
+:where(html[data-page]) .sh-sheet-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  opacity: 0;
+  transition: opacity .2s;
+}
+:where(html[data-page]) .sh-sheet-wrap.show .sh-sheet-bg {
+  opacity: 1;
+}
+:where(html[data-page]) .sh-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--kb, 0px);
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--card);
+  color: var(--text);
+  border-radius: 22px 22px 0 0;
+  padding: 8px 18px calc(22px + env(safe-area-inset-bottom, 0px));
+  max-height: calc(var(--vvh, 100vh) - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  transform: translateY(100%);
+  transition: transform .22s ease-out;
+}
+:where(html[data-page]) .sh-sheet-wrap.show .sh-sheet {
+  transform: translateY(0);
+}
+:where(html[data-page]) .sh-sheet-grab {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin: 4px auto 12px;
+}
+:where(html[data-page]) .sh-sheet-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+:where(html[data-page]) .sh-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(110px + var(--nav-extra, 0px));
+  transform: translate(-50%, 20px);
+  background: rgba(20,20,24,.94);
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 4000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .22s;
+  max-width: 86vw;
+  text-align: center;
+}
+:where(html[data-page]) .sh-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+:where(html[data-page]) .sh-lightbox {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 3500;
+  opacity: 0;
+  transition: opacity .2s;
+  display: flex;
+  align-items: center;
+}
+:where(html[data-page]) .sh-lightbox.show {
+  opacity: 1;
+}
+:where(html[data-page]) .sh-lb-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+:where(html[data-page]) .sh-lb-track::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page]) .sh-lb-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:where(html[data-page]) .sh-lb-slide img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+:where(html[data-page]) .sh-lb-close {
+  position: absolute;
+  top: calc(60px + env(safe-area-inset-top, 0px));
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.18);
+  border: none;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+:where(html[data-page]) .sh-lb-close svg {
+  width: 20px;
+  height: 20px;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+:where(html[data-page]) .sh-lb-count {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+:where(html[data-page]) .sh-rv-prod {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 8px 0 4px;
+}
+:where(html[data-page]) .sh-rv-prod img {
+  width: 56px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--bg);
+}
+:where(html[data-page]) .sh-rv-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+:where(html[data-page]) .sh-rate-pick {
+  display: flex;
+  gap: 6px;
+}
+:where(html[data-page]) .sh-rate-pick button {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+}
+:where(html[data-page]) .sh-rate-pick svg {
+  width: 38px;
+  height: 38px;
+  fill: none;
+  stroke: var(--star);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  transition: transform .12s;
+}
+:where(html[data-page]) .sh-rate-pick button.on svg {
+  fill: var(--star);
+}
+:where(html[data-page]) .sh-rate-pick button:active svg {
+  transform: scale(1.15);
+}
+:where(html[data-page]) .sh-photos {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+:where(html[data-page]) .sh-ph {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+:where(html[data-page]) .sh-ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+:where(html[data-page]) .sh-ph button {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+:where(html[data-page]) .sh-ph-add {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  border: 1.5px dashed var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 10px;
+  cursor: pointer;
+}
+:where(html[data-page]) .sh-ph-add svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page]) .sh-seg {
+  display: flex;
+  gap: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 4px;
+  border-radius: 12px;
+}
+:where(html[data-page]) .sh-seg button {
+  flex: 1;
+  height: 38px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+:where(html[data-page]) .sh-seg button.on {
+  background: var(--primary);
+  color: #fff;
+}
+:where(html[data-page]) .sh-seg button:disabled {
+  opacity: .4;
+}
+:where(html[data-page]) .sh-empty {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--muted);
+}
+:where(html[data-page]) .sh-empty svg {
+  width: 64px;
+  height: 64px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-bottom: 14px;
+  opacity: .7;
+}
+:where(html[data-page]) .sh-empty h3 {
+  font-size: 18px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+:where(html[data-page]) .sh-empty p {
+  font-size: 14px;
+  line-height: 1.45;
+}
+:where(html[data-page]) .sh-empty .sh-btn {
+  width: auto;
+  display: inline-flex;
+  padding: 0 26px;
+  margin-top: 18px;
+}
+
+/* ==========================================================================
+   SHARHLAR: sharh kartochkasi, yulduzlar, javob (product, reviews)
+   ========================================================================== */
+/* sahifa: product, heart, cart, profil, reviews */
+:where(html[data-page]) .sh-stars {
+  display: inline-flex;
+  gap: 1px;
+  vertical-align: middle;
+}
+:where(html[data-page]) .sh-star {
+  fill: none;
+  stroke: var(--star);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+:where(html[data-page]) .sh-star.on {
+  fill: var(--star);
+}
+:where(html[data-page]) .sh-review {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+:where(html[data-page]) .sh-review:last-child {
+  border-bottom: none;
+}
+:where(html[data-page]) .sh-review-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+:where(html[data-page]) .sh-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+:where(html[data-page]) .sh-avatar svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page]) .sh-avatar.anon {
+  background: var(--bg);
+  color: var(--muted);
+}
+:where(html[data-page]) .sh-review-who {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+:where(html[data-page]) .sh-review-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+:where(html[data-page]) .sh-review-date {
+  font-size: 12px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+:where(html[data-page]) .sh-review-variant {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+:where(html[data-page]) .sh-review-text {
+  font-size: 14px;
+  line-height: 1.45;
+  margin-top: 6px;
+  word-break: break-word;
+}
+:where(html[data-page]) .sh-review-text.muted {
+  color: var(--muted);
+}
+:where(html[data-page]) .sh-review-photos {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+:where(html[data-page]) .sh-review-photos img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+:where(html[data-page]) .sh-reply {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: 10px;
+  border-left: 3px solid var(--primary);
+}
+:where(html[data-page]) .sh-reply-name {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+:where(html[data-page]) .sh-reply-text {
+  font-size: 13px;
+  line-height: 1.4;
+}
+/* sahifa: reviews */
+:where(html[data-page="reviews"]) .filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 12px;
+  padding-bottom: 2px;
+}
+:where(html[data-page="reviews"]) .fchip {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+:where(html[data-page="reviews"]) .fchip svg {
+  width: 13px;
+  height: 13px;
+  fill: var(--star);
+  stroke: none;
+}
+:where(html[data-page="reviews"]) .fchip.on {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* ==========================================================================
+   MAHSULOT SAHIFASI (product.html): rasmlar, rang, o'lcham, tavsif, pastki panel
+   ========================================================================== */
+/* sahifa: product */
+:where(html[data-page="product"]) .pdp {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 118px 0 0;
+}
+:where(html[data-page="product"]) .pdp-gal {
+  position: relative;
+  background: var(--card);
+}
+:where(html[data-page="product"]) .pdp-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  aspect-ratio: 3 / 4;
+  max-height: 74vh;
+  width: 100%;
+}
+:where(html[data-page="product"]) .pdp-slider::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="product"]) .pdp-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  background: var(--bg);
+}
+:where(html[data-page="product"]) .pdp-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: zoom-in;
+}
+:where(html[data-page="product"]) .pdp-heart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+:where(html[data-page="product"]) .pdp-heart svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: #1f2026;
+  stroke-width: 2;
+}
+:where(html[data-page="product"]) .pdp-heart.liked svg {
+  fill: #8b4dff;
+  stroke: #8b4dff;
+}
+:where(html[data-page="product"]) .pdp-count {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: rgba(0,0,0,.55);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  z-index: 3;
+}
+:where(html[data-page="product"]) .pdp-flag {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  background: #ff3b30;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 8px;
+  z-index: 3;
+}
+:where(html[data-page="product"]) .pdp-thumbs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+:where(html[data-page="product"]) .pdp-thumbs::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="product"]) .pdp-thumbs img {
+  width: 52px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 9px;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+  opacity: .75;
+}
+:where(html[data-page="product"]) .pdp-thumbs img.on {
+  border-color: var(--primary);
+  opacity: 1;
+}
+:where(html[data-page="product"]) .pdp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  margin: 10px 12px;
+}
+:where(html[data-page="product"]) .pdp-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+:where(html[data-page="product"]) .pdp-price b {
+  font-size: 26px;
+  font-weight: 800;
+}
+:where(html[data-page="product"]) .pdp-old {
+  font-size: 15px;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+:where(html[data-page="product"]) .pdp-disc {
+  background: #ffe3f2;
+  color: #e0218a;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 7px;
+}
+[data-theme="dark"]:where([data-page="product"]) .pdp-disc {
+  background: #3a1730;
+}
+:where(html[data-page="product"]) .pdp-stock {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ff3d00;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+:where(html[data-page="product"]) .pdp-stock.out {
+  color: #ff3b30;
+}
+:where(html[data-page="product"]) .pdp-stock svg {
+  width: 14px;
+  height: 14px;
+}
+:where(html[data-page="product"]) .pdp-title {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-top: 10px;
+}
+:where(html[data-page="product"]) .pdp-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+:where(html[data-page="product"]) .pdp-meta a,
+:where(html[data-page="product"]) .pdp-meta .m {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  text-decoration: none;
+}
+:where(html[data-page="product"]) .pdp-meta svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="product"]) .pdp-meta b {
+  color: var(--text);
+}
+:where(html[data-page="product"]) .pdp-opt {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+:where(html[data-page="product"]) .pdp-opt-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+:where(html[data-page="product"]) .pdp-opt-h b {
+  color: var(--text);
+  font-weight: 700;
+}
+:where(html[data-page="product"]) .pdp-link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+:where(html[data-page="product"]) .pdp-link svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="product"]) .pdp-colors {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px;
+}
+:where(html[data-page="product"]) .pdp-colors::-webkit-scrollbar {
+  display: none;
+}
+:where(html[data-page="product"]) .pdp-col {
+  position: relative;
+  width: 60px;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-align: center;
+}
+:where(html[data-page="product"]) .pdp-col img {
+  width: 60px;
+  height: 76px;
+  object-fit: cover;
+  border-radius: 11px;
+  border: 2px solid var(--border);
+  display: block;
+}
+:where(html[data-page="product"]) .pdp-col.on img {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-bg);
+}
+:where(html[data-page="product"]) .pdp-col.off img {
+  opacity: .4;
+}
+:where(html[data-page="product"]) .pdp-col span {
+  display: block;
+  font-size: 11px;
+  margin-top: 4px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:where(html[data-page="product"]) .pdp-col.on span {
+  color: var(--primary);
+  font-weight: 700;
+}
+:where(html[data-page="product"]) .pdp-col.off::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 34px;
+  height: 2px;
+  background: var(--muted);
+  transform: rotate(-35deg);
+  opacity: .7;
+}
+:where(html[data-page="product"]) .pdp-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+:where(html[data-page="product"]) .pdp-size {
+  min-width: 48px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 11px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:where(html[data-page="product"]) .pdp-size.on {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+:where(html[data-page="product"]) .pdp-size.off {
+  color: var(--muted);
+  text-decoration: line-through;
+  opacity: .55;
+  background: var(--bg);
+}
+:where(html[data-page="product"]) .pdp-specs {
+  display: flex;
+  flex-direction: column;
+}
+:where(html[data-page="product"]) .pdp-spec {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+:where(html[data-page="product"]) .pdp-spec:last-child {
+  border-bottom: none;
+}
+:where(html[data-page="product"]) .pdp-spec svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--primary);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+:where(html[data-page="product"]) .pdp-spec .k {
+  color: var(--muted);
+  flex: 1;
+}
+:where(html[data-page="product"]) .pdp-spec .v {
+  font-weight: 600;
+  text-align: right;
+}
+:where(html[data-page="product"]) .pdp-h {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+:where(html[data-page="product"]) .pdp-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text);
+  white-space: pre-line;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+:where(html[data-page="product"]) .pdp-desc.open {
+  display: block;
+  -webkit-line-clamp: unset;
+}
+:where(html[data-page="product"]) .pdp-rv-sum {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+:where(html[data-page="product"]) .pdp-rv-sum b {
+  font-size: 26px;
+  font-weight: 800;
+}
+:where(html[data-page="product"]) .pdp-rv-all {
+  width: 100%;
+  height: 44px;
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+:where(html[data-page="product"]) .pdp-rv-all svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="product"]) .pdp-sold {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+:where(html[data-page="product"]) .pdp-sold .ic {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--primary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+:where(html[data-page="product"]) .pdp-sold .ic svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary);
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="product"]) .pdp-sold div {
+  font-size: 14px;
+  font-weight: 600;
+}
+:where(html[data-page="product"]) .pdp-sold small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 2px;
+}
+:where(html[data-page="product"]) .pdp-sim-title {
+  font-size: 18px;
+  font-weight: 800;
+  padding: 18px 16px 4px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+:where(html[data-page="product"]) .pdp-bar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px));
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 990;
+  box-shadow: 0 8px 24px rgba(0,0,0,.14);
+}
+:where(html[data-page="product"]) .pdp-bar .bp {
+  flex-shrink: 0;
+}
+:where(html[data-page="product"]) .pdp-bar .bp small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+:where(html[data-page="product"]) .pdp-bar .bp b {
+  font-size: 17px;
+  font-weight: 800;
+}
+:where(html[data-page="product"]) .pdp-bar .grow {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+:where(html[data-page="product"]) .pdp-btn {
+  flex: 1;
+  height: 46px;
+  border: none;
+  border-radius: 13px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 0;
+  padding: 0 10px;
+  white-space: nowrap;
+}
+:where(html[data-page="product"]) .pdp-btn.soft {
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+:where(html[data-page="product"]) .pdp-btn.ok {
+  background: #00c853;
+  color: #fff;
+}
+:where(html[data-page="product"]) .pdp-cnt {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 3px;
+}
+:where(html[data-page="product"]) .pdp-cnt button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+:where(html[data-page="product"]) .pdp-cnt button:disabled {
+  opacity: .35;
+}
+:where(html[data-page="product"]) .pdp-cnt span {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   SAVAT (cart.html): tanlash, miqdor, jami, buyurtma oynasi
+   ========================================================================== */
+/* sahifa: index, products, sales, product, heart */
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .cart-btn-sm {
+  width: 100%;
+  height: 36px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .cart-btn-sm svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+:where(html[data-page="index"],html[data-page="products"],html[data-page="sales"],html[data-page="product"],html[data-page="heart"]) .cart-counter-box-sm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 36px;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+}
+/* sahifa: cart */
+:where(html[data-page="cart"]) .toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px 10px;
+}
+:where(html[data-page="cart"]) .chk {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all .15s;
+}
+:where(html[data-page="cart"]) .chk svg {
+  width: 14px;
+  height: 14px;
+  stroke: #fff;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+:where(html[data-page="cart"]) .chk.on {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+:where(html[data-page="cart"]) .chk.on svg {
+  opacity: 1;
+}
+:where(html[data-page="cart"]) .chk.dis {
+  opacity: .35;
+  pointer-events: none;
+}
+:where(html[data-page="cart"]) .sel-all {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+:where(html[data-page="cart"]) .del-sel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #ff3b30;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 4px;
+}
+:where(html[data-page="cart"]) .del-sel svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="cart"]) .del-sel:disabled {
+  opacity: .35;
+}
+:where(html[data-page="cart"]) .cart-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+:where(html[data-page="cart"]) .cart-item.unavail .ci-img img {
+  filter: grayscale(1);
+  opacity: .55;
+}
+:where(html[data-page="cart"]) .ci-img {
+  width: 84px;
+  height: 108px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+:where(html[data-page="cart"]) .ci-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+:where(html[data-page="cart"]) .ci-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 108px;
+}
+:where(html[data-page="cart"]) .ci-title {
+  font-size: 13px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+}
+:where(html[data-page="cart"]) .ci-var {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+:where(html[data-page="cart"]) .ci-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: inline-block;
+}
+:where(html[data-page="cart"]) .ci-price {
+  font-size: 16px;
+  font-weight: 800;
+}
+:where(html[data-page="cart"]) .ci-old {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: line-through;
+  margin-left: 6px;
+  font-weight: 400;
+}
+:where(html[data-page="cart"]) .ci-bottom {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+:where(html[data-page="cart"]) .qty {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+}
+:where(html[data-page="cart"]) .qty button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+:where(html[data-page="cart"]) .qty button:disabled {
+  opacity: .35;
+}
+:where(html[data-page="cart"]) .qty span {
+  min-width: 24px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+:where(html[data-page="cart"]) .ci-rm {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+:where(html[data-page="cart"]) .ci-rm svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="cart"]) .out-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff3b30;
+}
+:where(html[data-page="cart"]) .checkout-bar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px));
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 10px 12px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 990;
+  box-shadow: 0 8px 24px rgba(0,0,0,.14);
+}
+:where(html[data-page="cart"]) .checkout-bar.show {
+  display: flex;
+}
+:where(html[data-page="cart"]) .cb-sum small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+}
+:where(html[data-page="cart"]) .cb-sum b {
+  font-size: 18px;
+  font-weight: 800;
+}
+:where(html[data-page="cart"]) .cb-btn {
+  height: 46px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 13px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+:where(html[data-page="cart"]) .cb-btn.off {
+  opacity: .5;
+}
+:where(html[data-page="cart"]) .sum-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 0;
+}
+:where(html[data-page="cart"]) .sum-line.total {
+  font-size: 17px;
+  font-weight: 800;
+  border-top: 1px solid var(--border);
+  margin-top: 6px;
+  padding-top: 12px;
+}
+:where(html[data-page="cart"]) .pay-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--primary);
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+:where(html[data-page="cart"]) .pay-chip svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="cart"]) .ok-ic {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #e6f9ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px auto 14px;
+}
+:where(html[data-page="cart"]) .ok-ic svg {
+  width: 38px;
+  height: 38px;
+  stroke: #00a650;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="cart"]) .ok-title {
+  text-align: center;
+  font-size: 19px;
+  font-weight: 800;
+}
+:where(html[data-page="cart"]) .ok-text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   PROFIL (profil.html): karta, menyu, buyurtmalar, sozlamalar
+   ========================================================================== */
+/* sahifa: profil */
+:where(html[data-page="profil"]) .pcard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+:where(html[data-page="profil"]) .pavatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+:where(html[data-page="profil"]) .pavatar svg {
+  width: 28px;
+  height: 28px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="profil"]) .pinfo {
+  flex: 1;
+  min-width: 0;
+}
+:where(html[data-page="profil"]) .pinfo h3 {
+  font-size: 17px;
+  font-weight: 800;
+}
+:where(html[data-page="profil"]) .pinfo p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+:where(html[data-page="profil"]) .pinfo p.verified {
+  color: #00a650;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+:where(html[data-page="profil"]) .pinfo p.verified svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="profil"]) .menu {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+:where(html[data-page="profil"]) .mrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+}
+:where(html[data-page="profil"]) .mrow:last-child {
+  border-bottom: none;
+}
+:where(html[data-page="profil"]) .mic {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--primary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+:where(html[data-page="profil"]) .mic svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--primary);
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="profil"]) .mrow .chev {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="profil"]) .mrow.danger {
+  color: #ff3b30;
+}
+:where(html[data-page="profil"]) .mrow.danger .mic {
+  background: rgba(255,59,48,.12);
+}
+:where(html[data-page="profil"]) .mrow.danger .mic svg {
+  stroke: #ff3b30;
+}
+:where(html[data-page="profil"]) .block {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+:where(html[data-page="profil"]) .block h4 {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+:where(html[data-page="profil"]) .seg2 {
+  display: flex;
+  gap: 8px;
+}
+:where(html[data-page="profil"]) .seg2 button {
+  flex: 1;
+  height: 48px;
+  border-radius: 13px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+:where(html[data-page="profil"]) .seg2 button svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:where(html[data-page="profil"]) .seg2 button.on {
+  border-color: var(--primary);
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+:where(html[data-page="profil"]) .ocard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+:where(html[data-page="profil"]) .ohead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+:where(html[data-page="profil"]) .ono {
+  font-size: 15px;
+  font-weight: 800;
+}
+:where(html[data-page="profil"]) .chip {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+:where(html[data-page="profil"]) .chip.new {
+  background: #e8f1ff;
+  color: #1b6ef3;
+}
+:where(html[data-page="profil"]) .chip.confirmed {
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+:where(html[data-page="profil"]) .chip.shipping {
+  background: #fff3e0;
+  color: #e68a00;
+}
+:where(html[data-page="profil"]) .chip.delivered {
+  background: #e6f9ee;
+  color: #00a650;
+}
+:where(html[data-page="profil"]) .chip.cancelled {
+  background: #ffe9e7;
+  color: #ff3b30;
+}
+[data-theme="dark"]:where([data-page="profil"]) .chip.new {
+  background: #14233d;
+}
+[data-theme="dark"]:where([data-page="profil"]) .chip.shipping {
+  background: #3a2a10;
+}
+[data-theme="dark"]:where([data-page="profil"]) .chip.delivered {
+  background: #0f2e1c;
+}
+[data-theme="dark"]:where([data-page="profil"]) .chip.cancelled {
+  background: #3a1613;
+}
+:where(html[data-page="profil"]) .odate {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+:where(html[data-page="profil"]) .othumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  align-items: center;
+}
+:where(html[data-page="profil"]) .othumbs img {
+  width: 52px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 9px;
+  background: var(--bg);
+}
+:where(html[data-page="profil"]) .omore {
+  width: 52px;
+  height: 66px;
+  border-radius: 9px;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+:where(html[data-page="profil"]) .ototal {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+}
+:where(html[data-page="profil"]) .oitem {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+:where(html[data-page="profil"]) .oitem:last-child {
+  border-bottom: none;
+}
+:where(html[data-page="profil"]) .oitem img {
+  width: 64px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--bg);
+  cursor: pointer;
+}
+:where(html[data-page="profil"]) .oi-info {
+  flex: 1;
+  min-width: 0;
+}
+:where(html[data-page="profil"]) .oi-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+:where(html[data-page="profil"]) .oi-var {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+:where(html[data-page="profil"]) .oi-price {
+  font-size: 14px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+:where(html[data-page="profil"]) .oi-btn {
+  margin-top: 8px;
+  height: 34px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+:where(html[data-page="profil"]) .oi-done {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #00a650;
+}
+:where(html[data-page="profil"]) .kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 14px;
+}
+:where(html[data-page="profil"]) .kv span:first-child {
+  color: var(--muted);
+}
+:where(html[data-page="profil"]) .kv span:last-child {
+  font-weight: 600;
+  text-align: right;
+}
+:where(html[data-page="profil"]) .hint {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 4px 12px;
+  line-height: 1.4;
+}
+:where(html[data-page="profil"]) .demo-btn {
+  margin-top: 12px;
+}
+
+/* ==========================================================================
+   BOSHQA: sahifaga xos qolgan qoidalar
+   ========================================================================== */
+/* sahifa: index, products, product, heart, cart, profil, reviews */
+[data-theme="dark"]:where([data-page="index"],[data-page="products"],[data-page="product"],[data-page="heart"],[data-page="cart"],[data-page="profil"],[data-page="reviews"]) {
+  --primary: #9b4dff;
+  --primary-bg: #221638;
+  --bg: #121316;
+  --card: #1c1d22;
+  --text: #f4f5f7;
+  --muted: #999cb0;
+  --border: #2a2c33;
+  --discount-bg: #2e1a47;
+  --discount-text: #b17dff;
+}
+/* sahifa: index */
+:where(html[data-page="index"]) .weekly-card-item {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 8px;
+  border: none;
+  overflow: hidden;
+  width: 155px;
+  flex: 0 0 155px;
+}
+/* sahifa: categories, sales */
+[data-theme="dark"]:where([data-page="categories"],[data-page="sales"]) {
+  --primary: #9b4dff;
+  --primary-bg: #221638;
+  --bg: #121316;
+  --card: #1c1d22;
+  --text: #f4f5f7;
+  --muted: #999cb0;
+  --border: #2a2c33;
+}
+/* sahifa: categories */
+:where(html[data-page="categories"]) .content-panel {
+  flex: 1;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="categories"]) .content-panel {
+    padding: 24px;
+    border-radius: 16px;
+  }
+}
+:where(html[data-page="categories"]) .panel-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+@media (min-width: 768px) {
+  :where(html[data-page="categories"]) .panel-title {
+    font-size: 18px;
+    margin-bottom: 18px;
+  }
+}
+/* sahifa: product, heart, cart, profil, reviews */
+:where(html[data-page]) .sh-ta {
+  height: 96px;
+  padding: 12px 14px;
+  resize: none;
+  margin-top: 12px;
+  font-family: inherit;
+}
+/* sahifa: product */
+:where(html[data-page="product"]) .size-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 10px;
+}
+:where(html[data-page="product"]) .size-table th,
+:where(html[data-page="product"]) .size-table td {
+  padding: 10px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+:where(html[data-page="product"]) .size-table th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12px;
+}
+:where(html[data-page="product"]) .size-table td:first-child {
+  font-weight: 800;
+  color: var(--primary);
+}
+/* sahifa: cart, reviews */
+:where(html[data-page="cart"],html[data-page="reviews"]) .page {
+  padding: 125px 12px 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+/* sahifa: profil */
+:where(html[data-page="profil"]) .page {
+  padding: 125px 14px 0;
+  max-width: 640px;
+  margin: 0 auto;
+}
+/* sahifa: reviews */
+:where(html[data-page="reviews"]) .box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+:where(html[data-page="reviews"]) .pm {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+}
+:where(html[data-page="reviews"]) .pm img {
+  width: 56px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--bg);
+}
+:where(html[data-page="reviews"]) .pm-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+:where(html[data-page="reviews"]) .sum {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+:where(html[data-page="reviews"]) .sum-big {
+  text-align: center;
+  min-width: 88px;
+}
+:where(html[data-page="reviews"]) .sum-big b {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  display: block;
+}
+:where(html[data-page="reviews"]) .sum-big small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+:where(html[data-page="reviews"]) .bars {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+:where(html[data-page="reviews"]) .bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+:where(html[data-page="reviews"]) .bar-row span:first-child {
+  width: 10px;
+  text-align: right;
+}
+:where(html[data-page="reviews"]) .bar {
+  flex: 1;
+  height: 6px;
+  background: var(--bg);
+  border-radius: 3px;
+  overflow: hidden;
+}
+:where(html[data-page="reviews"]) .bar i {
+  display: block;
+  height: 100%;
+  background: var(--star);
+  border-radius: 3px;
+}
+:where(html[data-page="reviews"]) .bar-row span:last-child {
+  width: 24px;
+}
+:where(html[data-page="reviews"]) .ph-title {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+:where(html[data-page="reviews"]) .ph-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+:where(html[data-page="reviews"]) .ph-row img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 1px solid var(--border);
+}
+:where(html[data-page="reviews"]) .write-bar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px) + var(--nav-extra, 0px));
+  z-index: 990;
+}
+
+
+/* ==========================================================================
+   YANGI (v4): AKSIYA belgisi, storis halqasi, "Chiqish" tugmasi, variant tanlash oynasi
+   ========================================================================== */
+
+/* ---------- AKSIYA belgisi: yuqoridagi namunadagidek (tepasida yarim doira o'yiq, chap burchagida buklama, biroz qiyshaygan) ---------- */
+html[data-page] .badge-action-ribbon {
+  position: absolute;
+  top: 12px;
+  left: -7px;
+  z-index: 4;
+  pointer-events: none;
+  isolation: isolate;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  padding: 9px 12px 8px 12px;
+  border-radius: 0;
+  background: transparent;
+  transform: rotate(4deg);
+  transform-origin: left top;
+  -webkit-mask: none;
+  mask: none;
+  text-shadow: 0 1px 0 rgba(60, 20, 170, 0.35);
+  white-space: nowrap;
+}
+html[data-page] .badge-action-ribbon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #8a62ff 0%, #6f45f3 100%);
+  -webkit-mask: radial-gradient(circle 4.5px at 50% 0, transparent 97%, #000 100%);
+  mask: radial-gradient(circle 4.5px at 50% 0, transparent 97%, #000 100%);
+  box-shadow: 0 2px 6px rgba(80, 40, 200, 0.28);
+}
+html[data-page] .badge-action-ribbon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -5px;
+  width: 8px;
+  height: 5px;
+  background: #4a22b5;
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+/* ---------- Storis: ko'rilmaganda rangli halqa (Instagramdagidek), ko'rilgach halqa yo'qoladi ---------- */
+html[data-page="index"] .story-ring {
+  padding: 3px;
+  background: transparent;
+}
+html[data-page="index"] .story-ring.unseen {
+  background: conic-gradient(from 200deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75);
+}
+html[data-page="index"] .story-ring.viewed {
+  background: transparent !important;
+}
+html[data-page="index"] .story-img,
+html[data-page="index"] .story-video {
+  width: 62px;
+  height: 62px;
+  border: 2px solid var(--card);
+}
+html[data-page="index"] .story-ring.viewed .story-img,
+html[data-page="index"] .story-ring.viewed .story-video {
+  border-color: transparent;
+}
+
+/* ---------- Indeks: "Chiqish" tugmasi ---------- */
+.exit-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.exit-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.exit-btn:active { transform: scale(0.96); }
+
+/* ---------- Mahsulot kartasidagi tugmalar: "Savatga" / -1+ / "Xabar qil" ---------- */
+html[data-page] .cart-btn-sm svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+html[data-page] .cart-btn-sm { display: flex; align-items: center; justify-content: center; gap: 7px; }
+
+/* ---------- Variant tanlash oynasi (rang / o'lcham / voltaj...) ---------- */
+.sh-var-head { display: flex; gap: 12px; margin-bottom: 14px; }
+.sh-var-head img { width: 72px; height: 92px; object-fit: cover; border-radius: 10px; background: var(--bg); flex-shrink: 0; }
+.sh-var-name { font-weight: 700; font-size: 15px; color: var(--text); }
+.sh-var-price { font-weight: 800; font-size: 17px; margin-top: 4px; color: var(--text); }
+.sh-var-stock { font-size: 13px; color: #e08a00; margin-top: 4px; font-weight: 600; }
+.sh-var-stock.out { color: var(--danger, #ff3b30); }
+.sh-var-axis { margin: 12px 0; }
+.sh-var-lbl { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.sh-var-lbl b { color: var(--text); }
+.sh-var-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.sh-chip { display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid var(--border); background: var(--card); color: var(--text); border-radius: 10px; padding: 9px 14px; font-weight: 600; font-size: 14px; cursor: pointer; min-height: 40px; }
+.sh-chip.has-sw { padding: 4px 12px 4px 4px; }
+.sh-chip img { width: 32px; height: 40px; object-fit: cover; border-radius: 7px; }
+.sh-chip i { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); display: inline-block; }
+.sh-chip.on { border-color: var(--primary); color: var(--primary); background: var(--primary-bg); }
+.sh-chip.off { opacity: 0.45; }
+.sh-chip.off span { text-decoration: line-through; }
+
+
+/* ==========================================================================
+   YANGI (v4): xarita oynasi, chat, sharhlarim, sotuvchiga murojaat, kutilayotganlar
+   ========================================================================== */
+
+/* ---------- Manzil: "Xaritadan tanlash" tugmasi ---------- */
+.sh-map-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 44px; margin-top: 8px; border: 1.5px dashed var(--primary); border-radius: 12px; background: var(--primary-bg); color: var(--primary); font-size: 14px; font-weight: 700; cursor: pointer; }
+.sh-map-btn svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sh-note.geo-ok { color: #00a650; font-weight: 700; margin-top: 6px; }
+.sh-note[hidden] { display: none; }
+
+/* ---------- Xarita oynasi ---------- */
+.sh-map-wrap { position: fixed; inset: 0; z-index: 3200; display: flex; flex-direction: column; background: var(--card); color: var(--text); opacity: 0; transform: translateY(24px); transition: opacity .22s, transform .22s; }
+.sh-map-wrap.show { opacity: 1; transform: none; }
+.sh-map-top { display: flex; align-items: center; gap: 10px; padding: calc(12px + env(safe-area-inset-top, 0px)) 12px 10px; padding-top: max(56px, calc(12px + env(safe-area-inset-top, 0px))); background: var(--card); border-bottom: 1px solid var(--border); }
+.sh-map-x { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
+.sh-map-x svg { width: 20px; height: 20px; stroke: var(--text); stroke-width: 2.2; stroke-linecap: round; }
+.sh-map-search { position: relative; flex: 1; }
+.sh-map-search input { width: 100%; height: 42px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); padding: 0 14px 0 40px; font-size: 15px; outline: none; -webkit-appearance: none; }
+.sh-map-search input:focus { border-color: var(--primary); }
+.sh-map-search span { position: absolute; left: 12px; top: 11px; pointer-events: none; }
+.sh-map-search span svg { width: 20px; height: 20px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; }
+.sh-map-sug { display: none; position: absolute; left: 12px; right: 12px; top: calc(max(56px, env(safe-area-inset-top, 0px) + 12px) + 54px); z-index: 5; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,.2); overflow: hidden; max-height: 46vh; overflow-y: auto; }
+.sh-map-sug.show { display: block; }
+.sh-map-s { display: block; width: 100%; text-align: left; padding: 11px 14px; border: none; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; }
+.sh-map-s:last-child { border-bottom: none; }
+.sh-map-s b { display: block; font-size: 14px; }
+.sh-map-s span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.sh-map-view { position: relative; flex: 1; min-height: 200px; overflow: hidden; background: #e8e6df; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.sh-map-tiles { position: absolute; inset: 0; }
+.sh-map-tile { position: absolute; left: 0; top: 0; width: 256px; height: 256px; max-width: none; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.sh-map-pin { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -42px 0 0 -22px; pointer-events: none; filter: drop-shadow(0 4px 4px rgba(0,0,0,.35)); }
+.sh-map-pin svg { width: 100%; height: 100%; }
+.sh-map-ctl { position: absolute; right: 12px; bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+.sh-map-ctl button { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.18); }
+.sh-map-ctl svg { width: 22px; height: 22px; stroke: var(--primary); fill: none; stroke-width: 2; stroke-linecap: round; }
+.sh-map-hint { position: absolute; left: 12px; top: 12px; right: 70px; font-size: 12px; font-weight: 600; background: rgba(0,0,0,.62); color: #fff; padding: 7px 11px; border-radius: 10px; pointer-events: none; }
+.sh-map-bottom { padding: 12px 14px calc(14px + env(safe-area-inset-bottom, 0px)); background: var(--card); border-top: 1px solid var(--border); }
+.sh-map-bottom textarea { resize: none; min-height: 54px; }
+
+/* ---------- Profil menyu: yangi qatorlar ---------- */
+:where(html[data-page="profil"]) .mbadge { margin-left: auto; margin-right: -6px; min-width: 22px; height: 22px; border-radius: 11px; padding: 0 7px; background: #ff3b30; color: #fff; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+:where(html[data-page="profil"]) .mbadge[hidden] { display: none; }
+:where(html[data-page="profil"]) .geo-link { display: inline-flex; vertical-align: middle; margin-left: 4px; }
+:where(html[data-page="profil"]) .geo-link svg { width: 17px; height: 17px; stroke: var(--primary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+:where(html[data-page="profil"]) .oi-btn.danger { background: rgba(255,59,48,.12); color: #ff3b30; }
+
+/* ---------- Sharhlarim ---------- */
+:where(html[data-page="profil"]) .myrv { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 14px; margin-bottom: 12px; }
+:where(html[data-page="profil"]) .myrv-head { display: flex; gap: 12px; align-items: center; }
+:where(html[data-page="profil"]) .myrv-head img { width: 52px; height: 66px; object-fit: cover; border-radius: 10px; background: var(--bg); cursor: pointer; }
+:where(html[data-page="profil"]) .myrv-name { font-weight: 700; font-size: 14.5px; color: var(--text); }
+:where(html[data-page="profil"]) .myrv-stars { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+:where(html[data-page="profil"]) .myrv-stars span { font-size: 12px; color: var(--muted); }
+:where(html[data-page="profil"]) .myrv-text { margin-top: 10px; font-size: 14px; line-height: 1.45; color: var(--text); white-space: pre-wrap; word-break: break-word; }
+:where(html[data-page="profil"]) .myrv-photos { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+:where(html[data-page="profil"]) .myrv-photos img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; cursor: pointer; }
+:where(html[data-page="profil"]) .myrv-act { display: flex; gap: 8px; }
+
+/* ---------- Sotuvchiga murojaat ---------- */
+:where(html[data-page="profil"]) .sl-card { text-align: center; }
+:where(html[data-page="profil"]) .sl-ava { width: 64px; height: 64px; border-radius: 50%; background: var(--primary-bg); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+:where(html[data-page="profil"]) .sl-ava svg { width: 30px; height: 30px; stroke: var(--primary); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+:where(html[data-page="profil"]) .sl-card h3 { font-size: 18px; color: var(--text); }
+:where(html[data-page="profil"]) .sl-card p { font-size: 13.5px; color: var(--muted); margin: 6px 0 14px; line-height: 1.45; }
+:where(html[data-page="profil"]) .sl-btns { display: flex; flex-direction: column; gap: 10px; }
+:where(html[data-page="profil"]) .sl-btn { display: flex; align-items: center; justify-content: center; gap: 9px; height: 48px; border-radius: 14px; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; }
+:where(html[data-page="profil"]) .sl-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+:where(html[data-page="profil"]) .sl-btn.main { background: var(--primary); border-color: var(--primary); color: #fff; }
+:where(html[data-page="profil"]) .sl-btn.call { background: #00a650; border-color: #00a650; color: #fff; }
+:where(html[data-page="profil"]) .block .kv span:first-child { display: inline-flex; align-items: center; gap: 8px; }
+:where(html[data-page="profil"]) .block .kv span:first-child svg { width: 17px; height: 17px; stroke: var(--muted); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- Kutilayotgan mahsulotlar ---------- */
+:where(html[data-page="profil"]) .wt-row { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 10px; margin-bottom: 10px; }
+:where(html[data-page="profil"]) .wt-row img { width: 56px; height: 70px; object-fit: cover; border-radius: 10px; background: var(--bg); cursor: pointer; }
+:where(html[data-page="profil"]) .wt-info { flex: 1; min-width: 0; }
+:where(html[data-page="profil"]) .wt-name { font-weight: 700; font-size: 14px; color: var(--text); }
+:where(html[data-page="profil"]) .wt-st { font-size: 12.5px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+:where(html[data-page="profil"]) .wt-st.ok { color: #00a650; }
+:where(html[data-page="profil"]) .wt-row .oi-btn { margin-top: 0; }
+
+/* ---------- Chat ---------- */
+body.chat-open .bottom-nav { display: none; }
+:where(html[data-page="profil"]) .chat-wrap { position: fixed; left: 0; right: 0; bottom: 0; top: 118px; max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; background: var(--bg); height: auto; }
+@supports (height: 100dvh) { :where(html[data-page="profil"]) .chat-wrap { bottom: auto; height: calc(var(--vvh, 100dvh) - 118px); } }
+:where(html[data-page="profil"]) .chat-head { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--card); border-bottom: 1px solid var(--border); }
+:where(html[data-page="profil"]) .chat-head b { display: block; font-size: 15px; color: var(--text); }
+:where(html[data-page="profil"]) .chat-head small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+:where(html[data-page="profil"]) .chat-head small.on { color: #00a650; font-weight: 700; }
+:where(html[data-page="profil"]) .chat-head small.on::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #00c853; margin-right: 5px; }
+:where(html[data-page="profil"]) .chat-ava { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-bg); display: flex; align-items: center; justify-content: center; }
+:where(html[data-page="profil"]) .chat-ava svg { width: 21px; height: 21px; stroke: var(--primary); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+:where(html[data-page="profil"]) .chat-list { flex: 1; overflow-y: auto; padding: 12px 12px 8px; display: flex; flex-direction: column; gap: 6px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+:where(html[data-page="profil"]) .cm { max-width: 82%; padding: 8px 11px 6px; border-radius: 16px; font-size: 14.5px; line-height: 1.38; position: relative; word-break: break-word; cursor: pointer; }
+:where(html[data-page="profil"]) .cm.me { align-self: flex-end; background: var(--primary); color: #fff; border-bottom-right-radius: 5px; }
+:where(html[data-page="profil"]) .cm.them { align-self: flex-start; background: var(--card); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 5px; }
+:where(html[data-page="profil"]) .cm-t { white-space: pre-wrap; }
+:where(html[data-page="profil"]) .cm-q { border-left: 3px solid rgba(255,255,255,.7); background: rgba(255,255,255,.16); border-radius: 6px; padding: 4px 8px; margin-bottom: 5px; font-size: 12.5px; opacity: .92; }
+:where(html[data-page="profil"]) .cm.them .cm-q { border-left-color: var(--primary); background: var(--primary-bg); }
+:where(html[data-page="profil"]) .cm-q b { display: block; font-size: 11.5px; }
+:where(html[data-page="profil"]) .cm-m { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 2px; font-size: 11px; opacity: .78; }
+:where(html[data-page="profil"]) .cm-m em { font-style: normal; font-size: 10.5px; margin-right: 4px; }
+:where(html[data-page="profil"]) .cm-m .tick svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+:where(html[data-page="profil"]) .cm-m .tick.read { color: #9be7ff; opacity: 1; }
+:where(html[data-page="profil"]) .chat-empty { margin: auto; text-align: center; color: var(--muted); font-size: 14px; padding: 20px; }
+:where(html[data-page="profil"]) .chat-empty svg { width: 46px; height: 46px; stroke: var(--muted); fill: none; stroke-width: 1.5; margin-bottom: 8px; }
+:where(html[data-page="profil"]) .chat-rp { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--card); border-top: 1px solid var(--border); }
+:where(html[data-page="profil"]) .chat-rp[hidden] { display: none; }
+:where(html[data-page="profil"]) .chat-rp div { flex: 1; border-left: 3px solid var(--primary); padding-left: 8px; font-size: 12.5px; color: var(--muted); min-width: 0; }
+:where(html[data-page="profil"]) .chat-rp b { display: block; color: var(--primary); font-size: 12px; }
+:where(html[data-page="profil"]) .chat-rp span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:where(html[data-page="profil"]) .chat-rp button { width: 30px; height: 30px; border: none; background: transparent; font-size: 22px; color: var(--muted); cursor: pointer; }
+:where(html[data-page="profil"]) .chat-input { display: flex; align-items: flex-end; gap: 8px; padding: 8px 10px calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--card); border-top: 1px solid var(--border); }
+:where(html[data-page="profil"]) .chat-input textarea { flex: 1; resize: none; max-height: 120px; min-height: 42px; border-radius: 21px; border: 1px solid var(--border); background: var(--bg); color: var(--text); padding: 10px 15px; font-size: 15px; line-height: 1.3; outline: none; }
+:where(html[data-page="profil"]) .chat-input textarea:focus { border-color: var(--primary); }
+:where(html[data-page="profil"]) .chat-input button { width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
+:where(html[data-page="profil"]) .chat-input button svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; margin-left: -2px; }
+
+/* ---------- Mahsulot sahifasi: admin yaratgan xususiyat (rang doirasi) ---------- */
+:where(html[data-page="product"]) .pdp-sw { display: block; width: 100%; aspect-ratio: 1; border-radius: 12px; border: 1px solid var(--border); }
+
+
+/* ==========================================================================
+   YANGI (v4): telefon, planshet va kompyuterga moslash
+   ========================================================================== */
+:where(html[data-page="product"]) .pdp-left, :where(html[data-page="product"]) .pdp-right { min-width: 0; }
+
+/* ---------- Planshet (768px dan) ---------- */
+@media (min-width: 768px) {
+  html[data-page="index"] .banner-slide { height: 170px; }
+  html[data-page="index"] .stories-container { padding-left: max(12px, calc((100vw - 1300px) / 2 + 12px)); }
+  .sh-sheet { max-width: 520px; margin-left: auto; margin-right: auto; }
+  html[data-page="profil"] .page, html[data-page="cart"] .page { max-width: 720px; }
+}
+
+/* ---------- Kompyuter (1000px dan): mahsulot sahifasi ikki ustunli ---------- */
+@media (min-width: 1000px) {
+  html[data-page="product"] .pdp { max-width: 1180px; display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 130px 24px 0; }
+  html[data-page="product"] .pdp-left { position: sticky; top: 126px; }
+  html[data-page="product"] .pdp-slider { max-height: 68vh; border-radius: 18px; overflow-x: auto; }
+  html[data-page="product"] .pdp-gal { border-radius: 18px; overflow: hidden; }
+  html[data-page="product"] .pdp-bar { max-width: 640px; }
+  html[data-page="product"] #similarBlock { max-width: 1180px; margin: 0 auto; padding: 0 12px; }
+  html[data-page="index"] .banner-slide { flex-basis: 640px; height: 200px; }
+  html[data-page="index"] .banner-track { padding-left: calc(50vw - 320px); }
+}
+@media (min-width: 1000px) and (min-height: 0) {
+  html[data-page="categories"] .page, html[data-page="heart"] .page { max-width: 1300px; }
+}
+
+
+/* ---------- AKSIYA belgisi: kichik, toza ---------- */
+html[data-page] .badge-action-ribbon {
+  top: 8px; left: 8px; transform: none; padding: 4px 8px 4px 6px; font-size: 9.5px; letter-spacing: .6px; font-weight: 800;
+  display: inline-flex; align-items: center; gap: 4px; border-radius: 8px; text-shadow: none;
+}
+html[data-page] .badge-action-ribbon::before { border-radius: 8px; background: linear-gradient(135deg, #8f6bff 0%, #6a3df0 100%); -webkit-mask: none; mask: none; box-shadow: 0 2px 6px rgba(90,50,210,.3); }
+html[data-page] .badge-action-ribbon::after { display: none; }
+html[data-page] .badge-action-ribbon svg { width: 11px; height: 11px; fill: #fff; stroke: #fff; stroke-width: 1.2; stroke-linejoin: round; flex: none; }
+/* ---------- Hafta aksiyalari: kartalar bir xil balandlikda ---------- */
+:where(html[data-page="index"]) .weekly-track { align-items: stretch; }
+:where(html[data-page="index"]) .weekly-card-item { display: flex; flex-direction: column; }
+:where(html[data-page="index"]) .weekly-card-item .product-info { flex: 1; display: flex; flex-direction: column; }
+:where(html[data-page="index"]) .weekly-card-item .product-info-top { flex: 1; }
+:where(html[data-page="index"]) .weekly-card-item .card-action-container { margin-top: auto; padding-top: 8px; }
+/* ---------- PDP olov belgisi (indexdagidek) ---------- */
+:where(html[data-page="product"]) .pdp-fire { display: inline-flex; width: 16px; height: 16px; }
+:where(html[data-page="product"]) .pdp-fire svg { width: 16px; height: 16px; }
+/* ---------- Variant oynasi: son tanlash ---------- */
+.sh-var-qty { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 12px; font-weight: 700; }
+.sh-var-qty .cart-counter-box-sm { width: 140px; }
+/* ---------- To'lov usuli ---------- */
+.pay-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+:where(html[data-page="cart"]) .pay-chips .pay-chip { flex: 1 1 140px; border: 1.5px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; font-family: inherit; }
+:where(html[data-page="cart"]) .pay-chips .pay-chip.on { border-color: var(--primary); background: var(--primary-bg); color: var(--primary); }
+.pay-chips .pay-chip svg { fill: none; stroke: currentColor; stroke-width: 1.8; flex: none; width: 22px; height: 22px; }
+.pay-card { margin-top: 10px; padding: 14px; border-radius: 14px; color: #fff; background: linear-gradient(135deg, #7a4cf5, #4b21c7); }
+.pay-card .pc-lbl { font-size: 11px; opacity: .8; text-transform: uppercase; letter-spacing: .6px; }
+.pay-card .pc-num { font-size: 21px; font-weight: 800; letter-spacing: 1.5px; margin-top: 2px; word-break: break-all; }
+.pay-card .pc-hold { font-size: 15px; font-weight: 700; text-transform: uppercase; }
+.pay-card .pc-copy { margin-top: 10px; border: 0; border-radius: 10px; padding: 8px 14px; font-weight: 700; background: rgba(255,255,255,.2); color: #fff; font-family: inherit; }
+.pay-card .pc-hint { margin-top: 8px; font-size: 12px; opacity: .9; }
+
+
+/* ---------- Chat v2 (sayt) ---------- */
+body.chat-open .sticky-header { z-index: 30; }
+body.chat-open.kb-open .sticky-header { display: none; }
+:where(html[data-page="profil"]) .chat-wrap { z-index: 40; top: 118px; }
+:where(html[data-page="profil"]) .cm { touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: background .3s; }
+:where(html[data-page="profil"]) .cm.swiping::after { content: ''; position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; border-radius: 50%; background: var(--primary-bg) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a4cf5' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='9 14 4 9 9 4'/><path d='M20 20v-7a4 4 0 0 0-4-4H4'/></svg>") center/14px no-repeat; opacity: .6; }
+:where(html[data-page="profil"]) .cm.me.swiping::after { left: calc(100% + 10px); }
+:where(html[data-page="profil"]) .cm.them.swiping::after { right: calc(100% + 10px); }
+:where(html[data-page="profil"]) .cm.armed::after { opacity: 1; transform: scale(1.15); }
+:where(html[data-page="profil"]) .cm.flash { animation: cmflash 1.2s; }
+@keyframes cmflash { 0%, 60% { box-shadow: 0 0 0 3px rgba(122,76,245,.45); } 100% { box-shadow: 0 0 0 0 transparent; } }
+:where(html[data-page="profil"]) .cm-more { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: rgba(0,0,0,.14); opacity: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+:where(html[data-page="profil"]) .cm-more svg { width: 14px; height: 14px; fill: #fff; stroke: none; }
+:where(html[data-page="profil"]) .cm:hover .cm-more { opacity: 1; }
+@media (hover: none) { :where(html[data-page="profil"]) .cm-more { display: none; } }
+:where(html[data-page="profil"]) .cm-img { display: block; max-width: 100%; width: 240px; max-height: 300px; object-fit: cover; border-radius: 12px; margin-bottom: 4px; cursor: zoom-in; }
+:where(html[data-page="profil"]) .cm-vid { display: block; width: 240px; max-width: 100%; max-height: 300px; border-radius: 12px; margin-bottom: 4px; background: #000; }
+:where(html[data-page="profil"]) .cm-aud { display: block; width: 220px; max-width: 100%; height: 38px; margin-bottom: 2px; }
+:where(html[data-page="profil"]) .chat-clip { width: 40px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex: none; }
+:where(html[data-page="profil"]) .chat-clip svg { width: 23px; height: 23px; stroke: var(--muted); fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+:where(html[data-page="profil"]) .chat-input textarea { font-size: 16px; }
+:where(html[data-page="profil"]) .chat-input button.is-mic svg { stroke: #fff; fill: none; margin-left: 0; }
+:where(html[data-page="profil"]) .chat-rec { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--card); border-top: 1px solid var(--border); color: var(--text); font-weight: 700; }
+:where(html[data-page="profil"]) .chat-rec[hidden] { display: none; }
+:where(html[data-page="profil"]) .chat-rec em { flex: 1; font-style: normal; font-weight: 500; color: var(--muted); font-size: 13px; }
+:where(html[data-page="profil"]) .chat-rec button { border: 0; background: transparent; font-size: 26px; color: var(--muted); width: 34px; height: 34px; cursor: pointer; }
+.rec-dot { width: 10px; height: 10px; border-radius: 50%; background: #ff3b30; animation: recp 1s infinite; }
+@keyframes recp { 50% { opacity: .25; } }
+.cm-menu { display: flex; flex-direction: column; gap: 2px; }
+.cm-menu button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 6px; border: 0; background: transparent; font-size: 16px; font-weight: 600; color: var(--text); font-family: inherit; text-align: left; cursor: pointer; border-radius: 10px; }
+.cm-menu button:active { background: var(--primary-bg); }
+.cm-menu button svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.cm-menu button.danger { color: #ff3b30; }
+
