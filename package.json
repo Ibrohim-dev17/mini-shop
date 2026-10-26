@@ -1,0 +1,15 @@
+{
+  "name": "namangan-online-shop",
+  "version": "2.0.0",
+  "description": "Telegram Web App kiyim do'koni",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
