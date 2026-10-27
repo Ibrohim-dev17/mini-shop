@@ -215,7 +215,7 @@ html[data-page="heart"] .sticky-header {
 /* 6. Faqat cart' sahifasi uchun*/
 html[data-page="cart"] .sticky-header {
   position: fixed;
-  top: 0;
+  top: -2px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -234,7 +234,7 @@ html[data-page="cart"] .sticky-header {
 /* 7. Faqat 'profil' sahifasi uchun */
 html[data-page="profil"] .sticky-header {
   position: fixed;
-  top: 0;
+  top: -2px;
   left: 0;
   right: 0;
   background: var(--card);
