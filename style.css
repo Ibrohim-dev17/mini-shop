@@ -120,7 +120,7 @@
 /* 1. Faqat 'categories' sahifasi uchun*/
 html[data-page="categories"] .sticky-header {
   position: fixed;
-  top: 50px;
+  top: 53px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -139,7 +139,7 @@ html[data-page="categories"] .sticky-header {
 /* 2. Faqat 'index' sahifasi uchun*/
 html[data-page="index"] .sticky-header {
   position: fixed;
-  top: 50px;
+  top: 53px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -158,7 +158,7 @@ html[data-page="index"] .sticky-header {
 /* 3. Faqat 'products' sahifasi uchun*/
 html[data-page="products"] .sticky-header {
   position: fixed;
-  top: 50px;
+  top: 53px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -177,7 +177,7 @@ html[data-page="products"] .sticky-header {
 /* 4. Faqat 'product' sahifasi uchun*/
 html[data-page="product"] .sticky-header {
   position: fixed;
-  top: 50px;
+  top: 53px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -196,7 +196,7 @@ html[data-page="product"] .sticky-header {
 /* 5. Faqat 'heart' sahifasi uchun*/
 html[data-page="heart"] .sticky-header {
   position: fixed;
-  top: 50px;
+  top: 53px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -215,7 +215,7 @@ html[data-page="heart"] .sticky-header {
 /* 6. Faqat cart' sahifasi uchun*/
 html[data-page="cart"] .sticky-header {
   position: fixed;
-  top: 5px;
+  top: 3px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -234,7 +234,7 @@ html[data-page="cart"] .sticky-header {
 /* 7. Faqat 'profil' sahifasi uchun */
 html[data-page="profil"] .sticky-header {
   position: fixed;
-  top: 5px;
+  top: 3px;
   left: 0;
   right: 0;
   background: var(--card);
