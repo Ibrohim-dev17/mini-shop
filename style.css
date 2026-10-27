@@ -119,7 +119,7 @@
 /* sahifa: products, categories, product, heart, cart, profil, reviews */
 :where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .sticky-header {
   position: fixed;
-  top: 5px;
+  top: 30px;
   left: 0;
   right: 0;
   background: var(--card);
