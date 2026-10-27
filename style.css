@@ -101,7 +101,7 @@
 /* sahifa: index, sales */
 :where(html[data-page="index"],html[data-page="sales"]) .sticky-header {
   position: fixed;
-  top: 0;
+  top: 30;
   left: 0;
   right: 0;
   margin-top: var(--tg-top, 0px);
