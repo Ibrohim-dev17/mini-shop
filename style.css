@@ -116,10 +116,11 @@
   margin-left: auto;
   margin-right: auto;
 }
-/* sahifa: products, categories, product, heart, cart, profil, reviews */
-:where(html[data-page="products"],html[data-page="categories"],html[data-page="product"],html[data-page="heart"],html[data-page="cart"],html[data-page="profil"],html[data-page="reviews"]) .sticky-header {
+
+/* 1. Faqat 'categories' sahifasi uchun*/
+html[data-page="categories"] .sticky-header {
   position: fixed;
-  top: 30px;
+  top: 45px;
   left: 0;
   right: 0;
   background: var(--card);
@@ -134,6 +135,123 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+/* 2. Faqat 'index' sahifasi uchun*/
+html[data-page="index"] .sticky-header {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: var(--tg-top, 0px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 3. Faqat 'products' sahifasi uchun*/
+html[data-page="products"] .sticky-header {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: var(--tg-top, 0px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 4. Faqat 'product' sahifasi uchun*/
+html[data-page="product"] .sticky-header {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: var(--tg-top, 0px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 5. Faqat 'heart' sahifasi uchun*/
+html[data-page="heart"] .sticky-header {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: var(--tg-top, 0px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 6. Faqat 'index' sahifasi uchun*/
+html[data-page="categories"] .sticky-header {
+  position: fixed;
+  top: 45px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: var(--tg-top, 0px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 7. Faqat 'profil' sahifasi uchun */
+html[data-page="profil"] .sticky-header {
+  position: fixed;
+  top: 10px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: var(--tg-top, 0px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
 /* sahifa: hammasi */
 .sticky-header::before {
   content: '';
