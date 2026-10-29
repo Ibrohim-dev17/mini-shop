@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Super admin</title>
+<link rel="stylesheet" href="super-admin.css">
+</head>
+<body>
+<header id="hd" hidden>
+  <h1>Super admin</h1>
+  <button class="ghost" id="logout">Chiqish</button>
+</header>
+
+<main id="login" class="login card">
+  <h2>Kirish</h2>
+  <div class="row" style="grid-template-columns:1fr">
+    <input id="okey" type="password" placeholder="Parol" autocomplete="current-password">
+    <button id="enter">Kirish</button>
+    <div class="muted" id="lerr"></div>
+  </div>
+</main>
+
+<main id="app" hidden>
+  <section class="card">
+    <h2>Yangi do'kon</h2>
+    <div class="row">
+      <input id="n_slug" placeholder="Nom (a-z, 0-9, -)">
+      <input id="n_name" placeholder="Do'kon nomi">
+      <input id="n_key" placeholder="Admin kaliti (bo'sh qoldirsangiz avtomatik)">
+      <input id="n_paid" type="date" title="To'lov muddati">
+      <button id="n_add">Yaratish</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Yangilik yuborish</h2>
+    <div class="row ann">
+      <input id="a_title" placeholder="Sarlavha">
+      <input id="a_text" placeholder="Matn">
+      <select id="a_to"><option value="all">Hamma do'konlar</option></select>
+    </div>
+    <div class="row" style="margin-top:10px;grid-template-columns:1fr"><button id="a_send">Yuborish</button></div>
+  </section>
+
+  <section class="card" id="appsSec">
+    <h2>Yangi arizalar</h2>
+    <div id="apps"><div class="muted">Yuklanmoqda...</div></div>
+  </section>
+
+  <section class="card" id="chatSec">
+    <h2>Sotuvchi bilan chat</h2>
+    <div class="row" style="grid-template-columns:1fr auto"><select id="c_shop"></select><button class="ghost" id="c_load">Yangilash</button></div>
+    <div class="chatbox" id="c_box"><div class="muted">Sotuvchini tanlang</div></div>
+    <div class="row" style="grid-template-columns:1fr auto;margin-top:10px"><textarea id="c_txt" placeholder="Xabar yozing..."></textarea><button id="c_send">Yuborish</button></div>
+  </section>
+
+  <section class="card">
+    <h2>Do'konlar</h2>
+    <table class="tbl" id="tbl"><thead><tr><th>Do'kon</th><th>Holat</th><th>To'lov muddati</th><th>Funksiyalar</th><th>Amallar</th></tr></thead><tbody></tbody></table>
+    <div class="cards" id="cards"></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="super-admin-chat.js"></script>
+<script src="super-admin-dashboard.js"></script>
+</body>
+</html>
