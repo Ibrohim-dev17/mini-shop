@@ -1,0 +1,54 @@
+:root { --bg:#f5f6fa; --surface:#fff; --line:#e4e6ee; --text:#1b1d2a; --muted:#6b7086; --primary:#6c2fff; --danger:#e5484d; --ok:#1f9d55; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0f1017; --surface:#181a25; --line:#2a2d3d; --text:#eceef7; --muted:#9ca1b8; } }
+body { margin:0; font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+header { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:12px; padding:12px 20px; background:var(--surface); border-bottom:1px solid var(--line); flex-wrap:wrap; }
+header h1 { font-size:17px; margin:0; flex:1; min-width:160px; }
+main { padding:18px 20px 60px; max-width:1200px; margin:0 auto; }
+.card { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:16px; }
+.card h2 { font-size:15px; margin:0 0 12px; }
+input, textarea, select { font:inherit; color:var(--text); background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:9px 11px; width:100%; box-sizing:border-box; }
+textarea { min-height:70px; resize:vertical; }
+.row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; align-items:end; }
+button { font:inherit; font-weight:600; border:0; border-radius:10px; padding:9px 14px; cursor:pointer; background:var(--primary); color:#fff; }
+button.ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
+button.danger { background:var(--danger); }
+button.ok { background:var(--ok); }
+button:disabled { opacity:.5; cursor:default; }
+.badge { display:inline-block; padding:3px 9px; border-radius:999px; font-size:12px; font-weight:700; }
+.b-ok { background:rgba(31,157,85,.15); color:var(--ok); }
+.b-off { background:rgba(229,72,77,.15); color:var(--danger); }
+.b-warn { background:rgba(255,176,32,.2); color:#b26a00; }
+.muted { color:var(--muted); font-size:12.5px; }
+.tbl { width:100%; border-collapse:collapse; }
+.tbl th, .tbl td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:middle; }
+.tbl th { font-size:12px; color:var(--muted); font-weight:600; }
+.acts { display:flex; gap:6px; flex-wrap:wrap; }
+.acts button { padding:6px 10px; font-size:12.5px; }
+.cards { display:none; }
+.row.ann { grid-template-columns:1fr 1fr 180px; }
+.feat { display:flex; gap:14px; flex-wrap:wrap; }
+.feat label { display:flex; gap:6px; align-items:center; }
+.chatbox { display:flex; flex-direction:column; gap:8px; max-height:50vh; overflow:auto; padding:10px; border:1px solid var(--line); border-radius:12px; margin-top:10px; background:var(--bg); }
+.bub { max-width:78%; padding:8px 12px; border-radius:14px; white-space:pre-wrap; word-break:break-word; }
+.bub.o { align-self:flex-end; background:var(--primary); color:#fff; }
+.bub.s { align-self:flex-start; background:var(--surface); border:1px solid var(--line); }
+.bub small { display:block; opacity:.7; font-size:11px; margin-top:3px; }
+.dot-n { display:inline-block; min-width:18px; padding:0 6px; border-radius:999px; background:var(--danger); color:#fff; font-size:11px; font-weight:700; text-align:center; margin-left:4px; }
+.toast { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:var(--text); color:var(--bg); padding:10px 16px; border-radius:10px; display:none; }
+.login { max-width:380px; margin:12vh auto; }
+@media (max-width: 760px) {
+  main { padding:12px 12px 60px; }
+  .tbl { display:none; }
+  .cards { display:grid; gap:10px; }
+  .shopcard { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; }
+  .shopcard .top { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+  .shopcard .meta { margin:8px 0; color:var(--muted); font-size:12.5px; }
+  .row.ann { grid-template-columns:1fr; }
+}
+
+/* Bo'limlar (tab) */
+.sa-tabs { display: flex; gap: 6px; overflow-x: auto; margin: 0 0 12px; padding-bottom: 4px; }
+.sa-tabs button { flex: 0 0 auto; border: 1px solid #ddd; background: #fff; border-radius: 999px; padding: 8px 14px; cursor: pointer; font-size: 14px; }
+.sa-tabs button.active { background: #f97316; border-color: #f97316; color: #fff; }
+
+[hidden] { display: none !important; }
