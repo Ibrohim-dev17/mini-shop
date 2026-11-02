@@ -252,6 +252,26 @@ html[data-page="profil"] .sticky-header {
 }
 
 
+/* 8. Faqat sales' sahifasi uchun  */
+html[data-page="sales"] .sticky-header {
+  position: fixed;
+  top: -10px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  z-index: 999;
+  padding: 12px 16px;
+  margin-top: var(--tg-top, 0px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
 
 
 
